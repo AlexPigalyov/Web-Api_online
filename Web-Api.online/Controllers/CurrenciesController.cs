@@ -19,6 +19,7 @@ namespace Web_Api.online.Controllers
             public Dictionary<string, double> Rates { get; set; } = new Dictionary<string, double>();
         }
 
+        [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")
         {
             var lastRates = Raterepository.GetLastRates();
