@@ -1,4 +1,9 @@
-﻿namespace Web_Api.online.Models.Tables.DPDCities
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace Web_Api.online.Models.Tables
 {
     public partial class DpdCity
     {

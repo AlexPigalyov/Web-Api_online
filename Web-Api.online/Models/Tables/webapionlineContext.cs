@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Web_Api.online.Models.Tables.DPDCities
+#nullable disable
+
+namespace Web_Api.online.Models.Tables
 {
     public partial class webapionlineContext : DbContext
     {
@@ -14,11 +18,13 @@ namespace Web_Api.online.Models.Tables.DPDCities
         }
 
         public virtual DbSet<DpdCity> DpdCities { get; set; }
+        public virtual DbSet<Rate> Rates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("server=localhost\\SQLExpress;user=webapionline;password=webapionline1;database=web-api.online");
             }
         }
@@ -87,6 +93,15 @@ namespace Web_Api.online.Models.Tables.DPDCities
                 entity.Property(e => e.Settled)
                     .HasMaxLength(20)
                     .IsFixedLength(true);
+            });
+
+            modelBuilder.Entity<Rate>(entity =>
+            {
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Value).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

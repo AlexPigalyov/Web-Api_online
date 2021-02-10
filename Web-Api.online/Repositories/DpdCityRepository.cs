@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Web_Api.online.Models.Tables.DPDCities;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
 {
