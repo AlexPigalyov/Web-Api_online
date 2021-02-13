@@ -9,7 +9,7 @@ namespace Web_Api.online.Controllers
         [HttpGet]
         public IActionResult Test()
         {
-            return Ok("12345");
+            return Ok("123456");
         }
     }
 }
