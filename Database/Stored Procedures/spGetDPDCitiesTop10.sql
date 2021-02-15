@@ -1,4 +1,4 @@
-ALTER PROCEDURE [spDPDCitiesTop10]
+ALTER PROCEDURE [spGetDPDCitiesTop10]
 @text nvarchar(50)
 AS
 BEGIN
@@ -26,5 +26,5 @@ END
 GO
 
 GRANT EXECUTE
-    ON OBJECT::[dbo].[spDPDCitiesTop10] TO PUBLIC
+    ON OBJECT::[dbo].[spGetDPDCitiesTop10] TO PUBLIC
     AS [dbo];
