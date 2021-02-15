@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Web_Api.online.Repositories;
 
 namespace Web_Api.online.API.Controllers
@@ -20,9 +21,23 @@ namespace Web_Api.online.API.Controllers
         }
 
         [HttpGet]
+        [Route("ticker")]
+        public async Task<IActionResult> GetTickerInformation()
+        {
+            try
+            {
+                return Ok(await RatesRepository.GetTickerInformationAsync());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")
         {
-            var lastRates = Raterepository.GetLastRates();
+            var lastRates = RatesRepository.GetLastRates();
             Currencies currencies = new Currencies();
             currencies.CurrencyOfMetal = currencyOfMetal;
             currencies.CurrencyOfValute = currencyOfValute;
