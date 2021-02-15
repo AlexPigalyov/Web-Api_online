@@ -4,10 +4,10 @@ BEGIN
 
 select
 rub.[Id]
-rub,[Acronim]
-rub,[Site]
-rub,[Price]
-rub,[Date]
+,rub.[Acronim]
+,rub.[Site]
+,rub.[Price]
+,rub.[Date]
 from (
     select top 1 *
     from [Rates]
@@ -18,10 +18,10 @@ union all
 
 select
 eur.[Id]
-eur,[Acronim]
-eur,[Site]
-eur,[Price]
-eur,[Date]
+,eur.[Acronim]
+,eur.[Site]
+,eur.[Price]
+,eur.[Date]
 from (
     select top 1 *
     from [Rates]
@@ -32,10 +32,10 @@ from (
 
 select
 xau.[Id]
-xau,[Acronim]
-xau,[Site]
-xau,[Price]
-xau,[Date]
+,xau.[Acronim]
+,xau.[Site]
+,xau.[Price]
+,xau.[Date]
 from (
     select top 1 *
     from [Rates]
@@ -46,10 +46,10 @@ from (
 
 select
 pl.[Id]
-pl,[Acronim]
-pl,[Site]
-pl,[Price]
-pl,[Date]
+,pl.[Acronim]
+,pl.[Site]
+,pl.[Price]
+,pl.[Date]
 from (
     select top 1 *
     from [Rates]
@@ -60,10 +60,10 @@ from (
 
 select
 xag.[Id]
-xag,[Acronim]
-xag,[Site]
-xag,[Price]
-xag,[Date]
+,xag.[Acronim]
+,xag.[Site]
+,xag.[Price]
+,xag.[Date]
 from (
     select top 1 *
     from [Rates]
