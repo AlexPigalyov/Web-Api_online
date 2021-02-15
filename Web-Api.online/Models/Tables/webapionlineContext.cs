@@ -17,6 +17,8 @@ namespace Web_Api.online.Models.Tables
         {
         }
 
+        public virtual DbSet<CoinsRate> CoinsRates { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<DpdCity> DpdCities { get; set; }
         public virtual DbSet<Rate> Rates { get; set; }
 
@@ -24,6 +26,7 @@ namespace Web_Api.online.Models.Tables
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("server=localhost\\SQLExpress;user=webapionline;password=webapionline1;database=web-api.online");
             }
         }
@@ -31,6 +34,36 @@ namespace Web_Api.online.Models.Tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
+
+            modelBuilder.Entity<CoinsRate>(entity =>
+            {
+                entity.Property(e => e.Acronim)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Site)
+                    .IsRequired()
+                    .HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<Currency>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Acronim).HasMaxLength(5);
+
+                entity.Property(e => e.Country).HasMaxLength(50);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
 
             modelBuilder.Entity<DpdCity>(entity =>
             {
@@ -96,11 +129,17 @@ namespace Web_Api.online.Models.Tables
 
             modelBuilder.Entity<Rate>(entity =>
             {
+                entity.Property(e => e.Acronim)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
                 entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Value).IsRequired();
+                entity.Property(e => e.Site)
+                    .IsRequired()
+                    .HasMaxLength(150);
             });
 
             OnModelCreatingPartial(modelBuilder);

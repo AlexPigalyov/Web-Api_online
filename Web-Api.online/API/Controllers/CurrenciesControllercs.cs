@@ -43,7 +43,7 @@ namespace Web_Api.online.API.Controllers
             currencies.CurrencyOfValute = currencyOfValute;
             Dictionary<string, double> valuteCurrencies, metalCurrencies;
 
-            Dictionary<string, double> rates = JsonConvert.DeserializeObject<Dictionary<string, double>>(lastRates.Value);
+            Dictionary<string, double> rates = JsonConvert.DeserializeObject<Dictionary<string, double>>(lastRates.ToString());
 
             metalCurrencies = rates.Take(4)
                 .ToDictionary(x => x.Key, x => x.Value);
