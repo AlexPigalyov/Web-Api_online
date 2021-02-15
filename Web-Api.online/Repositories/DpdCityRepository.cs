@@ -10,7 +10,7 @@ namespace Web_Api.online.Repositories
         {
             using (var ctx = new webapionlineContext())
             {
-                var top10cities = await ctx.DpdCities.FromSqlRaw($"spDPDCitiesTop10 '{cityName}'").ToListAsync();
+                var top10cities = await ctx.DpdCities.FromSqlRaw($"spGetDPDCitiesTop10 '{cityName}'").ToListAsync();
 
                 return top10cities;
             }

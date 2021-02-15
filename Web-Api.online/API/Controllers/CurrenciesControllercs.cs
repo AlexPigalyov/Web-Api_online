@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Web_Api.online.Repositories;
 
-namespace Web_Api.online.Controllers
+namespace Web_Api.online.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CurrenciesController : ControllerBase
+    public class CurrenciesControllercs : ControllerBase
     {
         public class Currencies
         {

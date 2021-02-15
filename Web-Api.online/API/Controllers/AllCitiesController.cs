@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Web_Api.online.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web_Api.online.Controllers
+namespace Web_Api.online.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

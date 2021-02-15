@@ -4,7 +4,7 @@ using Web_Api.online.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Models;
 
-namespace Web_Api.online.Controllers
+namespace Web_Api.online.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -21,7 +21,7 @@ namespace Web_Api.online.Controllers
             try
             {
                 var deliveryCity = await DpdCityRepository.GetDPDCityAsync(request.DeliveryCityName);
-                var pickupCity =  await DpdCityRepository.GetDPDCityAsync(request.PickupCityName);
+                var pickupCity = await DpdCityRepository.GetDPDCityAsync(request.PickupCityName);
 
                 var serviceCosts = await _calcClient.getServiceCost2Async(new DPDCalc.serviceCostRequest()
                 {
