@@ -30,7 +30,7 @@ namespace Web_Api.online.Repositories
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaulConnection")))
             {
-                var result = db.Query<dynamic>("exec spGetTickerRates").ToList();
+                var result = await db.QueryAsync<dynamic>("exec spGetTickerRates");
 
                 return result;
             }
