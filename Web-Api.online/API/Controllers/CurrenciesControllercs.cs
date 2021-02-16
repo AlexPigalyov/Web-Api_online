@@ -5,13 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web_Api.online.Repositories;
+using Microsoft.Extensions.Configuration;
 
 namespace Web_Api.online.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CurrenciesControllercs : ControllerBase
+    public class CurrenciesController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+
+        private readonly IRatesRepository _ratesRepository;
+
+        public CurrenciesController(IConfiguration configuration, IRatesRepository ratesRepository)
+        {
+            _configuration = configuration;
+            _ratesRepository = ratesRepository;
+        }
+
         public class Currencies
         {
             public string CurrencyOfMetal = "USD";
@@ -26,7 +37,7 @@ namespace Web_Api.online.API.Controllers
         {
             try
             {
-                return Ok(await RatesRepository.GetTickerInformationAsync());
+                return Ok(await _ratesRepository.GetTickerInformationAsync());
             }
             catch (Exception e)
             {
@@ -37,7 +48,7 @@ namespace Web_Api.online.API.Controllers
         [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")
         {
-            var lastRates = RatesRepository.GetLastRates();
+            var lastRates = _ratesRepository.GetLastRates();
             Currencies currencies = new Currencies();
             currencies.CurrencyOfMetal = currencyOfMetal;
             currencies.CurrencyOfValute = currencyOfValute;

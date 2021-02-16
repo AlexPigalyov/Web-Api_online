@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Web_Api.online.Repositories;
 
 namespace Web_Api.online
 {
@@ -28,6 +29,8 @@ namespace Web_Api.online
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_Api.online", Version = "v1" });
             });
+
+            services.AddTransient<IRatesRepository, RatesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

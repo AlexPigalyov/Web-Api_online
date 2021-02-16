@@ -1,14 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using Dapper;
+using System.Data;
+using Microsoft.Data.SqlClient;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Web_Api.online.Models.Tables;
+using Microsoft.Extensions.Configuration;
 
 namespace Web_Api.online.Repositories
 {
-    public static class RatesRepository
+    public class RatesRepository : IRatesRepository
     {
-        public static Rate GetLastRates()
+        private readonly IConfiguration _configuration;
+
+        public RatesRepository(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public Rate GetLastRates()
         {
             using (var ctx = new webapionlineContext())
             {
@@ -16,13 +26,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public static async Task<List<Rate>> GetTickerInformationAsync()
+        public async Task<dynamic> GetTickerInformationAsync()
         {
-            using (var ctx = new webapionlineContext())
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaulConnection")))
             {
-                var tickerInformation = await ctx.Rates.FromSqlRaw($"spGetTickerRates").ToListAsync();
+                var result = db.Query<dynamic>("exec spGetTickerRates").ToList();
 
-                return tickerInformation;
+                return result;
             }
         }
     }
