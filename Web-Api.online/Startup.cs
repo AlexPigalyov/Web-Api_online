@@ -39,8 +39,7 @@ namespace Web_Api.online
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                .AllowAnyHeader());
 
             if (env.IsDevelopment())
             {
