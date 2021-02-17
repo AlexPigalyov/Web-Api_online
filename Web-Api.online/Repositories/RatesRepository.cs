@@ -28,7 +28,7 @@ namespace Web_Api.online.Repositories
 
         public async Task<dynamic> GetTickerInformationAsync()
         {
-            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaulConnection")))
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var result = await db.QueryAsync<dynamic>("exec spGetTickerRates");
 
