@@ -20,7 +20,7 @@ SELECT TOP (10) [cityId]
 ,[lng]
 FROM [DpdCities]
 Where 
-[cityName] like '%'+@text+'%'
+[cityName] like N'%'+@text+'%'
 Order by Population desc
 END
 GO
