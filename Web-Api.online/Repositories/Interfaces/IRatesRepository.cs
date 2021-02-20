@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
@@ -7,6 +9,6 @@ namespace Web_Api.online.Repositories
     {
         public Rate GetLastRates();
 
-        public Task<dynamic> GetTickerInformationAsync();
+        public Task<List<spGetTickerRatesResult>> GetTickerInformationAsync();
     }
 }

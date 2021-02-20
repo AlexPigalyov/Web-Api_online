@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web_Api.online.Repositories;
 using Microsoft.Extensions.Configuration;
+using Web_Api.online.Models.StoredProcedures;
 
 namespace Web_Api.online.API.Controllers
 {
@@ -37,7 +38,18 @@ namespace Web_Api.online.API.Controllers
         {
             try
             {
-                return Ok(await _ratesRepository.GetTickerInformationAsync());
+                List<spGetTickerRatesResult> result = await _ratesRepository.GetTickerInformationAsync();
+
+                //Convert to RUB rates
+
+                var usd = result.FirstOrDefault(x => x.Acronim == "RUB");
+                usd.Acronim = "USD";
+                usd.Sell = usd.Buy;
+
+                var eur = result.FirstOrDefault(x => x.Acronim == "EUR");
+                eur.Sell = eur.Buy = Math.Round(usd.Buy / eur.Buy, 5);
+
+                return Ok(result);
             }
             catch (Exception e)
             {
