@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spGetTickerRatesResult
+    public class spGetLastCoinsRatesResult
     {
         public long Id { get; set; }
         public string Acronim { get; set; }

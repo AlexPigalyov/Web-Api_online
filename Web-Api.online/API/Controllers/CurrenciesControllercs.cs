@@ -63,16 +63,7 @@ namespace Web_Api.online.API.Controllers
         {
             try
             {
-                List<spGetTickerRatesResult> result = await _ratesRepository.GetTickerInformationAsync();
-
-                //Convert to RUB rates
-
-                var usd = result.FirstOrDefault(x => x.Acronim == "RUB");
-                usd.Acronim = "USD";
-                usd.Sell = usd.Buy;
-
-                var eur = result.FirstOrDefault(x => x.Acronim == "EUR");
-                eur.Sell = eur.Buy = Math.Round(usd.Buy / eur.Buy, 5);
+                List<spGetLastCoinsRatesResult> result = await _ratesRepository.GetLastCoinsRatesAsync();
 
                 return Ok(result);
             }
