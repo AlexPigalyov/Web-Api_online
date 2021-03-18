@@ -58,6 +58,31 @@ namespace Web_Api.online.API.Controllers
         }
 
         [HttpGet]
+        [Route("coinsRates")]
+        public async Task<IActionResult> GetLastCoinsRates()
+        {
+            try
+            {
+                List<spGetTickerRatesResult> result = await _ratesRepository.GetTickerInformationAsync();
+
+                //Convert to RUB rates
+
+                var usd = result.FirstOrDefault(x => x.Acronim == "RUB");
+                usd.Acronim = "USD";
+                usd.Sell = usd.Buy;
+
+                var eur = result.FirstOrDefault(x => x.Acronim == "EUR");
+                eur.Sell = eur.Buy = Math.Round(usd.Buy / eur.Buy, 5);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")
         {
             var lastRates = _ratesRepository.GetLastRates();
