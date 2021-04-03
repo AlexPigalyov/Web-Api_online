@@ -10,5 +10,7 @@ namespace Web_Api.online.Repositories
         public Rate GetLastRates();
 
         public Task<List<spGetTickerRatesResult>> GetTickerInformationAsync();
+
+        public Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync();
     }
 }

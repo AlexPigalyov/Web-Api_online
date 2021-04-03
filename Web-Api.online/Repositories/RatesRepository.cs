@@ -37,5 +37,15 @@ namespace Web_Api.online.Repositories
                 return result;
             }
         }
+
+        public async Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync()
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                List<spGetLastCoinsRatesResult> result = (List<spGetLastCoinsRatesResult>)(await db.QueryAsync<spGetLastCoinsRatesResult>("exec spGetLastCoinsRates"));
+
+                return result;
+            }
+        }
     }
 }

@@ -58,6 +58,22 @@ namespace Web_Api.online.API.Controllers
         }
 
         [HttpGet]
+        [Route("coinsRates")]
+        public async Task<IActionResult> GetLastCoinsRates()
+        {
+            try
+            {
+                List<spGetLastCoinsRatesResult> result = await _ratesRepository.GetLastCoinsRatesAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")
         {
             var lastRates = _ratesRepository.GetLastRates();
