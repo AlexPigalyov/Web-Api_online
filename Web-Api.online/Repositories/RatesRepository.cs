@@ -4,8 +4,10 @@ using Microsoft.Data.SqlClient;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Web_Api.online.Models.Tables;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
 {
@@ -26,11 +28,21 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<dynamic> GetTickerInformationAsync()
+        public async Task<List<spGetTickerRatesResult>> GetTickerInformationAsync()
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var result = await db.QueryAsync<dynamic>("exec spGetTickerRates");
+                List<spGetTickerRatesResult> result = (List<spGetTickerRatesResult>)(await db.QueryAsync<spGetTickerRatesResult>("exec spGetTickerRates"));
+
+                return result;
+            }
+        }
+
+        public async Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync()
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                List<spGetLastCoinsRatesResult> result = (List<spGetLastCoinsRatesResult>)(await db.QueryAsync<spGetLastCoinsRatesResult>("exec spGetLastCoinsRates"));
 
                 return result;
             }
