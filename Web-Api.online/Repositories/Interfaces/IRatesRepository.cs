@@ -12,5 +12,7 @@ namespace Web_Api.online.Repositories
         public Task<List<spGetTickerRatesResult>> GetTickerInformationAsync();
 
         public Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync();
+
+        public Task<List<spGetCoinRatesByAcronimResult>> GetCoinsByAcronimAsync(string acronim);
     }
 }
