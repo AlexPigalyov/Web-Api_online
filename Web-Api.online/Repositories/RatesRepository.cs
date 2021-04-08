@@ -20,11 +20,13 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public Rate GetLastRates()
+        public async Task<List<spGetLastRatesResult>> GetLastRatesAsync()
         {
-            using (var ctx = new webapionlineContext())
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                return ctx.Rates.OrderByDescending(item => item.Id).FirstOrDefault();
+                List<spGetLastRatesResult> result = (List<spGetLastRatesResult>)(await db.QueryAsync<spGetLastRatesResult>("exec spGetLastRates"));
+
+                return result;
             }
         }
 
