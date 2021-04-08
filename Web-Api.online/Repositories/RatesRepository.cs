@@ -47,5 +47,19 @@ namespace Web_Api.online.Repositories
                 return result;
             }
         }
+
+        public async Task<List<spGetCoinRatesByAcronimResult>> GetCoinsByAcronimAsync(string acronim)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+
+                List<spGetCoinRatesByAcronimResult> result = (List<spGetCoinRatesByAcronimResult>)(await db.QueryAsync<spGetCoinRatesByAcronimResult>("spGetCoinRatesByAcronim",
+                    new { acronim = acronim },
+                    commandType: CommandType.StoredProcedure
+                ));
+
+                return result;
+            }
+        }
     }
 }
