@@ -73,7 +73,37 @@ namespace Web_Api.online.API.Controllers
             }
         }
 
-        
+        [HttpGet]
+        [Route("CoinRatesByAcronim")]
+        public async Task<IActionResult> CoinRatesByAcronim(string acronim)
+        {
+            try
+            {
+                List<spGetCoinRatesByAcronimResult> result = await _ratesRepository.GetCoinsByAcronimAsync(acronim);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("CoinRatesByAcronimAndSite")]
+        public async Task<IActionResult> CoinRatesByAcronimAndSite(string acronim, string site)
+        {
+            try
+            {
+                List<spGetCoinRatesByAcronimAndSiteResult> result = await _ratesRepository.GetCoinsByAcronimAndSiteAsync(acronim, site);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpGet]
         public IActionResult GetCurrencies(string currencyOfMetal = "USD", string currencyOfValute = "USD")

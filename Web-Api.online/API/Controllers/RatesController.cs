@@ -23,21 +23,7 @@ namespace Web_Api.online.API.Controllers
             _ratesRepository = ratesRepository;
         }
 
-        [HttpGet]
-        [Route("CoinRatesByAcronim")]
-        public async Task<IActionResult> CoinRatesByAcronim(string acronim)
-        {
-            try
-            {
-                List<spGetCoinRatesByAcronimResult> result = await _ratesRepository.GetCoinsByAcronimAsync(acronim);
-
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }   
+        
 
         // GET: Rates
         public async Task<IActionResult> Index()
