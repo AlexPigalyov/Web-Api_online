@@ -7,7 +7,7 @@ namespace Web_Api.online.Repositories
 {
     public interface IRatesRepository
     {
-        public Rate GetLastRates();
+        public Task<List<spGetLastRatesResult>> GetLastRatesAsync();
 
         public Task<List<spGetTickerRatesResult>> GetTickerInformationAsync();
 
