@@ -13,5 +13,6 @@ namespace Web_Api.online.Models.Tables
         public double Buy { get; set; }
         public double Sell { get; set; }
         public DateTime Date { get; set; }
+        public bool? IsUp { get; set; }
     }
 }

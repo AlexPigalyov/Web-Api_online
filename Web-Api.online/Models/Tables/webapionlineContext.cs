@@ -54,6 +54,8 @@ namespace Web_Api.online.Models.Tables
                 entity.Property(e => e.Site)
                     .IsRequired()
                     .HasMaxLength(150);
+
+                entity.Property(e => e.IsUp);
             });
 
             modelBuilder.Entity<Currency>(entity =>
@@ -146,6 +148,8 @@ namespace Web_Api.online.Models.Tables
                 entity.Property(e => e.Site)
                     .IsRequired()
                     .HasMaxLength(150);
+
+                entity.Property(e => e.IsUp);
             });
 
             OnModelCreatingPartial(modelBuilder);

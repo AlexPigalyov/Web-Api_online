@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Repositories;
 
 namespace Web_Api.online.API.Controllers
 {
@@ -13,10 +15,15 @@ namespace Web_Api.online.API.Controllers
     {
         private readonly webapionlineContext _context;
 
-        public RatesController(webapionlineContext context)
+        private readonly IRatesRepository _ratesRepository;
+
+        public RatesController(webapionlineContext context, IRatesRepository ratesRepository)
         {
             _context = context;
+            _ratesRepository = ratesRepository;
         }
+
+        
 
         // GET: Rates
         public async Task<IActionResult> Index()

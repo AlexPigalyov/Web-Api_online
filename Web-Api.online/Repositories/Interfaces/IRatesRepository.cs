@@ -14,5 +14,7 @@ namespace Web_Api.online.Repositories
         public Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync();
 
         public Task<List<spGetCoinRatesByAcronimResult>> GetCoinsByAcronimAsync(string acronim);
+
+        public Task<List<spGetCoinRatesByAcronimAndSiteResult>> GetCoinsByAcronimAndSiteAsync(string acronim, string site);
     }
 }
