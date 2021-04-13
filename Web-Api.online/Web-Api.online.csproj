@@ -30,7 +30,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://raw.githubusercontent.com/andig/evcc/master/schema.json" /></VisualStudio></ProjectExtensions>
+	 <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://raw.githubusercontent.com/andig/evcc/master/schema.json" /></VisualStudio></ProjectExtensions>
 
 </Project>
