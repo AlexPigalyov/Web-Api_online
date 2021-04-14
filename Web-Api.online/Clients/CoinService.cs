@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Clients.Interfaces;
@@ -14,28 +15,28 @@ namespace Web_Api.online.Clients
 
         public CoinParameters Parameters { get; }
 
-        public CoinService()
+        public CoinService(IConfiguration configuration)
         {
             _restRequestClient = new RestRequestClient(this);
-            Parameters = new CoinParameters(this, null, null, null, null, 0);
+            Parameters = new CoinParameters(this, configuration, null, null, null, null, 0);
         }
 
-        public CoinService(bool useTestnet) : this()
+        public CoinService(IConfiguration configuration, bool useTestnet) : this(configuration)
         {
             Parameters.UseTestnet = useTestnet;
         }
 
-        public CoinService(string daemonUrl, string rpcUsername, string rpcPassword, string walletPassword)
+        public CoinService(IConfiguration configuration, string daemonUrl, string rpcUsername, string rpcPassword, string walletPassword)
         {
             _restRequestClient = new RestRequestClient(this);
-            Parameters = new CoinParameters(this, daemonUrl, rpcUsername, rpcPassword, walletPassword, 0);
+            Parameters = new CoinParameters(this, configuration, daemonUrl, rpcUsername, rpcPassword, walletPassword, 0);
         }
 
         //  this provides support for cases where *.config files are not an option
-        public CoinService(string daemonUrl, string rpcUsername, string rpcPassword, string walletPassword, short rpcRequestTimeoutInSeconds)
+        public CoinService(IConfiguration configuration, string daemonUrl, string rpcUsername, string rpcPassword, string walletPassword, short rpcRequestTimeoutInSeconds)
         {
             _restRequestClient = new RestRequestClient(this);
-            Parameters = new CoinParameters(this, daemonUrl, rpcUsername, rpcPassword, walletPassword, rpcRequestTimeoutInSeconds);
+            Parameters = new CoinParameters(this, configuration, daemonUrl, rpcUsername, rpcPassword, walletPassword, rpcRequestTimeoutInSeconds);
         }
 
         public string AddMultiSigAddress(int nRquired, List<string> publicKeys, string account)

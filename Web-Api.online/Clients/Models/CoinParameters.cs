@@ -1,22 +1,26 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Web_Api.online.Clients.Interfaces;
 
 namespace Web_Api.online.Clients.Models
 {
     public class CoinParameters
     {
+        private readonly IConfiguration _configuration;
+
         #region Constructor
 
         public CoinParameters(ICoinService coinService,
-            IConfiguration configRoot,
+            IConfiguration configuration,
             string daemonUrl,
             string rpcUsername,
             string rpcPassword,
             string walletPassword,
             short rpcRequestTimeoutInSeconds)
         {
+            _configuration = configuration;
+
             if (!string.IsNullOrWhiteSpace(daemonUrl))
             {
                 DaemonUrl = daemonUrl;
@@ -35,7 +39,7 @@ namespace Web_Api.online.Clients.Models
             {
                 short rpcRequestTimeoutTryParse = 0;
 
-                if (short.TryParse(ConfigurationManager.AppSettings.Get("RpcRequestTimeoutInSeconds"), out rpcRequestTimeoutTryParse))
+                if (short.TryParse(_configuration["RpcRequestTimeoutInSeconds"], out rpcRequestTimeoutTryParse))
                 {
                     RpcRequestTimeoutInSeconds = rpcRequestTimeoutTryParse;
                 }
@@ -58,11 +62,11 @@ namespace Web_Api.online.Clients.Models
             {
                 if (!IgnoreConfigFiles)
                 {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("BitcoinCash_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("BitcoinCash_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("BitcoinCash_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("BitcoinCash_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("BitcoinCash_WalletPassword");
+                    DaemonUrl = _configuration["BitcoinCash_DaemonUrl"];
+                    DaemonUrlTestnet = _configuration["BitcoinCash_DaemonUrl_Testnet"];
+                    RpcUsername = _configuration["BitcoinCash_RpcUsername"];
+                    RpcPassword = _configuration["BitcoinCash_RpcPassword"];
+                    WalletPassword = _configuration["BitcoinCash_WalletPassword"];
                 }
 
                 CoinShortName = "BCH";
@@ -96,11 +100,11 @@ namespace Web_Api.online.Clients.Models
             {
                 if (!IgnoreConfigFiles)
                 {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Bitcoin_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Bitcoin_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Bitcoin_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Bitcoin_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Bitcoin_WalletPassword");
+                    DaemonUrl = _configuration["Bitcoin_DaemonUrl"];
+                    DaemonUrlTestnet = _configuration["Bitcoin_DaemonUrl_Testnet"];
+                    RpcUsername = _configuration["Bitcoin_RpcUsername"];
+                    RpcPassword = _configuration["Bitcoin_RpcPassword"];
+                    WalletPassword = _configuration["Bitcoin_WalletPassword"];
                 }
 
                 CoinShortName = "BTC";
@@ -135,11 +139,11 @@ namespace Web_Api.online.Clients.Models
             {
                 if (!IgnoreConfigFiles)
                 {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Litecoin_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Litecoin_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Litecoin_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Litecoin_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Litecoin_WalletPassword");
+                    DaemonUrl = _configuration["Litecoin_DaemonUrl"];
+                    DaemonUrlTestnet = _configuration["Litecoin_DaemonUrl_Testnet"];
+                    RpcUsername = _configuration["Litecoin_RpcUsername"];
+                    RpcPassword = _configuration["Litecoin_RpcPassword"];
+                    WalletPassword = _configuration["Litecoin_WalletPassword"];
                 }
 
                 CoinShortName = "LTC";
@@ -175,11 +179,11 @@ namespace Web_Api.online.Clients.Models
             {
                 if (!IgnoreConfigFiles)
                 {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Dogecoin_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Dogecoin_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Dogecoin_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Dogecoin_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Dogecoin_WalletPassword");
+                    DaemonUrl = _configuration["Dogecoin_DaemonUrl"];
+                    DaemonUrlTestnet = _configuration["Dogecoin_DaemonUrl_Testnet"];
+                    RpcUsername = _configuration["Dogecoin_RpcUsername"];
+                    RpcPassword = _configuration["Dogecoin_RpcPassword"];
+                    WalletPassword = _configuration["Dogecoin_WalletPassword"];
                 }
 
                 CoinShortName = "Doge";
@@ -205,44 +209,44 @@ namespace Web_Api.online.Clients.Models
 
             #endregion
 
-            #region Sarcoin
+            //#region Sarcoin
 
-            else if (coinService is SarcoinService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Sarcoin_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Sarcoin_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Sarcoin_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Sarcoin_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Sarcoin_WalletPassword");
-                }
+            //else if (coinService is SarcoinService)
+            //{
+            //    if (!IgnoreConfigFiles)
+            //    {
+            //        DaemonUrl = _configuration["Sarcoin_DaemonUrl"];
+            //        DaemonUrlTestnet = _configuration["Sarcoin_DaemonUrl_Testnet"];
+            //        RpcUsername = _configuration["Sarcoin_RpcUsername"];
+            //        RpcPassword = _configuration["Sarcoin_RpcPassword"];
+            //        WalletPassword = _configuration["Sarcoin_WalletPassword"];
+            //    }
 
-                CoinShortName = "SAR";
-                CoinLongName = "Sarcoin";
-                IsoCurrencyCode = "SAR";
+            //    CoinShortName = "SAR";
+            //    CoinLongName = "Sarcoin";
+            //    IsoCurrencyCode = "SAR";
 
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
+            //    TransactionSizeBytesContributedByEachInput = 148;
+            //    TransactionSizeBytesContributedByEachOutput = 34;
+            //    TransactionSizeFixedExtraSizeInBytes = 10;
 
-                FreeTransactionMaximumSizeInBytes = 0;
-                FreeTransactionMinimumOutputAmountInCoins = 0;
-                FreeTransactionMinimumPriority = 0;
-                FeePerThousandBytesInCoins = 0.00001M;
-                MinimumTransactionFeeInCoins = 0.00001M;
-                MinimumNonDustTransactionAmountInCoins = 0.00001M;
+            //    FreeTransactionMaximumSizeInBytes = 0;
+            //    FreeTransactionMinimumOutputAmountInCoins = 0;
+            //    FreeTransactionMinimumPriority = 0;
+            //    FeePerThousandBytesInCoins = 0.00001M;
+            //    MinimumTransactionFeeInCoins = 0.00001M;
+            //    MinimumNonDustTransactionAmountInCoins = 0.00001M;
 
-                TotalCoinSupplyInCoins = 2000000000;
-                EstimatedBlockGenerationTimeInMinutes = 1.5;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
+            //    TotalCoinSupplyInCoins = 2000000000;
+            //    EstimatedBlockGenerationTimeInMinutes = 1.5;
+            //    BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
 
-                BaseUnitName = "Satoshi";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
+            //    BaseUnitName = "Satoshi";
+            //    BaseUnitsPerCoin = 100000000;
+            //    CoinsPerBaseUnit = 0.00000001M;
+            //}
 
-            #endregion
+            //#endregion
 
             #region Dash
 
@@ -250,11 +254,11 @@ namespace Web_Api.online.Clients.Models
             {
                 if (!IgnoreConfigFiles)
                 {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Dash_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Dash_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Dash_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Dash_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Dash_WalletPassword");
+                    DaemonUrl = _configuration["Dash_DaemonUrl"];
+                    DaemonUrlTestnet = _configuration["Dash_DaemonUrl_Testnet"];
+                    RpcUsername = _configuration["Dash_RpcUsername"];
+                    RpcPassword = _configuration["Dash_RpcPassword"];
+                    WalletPassword = _configuration["Dash_WalletPassword"];
                 }
 
                 CoinShortName = "DASH";
@@ -283,167 +287,167 @@ namespace Web_Api.online.Clients.Models
 
             #endregion
 
-            #region Mogwai
-            else if (coinService is MogwaicoinService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Mogwaicoin_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Mogwaicoin_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Mogwaicoin_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Mogwaicoin_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Mogwaicoin_WalletPassword");
-                }
-                CoinShortName = "Mogwaicoin";
-                CoinLongName = "Mogwaicoin";
-                IsoCurrencyCode = "MOG";
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
-                FreeTransactionMaximumSizeInBytes = 1000;
-                FreeTransactionMinimumOutputAmountInCoins = 0.0001M;
-                FreeTransactionMinimumPriority = 57600000;
-                FeePerThousandBytesInCoins = 0.0001M;
-                MinimumTransactionFeeInCoins = 0.001M;
-                MinimumNonDustTransactionAmountInCoins = 0.0000543M;
-                TotalCoinSupplyInCoins = 50000000;
-                EstimatedBlockGenerationTimeInMinutes = 2.0;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
-                BaseUnitName = "Puff";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
-            #endregion
+            //#region Mogwai
+            //else if (coinService is MogwaicoinService)
+            //{
+            //    if (!IgnoreConfigFiles)
+            //    {
+            //        DaemonUrl = _configuration["Mogwaicoin_DaemonUrl"];
+            //        DaemonUrlTestnet = _configuration["Mogwaicoin_DaemonUrl_Testnet"];
+            //        RpcUsername = _configuration["Mogwaicoin_RpcUsername"];
+            //        RpcPassword = _configuration["Mogwaicoin_RpcPassword"];
+            //        WalletPassword = _configuration["Mogwaicoin_WalletPassword"];
+            //    }
+            //    CoinShortName = "Mogwaicoin";
+            //    CoinLongName = "Mogwaicoin";
+            //    IsoCurrencyCode = "MOG";
+            //    TransactionSizeBytesContributedByEachInput = 148;
+            //    TransactionSizeBytesContributedByEachOutput = 34;
+            //    TransactionSizeFixedExtraSizeInBytes = 10;
+            //    FreeTransactionMaximumSizeInBytes = 1000;
+            //    FreeTransactionMinimumOutputAmountInCoins = 0.0001M;
+            //    FreeTransactionMinimumPriority = 57600000;
+            //    FeePerThousandBytesInCoins = 0.0001M;
+            //    MinimumTransactionFeeInCoins = 0.001M;
+            //    MinimumNonDustTransactionAmountInCoins = 0.0000543M;
+            //    TotalCoinSupplyInCoins = 50000000;
+            //    EstimatedBlockGenerationTimeInMinutes = 2.0;
+            //    BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
+            //    BaseUnitName = "Puff";
+            //    BaseUnitsPerCoin = 100000000;
+            //    CoinsPerBaseUnit = 0.00000001M;
+            //}
+            //#endregion
 
-            #region Smartcash
+            //#region Smartcash
 
-            else if (coinService is SmartcashService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Smartcash_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Smartcash_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Smartcash_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Smartcash_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Smartcash_WalletPassword");
-                }
+            //else if (coinService is SmartcashService)
+            //{
+            //    if (!IgnoreConfigFiles)
+            //    {
+            //        DaemonUrl = _configuration["Smartcash_DaemonUrl"];
+            //        DaemonUrlTestnet = _configuration["Smartcash_DaemonUrl_Testnet"];
+            //        RpcUsername = _configuration["Smartcash_RpcUsername"];
+            //        RpcPassword = _configuration["Smartcash_RpcPassword"];
+            //        WalletPassword = _configuration["Smartcash_WalletPassword"];
+            //    }
 
-                CoinShortName = "SMART";
-                CoinLongName = "Smartcash";
-                IsoCurrencyCode = "SMART";
+            //    CoinShortName = "SMART";
+            //    CoinLongName = "Smartcash";
+            //    IsoCurrencyCode = "SMART";
 
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
+            //    TransactionSizeBytesContributedByEachInput = 148;
+            //    TransactionSizeBytesContributedByEachOutput = 34;
+            //    TransactionSizeFixedExtraSizeInBytes = 10;
 
-                FreeTransactionMaximumSizeInBytes = 0; // free txs are not supported
-                FreeTransactionMinimumOutputAmountInCoins = 0;
-                FreeTransactionMinimumPriority = 0;
-                FeePerThousandBytesInCoins = 0.0001M;
-                MinimumTransactionFeeInCoins = 0.001M;
-                MinimumNonDustTransactionAmountInCoins = 0.00001M;
+            //    FreeTransactionMaximumSizeInBytes = 0; // free txs are not supported
+            //    FreeTransactionMinimumOutputAmountInCoins = 0;
+            //    FreeTransactionMinimumPriority = 0;
+            //    FeePerThousandBytesInCoins = 0.0001M;
+            //    MinimumTransactionFeeInCoins = 0.001M;
+            //    MinimumNonDustTransactionAmountInCoins = 0.00001M;
 
-                TotalCoinSupplyInCoins = 5000000000;
-                EstimatedBlockGenerationTimeInMinutes = 0.916667;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
+            //    TotalCoinSupplyInCoins = 5000000000;
+            //    EstimatedBlockGenerationTimeInMinutes = 0.916667;
+            //    BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
 
-                BaseUnitName = "Smartoshi";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
+            //    BaseUnitName = "Smartoshi";
+            //    BaseUnitsPerCoin = 100000000;
+            //    CoinsPerBaseUnit = 0.00000001M;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region Dallar
+            //#region Dallar
 
-            else if (coinService is DallarService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Dallar_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Dallar_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Dallar_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Dallar_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Dallar_WalletPassword");
-                }
+            //else if (coinService is DallarService)
+            //{
+            //    if (!IgnoreConfigFiles)
+            //    {
+            //        DaemonUrl = _configuration["Dallar_DaemonUrl"];
+            //        DaemonUrlTestnet = _configuration["Dallar_DaemonUrl_Testnet"];
+            //        RpcUsername = _configuration["Dallar_RpcUsername"];
+            //        RpcPassword = _configuration["Dallar_RpcPassword"];
+            //        WalletPassword = _configuration["Dallar_WalletPassword"];
+            //    }
 
-                CoinShortName = "DAL";
-                CoinLongName = "Dallar";
-                IsoCurrencyCode = "DAL";
+            //    CoinShortName = "DAL";
+            //    CoinLongName = "Dallar";
+            //    IsoCurrencyCode = "DAL";
 
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
+            //    TransactionSizeBytesContributedByEachInput = 148;
+            //    TransactionSizeBytesContributedByEachOutput = 34;
+            //    TransactionSizeFixedExtraSizeInBytes = 10;
 
-                FreeTransactionMaximumSizeInBytes = 1000;
-                FreeTransactionMinimumOutputAmountInCoins = 0.001M;
-                FreeTransactionMinimumPriority = 230400000;
-                FeePerThousandBytesInCoins = 0.001M;
-                MinimumTransactionFeeInCoins = 0.0001M;
-                MinimumNonDustTransactionAmountInCoins = 0.001M;
+            //    FreeTransactionMaximumSizeInBytes = 1000;
+            //    FreeTransactionMinimumOutputAmountInCoins = 0.001M;
+            //    FreeTransactionMinimumPriority = 230400000;
+            //    FeePerThousandBytesInCoins = 0.001M;
+            //    MinimumTransactionFeeInCoins = 0.0001M;
+            //    MinimumNonDustTransactionAmountInCoins = 0.001M;
 
-                TotalCoinSupplyInCoins = 80000000;
-                EstimatedBlockGenerationTimeInMinutes = 1.0;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 16000;
-                BlockMaximumSizeInBytes = 750000;
+            //    TotalCoinSupplyInCoins = 80000000;
+            //    EstimatedBlockGenerationTimeInMinutes = 1.0;
+            //    BlocksHighestPriorityTransactionsReservedSizeInBytes = 16000;
+            //    BlockMaximumSizeInBytes = 750000;
 
-                BaseUnitName = "Allar";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
+            //    BaseUnitName = "Allar";
+            //    BaseUnitsPerCoin = 100000000;
+            //    CoinsPerBaseUnit = 0.00000001M;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region Colx
+            //#region Colx
 
-            else if (coinService is ColxService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = ConfigurationManager.AppSettings.Get("Colx_DaemonUrl");
-                    DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Colx_DaemonUrl_Testnet");
-                    RpcUsername = ConfigurationManager.AppSettings.Get("Colx_RpcUsername");
-                    RpcPassword = ConfigurationManager.AppSettings.Get("Colx_RpcPassword");
-                    WalletPassword = ConfigurationManager.AppSettings.Get("Colx_WalletPassword");
-                }
-                CoinShortName = "COLX";
-                CoinLongName = "ColossusXT Coin";
-                IsoCurrencyCode = "COLX";
+            //else if (coinService is ColxService)
+            //{
+            //    if (!IgnoreConfigFiles)
+            //    {
+            //        DaemonUrl = _configuration["Colx_DaemonUrl"];
+            //        DaemonUrlTestnet = _configuration["Colx_DaemonUrl_Testnet"];
+            //        RpcUsername = _configuration["Colx_RpcUsername"];
+            //        RpcPassword = _configuration["Colx_RpcPassword"];
+            //        WalletPassword = _configuration["Colx_WalletPassword"];
+            //    }
+            //    CoinShortName = "COLX";
+            //    CoinLongName = "ColossusXT Coin";
+            //    IsoCurrencyCode = "COLX";
 
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
+            //    TransactionSizeBytesContributedByEachInput = 148;
+            //    TransactionSizeBytesContributedByEachOutput = 34;
+            //    TransactionSizeFixedExtraSizeInBytes = 10;
 
-                FreeTransactionMaximumSizeInBytes = 1000;
-                FreeTransactionMinimumOutputAmountInCoins = 0.0001M;
-                FreeTransactionMinimumPriority = 57600000;
-                FeePerThousandBytesInCoins = 0.0001M;
-                MinimumTransactionFeeInCoins = 0.001M;
-                MinimumNonDustTransactionAmountInCoins = 0.0000543M;
+            //    FreeTransactionMaximumSizeInBytes = 1000;
+            //    FreeTransactionMinimumOutputAmountInCoins = 0.0001M;
+            //    FreeTransactionMinimumPriority = 57600000;
+            //    FeePerThousandBytesInCoins = 0.0001M;
+            //    MinimumTransactionFeeInCoins = 0.001M;
+            //    MinimumNonDustTransactionAmountInCoins = 0.0000543M;
 
-                TotalCoinSupplyInCoins = 18900000;
-                EstimatedBlockGenerationTimeInMinutes = 2.7;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
+            //    TotalCoinSupplyInCoins = 18900000;
+            //    EstimatedBlockGenerationTimeInMinutes = 2.7;
+            //    BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
 
-                BaseUnitName = "ucolx";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
+            //    BaseUnitName = "ucolx";
+            //    BaseUnitsPerCoin = 100000000;
+            //    CoinsPerBaseUnit = 0.00000001M;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region Agnostic coin (cryptocoin)
+            //#region Agnostic coin (cryptocoin)
 
-            else if (coinService is CryptocoinService)
-            {
-                CoinShortName = "XXX";
-                CoinLongName = "Generic Cryptocoin Template";
-                IsoCurrencyCode = "XXX";
+            //else if (coinService is CryptocoinService)
+            //{
+            //    CoinShortName = "XXX";
+            //    CoinLongName = "Generic Cryptocoin Template";
+            //    IsoCurrencyCode = "XXX";
 
-                //  Note: The rest of the parameters will have to be defined at run-time
-            }
+            //    //  Note: The rest of the parameters will have to be defined at run-time
+            //}
 
-            #endregion
+            //#endregion
 
             #region Uknown coin exception
 
