@@ -8,10 +8,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[OpenOrder](
+CREATE TABLE [dbo].[BTC_USDT_OpenOrders](
 	[OpenOrderId] [int] NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
-	[Pair] [nvarchar](25) NOT NULL,
 	[IsBuy] [bit] NOT NULL,
 	[Price] [decimal](18, 0) NOT NULL,
 	[Amount] [decimal](18, 0) NOT NULL,
