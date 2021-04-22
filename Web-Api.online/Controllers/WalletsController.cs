@@ -13,14 +13,9 @@ namespace Web_Api.online.Controllers
         // GET: WalletsController
         public ActionResult Index()
         {
-            
+            var _params = Request.QueryString;
 
-            return View();
-        }
-
-        public ActionResult Index(string name)
-        {
-
+            var name = Request.Query["name"];
 
             return View();
         }
