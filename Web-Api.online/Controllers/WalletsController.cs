@@ -5,19 +5,55 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Web_Api.online.Models;
+using Web_Api.online.Models.Tables;
+using Web_Api.online.Repositories;
+using System.Security.Claims;
 
 namespace Web_Api.online.Controllers
 {
     public class WalletsController : Controller
     {
+        private WalletsRepository _walletsRepository;
+
+        public WalletsController(WalletsRepository walletsRepository)
+        {
+            _walletsRepository = walletsRepository;
+        }
+
+        public class IndexModel
+        {
+            public List<Currency> Currencies { get; set; }
+            public List<Wallet> UserWallets { get; set; }
+        }
+
+
         // GET: WalletsController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var _params = Request.QueryString;
 
             var name = Request.Query["name"];
 
-            return View();
+            List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
+
+            List<Wallet> userWallets = new List<Wallet>();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+            }
+
+            //List <WalletsController> wallets = _walletsRepository.
+
+            IndexModel model = new IndexModel();
+
+            model.Currencies = currencies;
+            model.UserWallets = userWallets;
+
+            return View(model);
         }
 
         public ActionResult Details(string name)

@@ -53,6 +53,7 @@ namespace Web_Api.online
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_Api.online", Version = "v1" });
             });
 
+            services.AddTransient<WalletsRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
         }
 

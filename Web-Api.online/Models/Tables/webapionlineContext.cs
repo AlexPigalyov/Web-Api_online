@@ -58,20 +58,18 @@ namespace Web_Api.online.Models.Tables
                 entity.Property(e => e.IsUp);
             });
 
-            modelBuilder.Entity<Currency>(entity =>
-            {
-                entity.HasNoKey();
+            //modelBuilder.Entity<Currency>(entity =>
+            //{
+            //    entity.HasNoKey();
 
-                entity.Property(e => e.Acronim).HasMaxLength(5);
+            //    entity.Property(e => e.Acronim).HasMaxLength(5);
 
-                entity.Property(e => e.Country).HasMaxLength(50);
+            //    entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
+            //    entity.Property(e => e.Name)
+            //        .IsRequired()
+            //        .HasMaxLength(50);
+            //});
 
             modelBuilder.Entity<DpdCity>(entity =>
             {

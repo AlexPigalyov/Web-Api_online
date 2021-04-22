@@ -7,10 +7,15 @@
     <p>API:</p>
 </div>
 
+
+Wallets:
 <div>
     <ul>
-        <li>
-            
-        </li>
+        @foreach (var item in Model.UserWallets)
+        {
+            <li>
+                @item.Acronim
+            </li>
+        }
     </ul>
 </div>
