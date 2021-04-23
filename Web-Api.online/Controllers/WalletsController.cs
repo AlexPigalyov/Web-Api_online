@@ -62,9 +62,23 @@ namespace Web_Api.online.Controllers
         }
 
         // GET: WalletsController/Create
-        public ActionResult Create()
+        [HttpGet]
+        public async Task<JsonResult> Create(string id)
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            string walletAddress = Guid.NewGuid().ToString();
+
+            Wallet wallet = new Wallet()
+            {
+                UserId = userId,
+                CurrencyAcronim = id,
+                WalletAddress = walletAddress
+            };
+
+            wallet = await _walletsRepository.CreateUserWalletsAsync(wallet);
+
+            return Json(wallet);
         }
 
         // POST: WalletsController/Create

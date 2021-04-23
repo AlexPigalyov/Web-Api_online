@@ -1,20 +1,54 @@
 ﻿@{
     ViewData["Title"] = "Wallets";
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#selectCurrency option:first").attr('selected', 'selected');
+        //$("#selectCurrency option:first").prop("selected", "selected");
+
+        $("#createButton").click(function () {
+            var currency = $('#selectCurrency').find(":selected").val();;
+            createWallet(currency);
+        });
+    });
+
+    function createWallet(currency) {
+        var url = "/wallets/create/" + currency;
+        $.get(url, function (data) {
+            var walletAddress = data;
+
+            $("#walletsList").append('<li>' + data.id + ' ' + data.currencyAcronim + ' ' + data.value + ' ' + data.walletAddress + '</li>');
+
+
+        });
+    }
+</script>
 
 <div class="text-center">
     <h1 class="display-4">Wallets</h1>
-    <p>API:</p>
 </div>
+
+Create wallet:
+<select name="selectCurrency" id="selectCurrency">
+    @foreach (var item in Model.Currencies)
+    {
+        <option value="@item.Acronim">@item.Acronim</option>
+    }
+</select>
+<div id="createButton">Create</div>
 
 
 Wallets:
 <div>
-    <ul>
+    <ul id="walletsList">
         @foreach (var item in Model.UserWallets)
         {
             <li>
-                @item.Acronim
+                @item.Id @item.CurrencyAcronim @item.Value @item.WalletAddress
             </li>
         }
     </ul>

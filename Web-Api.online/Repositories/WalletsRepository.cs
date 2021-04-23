@@ -21,6 +21,7 @@ namespace Web_Api.online.Repositories
         {
             _configuration = configuration;
         }
+
         public async Task<List<Wallet>> GetUserWalletsAsync(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
@@ -33,6 +34,28 @@ namespace Web_Api.online.Repositories
                 ));
 
                     return result;
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
+
+        public async Task<Wallet> CreateUserWalletsAsync(Wallet wallet)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("userId", wallet.UserId);
+                    p.Add("walletAddress", wallet.WalletAddress);
+                    p.Add("currencyAcronim", wallet.CurrencyAcronim);
+                    p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    await db.QueryAsync<int>("spCreateUserWallet", p, commandType: CommandType.StoredProcedure);
+
+                    wallet.Id = p.Get<int>("new_identity");
+
+                    return wallet;
                 }
                 catch (Exception ex) { return null; }
             }
