@@ -39,7 +39,24 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<Wallet> CreateUserWalletsAsync(Wallet wallet)
+        public async Task<List<IncomeWallet>> GetUserIncomeWalletsAsync(string userId)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    List<IncomeWallet> result = (List<IncomeWallet>)(await db.QueryAsync<IncomeWallet>("spGetUserIncomeWallets",
+                    new { userId = userId },
+                    commandType: CommandType.StoredProcedure
+                ));
+
+                    return result;
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
+
+        public async Task<IncomeWallet> CreateUserIncomeWalletAsync(IncomeWallet wallet)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -51,7 +68,7 @@ namespace Web_Api.online.Repositories
                     p.Add("currencyAcronim", wallet.CurrencyAcronim);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                    await db.QueryAsync<int>("spCreateUserWallet", p, commandType: CommandType.StoredProcedure);
+                    await db.QueryAsync<int>("spCreateUserIncomeWallet", p, commandType: CommandType.StoredProcedure);
 
                     wallet.Id = p.Get<int>("new_identity");
 

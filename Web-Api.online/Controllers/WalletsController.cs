@@ -24,6 +24,7 @@ namespace Web_Api.online.Controllers
         public class IndexModel
         {
             public List<Currency> Currencies { get; set; }
+            public List<IncomeWallet> UserIncomeWallets { get; set; }
             public List<Wallet> UserWallets { get; set; }
         }
 
@@ -31,18 +32,16 @@ namespace Web_Api.online.Controllers
         // GET: WalletsController
         public async Task<ActionResult> Index()
         {
-            var _params = Request.QueryString;
-
-            var name = Request.Query["name"];
-
             List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
 
+            List<IncomeWallet> userIncomeWallets = new List<IncomeWallet>();
             List<Wallet> userWallets = new List<Wallet>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
+                userIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
                 userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
             }
 
@@ -51,6 +50,7 @@ namespace Web_Api.online.Controllers
             IndexModel model = new IndexModel();
 
             model.Currencies = currencies;
+            model.UserIncomeWallets = userIncomeWallets;
             model.UserWallets = userWallets;
 
             return View(model);
@@ -62,6 +62,7 @@ namespace Web_Api.online.Controllers
         }
 
         // GET: WalletsController/Create
+        // Create income wallet
         [HttpGet]
         public async Task<JsonResult> Create(string id)
         {
@@ -69,16 +70,16 @@ namespace Web_Api.online.Controllers
 
             string walletAddress = Guid.NewGuid().ToString();
 
-            Wallet wallet = new Wallet()
+            IncomeWallet incomeWallet = new IncomeWallet()
             {
                 UserId = userId,
                 CurrencyAcronim = id,
                 WalletAddress = walletAddress
             };
 
-            wallet = await _walletsRepository.CreateUserWalletsAsync(wallet);
+            incomeWallet = await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
 
-            return Json(wallet);
+            return Json(incomeWallet);
         }
 
         // POST: WalletsController/Create

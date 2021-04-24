@@ -27,28 +27,69 @@
         });
     }
 </script>
+<style>
+    .row {
+        width: 170px;
+    }
+
+    .column {
+        float: left;
+        width: 50%;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    #balanceWalletsList ul > li {
+        display: inline-block;
+        /* You can also add some margins here to make it look prettier */
+        zoom: 1;
+        *display: inline;
+        /* this fix is needed for IE7- */
+    }
+</style>
 
 <div class="text-center">
     <h1 class="display-4">Wallets</h1>
 </div>
 
-Create wallet:
-<select name="selectCurrency" id="selectCurrency">
-    @foreach (var item in Model.Currencies)
+Balance:
+<ul id="balanceWalletsList">
+    @foreach (var item in Model.UserWallets)
     {
-        <option value="@item.Acronim">@item.Acronim</option>
+        <li>
+            @item.CurrencyAcronim : @item.Value
+        </li>
     }
-</select>
-<div id="createButton">Create</div>
+</ul>
 
-
-Wallets:
+Create income wallet:
+<div class="row">
+    <div class="column">
+        <select name="selectCurrency" id="selectCurrency">
+            @foreach (var item in Model.Currencies)
+            {
+                <option value="@item.Acronim">@item.Acronim</option>
+            }
+        </select>
+    </div>
+    <div id="createButton" class="column"><img src="/img/add.png" alt="add" title="add" style="height:25px;" /></div>
+</div>
+<hr />
+Income wallets:
 <div>
     <ul id="walletsList">
-        @foreach (var item in Model.UserWallets)
+        <li>
+            Id Currency Value WalletAddress Created
+        </li>
+        @foreach (var item in Model.UserIncomeWallets)
         {
             <li>
-                @item.Id @item.CurrencyAcronim @item.Value @item.WalletAddress
+                @item.Id @item.CurrencyAcronim @item.Value @item.WalletAddress @item.Created
             </li>
         }
     </ul>
