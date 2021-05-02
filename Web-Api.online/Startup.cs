@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Web_Api.online.Data;
 using Microsoft.OpenApi.Models;
 using Web_Api.online.Repositories;
+using Web_Api.online.Hubs;
 
 namespace Web_Api.online
 {
@@ -47,6 +48,8 @@ namespace Web_Api.online
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddSignalR();
 
             services.AddSwaggerGen(c =>
             {
@@ -93,6 +96,7 @@ namespace Web_Api.online
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<BTC_USDT_Hub>("/hubs/btc_usdt");
             });
         }
     }
