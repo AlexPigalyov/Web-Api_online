@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Web_Api.online.Models.Tables
+﻿namespace Web_Api.online.Models.Tables
 {
     public class BTC_USDT_ClosedOrders
     {
@@ -14,8 +9,7 @@ namespace Web_Api.online.Models.Tables
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
         public decimal Total { get; set; }
-        public string Status { get; set; }
-        public int SoldUserId { get; set; }
+        public int CreateUserId { get; set; }
         public int BoughtUserId { get; set; }
     }
 }
