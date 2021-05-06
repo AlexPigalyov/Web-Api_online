@@ -28,7 +28,6 @@ namespace Web_Api.online.Controllers
             public List<Wallet> UserWallets { get; set; }
         }
 
-
         // GET: WalletsController
         public async Task<ActionResult> Index()
         {

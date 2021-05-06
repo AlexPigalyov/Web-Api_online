@@ -4,20 +4,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Web_Api.online.Repositories;
+using Web_Api.online.Models;
+using System.Security.Claims;
 
 namespace Web_Api.online.Controllers
 {
     public class TradeController : Controller
     {
+        private WalletsRepository _walletsRepository;
+
+        public TradeController(WalletsRepository walletsRepository)
+        {
+            _walletsRepository = walletsRepository;
+        }
+
         // GET: TradeController
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult BTC_USDT()
+        public class BTC_USDTModel
         {
-            return View();
+            public List<Wallet> UserWallets { get; set; }
+        }
+
+        public async Task<ActionResult> BTC_USDT()
+        {
+            List<Wallet> userWallets = new List<Wallet>();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+            }
+
+            BTC_USDTModel model = new BTC_USDTModel();
+
+            model.UserWallets = userWallets;
+
+            return View(model);
         }
 
         // GET: TradeController/Details/5
