@@ -10,5 +10,6 @@ namespace Web_Api.online.Models
         public decimal Value { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdate { get; set; }
+        public string Address { get; set; }
     }
 }

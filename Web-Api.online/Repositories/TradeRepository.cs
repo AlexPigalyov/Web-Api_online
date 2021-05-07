@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models;
+using System;
 
 namespace Web_Api.online.Repositories
 {
@@ -30,5 +32,26 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<OpenOrder> Add_BTC_USDT_OrderAsync(OpenOrder order)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("isBuy", order.IsBuy);
+                    p.Add("price", order.Price);
+                    p.Add("amount", order.Amount);
+                    p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    await db.QueryAsync<int>("spAdd_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
+
+                    order.OpenOrderId = p.Get<int>("new_identity");
+
+                    return order;
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
     }
 }

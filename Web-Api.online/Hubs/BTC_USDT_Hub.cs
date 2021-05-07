@@ -1,13 +1,40 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Web_Api.online.Models;
+using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Repositories;
 
 namespace Web_Api.online.Hubs
 {
     public class BTC_USDT_Hub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        private TradeRepository _tradeRepository;
+
+        public BTC_USDT_Hub(TradeRepository tradeRepository)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            _tradeRepository = tradeRepository;
+        }
+
+        public async Task SendMessage(string amount, string price)
+        {
+            double priceDouble = Convert.ToDouble(price);
+            double amountDouble = Convert.ToDouble(amount);
+
+            OpenOrder order = new OpenOrder
+            {
+                IsBuy = true,
+                Price = priceDouble,
+                Amount = amountDouble,
+                CreateUserId = "53cd122d-6253-4981-b290-11471f67c528"
+            };
+
+            await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
+
+            List<spGet_BTC_USDT_OpenOrdersResult> openOrders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
+
+            await Clients.All.SendAsync("ReceiveMessage", openOrders);
         }
     }
 }

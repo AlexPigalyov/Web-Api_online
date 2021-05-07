@@ -27,7 +27,11 @@ namespace Web_Api.online.Controllers
 
         public class BTC_USDTModel
         {
+            public string UserId { get; set; }
             public List<Wallet> UserWallets { get; set; }
+            public Wallet BtcWallet { get; set; }
+
+            public Wallet UsdtWallet { get; set; }
         }
 
         public async Task<ActionResult> BTC_USDT()
@@ -36,12 +40,56 @@ namespace Web_Api.online.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            BTC_USDTModel model = new BTC_USDTModel();
+
             if (!string.IsNullOrEmpty(userId))
             {
+                model.UserId = userId;
+
                 userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+
+                Wallet btcWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC");
+
+                if (btcWallet == null)
+                {
+                    btcWallet = new Wallet
+                    {
+                        UserId = userId,
+                        CurrencyAcronim = "BTC",
+                        Address = System.Guid.NewGuid().ToString().Replace("-", ""),
+                        Value = 0
+                    };
+
+                    btcWallet = await _walletsRepository.CreateUserWalletAsync(btcWallet);
+
+                    model.UserWallets.Add(btcWallet);
+
+                    model.BtcWallet = btcWallet;
+                }
+
+                Wallet usdtWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT");
+
+                if (usdtWallet == null)
+                {
+                    usdtWallet = new Wallet
+                    {
+                        UserId = userId,
+                        CurrencyAcronim = "USDT",
+                        Address = System.Guid.NewGuid().ToString().Replace("-", ""),
+                        Value = 0,
+                        Created = DateTime.Now,
+                        LastUpdate = DateTime.Now
+                    };
+
+                    usdtWallet = await _walletsRepository.CreateUserWalletAsync(usdtWallet);
+
+                    model.UserWallets.Add(usdtWallet);
+
+                    model.UsdtWallet = usdtWallet;
+                }
             }
 
-            BTC_USDTModel model = new BTC_USDTModel();
+
 
             model.UserWallets = userWallets;
 

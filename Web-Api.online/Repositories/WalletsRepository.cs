@@ -78,6 +78,28 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<Wallet> CreateUserWalletAsync(Wallet wallet)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("userId", wallet.UserId);
+                    p.Add("address", wallet.Address);
+                    p.Add("currencyAcronim", wallet.CurrencyAcronim);
+                    p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    await db.QueryAsync<int>("spCreateUserWallet", p, commandType: CommandType.StoredProcedure);
+
+                    wallet.Id = p.Get<int>("new_identity");
+
+                    return wallet;
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
+
         public async Task<List<Currency>> GetCurrenciesAsync()
         {
             using (var ctx = new exchangeContext())
