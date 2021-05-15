@@ -48,6 +48,8 @@ namespace Web_Api.online.Controllers
 
                 userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
 
+                model.UserWallets = userWallets;
+
                 Wallet btcWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC");
 
                 if (btcWallet == null)
@@ -61,11 +63,11 @@ namespace Web_Api.online.Controllers
                     };
 
                     btcWallet = await _walletsRepository.CreateUserWalletAsync(btcWallet);
-
-                    model.UserWallets.Add(btcWallet);
-
-                    model.BtcWallet = btcWallet;
                 }
+
+                model.UserWallets.Add(btcWallet);
+
+                model.BtcWallet = btcWallet;
 
                 Wallet usdtWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT");
 
@@ -82,17 +84,15 @@ namespace Web_Api.online.Controllers
                     };
 
                     usdtWallet = await _walletsRepository.CreateUserWalletAsync(usdtWallet);
-
-                    model.UserWallets.Add(usdtWallet);
-
-                    model.UsdtWallet = usdtWallet;
                 }
+
+                model.UserWallets.Add(usdtWallet);
+
+                model.UsdtWallet = usdtWallet;
             }
 
 
-
-            model.UserWallets = userWallets;
-
+            
             return View(model);
         }
 
