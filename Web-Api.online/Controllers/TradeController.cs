@@ -34,7 +34,7 @@ namespace Web_Api.online.Controllers
             public Wallet UsdtWallet { get; set; }
         }
 
-        public async Task<ActionResult> BTC_USDT()
+        public async Task<ActionResult> BTCUSDT()
         {
             List<Wallet> userWallets = new List<Wallet>();
 
