@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/hubs/btc_usdt").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/btcusdthub").build();
 
 //Disable send button until connection is established
 document.getElementById("buyButton").disabled = true;

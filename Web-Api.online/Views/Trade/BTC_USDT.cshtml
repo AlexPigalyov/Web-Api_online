@@ -11,7 +11,6 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>
@@ -21,7 +20,6 @@
     <li class="nav-item">
         USDT balance: @Model.UsdtWallet.Value Address: @Model.UsdtWallet.Address
     </li>
-
 
     <div class="container">
         <div class="row">&nbsp;</div>
@@ -40,10 +38,7 @@
             </div>
         </div>
     </div>
-
 }
-
-
 
 
 <div class="row">
@@ -58,4 +53,4 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/btc_usdt_hub.js"></script>
+<script src="~/js/btc_usdt_hub.js?2"></script>

@@ -8,11 +8,11 @@ using Web_Api.online.Repositories;
 
 namespace Web_Api.online.Hubs
 {
-    public class BTC_USDT_Hub : Hub
+    public class btcusdtHub : Hub
     {
         private TradeRepository _tradeRepository;
 
-        public BTC_USDT_Hub(TradeRepository tradeRepository)
+        public btcusdtHub(TradeRepository tradeRepository)
         {
             _tradeRepository = tradeRepository;
         }

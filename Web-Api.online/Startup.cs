@@ -96,7 +96,8 @@ namespace Web_Api.online
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<BTC_USDT_Hub>("/hubs/btc_usdt");
+                endpoints.MapHub<btcusdtHub>("/btcusdthub");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
