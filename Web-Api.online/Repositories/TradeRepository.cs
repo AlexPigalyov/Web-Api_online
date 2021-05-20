@@ -42,11 +42,12 @@ namespace Web_Api.online.Repositories
                     p.Add("isBuy", order.IsBuy);
                     p.Add("price", order.Price);
                     p.Add("amount", order.Amount);
+                    p.Add("userid", order.CreateUserId);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                    await db.QueryAsync<int>("spAdd_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
+                    var res = await db.QueryAsync<long>("spAdd_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
 
-                    order.OpenOrderId = p.Get<int>("new_identity");
+                    order.OpenOrderId = res.FirstOrDefault();
 
                     return order;
                 }

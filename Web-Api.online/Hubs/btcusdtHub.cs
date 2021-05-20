@@ -10,31 +10,31 @@ namespace Web_Api.online.Hubs
 {
     public class btcusdtHub : Hub
     {
-        //private TradeRepository _tradeRepository;
+        private TradeRepository _tradeRepository;
 
-        //public btcusdtHub(TradeRepository tradeRepository)
-        //{
-        //    _tradeRepository = tradeRepository;
-        //}
+        public btcusdtHub(TradeRepository tradeRepository) : base()
+        {
+            _tradeRepository = tradeRepository;
+        }
 
         public async Task SendMessage(string amount, string price)
         {
-            //double priceDouble = Convert.ToDouble(price);
-            //double amountDouble = Convert.ToDouble(amount);
+            double priceDouble = Convert.ToDouble(price);
+            double amountDouble = Convert.ToDouble(amount);
 
-            //OpenOrder order = new OpenOrder
-            //{
-            //    IsBuy = true,
-            //    Price = priceDouble,
-            //    Amount = amountDouble,
-            //    CreateUserId = "53cd122d-6253-4981-b290-11471f67c528"
-            //};
+            OpenOrder order = new OpenOrder
+            {
+                IsBuy = true,
+                Price = priceDouble,
+                Amount = amountDouble,
+                CreateUserId = "53cd122d-6253-4981-b290-11471f67c528"
+            };
 
-            //await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
+            await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
 
-            //List<spGet_BTC_USDT_OpenOrdersResult> openOrders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
+            List<spGet_BTC_USDT_OpenOrdersResult> openOrders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
 
-            //await Clients.All.SendAsync("ReceiveMessage", openOrders);
+            await Clients.All.SendAsync("ReceiveMessage", openOrders);
         }
     }
 }

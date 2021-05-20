@@ -57,6 +57,7 @@ namespace Web_Api.online
             });
 
             services.AddTransient<WalletsRepository>();
+            services.AddTransient<TradeRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
         }
 
