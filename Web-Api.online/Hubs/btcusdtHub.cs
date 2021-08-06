@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Repositories;
+using Newtonsoft.Json;
 
 namespace Web_Api.online.Hubs
 {
@@ -34,7 +35,7 @@ namespace Web_Api.online.Hubs
 
             List<spGet_BTC_USDT_OpenOrdersResult> openOrders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
 
-            await Clients.All.SendAsync("ReceiveMessage", openOrders);
+            await Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(openOrders));
         }
     }
 }

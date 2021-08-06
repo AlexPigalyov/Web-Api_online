@@ -11,15 +11,17 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-    </li>
-    <li class="nav-item">
-        BTC balance: @Model.BtcWallet.Value Address: @Model.BtcWallet.Address
-    </li>
-    <li class="nav-item">
-        USDT balance: @Model.UsdtWallet.Value Address: @Model.UsdtWallet.Address
-    </li>
+    <ul>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        </li>
+        <li class="nav-item">
+            BTC balance: @Model.BtcWallet.Value Address: @Model.BtcWallet.Address
+        </li>
+        <li class="nav-item">
+            USDT balance: @Model.UsdtWallet.Value Address: @Model.UsdtWallet.Address
+        </li>
+    </ul>
 
     <div class="container">
         <div class="row">&nbsp;</div>
@@ -46,9 +48,27 @@
         <hr />
     </div>
 </div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList"></ul>
+<div class="orderbook">
+    <div class="orderbook-header"></div>
+    <div class="orderbook-tbheader">
+        <div class="orderbook-tbheader-col">Цена(USDT)</div>
+        <div class="orderbook-tbheader-col">Количество(BTC)</div>
+        <div class="orderbook-tbheader-col">Всего</div>
+    </div>
+    <div class="orderbook-container">
+        <div class="orderbook-list orderbook-asks">
+        </div>
+        <div class="orderbook-ticker">
+            <div class="orderbook-ticker-status status-buy">
+                6.233
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);"><path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path></svg>
+            </div>
+            <div class="orderbook-ticker-markprice">$6.24</div>
+            <a href="#" target="_blank" class="orderbook-ticker-more">
+                Больше
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect y="7" width="2.66667" height="5" fill="#00C582"></rect><rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect><rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect><rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect></svg>
+            </a>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
