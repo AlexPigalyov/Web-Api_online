@@ -36,7 +36,8 @@ namespace Web_Api.online.Controllers
             public Wallet BtcWallet { get; set; }
 
             public Wallet UsdtWallet { get; set; }
-            public List<OrderBookModel> OrderBook { get; set; }
+            public List<OrderBookModel> BuyOrderBook { get; set; }
+            public List<OrderBookModel> SellOrderBook { get; set; }
         }
 
         public async Task<ActionResult> BTCUSDT()
@@ -96,7 +97,8 @@ namespace Web_Api.online.Controllers
                 model.UsdtWallet = usdtWallet;
             }
 
-            model.OrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync();
+            model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
+            model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
 
             return View(model);
         }

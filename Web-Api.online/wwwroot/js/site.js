@@ -1,7 +1,8 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
-function loadNewOrderBook(openOrders, isLoad) {
-    let list = document.getElementsByClassName("orderbook-list")[0];
+function loadNewOrderBook(openOrders, isLoad, isBuy) {
+
+    let list = isBuy ? document.getElementsByClassName("orderbook-list")[0] : document.getElementsByClassName("orderbook-list")[1];
 
     list.innerHTML = '';
     var openOrdersObj = openOrders;
@@ -9,7 +10,6 @@ function loadNewOrderBook(openOrders, isLoad) {
     if (!isLoad) {
         openOrdersObj = JSON.parse(openOrders);
     }
-
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
@@ -34,7 +34,13 @@ function loadNewOrderBook(openOrders, isLoad) {
         orderBookElem.className = "orderbook-row";
 
         let orderBookElemColFirst = document.createElement('div');
-        orderBookElemColFirst.className = "orderbook-col";
+        if (isBuy) {
+            orderBookElemColFirst.className = "orderbook-col";
+        }
+        else {
+            orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+        }
+
         orderBookElemColFirst.innerHTML = orderPrice;
 
         orderBookElem.appendChild(orderBookElemColFirst);
@@ -52,13 +58,16 @@ function loadNewOrderBook(openOrders, isLoad) {
         orderBookElem.appendChild(orderBookElemColThird);
 
         let orderBookElemProgressBar = document.createElement('div');
-        orderBookElemProgressBar.className = "orderbook-progress-bar";
+        if (isBuy) {
+            orderBookElemProgressBar.className = "orderbook-progress-bar";
+        }
+        else {
+            orderBookElemProgressBar.classList.add("orderbook-bids", "orderbook-progress-bar");
+        }
 
         orderBookElemProgressBar.style = "transform: translateX(-" + ((orderAmount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
 
         orderBookElem.appendChild(orderBookElemProgressBar);
-
-        console.log(orderBookElem);
 
         list.appendChild(orderBookElem);
     });

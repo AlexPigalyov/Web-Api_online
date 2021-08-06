@@ -6,6 +6,7 @@ using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Repositories;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace Web_Api.online.Hubs
 {
@@ -18,14 +19,14 @@ namespace Web_Api.online.Hubs
             _tradeRepository = tradeRepository;
         }
 
-        public async Task SendMessage(string amount, string price)
+        public async Task SendMessage(string amount, string price, bool isBuy)
         {
             double priceDouble = Convert.ToDouble(price);
             double amountDouble = Convert.ToDouble(amount);
 
             OpenOrder order = new OpenOrder
             {
-                IsBuy = true,
+                IsBuy = isBuy,
                 Price = priceDouble,
                 Amount = amountDouble,
                 CreateUserId = "53cd122d-6253-4981-b290-11471f67c528"
@@ -33,9 +34,15 @@ namespace Web_Api.online.Hubs
 
             await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
 
-            List<OrderBookModel> openOrders = await _tradeRepository.Get_BTC_USDT_OrderBookAsync();
+            List<OrderBookModel> openOrders = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(isBuy);
 
-            await Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(openOrders));
+            RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
+            {
+                OrderBook = openOrders,
+                IsBuy = isBuy
+            };
+
+            await Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(recieveResult));
         }
     }
 }

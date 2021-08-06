@@ -4,6 +4,7 @@
     {
         public int CountPrices { get; set; }
         public double Price { get; set; }
+        public bool IsBuy { get; set; }
         public double Amount { get; set; }
     }
 }

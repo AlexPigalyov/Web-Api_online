@@ -31,19 +31,22 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<OrderBookModel>> Get_BTC_USDT_OrderBookAsync(int count = 15)
+        public async Task<List<OrderBookModel>> Get_BTC_USDT_OrderBookAsync(bool isBuy, int count = 15)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    var res = (await db.QueryAsync<OrderBookModel>("exec spGet_BTC_USDT_SortedOrderBook"))
+                    var p = new DynamicParameters();
+                    p.Add("isBuy", isBuy);
+
+                    var res = (await db.QueryAsync<OrderBookModel>("spGet_BTC_USDT_SortedOrderBook", p, commandType: CommandType.StoredProcedure))
                         .ToList().Take(count);
 
                     return res.ToList();
                 }
-                catch { return null; }
-        }
+                catch(Exception ex) { return null; }
+            }
         }
 
         public async Task<OpenOrder> Add_BTC_USDT_OrderAsync(OpenOrder order)

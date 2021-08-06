@@ -5,10 +5,13 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/btcusdthub").build
 //Disable send button until connection is established
 document.getElementById("buyButton").disabled = true;
 
-connection.on("ReceiveMessage", function (openOrders) {
+connection.on("ReceiveMessage", function (recieveModel) {
     //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     //var encodedMsg = user + " says " + msg;
-    loadNewOrderBook(openOrders);
+
+    let model = JSON.parse(recieveModel);
+
+    loadNewOrderBook(model.OrderBook, false, model.IsBuy);
 });
 
 connection.start().then(function () {
@@ -20,7 +23,16 @@ connection.start().then(function () {
 document.getElementById("buyButton").addEventListener("click", function (event) {
     var amount = document.getElementById("amountInput").value.replace(".", ",");
     var price = document.getElementById("priceInput").value;
-    connection.invoke("SendMessage", amount, price).catch(function (err) {
+    connection.invoke("SendMessage", amount, price, true).catch(function (err) {
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+});
+
+document.getElementById("sellButton").addEventListener("click", function (event) {
+    var amount = document.getElementById("amountInput").value.replace(".", ",");
+    var price = document.getElementById("priceInput").value;
+    connection.invoke("SendMessage", amount, price, false).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
