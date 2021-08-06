@@ -64,7 +64,7 @@ namespace Web_Api.online.Repositories
                 {
                     var p = new DynamicParameters();
                     p.Add("userId", wallet.UserId);
-                    p.Add("walletAddress", wallet.WalletAddress);
+                    p.Add("walletAddress", wallet.Address);
                     p.Add("currencyAcronim", wallet.CurrencyAcronim);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

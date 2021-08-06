@@ -2,6 +2,9 @@
 
 namespace Web_Api.online.Models
 {
+    /// <summary>
+    /// Кошелёк внутренних переводов только внутри нашей системы. В блокчейне не создаётся.
+    /// </summary>
     public class Wallet
     {
         public int Id { get; set; }

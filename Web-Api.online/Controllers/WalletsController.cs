@@ -73,7 +73,7 @@ namespace Web_Api.online.Controllers
             {
                 UserId = userId,
                 CurrencyAcronim = id,
-                WalletAddress = walletAddress
+                Address = walletAddress
             };
 
             incomeWallet = await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
