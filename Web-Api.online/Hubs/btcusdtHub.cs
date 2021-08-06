@@ -33,7 +33,7 @@ namespace Web_Api.online.Hubs
 
             await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
 
-            List<spGet_BTC_USDT_OpenOrdersResult> openOrders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
+            List<OrderBookModel> openOrders = await _tradeRepository.Get_BTC_USDT_OrderBookAsync();
 
             await Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(openOrders));
         }

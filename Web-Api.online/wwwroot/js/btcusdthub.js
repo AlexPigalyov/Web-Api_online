@@ -8,54 +8,7 @@ document.getElementById("buyButton").disabled = true;
 connection.on("ReceiveMessage", function (openOrders) {
     //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     //var encodedMsg = user + " says " + msg;
-    let list = document.getElementsByClassName("orderbook-list")[0];
-
-    var openOrdersObj = JSON.parse(openOrders);
-
-    openOrdersObj.sort((a, b) => a.Price - b.Price);
-
-    let filterLimit = 15;
-    let forCount = 0;
-
-    var openOrdersObjMaxAmount = Math.max.apply(null, openOrdersObj.slice(0, filterLimit).map(item => item.Amount));
-
-    openOrdersObj.forEach(order => {
-        let orderBookElem = document.createElement('div');
-        orderBookElem.className = "orderbook-row";
-
-        let orderBookElemColFirst = document.createElement('div');
-        orderBookElemColFirst.className = "orderbook-col";
-        orderBookElemColFirst.innerHTML = order.Price;
-
-        orderBookElem.appendChild(orderBookElemColFirst);
-
-        let orderBookElemColSecond = document.createElement('div');
-        orderBookElemColSecond.className = "orderbook-col";
-        orderBookElemColSecond.innerHTML = order.Amount;
-
-        orderBookElem.appendChild(orderBookElemColSecond);
-
-        let orderBookElemColThird = document.createElement('div');
-        orderBookElemColThird.className = "orderbook-col";
-        orderBookElemColThird.innerHTML = order.Price * order.Amount;
-
-        orderBookElem.appendChild(orderBookElemColThird);
-
-        let orderBookElemProgressBar = document.createElement('div');
-        orderBookElemProgressBar.className = "orderbook-progress-bar";
-
-        forCount += 1;
-
-        if (forCount < filterLimit) {
-            orderBookElemProgressBar.style = "transform: translateX(-" + ((order.Amount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
-        }
-
-        orderBookElem.appendChild(orderBookElemProgressBar);
-
-        console.log(orderBookElem);
-
-        list.appendChild(orderBookElem);
-    });
+    loadNewOrderBook(openOrders);
 });
 
 connection.start().then(function () {

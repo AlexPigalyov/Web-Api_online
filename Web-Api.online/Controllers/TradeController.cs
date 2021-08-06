@@ -12,11 +12,15 @@ namespace Web_Api.online.Controllers
 {
     public class TradeController : Controller
     {
-        private WalletsRepository _walletsRepository;
+        private readonly WalletsRepository _walletsRepository;
+        private readonly TradeRepository _tradeRepository;
 
-        public TradeController(WalletsRepository walletsRepository)
+        public TradeController(
+            WalletsRepository walletsRepository,
+            TradeRepository tradeRepository)
         {
             _walletsRepository = walletsRepository;
+            _tradeRepository = tradeRepository;
         }
 
         // GET: TradeController
@@ -32,6 +36,7 @@ namespace Web_Api.online.Controllers
             public Wallet BtcWallet { get; set; }
 
             public Wallet UsdtWallet { get; set; }
+            public List<OrderBookModel> OrderBook { get; set; }
         }
 
         public async Task<ActionResult> BTCUSDT()
@@ -91,8 +96,8 @@ namespace Web_Api.online.Controllers
                 model.UsdtWallet = usdtWallet;
             }
 
+            model.OrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync();
 
-            
             return View(model);
         }
 

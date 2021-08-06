@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Web_Api.online.Models.StoredProcedures;
-using Web_Api.online.Models.Tables;
 using Web_Api.online.Models;
 using System;
 
@@ -32,6 +31,21 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<List<OrderBookModel>> Get_BTC_USDT_OrderBookAsync(int count = 15)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var res = (await db.QueryAsync<OrderBookModel>("exec spGet_BTC_USDT_SortedOrderBook"))
+                        .ToList().Take(count);
+
+                    return res.ToList();
+                }
+                catch { return null; }
+        }
+        }
+
         public async Task<OpenOrder> Add_BTC_USDT_OrderAsync(OpenOrder order)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
@@ -51,7 +65,7 @@ namespace Web_Api.online.Repositories
 
                     return order;
                 }
-                catch (Exception ex) { return null; }
+                catch { return null; }
             }
         }
     }
