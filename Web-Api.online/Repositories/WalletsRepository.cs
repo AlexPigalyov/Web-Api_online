@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using Web_Api.online.Data;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
@@ -102,7 +103,7 @@ namespace Web_Api.online.Repositories
 
         public async Task<List<Currency>> GetCurrenciesAsync()
         {
-            using (var ctx = new exchangeContext())
+            using (var ctx = new ExchangeContext())
             {
                 try
                 {

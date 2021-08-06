@@ -3,18 +3,20 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using Web_Api.online.Models;
+using Web_Api.online.Models.Tables;
 
 #nullable disable
 
-namespace Web_Api.online.Models.Tables
+namespace Web_Api.online.Data
 {
-    public partial class exchangeContext : DbContext
+    public partial class ExchangeContext : DbContext
     {
-        public exchangeContext()
+        public ExchangeContext()
         {
         }
 
-        public exchangeContext(DbContextOptions<webapionlineContext> options)
+        public ExchangeContext(DbContextOptions<webapionlineContext> options)
             : base(options)
         {
         }
@@ -37,8 +39,6 @@ namespace Web_Api.online.Models.Tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
-
-            
 
             OnModelCreatingPartial(modelBuilder);
         }
