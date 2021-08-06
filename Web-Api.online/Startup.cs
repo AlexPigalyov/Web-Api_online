@@ -30,7 +30,7 @@ namespace Web_Api.online
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<WebApiDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -46,7 +46,7 @@ namespace Web_Api.online
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<WebApiDbContext>();
             services.AddControllersWithViews();
 
             services.AddSignalR();

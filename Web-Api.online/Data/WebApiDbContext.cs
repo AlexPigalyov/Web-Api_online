@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Web_Api.online.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class WebApiDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public WebApiDbContext(DbContextOptions<WebApiDbContext> options)
             : base(options)
         {
         }
