@@ -19,9 +19,9 @@
     function createWallet(currency) {
         var url = "/wallets/create/" + currency;
         $.get(url, function (data) {
-            var walletAddress = data;
+            var address = data;
 
-            $("#walletsList").append('<li>' + data.id + ' ' + data.currencyAcronim + ' ' + data.value + ' ' + data.walletAddress + '</li>');
+            $("#walletsList").append('<li>' + data.id + ' ' + data.currencyAcronim + ' ' + data.value + ' ' + data.address + '</li>');
 
 
         });
@@ -84,12 +84,12 @@ Income wallets:
 <div>
     <ul id="walletsList">
         <li>
-            Id Currency Value WalletAddress Created
+            Id Currency Value Address Created
         </li>
         @foreach (var item in Model.UserIncomeWallets)
         {
             <li>
-                @item.Id @item.CurrencyAcronim @item.Value @item.WalletAddress @item.Created
+                @item.Id @item.CurrencyAcronim @item.Value @item.Address @item.Created
             </li>
         }
     </ul>

@@ -67,13 +67,13 @@ namespace Web_Api.online.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            string walletAddress = Guid.NewGuid().ToString();
+            string address = Guid.NewGuid().ToString();
 
             IncomeWallet incomeWallet = new IncomeWallet()
             {
                 UserId = userId,
                 CurrencyAcronim = id,
-                Address = walletAddress
+                Address = address
             };
 
             incomeWallet = await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
