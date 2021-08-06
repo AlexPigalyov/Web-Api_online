@@ -1,0 +1,195 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(94, 102, 115);
+    border-radius: 3px;
+    height: 90px;
+}
+
+
+.orderbook {
+    margin: 0px;
+    height: 100%;
+    width: 100vw;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    min-width: 0px;
+    width: 100%;
+    max-width: 305px;
+    background-color: rgb(20, 21, 26);
+    position: relative;
+    padding-top: 8px;
+    height: 360px;
+    font-size: 12px;
+}
+
+    .orderbook a:hover {
+        color: #c99400;
+    }
+
+.orderbook-header {
+    -webkit-box-align: center;
+    align-items: center;
+    margin-left: 16px;
+    margin-right: 16px;
+    position: relative;
+    -webkit-box-pack: initial;
+    justify-content: initial;
+}
+
+.orderbook-tbheader {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-left: 16px;
+    margin-right: 16px;
+    color: #5e6673;
+    padding-bottom: 3px;
+}
+
+.orderbook-tbheader-col {
+    flex: 1 1 0%;
+    text-align: left;
+}
+
+    .orderbook-tbheader-col:nth-child(2),
+    .orderbook-tbheader-col:nth-child(3) {
+        text-align: right;
+    }
+
+.orderbook-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    color: #d8dce1;
+}
+
+.orderbook-list {
+    position: relative;
+    display: flex;
+    flex: 1;
+    width: 305px;
+    overflow: auto;
+    will-change: transform;
+    direction: ltr;
+    flex-direction: column;
+    max-height: 305px;
+    flex-direction: column-reverse;
+}
+
+.orderbook-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 0 16px;
+    line-height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.orderbook-asks .orderbook-col:nth-child(1) {
+    color: #f84960;
+}
+
+.orderbook-bids .orderbook-col:nth-child(1) {
+    color: #02c076;
+}
+
+.orderbook-col {
+    flex: 1 1 0%;
+    text-align: left;
+}
+
+    .orderbook-col:nth-child(2),
+    .orderbook-col:nth-child(3) {
+        text-align: right;
+        padding-left: 4px;
+    }
+
+.orderbook-progress-bar {
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+    opacity: 0.15;
+    height: 16px;
+    width: 100%;
+    left: 100%;
+}
+
+.orderbook-asks .orderbook-progress-bar {
+    background-color: #f84960;
+}
+
+.orderbook-bids .orderbook-progress-bar {
+    background-color: #02c076;
+}
+
+.orderbook-ticker {
+    display: flex;
+    padding: 1px 16px;
+    height: 23px;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.orderbook-ticker-status {
+    display: flex;
+    margin-right: 4px;
+    font-size: 16px;
+    -webkit-box-align: center;
+    align-items: center;
+    font-weight: 500;
+}
+
+    .orderbook-ticker-status svg {
+        margin: 0px;
+        min-width: 0px;
+        color: currentcolor;
+        font-size: 18px;
+        margin-top: -2px;
+        fill: currentcolor;
+        width: 1em;
+        height: 1em;
+    }
+
+.orderbook-ticker .status-buy {
+    color: rgb(2, 192, 118);
+}
+
+.orderbook-ticker .status-sell {
+    color: rgb(248, 73, 96);
+}
+
+.orderbook-ticker .status-primary {
+    color: rgb(255, 255, 255);
+}
+
+.orderbook-ticker-markprice {
+    flex: 1 1 0%;
+    display: inline-block;
+    font-size: 14px;
+    text-align: left;
+    color: rgb(132, 142, 156);
+    font-weight: 500;
+}
+
+.orderbook-ticker-more {
+    color: rgb(234, 236, 239);
+    font-size: 14px;
+    text-decoration: none;
+}
