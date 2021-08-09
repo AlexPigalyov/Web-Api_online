@@ -9,16 +9,19 @@ using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 using System.Security.Claims;
+using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Controllers
 {
     public class WalletsController : Controller
     {
         private WalletsRepository _walletsRepository;
+        private ICoinManager _coinManager;
 
-        public WalletsController(WalletsRepository walletsRepository)
+        public WalletsController(WalletsRepository walletsRepository, ICoinManager coinManager)
         {
             _walletsRepository = walletsRepository;
+            _coinManager = coinManager;
         }
 
         public class IndexModel
@@ -60,40 +63,35 @@ namespace Web_Api.online.Controllers
             return View();
         }
 
-        // GET: WalletsController/Create
-        // Create income wallet
-        [HttpGet]
-        public async Task<JsonResult> Create(string id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            string address = Guid.NewGuid().ToString();
-
-            IncomeWallet incomeWallet = new IncomeWallet()
-            {
-                UserId = userId,
-                CurrencyAcronim = id,
-                Address = address
-            };
-
-            incomeWallet = await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
-
-            return Json(incomeWallet);
-        }
-
         // POST: WalletsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(string selectCurrency)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(!string.IsNullOrEmpty(userId))
             {
-                return RedirectToAction(nameof(Index));
+                string address = "";
+
+                foreach (var coin in _coinManager.CoinServices)
+                {
+                    if (coin.CoinShortName == selectCurrency)
+                    {
+                        address = coin.GetNewAddress();
+                        break;
+                    }
+                }
+
+                IncomeWallet incomeWallet = new IncomeWallet()
+                {
+                    UserId = userId,
+                    CurrencyAcronim = selectCurrency,
+                    Address = address,
+                };
+
+                await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
 
         // GET: WalletsController/Edit/5

@@ -68,19 +68,22 @@ Balance:
 </ul>
 
 Create income wallet:
-<div class="row">
-    <div class="column">
-        <select name="selectCurrency" id="selectCurrency">
-            @foreach (var item in Model.Currencies)
-            {
-                <option value="@item.Acronim">@item.Acronim</option>
-            }
-        </select>
+<form asp-action="Create" method="post">
+    <div class="row">
+        <div class="column">
+            <select name="selectCurrency" id="selectCurrency">
+                @foreach (var item in Model.Currencies)
+                {
+                    <option value="@item.Acronim">@item.Acronim</option>
+                }
+            </select>
+        </div>
+        <button id="createButton" type="submit" class="column"><img src="/img/add.png" alt="add" title="add" style="height:25px;" /></button>
     </div>
-    <div id="createButton" class="column"><img src="/img/add.png" alt="add" title="add" style="height:25px;" /></div>
-</div>
+</form>
 <hr />
-Income wallets:
+
+    Income wallets:
 <div>
     <ul id="walletsList">
         <li>
