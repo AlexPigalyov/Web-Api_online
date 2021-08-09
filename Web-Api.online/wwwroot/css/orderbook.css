@@ -61,6 +61,7 @@
 }
 
 .orderbook-tbheader-col {
+    font-family: Arial, sans-serif;
     flex: 1 1 0%;
     text-align: left;
 }
@@ -85,9 +86,15 @@
     overflow: auto;
     will-change: transform;
     direction: ltr;
-    flex-direction: column;
     max-height: 305px;
+}
+
+.orderbook-list-asks {
     flex-direction: column-reverse;
+}
+
+.orderbook-list-bids {
+    flex-direction: column;
 }
 
 .orderbook-row {

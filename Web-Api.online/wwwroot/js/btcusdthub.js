@@ -10,7 +10,7 @@ connection.on("ReceiveMessage", function (recieveModel) {
     //var encodedMsg = user + " says " + msg;
 
     let model = JSON.parse(recieveModel);
-
+    console.log(model);
     loadNewOrderBook(model.OrderBook, false, model.IsBuy);
 });
 

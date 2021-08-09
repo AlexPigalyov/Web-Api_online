@@ -7,9 +7,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy) {
     list.innerHTML = '';
     var openOrdersObj = openOrders;
 
-    if (!isLoad) {
-        openOrdersObj = JSON.parse(openOrders);
-    }
+    console.log(openOrdersObj);
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
