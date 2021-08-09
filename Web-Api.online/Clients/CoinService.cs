@@ -14,6 +14,8 @@ namespace Web_Api.online.Clients
         protected readonly IRestRequestClient _restRequestClient;
 
         public CoinParameters Parameters { get; }
+        public string CoinShortName { get => Parameters.CoinShortName; }
+        public string CoinLongName { get => Parameters.CoinLongName; }
 
         public CoinService(IConfiguration configuration)
         {
