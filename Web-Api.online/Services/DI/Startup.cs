@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
-using Web_Api.online.Services.DI.Models;
 using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Services.DI
