@@ -15,6 +15,7 @@ using Web_Api.online.Data;
 using Microsoft.OpenApi.Models;
 using Web_Api.online.Repositories;
 using Web_Api.online.Hubs;
+using Web_Api.online.Services.DI;
 
 namespace Web_Api.online
 {
@@ -59,6 +60,9 @@ namespace Web_Api.online
             services.AddTransient<WalletsRepository>();
             services.AddTransient<TradeRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
+
+
+            services.AddCoinManager(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
