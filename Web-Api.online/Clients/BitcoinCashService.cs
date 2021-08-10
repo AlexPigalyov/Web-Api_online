@@ -4,7 +4,7 @@ using Web_Api.online.Clients.Models;
 
 namespace Web_Api.online.Clients
 {
-    public class BitcoinCashService : CoinService, IBitcoinService
+    public class BitcoinCashService : CoinService, IBitcoinCashService
     {
         public BitcoinCashService(IConfiguration configuration, bool useTestnet = false) : base(configuration, useTestnet)
         {
