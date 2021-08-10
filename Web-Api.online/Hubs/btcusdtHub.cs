@@ -21,10 +21,10 @@ namespace Web_Api.online.Hubs
 
         public async Task SendMessage(string amount, string price, bool isBuy)
         {
-            double priceDouble = Convert.ToDouble(price);
-            double amountDouble = Convert.ToDouble(amount);
+            decimal priceDouble = Convert.ToDecimal(price);
+            decimal amountDouble = Convert.ToDecimal(amount);
 
-            OpenOrder order = new OpenOrder
+            spGet_BTC_USDT_OpenOrdersResult order = new spGet_BTC_USDT_OpenOrdersResult
             {
                 IsBuy = isBuy,
                 Price = priceDouble,
@@ -33,6 +33,42 @@ namespace Web_Api.online.Hubs
             };
 
             await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
+
+            var orders = (await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync())
+                .Where(x => x.IsBuy == isBuy && x.Price == priceDouble);
+
+            List<spGet_BTC_USDT_OpenOrdersResult> closedOrders = new List<spGet_BTC_USDT_OpenOrdersResult>();
+
+            if(orders != null)
+            {
+                foreach (var openOrder in orders)
+                {
+                    if (amountDouble > openOrder.Amount)
+                    {
+                        amountDouble -= openOrder.Amount;
+
+                        closedOrders.Add(openOrder);
+
+                        var localOrder = order;
+                        localOrder.Amount = openOrder.Amount;
+
+                        closedOrders.Add(localOrder);
+
+                        order.Amount = amountDouble;
+                    }
+
+                    if (amountDouble < openOrder.Amount)
+                    {
+                        openOrder.Amount = amountDouble;
+
+                        closedOrders.Add(openOrder);
+
+                        order.Amount = amountDouble;
+
+                        closedOrders.Add(order);
+                    }
+                }
+            }
 
             List<OrderBookModel> openOrders = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(isBuy);
 

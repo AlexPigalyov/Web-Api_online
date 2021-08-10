@@ -25,9 +25,45 @@ namespace Web_Api.online.Repositories
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<spGet_BTC_USDT_OpenOrdersResult> result = (List<spGet_BTC_USDT_OpenOrdersResult>)(await db.QueryAsync<spGet_BTC_USDT_OpenOrdersResult>("exec spGet_BTC_USDT_OpenOrders"));
+                List<spGet_BTC_USDT_OpenOrdersResult> result = (List<spGet_BTC_USDT_OpenOrdersResult>)
+                    await db.QueryAsync<spGet_BTC_USDT_OpenOrdersResult>("exec spGet_BTC_USDT_OpenOrders");
 
                 return result;
+            }
+        }
+
+        public async Task<int> RemoveOpenOrderById(long id)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var res = await db.ExecuteAsync($"DELETE FROM [Exchange].[dbo.BTC_USDT_OpenOrders] WHERE OpenOrderId={id}");
+
+                    return res;
+                }
+                catch { return 0; }
+            }
+        }
+
+        public async Task<List<long>> UpdateOpenOrder(spGet_BTC_USDT_OpenOrdersResult order)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("userid", order.CreateUserId);
+                    p.Add("isBuy", order.IsBuy);
+                    p.Add("price", order.Price);
+                    p.Add("amount", order.Amount);
+                    p.Add("openOrderId", order.OpenOrderId);
+
+                    var res = (await db.QueryAsync<long>("spUpdate_BTC_USDT_OpenOrder", p, commandType: CommandType.StoredProcedure));
+
+                    return res.ToList();
+                }
+                catch { return null; }
             }
         }
 
@@ -41,15 +77,16 @@ namespace Web_Api.online.Repositories
                     p.Add("isBuy", isBuy);
 
                     var res = (await db.QueryAsync<OrderBookModel>("spGet_BTC_USDT_SortedOrderBook", p, commandType: CommandType.StoredProcedure))
-                        .ToList().Take(count);
+                        .ToList()
+                        .Take(count);
 
                     return res.ToList();
                 }
-                catch(Exception ex) { return null; }
+                catch { return null; }
             }
         }
 
-        public async Task<OpenOrder> Add_BTC_USDT_OrderAsync(OpenOrder order)
+        public async Task<spGet_BTC_USDT_OpenOrdersResult> Add_BTC_USDT_OrderAsync(spGet_BTC_USDT_OpenOrdersResult order)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
