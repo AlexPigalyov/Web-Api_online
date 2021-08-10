@@ -38,11 +38,36 @@ namespace Web_Api.online.Repositories
             {
                 try
                 {
-                    var res = await db.ExecuteAsync($"DELETE FROM [Exchange].[dbo.BTC_USDT_OpenOrders] WHERE OpenOrderId={id}");
+                    var res = await db.ExecuteAsync($"DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] WHERE OpenOrderId={id}");
 
                     return res;
                 }
-                catch { return 0; }
+                catch(Exception ex) { return 0; }
+            }
+        }
+
+        public async Task<spGet_BTC_USDT_ClosedOrdersResult> Add_BTC_USDT_ClosedOrderAsync(spGet_BTC_USDT_ClosedOrdersResult order)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("createUserId", order.CreateUserId);
+                    p.Add("boughtUserId", order.BoughtUserId);
+                    p.Add("isBuy", order.IsBuy);
+                    p.Add("price", order.Price);
+                    p.Add("amount", order.Amount);
+                    p.Add("createDate", order.CreateDate);
+                    p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    var res = await db.QueryAsync<long>("spAdd_BTC_USDT_ClosedOrder", p, commandType: CommandType.StoredProcedure);
+
+                    order.ClosedOrderId = res.FirstOrDefault();
+
+                    return order;
+                }
+                catch(Exception ex) { return null; }
             }
         }
 

@@ -29,17 +29,18 @@ namespace Web_Api.online.Hubs
                 IsBuy = isBuy,
                 Price = priceDouble,
                 Amount = amountDouble,
-                CreateUserId = "53cd122d-6253-4981-b290-11471f67c528"
+                CreateUserId = "53cd122d-6253-4981-b290-11471f67c528",
+                CreateDate = DateTime.Now
             };
 
             await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
 
             var orders = (await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync())
-                .Where(x => x.IsBuy == isBuy && x.Price == priceDouble);
+                .Where(x => x.IsBuy == !isBuy && x.Price == priceDouble);
 
-            List<spGet_BTC_USDT_OpenOrdersResult> closedOrders = new List<spGet_BTC_USDT_OpenOrdersResult>();
+            List<ClosedOrder> closedOrders = new List<ClosedOrder>();
 
-            if(orders != null)
+            if (orders != null)
             {
                 foreach (var openOrder in orders)
                 {
@@ -47,12 +48,20 @@ namespace Web_Api.online.Hubs
                     {
                         amountDouble -= openOrder.Amount;
 
-                        closedOrders.Add(openOrder);
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
 
                         var localOrder = order;
                         localOrder.Amount = openOrder.Amount;
 
-                        closedOrders.Add(localOrder);
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = localOrder,
+                            RemoveOpenOrderFromDataBase = false
+                        });
 
                         order.Amount = amountDouble;
                     }
@@ -61,12 +70,56 @@ namespace Web_Api.online.Hubs
                     {
                         openOrder.Amount = amountDouble;
 
-                        closedOrders.Add(openOrder);
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = false
+                        });
 
                         order.Amount = amountDouble;
 
-                        closedOrders.Add(order);
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = order,
+                            RemoveOpenOrderFromDataBase = true
+                        });
                     }
+
+                    if (amountDouble == openOrder.Amount)
+                    {
+                        order.Amount = amountDouble;
+
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = order,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+
+                        closedOrders.Add(new ClosedOrder
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+                    }
+                }
+
+                foreach (var closedOrder in closedOrders)
+                {
+                    if (closedOrder.RemoveOpenOrderFromDataBase == true)
+                    {
+                        await _tradeRepository.RemoveOpenOrderById(closedOrder.Order.OpenOrderId);
+                    }
+
+                    await _tradeRepository.Add_BTC_USDT_ClosedOrderAsync(new spGet_BTC_USDT_ClosedOrdersResult()
+                    {
+                        CreateDate = closedOrder.Order.CreateDate,
+                        ClosedDate = DateTime.Now,
+                        IsBuy = closedOrder.Order.IsBuy,
+                        Price = closedOrder.Order.Price,
+                        Amount = closedOrder.Order.Amount,
+                        CreateUserId = closedOrder.Order.CreateUserId,
+                        BoughtUserId = order.CreateUserId
+                    });
                 }
             }
 
