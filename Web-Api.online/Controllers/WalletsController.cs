@@ -69,13 +69,13 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Create(string selectCurrency)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(userId))
             {
                 string address = "";
 
                 foreach (var coin in _coinManager.CoinServices)
                 {
-                    if (coin.CoinShortName == selectCurrency)
+                    if (coin.CoinShortName.ToLower() == selectCurrency.ToLower())
                     {
                         address = coin.GetNewAddress();
                         break;
@@ -90,8 +90,12 @@ namespace Web_Api.online.Controllers
                 };
 
                 await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
 
         // GET: WalletsController/Edit/5
