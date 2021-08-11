@@ -5,9 +5,8 @@ function loadNewOrderBook(openOrders, isLoad, isBuy) {
     let list = isBuy ? document.getElementsByClassName("orderbook-list")[0] : document.getElementsByClassName("orderbook-list")[1];
 
     list.innerHTML = '';
-    var openOrdersObj = openOrders;
 
-    console.log(openOrdersObj);
+    var openOrdersObj = openOrders;
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {

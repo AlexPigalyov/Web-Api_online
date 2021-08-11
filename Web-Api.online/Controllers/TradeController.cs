@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 using Web_Api.online.Repositories;
 using Web_Api.online.Models;
 using System.Security.Claims;
+using Web_Api.online.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers
 {
     public class TradeController : Controller
     {
         private readonly WalletsRepository _walletsRepository;
-        private readonly TradeRepository _tradeRepository;
+        private readonly IOpenOrdersRepository _openOrdersRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
-            TradeRepository tradeRepository)
+            IOpenOrdersRepository openOrdersRepository)
         {
             _walletsRepository = walletsRepository;
-            _tradeRepository = tradeRepository;
+            _openOrdersRepository = openOrdersRepository;
         }
 
         // GET: TradeController
@@ -97,8 +98,8 @@ namespace Web_Api.online.Controllers
                 model.UsdtWallet = usdtWallet;
             }
 
-            model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
-            model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
+            model.BuyOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);
+            model.SellOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(false);
 
             return View(model);
         }

@@ -7,16 +7,22 @@ using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Repositories;
 using Newtonsoft.Json;
 using System.Linq;
+using Web_Api.online.Models.Tables;
+using Web_Api.online.Repositories.Abstract;
 
 namespace Web_Api.online.Hubs
 {
     public class btcusdtHub : Hub
     {
-        private TradeRepository _tradeRepository;
+        private readonly IOpenOrdersRepository _openOrdersRepository;
+        private readonly IClosedOrdersRepository _closedOrdersRepository;
 
-        public btcusdtHub(TradeRepository tradeRepository) : base()
+        public btcusdtHub(
+            IOpenOrdersRepository openOrdersRepository,
+            IClosedOrdersRepository closedOrdersRepository) : base()
         {
-            _tradeRepository = tradeRepository;
+            _openOrdersRepository = openOrdersRepository;
+            _closedOrdersRepository = closedOrdersRepository;
         }
 
         public async Task SendMessage(string amount, string price, bool isBuy)
@@ -24,7 +30,7 @@ namespace Web_Api.online.Hubs
             decimal priceDouble = Convert.ToDecimal(price);
             decimal amountDouble = Convert.ToDecimal(amount);
 
-            spGet_BTC_USDT_OpenOrdersResult order = new spGet_BTC_USDT_OpenOrdersResult
+            BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
             {
                 IsBuy = isBuy,
                 Price = priceDouble,
@@ -33,15 +39,15 @@ namespace Web_Api.online.Hubs
                 CreateDate = DateTime.Now
             };
 
-            await _tradeRepository.Add_BTC_USDT_OrderAsync(order);
+            await _openOrdersRepository.CreateAsync(order);
 
-            var orders = (await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync())
+            var orders = (await _openOrdersRepository.Get_BTC_USDT_OpenOrdersAsync())
                 .Where(x => x.IsBuy == !isBuy && x.Price == priceDouble);
 
-            List<ClosedOrder> closedOrders = new List<ClosedOrder>();
-
-            if (orders != null)
+            if (orders.Count() > 0)
             {
+                List<ClosedOrder> closedOrders = new List<ClosedOrder>();
+
                 foreach (var openOrder in orders)
                 {
                     if (amountDouble > openOrder.Amount)
@@ -55,7 +61,7 @@ namespace Web_Api.online.Hubs
                         });
 
                         var localOrder = order;
-                        localOrder.Amount = openOrder.Amount;
+                        localOrder.Amount = amountDouble;
 
                         closedOrders.Add(new ClosedOrder
                         {
@@ -83,6 +89,8 @@ namespace Web_Api.online.Hubs
                             Order = order,
                             RemoveOpenOrderFromDataBase = true
                         });
+
+                        break;
                     }
 
                     if (amountDouble == openOrder.Amount)
@@ -100,6 +108,8 @@ namespace Web_Api.online.Hubs
                             Order = openOrder,
                             RemoveOpenOrderFromDataBase = true
                         });
+
+                        break;
                     }
                 }
 
@@ -107,11 +117,16 @@ namespace Web_Api.online.Hubs
                 {
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
-                        await _tradeRepository.RemoveOpenOrderById(closedOrder.Order.OpenOrderId);
+                        await _openOrdersRepository.RemoveByIdAsync(closedOrder.Order.OpenOrderId);
+                    }
+                    else
+                    {
+                        await _openOrdersRepository.UpdateAsync(closedOrder.Order);
                     }
 
-                    await _tradeRepository.Add_BTC_USDT_ClosedOrderAsync(new spGet_BTC_USDT_ClosedOrdersResult()
+                    await _closedOrdersRepository.CreateAsync(new BTC_USDT_ClosedOrders()
                     {
+                        ClosedOrderId = closedOrder.Order.OpenOrderId,
                         CreateDate = closedOrder.Order.CreateDate,
                         ClosedDate = DateTime.Now,
                         IsBuy = closedOrder.Order.IsBuy,
@@ -123,11 +138,13 @@ namespace Web_Api.online.Hubs
                 }
             }
 
-            List<OrderBookModel> openOrders = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(isBuy);
+            List<OrderBookModel> openOrdersBuy = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);
+            List<OrderBookModel> openOrdersSell = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(false);
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
-                OrderBook = openOrders,
+                OrderBookBuy = openOrdersBuy,
+                OrderBookSell = openOrdersSell,
                 IsBuy = isBuy
             };
 

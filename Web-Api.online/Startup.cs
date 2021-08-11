@@ -16,6 +16,8 @@ using Microsoft.OpenApi.Models;
 using Web_Api.online.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Services.DI;
+using Web_Api.online.Repositories.Abstract;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online
 {
@@ -58,8 +60,11 @@ namespace Web_Api.online
             });
 
             services.AddTransient<WalletsRepository>();
-            services.AddTransient<TradeRepository>();
+            services.AddTransient<webapionlineContext>();
+            services.AddTransient<ExchangeContext>();
             services.AddTransient<IRatesRepository, RatesRepository>();
+            services.AddTransient<IOpenOrdersRepository, OpenOrdersRepository>();
+            services.AddTransient<IClosedOrdersRepository, ClosedOrdersRepository>();
 
 
             services.AddCoinManager(Configuration);
