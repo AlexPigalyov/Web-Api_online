@@ -45,10 +45,9 @@ namespace Web_Api.online.Repositories
             {
                 try
                 {
-                    var p = new DynamicParameters();
-                    p.Add("isBuy", isBuy);
+                    var isBuyStr = isBuy ? "Buy" : "Sell";
 
-                    var res = (await db.QueryAsync<OrderBookModel>("spGet_BTC_USDT_SortedOrderBook", p, commandType: CommandType.StoredProcedure))
+                    var res = (await db.QueryAsync<OrderBookModel>($"spGet_BTC_USDT_SortedOrderBook{isBuyStr}", commandType: CommandType.StoredProcedure))
                         .ToList()
                         .Take(count);
 
