@@ -46,8 +46,15 @@
     margin-left: 16px;
     margin-right: 16px;
     position: relative;
+    color: rgb(240, 185, 11);
     -webkit-box-pack: initial;
+    font-size: 14px;
     justify-content: initial;
+}
+
+.order-header-col {
+    text-align: left;
+    font-family: Arial Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif !important;
 }
 
 .orderbook-tbheader {
