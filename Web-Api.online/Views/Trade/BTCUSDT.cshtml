@@ -46,6 +46,17 @@
                 </div>
             </div>
         </div>
+        <div class="orderbook">
+            <div class="orderbook-tbheader">
+                <div class="orderbook-tbheader-col">Цена(USDT)</div>
+                <div class="orderbook-tbheader-col">Количество(BTC)</div>
+                <div class="orderbook-tbheader-col">Время</div>
+            </div>
+            <div class="orderbook-container">
+                <div class="orderbook-list orderbook-list-bids">
+                </div>
+            </div>
+        </div>
     </div>
     <div class="text-wrap">
         @if (SignInManager.IsSignedIn(User))
@@ -91,6 +102,8 @@
     var model = @Html.Raw(Json.Serialize(Model));
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
-    loadNewOrderBook(buyOpenOrders, true, true);
+    var marketTrades = model.marketTrades
+    loadNewOrderBook(buyOpenOrders, true, false);
     loadNewOrderBook(sellOpenOrders, true, false);
+    loadNewOrderBook(marketTrades, true, true);
 </script>
