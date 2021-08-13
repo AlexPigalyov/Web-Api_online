@@ -74,7 +74,7 @@ namespace Web_Api.online.Hubs
 
                     if (amountDouble < openOrder.Amount)
                     {
-                        openOrder.Amount = amountDouble;
+                        openOrder.Amount -= amountDouble;
 
                         closedOrders.Add(new ClosedOrder
                         {
@@ -118,23 +118,23 @@ namespace Web_Api.online.Hubs
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
                         await _openOrdersRepository.RemoveByIdAsync(closedOrder.Order.OpenOrderId);
+
+                        await _closedOrdersRepository.CreateAsync(new BTC_USDT_ClosedOrders()
+                        {
+                            ClosedOrderId = closedOrder.Order.OpenOrderId,
+                            CreateDate = closedOrder.Order.CreateDate,
+                            ClosedDate = DateTime.Now,
+                            IsBuy = closedOrder.Order.IsBuy,
+                            Price = closedOrder.Order.Price,
+                            Amount = closedOrder.Order.Amount,
+                            CreateUserId = closedOrder.Order.CreateUserId,
+                            BoughtUserId = order.CreateUserId
+                        });
                     }
                     else
                     {
                         await _openOrdersRepository.UpdateAsync(closedOrder.Order);
                     }
-
-                    await _closedOrdersRepository.CreateAsync(new BTC_USDT_ClosedOrders()
-                    {
-                        ClosedOrderId = closedOrder.Order.OpenOrderId,
-                        CreateDate = closedOrder.Order.CreateDate,
-                        ClosedDate = DateTime.Now,
-                        IsBuy = closedOrder.Order.IsBuy,
-                        Price = closedOrder.Order.Price,
-                        Amount = closedOrder.Order.Amount,
-                        CreateUserId = closedOrder.Order.CreateUserId,
-                        BoughtUserId = order.CreateUserId
-                    });
                 }
             }
 
