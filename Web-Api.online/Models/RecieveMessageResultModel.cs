@@ -6,6 +6,7 @@ namespace Web_Api.online.Models
     {
         public List<OrderBookModel> OrderBookSell { get; set; }
         public List<OrderBookModel> OrderBookBuy { get; set; }
+        public List<MarketTradesModel> MarketTrades { get; set; }
         public bool IsBuy { get; set; }
     }
 }

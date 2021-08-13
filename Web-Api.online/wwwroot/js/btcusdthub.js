@@ -12,7 +12,8 @@ connection.on("ReceiveMessage", function (recieveModel) {
     let model = JSON.parse(recieveModel);
 
     loadNewOrderBook(model.OrderBookSell, false, false);
-    loadNewOrderBook(model.OrderBookBuy, false, true);
+    loadNewOrderBook(model.OrderBookBuy, false, false);
+    loadNewOrderBook(model.MarketTrades, false, true);
 });
 
 connection.start().then(function () {

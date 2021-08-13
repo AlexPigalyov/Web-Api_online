@@ -77,6 +77,18 @@
         </div>
     </div>
 </div>
+<div class="orderbook">
+    <div class="orderbook-tbheader">
+        <div class="orderbook-tbheader-col">Цена(USDT)</div>
+        <div class="orderbook-tbheader-col">Количество(BTC)</div>
+        <div class="orderbook-tbheader-col">Время</div>
+    </div>
+    <div class="orderbook-container">
+        <div class="orderbook-list orderbook-list-bids">
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/site.js"></script>
@@ -85,7 +97,9 @@
     var model = @Html.Raw(Json.Serialize(Model));
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
+    var marketTrades = model.marketTrades
 
-    loadNewOrderBook(buyOpenOrders, true, true);
+    loadNewOrderBook(buyOpenOrders, true, false);
     loadNewOrderBook(sellOpenOrders, true, false);
+    loadNewOrderBook(marketTrades, true, true);
 </script>

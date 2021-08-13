@@ -140,11 +140,13 @@ namespace Web_Api.online.Hubs
 
             List<OrderBookModel> openOrdersBuy = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);
             List<OrderBookModel> openOrdersSell = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(false);
+            List<MarketTradesModel> marketTrades = await _closedOrdersRepository.Get_BTC_USDT_ClosedOrders();
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
                 OrderBookBuy = openOrdersBuy,
                 OrderBookSell = openOrdersSell,
+                MarketTrades = marketTrades,
                 IsBuy = isBuy
             };
 

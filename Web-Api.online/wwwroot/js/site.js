@@ -1,34 +1,63 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
-function loadNewOrderBook(openOrders, isLoad, isBuy) {
+function getCurrentList(isBuy, isMarketTrades) {
+    if (isMarketTrades) {
+        return document.getElementsByClassName("orderbook-list")[2];
+    }
 
-    let list = isBuy ? document.getElementsByClassName("orderbook-list")[0] : document.getElementsByClassName("orderbook-list")[1];
+    if (isBuy) {
+        return document.getElementsByClassName("orderbook-list")[0];
+    }
+    else {
+        return document.getElementsByClassName("orderbook-list")[1];
+    }
+}
 
-    list.innerHTML = '';
-
+function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
     var openOrdersObj = openOrders;
+
+    let list = null;
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
         openOrdersObjMaxAmount = Math.max.apply(null, openOrdersObj.map(item => item.amount));
+
+        list = getCurrentList(openOrdersObj[0].isBuy, isMarketTrades);
     }
     else {
         openOrdersObjMaxAmount = Math.max.apply(null, openOrdersObj.map(item => item.Amount));
+
+        list = getCurrentList(openOrdersObj[0].IsBuy, isMarketTrades);
     }
+
+    list.innerHTML = '';
 
     openOrdersObj.forEach(order => {
         let orderPrice = 0;
         let orderAmount = 0;
+        let isBuy = true;
         if (!isLoad) {
             orderPrice = order.Price;
             orderAmount = order.Amount;
+            isBuy = order.IsBuy;
         }
         else {
             orderPrice = order.price;
             orderAmount = order.amount;
+            isBuy = order.isBuy;
         }
         let orderBookElem = document.createElement('div');
-        orderBookElem.className = "orderbook-row";
+        if (isMarketTrades) {
+            if (isBuy) {
+                orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+            }
+            else {
+                orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+            }
+        }
+        else {
+            orderBookElem.className = "orderbook-row";
+        }
 
         let orderBookElemColFirst = document.createElement('div');
         if (isBuy) {
@@ -54,17 +83,19 @@ function loadNewOrderBook(openOrders, isLoad, isBuy) {
 
         orderBookElem.appendChild(orderBookElemColThird);
 
-        let orderBookElemProgressBar = document.createElement('div');
-        if (isBuy) {
-            orderBookElemProgressBar.className = "orderbook-progress-bar";
-        }
-        else {
-            orderBookElemProgressBar.classList.add("orderbook-bids", "orderbook-progress-bar");
-        }
+        if (!isMarketTrades) {
+            let orderBookElemProgressBar = document.createElement('div');
+            if (isBuy) {
+                orderBookElemProgressBar.className = "orderbook-progress-bar";
+            }
+            else {
+                orderBookElemProgressBar.classList.add("orderbook-bids", "orderbook-progress-bar");
+            }
 
-        orderBookElemProgressBar.style = "transform: translateX(-" + ((orderAmount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
+            orderBookElemProgressBar.style = "transform: translateX(-" + ((orderAmount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
 
-        orderBookElem.appendChild(orderBookElemProgressBar);
+            orderBookElem.appendChild(orderBookElemProgressBar);
+        }
 
         list.appendChild(orderBookElem);
     });

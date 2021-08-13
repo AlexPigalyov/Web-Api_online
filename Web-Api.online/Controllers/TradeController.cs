@@ -15,13 +15,16 @@ namespace Web_Api.online.Controllers
     {
         private readonly WalletsRepository _walletsRepository;
         private readonly IOpenOrdersRepository _openOrdersRepository;
+        private readonly IClosedOrdersRepository _closedOrdersRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
-            IOpenOrdersRepository openOrdersRepository)
+            IOpenOrdersRepository openOrdersRepository,
+            IClosedOrdersRepository closedOrdersRepository)
         {
             _walletsRepository = walletsRepository;
             _openOrdersRepository = openOrdersRepository;
+            _closedOrdersRepository = closedOrdersRepository;
         }
 
         // GET: TradeController
@@ -37,6 +40,7 @@ namespace Web_Api.online.Controllers
             public Wallet BtcWallet { get; set; }
 
             public Wallet UsdtWallet { get; set; }
+            public List<MarketTradesModel> MarketTrades { get; set; }
             public List<OrderBookModel> BuyOrderBook { get; set; }
             public List<OrderBookModel> SellOrderBook { get; set; }
         }
@@ -100,6 +104,7 @@ namespace Web_Api.online.Controllers
 
             model.BuyOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);
             model.SellOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(false);
+            model.MarketTrades = await _closedOrdersRepository.Get_BTC_USDT_ClosedOrders();
 
             return View(model);
         }

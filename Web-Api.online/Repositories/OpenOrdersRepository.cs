@@ -48,7 +48,6 @@ namespace Web_Api.online.Repositories
                     var isBuyStr = isBuy ? "Buy" : "Sell";
 
                     var res = (await db.QueryAsync<OrderBookModel>($"spGet_BTC_USDT_SortedOrderBook{isBuyStr}", commandType: CommandType.StoredProcedure))
-                        .ToList()
                         .Take(count);
 
                     return res.ToList();
