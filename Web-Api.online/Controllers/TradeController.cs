@@ -8,6 +8,7 @@ using Web_Api.online.Repositories;
 using Web_Api.online.Models;
 using System.Security.Claims;
 using Web_Api.online.Repositories.Abstract;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Controllers
 {
@@ -41,8 +42,35 @@ namespace Web_Api.online.Controllers
 
             public Wallet UsdtWallet { get; set; }
             public List<MarketTradesModel> MarketTrades { get; set; }
+            public List<BTC_USDT_OpenOrders> UserOpenOrders { get; set; }
             public List<OrderBookModel> BuyOrderBook { get; set; }
             public List<OrderBookModel> SellOrderBook { get; set; }
+        }
+
+        public async Task<ActionResult> CancelOrder(long id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You are not authorized.");
+            }
+
+            var order = await _openOrdersRepository.FindByIdAsync(id);
+
+            if (order == null)
+            {
+                return BadRequest("Order with this id doesn't exist.");
+            }
+
+            if (order.CreateUserId != userId)
+            {
+                return BadRequest("This is not your order.");
+            }
+
+            await _openOrdersRepository.RemoveAsync(order);
+
+            return Ok();
         }
 
         public async Task<ActionResult> BTCUSDT()
@@ -100,6 +128,8 @@ namespace Web_Api.online.Controllers
                 model.UserWallets.Add(usdtWallet);
 
                 model.UsdtWallet = usdtWallet;
+
+                model.UserOpenOrders = _openOrdersRepository.GetByUserId(userId);
             }
 
             model.BuyOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);

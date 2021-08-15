@@ -11,6 +11,7 @@ namespace Web_Api.online.Repositories.Abstract
         : IBaseRepository<BTC_USDT_OpenOrders>
     {
         Task<List<BTC_USDT_OpenOrders>> Get_BTC_USDT_OpenOrdersAsync();
+        List<BTC_USDT_OpenOrders> GetByUserId(string userId);
         Task<List<OrderBookModel>> Get_BTC_USDT_OrderBookAsync(bool isBuy, int count = 15);
     }
 }

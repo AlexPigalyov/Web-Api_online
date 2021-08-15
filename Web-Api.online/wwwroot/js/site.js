@@ -1,8 +1,12 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
-function getCurrentList(isBuy, isMarketTrades) {
+function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
     if (isMarketTrades) {
         return document.getElementsByClassName("orderbook-list")[2];
+    }
+
+    if (isUserOpenOrders) {
+        return document.getElementsByClassName("orderbook-list")[3];
     }
 
     if (isBuy) {
@@ -13,7 +17,7 @@ function getCurrentList(isBuy, isMarketTrades) {
     }
 }
 
-function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
+function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpenOrders = false) {
     var openOrdersObj = openOrders;
 
     let list = null;
@@ -22,12 +26,22 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
     if (isLoad) {
         openOrdersObjMaxAmount = Math.max.apply(null, openOrdersObj.map(item => item.amount));
 
-        list = getCurrentList(openOrdersObj[0].isBuy, isMarketTrades);
+        if (openOrdersObj.length != 0) {
+            list = getCurrentList(openOrdersObj[0].isBuy, isMarketTrades, isUserOpenOrders);
+        }
+        else {
+            return;
+        }
     }
     else {
         openOrdersObjMaxAmount = Math.max.apply(null, openOrdersObj.map(item => item.Amount));
 
-        list = getCurrentList(openOrdersObj[0].IsBuy, isMarketTrades);
+        if (openOrdersObj.length != 0) {
+            list = getCurrentList(openOrdersObj[0].IsBuy, isMarketTrades, isUserOpenOrders);
+        }
+        else {
+            return;
+        }
     }
 
     list.innerHTML = '';
@@ -55,7 +69,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
             }
         }
         let orderBookElem = document.createElement('div');
-        if (isMarketTrades) {
+        if (isMarketTrades || isUserOpenOrders) {
             if (isBuy) {
                 orderBookElem.classList.add("orderbook-asks", "orderbook-row");
             }
@@ -87,7 +101,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
 
         let orderBookElemColThird = document.createElement('div');
         orderBookElemColThird.className = "orderbook-col";
-        if (isMarketTrades) {
+        if (isMarketTrades || isUserOpenOrders) {
             let hour = time.getHours();
             let minutes = time.getMinutes();
             let seconds = time.getSeconds();
@@ -100,7 +114,16 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false) {
 
         orderBookElem.appendChild(orderBookElemColThird);
 
-        if (!isMarketTrades) {
+        if (isUserOpenOrders) {
+            let orderBookElemButton = document.createElement('div');
+            orderBookElemButton.className = "orderbook-col";
+
+            let orderBookElemButtonA = document.createElement('a');
+            orderBookElemButtonA.href = "/trade/cancelorder/" + (isLoad ? order.createUserId : order.CreateUserId);
+            orderBookElemButtonA.innerHTML = "Cancel";
+        }
+
+        if (!isMarketTrades && !isUserOpenOrders) {
             let orderBookElemProgressBar = document.createElement('div');
             if (isBuy) {
                 orderBookElemProgressBar.className = "orderbook-progress-bar";

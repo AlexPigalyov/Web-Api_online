@@ -60,6 +60,29 @@
                 </div>
             </div>
         </div>
+        <div class="orderbook">
+            <div class="orderbook-header">
+                <div class="orderbook-header-col">Открытые сделки</div>
+            </div>
+            <div class="orderbook-tbheader">
+                <div class="orderbook-tbheader-col">Цена(USDT)</div>
+                <div class="orderbook-tbheader-col">Количество(BTC)</div>
+                <div class="orderbook-tbheader-col">Время</div>
+                <div class="orderbook-tbheader-col"></div>
+            </div>
+            <div class="orderbook-container">
+                <div class="orderbook-list orderbook-list-bids">
+                    <div class="orderbook-row">
+                        <div class="orderbook-col">452.518</div>
+                        <div class="orderbook-col">8132.234</div>
+                        <div class="orderbook-col">15.08.21 1:46:01</div>
+                        <div class="orderbook-col">
+                            <a href="/trade/cancelorder/1">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="text-wrap">
         @if (SignInManager.IsSignedIn(User))
@@ -103,10 +126,12 @@
 <script src="~/js/btcusdthub.js?2"></script>
 <script>
     var model = @Html.Raw(Json.Serialize(Model));
+    var userOpenOrders = model.userOpenOrders;
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
     var marketTrades = model.marketTrades
-    loadNewOrderBook(buyOpenOrders, true, false);
-    loadNewOrderBook(sellOpenOrders, true, false);
-    loadNewOrderBook(marketTrades, true, true);
+    loadNewOrderBook(buyOpenOrders, true, false, false);
+    loadNewOrderBook(sellOpenOrders, true, false, false);
+    loadNewOrderBook(marketTrades, true, true, false);
+    loadNewOrderBook(userOpenOrders, true, false, true);
 </script>

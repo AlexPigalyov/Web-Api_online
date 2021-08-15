@@ -44,6 +44,8 @@ namespace Web_Api.online.Hubs
             var orders = (await _openOrdersRepository.Get_BTC_USDT_OpenOrdersAsync())
                 .Where(x => x.IsBuy == !isBuy && x.Price == priceDouble);
 
+            bool isOrderClosed = false;
+
             if (orders.Count() > 0)
             {
                 List<ClosedOrder> closedOrders = new List<ClosedOrder>();
@@ -84,6 +86,8 @@ namespace Web_Api.online.Hubs
 
                         order.Amount = amountDouble;
 
+                        isOrderClosed = true;
+
                         closedOrders.Add(new ClosedOrder
                         {
                             Order = order,
@@ -102,6 +106,8 @@ namespace Web_Api.online.Hubs
                             Order = order,
                             RemoveOpenOrderFromDataBase = true
                         });
+
+                        isOrderClosed = true;
 
                         closedOrders.Add(new ClosedOrder
                         {
@@ -144,6 +150,7 @@ namespace Web_Api.online.Hubs
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
+                CurrentOrder = isOrderClosed ? null : order,
                 OrderBookBuy = openOrdersBuy,
                 OrderBookSell = openOrdersSell,
                 MarketTrades = marketTrades,

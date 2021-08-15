@@ -20,12 +20,21 @@ namespace Web_Api.online.Repositories
         IOpenOrdersRepository
     {
         private readonly IConfiguration _configuration;
+        private readonly ExchangeContext _context;
         public OpenOrdersRepository(
             ExchangeContext context,
             IConfiguration configuration)
             : base(context)
         {
+            _context = context;
             _configuration = configuration;
+        }
+
+        public List<BTC_USDT_OpenOrders> GetByUserId(string userId)
+        {
+            return _context.BTC_USDT_OpenOrders
+                .Where(x => x.CreateUserId == userId)
+                .ToList();
         }
 
         public async Task<List<BTC_USDT_OpenOrders>> Get_BTC_USDT_OpenOrdersAsync()
