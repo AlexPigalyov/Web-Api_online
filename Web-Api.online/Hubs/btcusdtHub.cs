@@ -48,7 +48,7 @@ namespace Web_Api.online.Hubs
 
             if (orders.Count() > 0)
             {
-                List<ClosedOrder> closedOrders = new List<ClosedOrder>();
+                List<TradeClosedOrderModel> closedOrders = new List<TradeClosedOrderModel>();
 
                 foreach (var openOrder in orders)
                 {
@@ -56,7 +56,7 @@ namespace Web_Api.online.Hubs
                     {
                         amountDouble -= openOrder.Amount;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = openOrder,
                             RemoveOpenOrderFromDataBase = true
@@ -65,7 +65,7 @@ namespace Web_Api.online.Hubs
                         var localOrder = order;
                         localOrder.Amount = amountDouble;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = localOrder,
                             RemoveOpenOrderFromDataBase = false
@@ -78,7 +78,7 @@ namespace Web_Api.online.Hubs
                     {
                         openOrder.Amount -= amountDouble;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = openOrder,
                             RemoveOpenOrderFromDataBase = false
@@ -88,7 +88,7 @@ namespace Web_Api.online.Hubs
 
                         isOrderClosed = true;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = order,
                             RemoveOpenOrderFromDataBase = true
@@ -101,7 +101,7 @@ namespace Web_Api.online.Hubs
                     {
                         order.Amount = amountDouble;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = order,
                             RemoveOpenOrderFromDataBase = true
@@ -109,7 +109,7 @@ namespace Web_Api.online.Hubs
 
                         isOrderClosed = true;
 
-                        closedOrders.Add(new ClosedOrder
+                        closedOrders.Add(new TradeClosedOrderModel
                         {
                             Order = openOrder,
                             RemoveOpenOrderFromDataBase = true
@@ -134,7 +134,8 @@ namespace Web_Api.online.Hubs
                             Price = closedOrder.Order.Price,
                             Amount = closedOrder.Order.Amount,
                             CreateUserId = closedOrder.Order.CreateUserId,
-                            BoughtUserId = order.CreateUserId
+                            BoughtUserId = order.CreateUserId,
+                            Status = true
                         });
                     }
                     else

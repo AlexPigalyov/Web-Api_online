@@ -66,7 +66,6 @@ namespace Web_Api.online
             services.AddTransient<IOpenOrdersRepository, OpenOrdersRepository>();
             services.AddTransient<IClosedOrdersRepository, ClosedOrdersRepository>();
 
-
             services.AddCoinManager(Configuration);
         }
 

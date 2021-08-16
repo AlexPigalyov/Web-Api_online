@@ -10,5 +10,6 @@ namespace Web_Api.online.Repositories.Abstract
         : IBaseRepository<BTC_USDT_ClosedOrders>
     {
         Task<List<MarketTradesModel>> Get_BTC_USDT_ClosedOrders();
+        List<ClosedOrderModel> GetByUserId(string userId);
     }
 }

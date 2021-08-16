@@ -9,6 +9,7 @@ using Web_Api.online.Models;
 using System.Security.Claims;
 using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.Enums;
 
 namespace Web_Api.online.Controllers
 {
@@ -69,8 +70,47 @@ namespace Web_Api.online.Controllers
             }
 
             await _openOrdersRepository.RemoveAsync(order);
+            await _closedOrdersRepository.CreateAsync(new BTC_USDT_ClosedOrders()
+            {
+                Amount = order.Amount,
+                BoughtUserId = null,
+                Status = Convert.ToBoolean(ClosedOrderStatus.Canceled),
+                ClosedDate = DateTime.Now,
+                ClosedOrderId = order.OpenOrderId,
+                CreateDate = order.CreateDate,
+                CreateUserId = order.CreateUserId,
+                IsBuy = order.IsBuy,
+                Price = order.Price,
+                Total = order.Total
+            });
 
             return Ok();
+        }
+
+        public async Task<ActionResult> OpenOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                return View(_openOrdersRepository
+                    .GetByUserId("53cd122d-6253-4981-b290-11471f67c528"));
+            }
+
+            return BadRequest("You're not authorized");
+        }
+
+        public async Task<ActionResult> ClosedOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                return View(_closedOrdersRepository
+                    .GetByUserId("53cd122d-6253-4981-b290-11471f67c528"));
+            }
+
+            return BadRequest("You're not authorized");
         }
 
         public async Task<ActionResult> BTCUSDT()

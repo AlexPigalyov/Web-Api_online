@@ -74,7 +74,12 @@
 }
 
     .orderbook-tbheader-col:nth-child(2),
-    .orderbook-tbheader-col:nth-child(3) {
+    .orderbook-tbheader-col:nth-child(3),
+    .orderbook-tbheader-col:nth-child(4),
+    .orderbook-tbheader-col:nth-child(5),
+    .orderbook-tbheader-col:nth-child(6),
+    .orderbook-tbheader-col:nth-child(7) {
+        
         text-align: right;
     }
 
@@ -130,7 +135,11 @@
 }
 
     .orderbook-col:nth-child(2),
-    .orderbook-col:nth-child(3) {
+    .orderbook-col:nth-child(3),
+    .orderbook-col:nth-child(4),
+    .orderbook-col:nth-child(5),
+    .orderbook-col:nth-child(6),
+    .orderbook-col:nth-child(7) {
         text-align: right;
         padding-left: 4px;
     }

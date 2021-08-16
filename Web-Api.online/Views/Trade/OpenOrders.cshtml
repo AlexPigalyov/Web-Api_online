@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Open orders";
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="text-center">
+        <h1 class="display-4">Open orders</h1>
+    </div>
+
+    <div class="orderbook-wrap">
+        <div class="orderbook" style="height: 1000px !important; width: 1540px !important; max-width: 1540px !important;">
+            <div class="orderbook-header"></div>
+            <div class="orderbook-tbheader">
+                <div class="orderbook-tbheader-col">Price(USDT)</div>
+                <div class="orderbook-tbheader-col">Amount(BTC)</div>
+                <div class="orderbook-tbheader-col">Total</div>
+                <div class="orderbook-tbheader-col">Valute Pair</div>
+                <div class="orderbook-tbheader-col">Create date-time</div>
+                <div class="orderbook-tbheader-col"></div>
+            </div>
+            <div class="orderbook-container">
+                <div class="orderbook-list orderbook-list-bids orderbook-asks" style="width: 1540px !important; max-height: 970px !important;">
+                    @foreach (var order in Model)
+                    {
+                        <div class="orderbook-row">
+                            <div class="orderbook-col">@order.Price</div>
+                            <div class="orderbook-col">@order.Amount</div>
+                            <div class="orderbook-col">@(order.Price * order.Amount)</div>
+                            <div class="orderbook-col">BTC-USDT</div>
+                            <div class="orderbook-col">@(order.CreateDate.ToString("hh:mm:ss"))</div>
+                            <div class="orderbook-col">
+                                <a href="/trade/cancelorder/@order.OpenOrderId">Cancel</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .container {
+        max-width: 1540px;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>

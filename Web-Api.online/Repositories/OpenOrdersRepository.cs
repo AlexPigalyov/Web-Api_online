@@ -34,6 +34,7 @@ namespace Web_Api.online.Repositories
         {
             return _context.BTC_USDT_OpenOrders
                 .Where(x => x.CreateUserId == userId)
+                .OrderByDescending(x => x.CreateDate)
                 .ToList();
         }
 

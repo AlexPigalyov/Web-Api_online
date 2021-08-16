@@ -17,6 +17,11 @@ connection.on("ReceiveMessage", function (recieveModel) {
     loadNewOrderBook(model.CurrentOrder, false, false, true);
 });
 
+connection.on("ReceiveOpenOrders", function (model) {
+    console.log(model);
+});
+
+
 connection.start().then(function () {
     document.getElementById("buyButton").disabled = false;
 }).catch(function (err) {
