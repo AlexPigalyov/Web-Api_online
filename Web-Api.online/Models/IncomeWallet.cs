@@ -14,5 +14,6 @@ namespace Web_Api.online.Models
         public DateTime Created { get; set; }
         public DateTime LastUpdate { get; set; }
         public string Address { get; set; }
+        public string AddressLabel { get; set; }
     }
 }
