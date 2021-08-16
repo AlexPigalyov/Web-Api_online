@@ -10,6 +10,7 @@ using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 using System.Security.Claims;
 using Web_Api.online.Services.Interfaces;
+using Web_Api.online.Services;
 
 namespace Web_Api.online.Controllers
 {
@@ -17,11 +18,15 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
+        private TransactionManager _transactionManager;
 
-        public WalletsController(WalletsRepository walletsRepository, ICoinManager coinManager)
+        public WalletsController(WalletsRepository walletsRepository,
+            ICoinManager coinManager,
+            TransactionManager transactionManager)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
+            _transactionManager = transactionManager;
         }
 
         public class IndexModel
@@ -43,11 +48,10 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
+                await _transactionManager.StartSearch(userId);
                 userIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
                 userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
             }
-
-            //List <WalletsController> wallets = _walletsRepository.
 
             IndexModel model = new IndexModel();
 
@@ -77,7 +81,7 @@ namespace Web_Api.online.Controllers
                 {
                     if (coin.CoinShortName.ToLower() == selectCurrency.ToLower())
                     {
-                        address = coin.GetNewAddress();
+                        address = coin.GetNewAddress(userId);
                         break;
                     }
                 }
@@ -87,6 +91,7 @@ namespace Web_Api.online.Controllers
                     UserId = userId,
                     CurrencyAcronim = selectCurrency,
                     Address = address,
+                    AddressLabel = userId //придумать что-нибудь
                 };
 
                 await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
