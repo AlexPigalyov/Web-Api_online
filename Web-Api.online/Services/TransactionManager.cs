@@ -18,7 +18,7 @@ namespace Web_Api.online.Services
 
 
         private string userId;
-        private int amountTransactionsToGet = 10;
+        //private int amountTransactionsToGet = 10;
         private List<IncomeWallet> incomeWallets;
         private List<Wallet> wallets;
 
@@ -47,7 +47,7 @@ namespace Web_Api.online.Services
                                 .CoinServices
                                 .Where(x => incomeWallets
                                                 .Any(y =>
-                                                        x.CoinShortName.ToLower() == y.CurrencyAcronim.ToLower()))
+                                                        x.CoinShortName == y.CurrencyAcronim))
                                 .ToList(); // убирает лишние сервисы, останутся только те у которых юзер имеет кошелёк
 
             foreach (var coin in coinServices)
@@ -56,7 +56,7 @@ namespace Web_Api.online.Services
 
                 var lastTr = incomeLastTransactions
                                  .FirstOrDefault(tr =>
-                                    tr.CurrencyAcronim.Trim().ToLower() == coin.CoinShortName.ToLower());
+                                    tr.CurrencyAcronim == coin.CoinShortName);
 
                 if (lastTr == null)
                 {
@@ -80,23 +80,39 @@ namespace Web_Api.online.Services
                 }
             }
         }
+        // идёт от 1 транзакции к последней, нужно запомнить как-то id транзакции в блокчейне
+        // и от этого id начинать выборку
+        //private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
+        //    IncomeTransaction lastTransaction,
+        //    ICoinService coinService,
+        //    int calls = 0)
+        //{
+        //    var lastTransactionsBlockchain = coinService.ListTransactions(userId, amountTransactionsToGet, calls * amountTransactionsToGet);
+        //    var lastSavedTransaction = lastTransactionsBlockchain.FirstOrDefault(tr => tr.TxId == lastTransaction.TransactionId);
+
+        //    if (lastSavedTransaction == null)
+        //    {
+        //        SearshLastNoSaveTransactions(incomeTransactionsResult, lastTransaction, coinService, ++calls);
+        //    }
+
+        //    incomeTransactionsResult.AddRange(
+        //        ConvertTransactionsResponseToIncomeTransactions(lastTransactionsBlockchain,
+        //        coinService.CoinShortName));
+        //}
 
         private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
             IncomeTransaction lastTransaction,
-            ICoinService coinService,
-            int calls = 0)
+            ICoinService coinService)
         {
-            var lastTransactionsBlockchain = coinService.ListTransactions(userId, amountTransactionsToGet, calls * amountTransactionsToGet);
-            var lastSavedTransaction = lastTransactionsBlockchain.FirstOrDefault(tr => tr.TxId == lastTransaction.TransactionId);
+            var allTransactionsBlockchain = coinService.ListTransactions(userId);
 
-            if (lastSavedTransaction == null)
+            if (allTransactionsBlockchain.Count() != 0)
             {
-                SearshLastNoSaveTransactions(incomeTransactionsResult, lastTransaction, coinService, ++calls);
+                incomeTransactionsResult.AddRange(
+                    ConvertTransactionsResponseToIncomeTransactions(
+                        allTransactionsBlockchain.Where(x => x.Time > lastTransaction.Date).ToList(),
+                        coinService.CoinShortName));
             }
-
-            incomeTransactionsResult.AddRange(
-                ConvertListTransactionsResponseToIncomeTransactions(lastTransactionsBlockchain,
-                coinService.CoinShortName));
         }
 
         private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
@@ -107,24 +123,24 @@ namespace Web_Api.online.Services
             if (allTransactionsBlockchain.Count() != 0)
             {
                 incomeTransactionsResult.AddRange(
-                    ConvertListTransactionsResponseToIncomeTransactions(allTransactionsBlockchain,
+                    ConvertTransactionsResponseToIncomeTransactions(allTransactionsBlockchain,
                                                                             coinService.CoinShortName));
             }
         }
 
-        private List<IncomeTransaction> ConvertListTransactionsResponseToIncomeTransactions(List<ListTransactionsResponse> listTransactions,
+        private List<IncomeTransaction> ConvertTransactionsResponseToIncomeTransactions(List<TransactionResponse> transactionsResponse,
             string shortNameCurrency)
         {
             List<IncomeTransaction> incomeTransactions = new List<IncomeTransaction>();
-            foreach (var tr in listTransactions)
+            foreach (var tr in transactionsResponse)
             {
                 var wallet = incomeWallets.FirstOrDefault(w => w.Address == tr.Address);
-                incomeTransactions.Add(ConvertListTransactionsResponseToIncomeTransactions(tr, shortNameCurrency, wallet.Id));
+                incomeTransactions.Add(ConvertTransactionResponseToIncomeTransaction(tr, shortNameCurrency, wallet.Id));
             }
             return incomeTransactions;
         }
 
-        private IncomeTransaction ConvertListTransactionsResponseToIncomeTransactions(ListTransactionsResponse transaction,
+        private IncomeTransaction ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
             string shortNameCurrency, int walletId)
         {
             return new IncomeTransaction()
@@ -134,7 +150,7 @@ namespace Web_Api.online.Services
                 Amount = transaction.Amount,
                 TransactionFee = transaction.Fee, // не видит комиссию
                 ToAddress = transaction.Address,
-                Date = (decimal)transaction.Time,
+                Date = transaction.Time,
                 UserId = userId,
                 WalletId = walletId
             };
@@ -142,14 +158,10 @@ namespace Web_Api.online.Services
 
         private async Task UpdateBalance(List<IncomeTransaction> incomeTransactions)
         {
-            foreach(var tr in incomeTransactions)
+            foreach (var tr in incomeTransactions)
             {
                 var w = wallets.FirstOrDefault(t => t.CurrencyAcronim.ToLower() == tr.CurrencyAcronim.ToLower());
                 w.Value = w.Value + tr.Amount;
-            }
-
-            foreach(var w in wallets)
-            {
                 await _walletsRepository.UpdateWalletBalance(w);
             }
         }
