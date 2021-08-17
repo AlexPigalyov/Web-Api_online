@@ -41,23 +41,18 @@ namespace Web_Api.online.Controllers
         {
             List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
 
-            List<IncomeWallet> userIncomeWallets = new List<IncomeWallet>();
-            List<Wallet> userWallets = new List<Wallet>();
+            IndexModel model = new IndexModel();
+            model.Currencies = currencies;
+            model.UserWallets = new List<Wallet>();
+            model.UserIncomeWallets = new List<IncomeWallet>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                userWallets = await _transactionManager.GetUpdatedWallets(userId);//вернуть внутренние кошельки с новым балансом балансом
-                userIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
-                //userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+                model.UserWallets = await _transactionManager.GetUpdatedWallets(userId);
+                model.UserIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
             }
-
-            IndexModel model = new IndexModel();
-
-            model.Currencies = currencies;
-            model.UserIncomeWallets = userIncomeWallets;
-            model.UserWallets = userWallets;
 
             return View(model);
         }
@@ -79,7 +74,7 @@ namespace Web_Api.online.Controllers
 
                 foreach (var coin in _coinManager.CoinServices)
                 {
-                    if (coin.CoinShortName.ToLower() == selectCurrency.ToLower())
+                    if (coin.CoinShortName == selectCurrency)
                     {
                         address = coin.GetNewAddress(userId);
                         break;
