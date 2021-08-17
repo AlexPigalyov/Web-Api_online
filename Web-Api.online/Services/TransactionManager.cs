@@ -61,7 +61,7 @@ namespace Web_Api.online.Services
                 if (lastTr == null)
                 {
 
-                    SearshLastNoSaveTransactions(listIncomeTransactionsToSave, coin);
+                    SearchLastNoSaveTransactions(listIncomeTransactionsToSave, coin);
                     if (listIncomeTransactionsToSave.Count() != 0)
                     {
                         await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
@@ -70,7 +70,7 @@ namespace Web_Api.online.Services
                 }
                 else
                 {
-                    SearshLastNoSaveTransactions(listIncomeTransactionsToSave, lastTr, coin);
+                    SearchLastNoSaveTransactions(listIncomeTransactionsToSave, lastTr, coin);
                     if (listIncomeTransactionsToSave.Count() != 0)
                     {
                         listIncomeTransactionsToSave = listIncomeTransactionsToSave.Where(c => c.Date > lastTr.Date).ToList();
@@ -100,7 +100,8 @@ namespace Web_Api.online.Services
         //        coinService.CoinShortName));
         //}
 
-        private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
+        // coinService.ListTransactions(userId, amountTransactionsToGet, из бд достать количество транзакций юзера)
+        private void SearchLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
             IncomeTransaction lastTransaction,
             ICoinService coinService)
         {
@@ -115,7 +116,7 @@ namespace Web_Api.online.Services
             }
         }
 
-        private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
+        private void SearchLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
             ICoinService coinService)
         {
             var allTransactionsBlockchain = coinService.ListTransactions(userId);
@@ -160,7 +161,7 @@ namespace Web_Api.online.Services
         {
             foreach (var tr in incomeTransactions)
             {
-                var w = wallets.FirstOrDefault(t => t.CurrencyAcronim.ToLower() == tr.CurrencyAcronim.ToLower());
+                var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
                 w.Value = w.Value + tr.Amount;
                 await _walletsRepository.UpdateWalletBalance(w);
             }
