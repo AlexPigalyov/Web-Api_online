@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web_Api.online.Repositories;
 using Microsoft.Extensions.Configuration;
 using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Repositories.Abstract;
 
 namespace Web_Api.online.API.Controllers
 {

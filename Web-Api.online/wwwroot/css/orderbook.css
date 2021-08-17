@@ -46,8 +46,15 @@
     margin-left: 16px;
     margin-right: 16px;
     position: relative;
+    color: rgb(240, 185, 11);
     -webkit-box-pack: initial;
+    font-size: 14px;
     justify-content: initial;
+}
+
+.order-header-col {
+    text-align: left;
+    font-family: Arial Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif !important;
 }
 
 .orderbook-tbheader {
@@ -67,7 +74,12 @@
 }
 
     .orderbook-tbheader-col:nth-child(2),
-    .orderbook-tbheader-col:nth-child(3) {
+    .orderbook-tbheader-col:nth-child(3),
+    .orderbook-tbheader-col:nth-child(4),
+    .orderbook-tbheader-col:nth-child(5),
+    .orderbook-tbheader-col:nth-child(6),
+    .orderbook-tbheader-col:nth-child(7) {
+        
         text-align: right;
     }
 
@@ -123,7 +135,11 @@
 }
 
     .orderbook-col:nth-child(2),
-    .orderbook-col:nth-child(3) {
+    .orderbook-col:nth-child(3),
+    .orderbook-col:nth-child(4),
+    .orderbook-col:nth-child(5),
+    .orderbook-col:nth-child(6),
+    .orderbook-col:nth-child(7) {
         text-align: right;
         padding-left: 4px;
     }

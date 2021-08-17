@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Web_Api.online.Models.StoredProcedures;
-using Web_Api.online.Models.Tables;
 
-namespace Web_Api.online.Repositories
+using Web_Api.online.Models.StoredProcedures;
+
+namespace Web_Api.online.Repositories.Abstract
 {
     public interface IRatesRepository
     {

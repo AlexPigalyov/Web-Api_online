@@ -10,9 +10,17 @@ connection.on("ReceiveMessage", function (recieveModel) {
     //var encodedMsg = user + " says " + msg;
 
     let model = JSON.parse(recieveModel);
-    console.log(model);
-    loadNewOrderBook(model.OrderBook, false, model.IsBuy);
+
+    loadNewOrderBook(model.OrderBookSell, false, false, false);
+    loadNewOrderBook(model.OrderBookBuy, false, false, false);
+    loadNewOrderBook(model.MarketTrades, false, true, false);
+    loadNewOrderBook(model.CurrentOrder, false, false, true);
 });
+
+connection.on("ReceiveOpenOrders", function (model) {
+    console.log(model);
+});
+
 
 connection.start().then(function () {
     document.getElementById("buyButton").disabled = false;

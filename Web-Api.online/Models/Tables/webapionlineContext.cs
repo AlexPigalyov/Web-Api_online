@@ -23,6 +23,7 @@ namespace Web_Api.online.Models.Tables
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<DpdCity> DpdCities { get; set; }
         public virtual DbSet<Rate> Rates { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
