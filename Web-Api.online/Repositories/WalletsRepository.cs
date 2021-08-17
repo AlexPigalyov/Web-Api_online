@@ -102,6 +102,22 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task UpdateWalletBalance(Wallet wallet)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    await db.QueryAsync<Wallet>("spUpdateWalletBalance",
+                        new { walletId = wallet.Id ,
+                              newWalletBalance = wallet.Value},
+                              commandType: CommandType.StoredProcedure);
+
+                }
+                catch (Exception ex) { return; }
+            }
+        }
+
         public async Task<List<Currency>> GetCurrenciesAsync()
         {
             using (var ctx = new ExchangeContext())
