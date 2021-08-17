@@ -48,9 +48,9 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                await _transactionManager.StartSearch(userId);
+                userWallets = await _transactionManager.GetUpdatedWallets(userId);//вернуть внутренние кошельки с новым балансом балансом
                 userIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
-                userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+                //userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
             }
 
             IndexModel model = new IndexModel();
