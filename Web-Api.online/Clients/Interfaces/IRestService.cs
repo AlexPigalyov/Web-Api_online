@@ -133,7 +133,7 @@ namespace Web_Api.online.Clients.Interfaces
         List<ListReceivedByAddressResponse> ListReceivedByAddress(int minConf = 1, bool includeEmpty = false, bool? includeWatchonly = null);
         List<ListReceivedByLabelResponse> ListReceivedByLabel(int minConf = 1, bool includeEmpty = false, bool? includeWatchonly = null);
         ListSinceBlockResponse ListSinceBlock(string blockHash = null, int targetConfirmations = 1, bool? includeWatchonly = null);
-        List<ListTransactionsResponse> ListTransactions(string account = null, int count = 10, int from = 0, bool? includeWatchonly = null);
+        List<TransactionResponse> ListTransactions(string account = null, int count = 10, int from = 0, bool? includeWatchonly = null);
         List<ListUnspentResponse> ListUnspent(int minConf = 1, int maxConf = 9999999, List<string> addresses = null);
         bool LockUnspent(bool unlock, IList<ListUnspentResponse> listUnspentResponses);
         bool Move(string fromAccount, string toAccount, decimal amount, int minConf = 1, string comment = "");
