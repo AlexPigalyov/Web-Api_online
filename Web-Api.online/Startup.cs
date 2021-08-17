@@ -18,6 +18,7 @@ using Web_Api.online.Hubs;
 using Web_Api.online.Services.DI;
 using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Services;
 
 namespace Web_Api.online
 {
@@ -66,6 +67,8 @@ namespace Web_Api.online
             services.AddTransient<IOpenOrdersRepository, OpenOrdersRepository>();
             services.AddTransient<IClosedOrdersRepository, ClosedOrdersRepository>();
 
+            services.AddTransient<TransactionsRepository>();
+            services.AddTransient<TransactionManager>();
             services.AddCoinManager(Configuration);
         }
 

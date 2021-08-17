@@ -66,6 +66,7 @@ namespace Web_Api.online.Repositories
                     var p = new DynamicParameters();
                     p.Add("userId", wallet.UserId);
                     p.Add("address", wallet.Address);
+                    p.Add("addressLabel", wallet.AddressLabel);
                     p.Add("currencyAcronim", wallet.CurrencyAcronim);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -98,6 +99,22 @@ namespace Web_Api.online.Repositories
                     return wallet;
                 }
                 catch (Exception ex) { return null; }
+            }
+        }
+
+        public async Task UpdateWalletBalance(Wallet wallet)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    await db.QueryAsync<Wallet>("spUpdateWalletBalance",
+                        new { walletId = wallet.Id ,
+                              newWalletBalance = wallet.Value},
+                              commandType: CommandType.StoredProcedure);
+
+                }
+                catch (Exception ex) { return; }
             }
         }
 

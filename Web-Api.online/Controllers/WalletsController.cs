@@ -10,6 +10,7 @@ using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 using System.Security.Claims;
 using Web_Api.online.Services.Interfaces;
+using Web_Api.online.Services;
 
 namespace Web_Api.online.Controllers
 {
@@ -17,11 +18,15 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
+        private TransactionManager _transactionManager;
 
-        public WalletsController(WalletsRepository walletsRepository, ICoinManager coinManager)
+        public WalletsController(WalletsRepository walletsRepository,
+            ICoinManager coinManager,
+            TransactionManager transactionManager)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
+            _transactionManager = transactionManager;
         }
 
         public class IndexModel
@@ -36,24 +41,18 @@ namespace Web_Api.online.Controllers
         {
             List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
 
-            List<IncomeWallet> userIncomeWallets = new List<IncomeWallet>();
-            List<Wallet> userWallets = new List<Wallet>();
+            IndexModel model = new IndexModel();
+            model.Currencies = currencies;
+            model.UserWallets = new List<Wallet>();
+            model.UserIncomeWallets = new List<IncomeWallet>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                userIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
-                userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+                model.UserWallets = await _transactionManager.GetUpdatedWallets(userId);
+                model.UserIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
             }
-
-            //List <WalletsController> wallets = _walletsRepository.
-
-            IndexModel model = new IndexModel();
-
-            model.Currencies = currencies;
-            model.UserIncomeWallets = userIncomeWallets;
-            model.UserWallets = userWallets;
 
             return View(model);
         }
@@ -69,7 +68,7 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Create(string selectCurrency)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(userId))
             {
                 string address = "";
 
@@ -77,7 +76,7 @@ namespace Web_Api.online.Controllers
                 {
                     if (coin.CoinShortName == selectCurrency)
                     {
-                        address = coin.GetNewAddress();
+                        address = coin.GetNewAddress(userId);
                         break;
                     }
                 }
@@ -87,11 +86,16 @@ namespace Web_Api.online.Controllers
                     UserId = userId,
                     CurrencyAcronim = selectCurrency,
                     Address = address,
+                    AddressLabel = userId //придумать что-нибудь
                 };
 
                 await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
 
         // GET: WalletsController/Edit/5

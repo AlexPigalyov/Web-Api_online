@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Clients.Models
 {
-    public class ListTransactionsResponse
+    public class TransactionResponse
     {
         public string Account { get; set; }
         public string Address { get; set; }

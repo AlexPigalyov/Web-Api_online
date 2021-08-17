@@ -565,11 +565,11 @@ namespace Web_Api.online.Clients
                 : _restRequestClient.MakeRequest<ListSinceBlockResponse>(RestMethods.listsinceblock, (string.IsNullOrWhiteSpace(blockHash) ? "" : blockHash), targetConfirmations, includeWatchonly);
         }
 
-        public List<ListTransactionsResponse> ListTransactions(string account, int count, int from, bool? includeWatchonly)
+        public List<TransactionResponse> ListTransactions(string account, int count, int from, bool? includeWatchonly)
         {
             return includeWatchonly == null
-                ? _restRequestClient.MakeRequest<List<ListTransactionsResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from)
-                : _restRequestClient.MakeRequest<List<ListTransactionsResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from, includeWatchonly);
+                ? _restRequestClient.MakeRequest<List<TransactionResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from)
+                : _restRequestClient.MakeRequest<List<TransactionResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from, includeWatchonly);
         }
 
         public List<ListUnspentResponse> ListUnspent(int minConf, int maxConf, List<string> addresses)

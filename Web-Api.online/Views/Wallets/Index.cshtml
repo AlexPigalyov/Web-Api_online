@@ -87,12 +87,12 @@ Create income wallet:
 <div>
     <ul id="walletsList">
         <li>
-            Id Currency Value Address Created
+            Id Currency Address Created
         </li>
         @foreach (var item in Model.UserIncomeWallets)
         {
             <li>
-                @item.Id @item.CurrencyAcronim @item.Value @item.Address @item.Created
+                @item.Id @item.CurrencyAcronim @item.Address @item.Created
             </li>
         }
     </ul>

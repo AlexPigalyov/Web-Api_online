@@ -186,7 +186,7 @@ namespace Web_Api.online.Clients.Models
                     WalletPassword = _configuration["Dogecoin_WalletPassword"];
                 }
 
-                CoinShortName = "Doge";
+                CoinShortName = "DOGE";
                 CoinLongName = "Dogecoin";
                 IsoCurrencyCode = "XDG";
                 TransactionSizeBytesContributedByEachInput = 148;
