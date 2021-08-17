@@ -18,8 +18,9 @@ namespace Web_Api.online.Services
 
 
         private string userId;
-        private int amountTransactions = 10;
+        private int amountTransactionsToGet = 10;
         private List<IncomeWallet> incomeWallets;
+        private List<Wallet> wallets;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository)
@@ -29,11 +30,13 @@ namespace Web_Api.online.Services
             _walletsRepository = walletsRepository;
         }
 
-        public async Task StartSearch(string userId)
+        public async Task<List<Wallet>> GetUpdatedWallets(string userId)
         {
             this.userId = userId;
             incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
+            wallets = await _walletsRepository.GetUserWalletsAsync(userId);
             await SearchNewIncomeTransactionsAsync();
+            return wallets;
         }
 
         private async Task SearchNewIncomeTransactionsAsync()
@@ -45,10 +48,11 @@ namespace Web_Api.online.Services
                                 .Where(x => incomeWallets
                                                 .Any(y =>
                                                         x.CoinShortName.ToLower() == y.CurrencyAcronim.ToLower()))
-                                .ToList();
+                                .ToList(); // убирает лишние сервисы, останутся только те у которых юзер имеет кошелёк
+
             foreach (var coin in coinServices)
             {
-                var listTransactionsToSave = new List<IncomeTransaction>();
+                var listIncomeTransactionsToSave = new List<IncomeTransaction>();
 
                 var lastTr = incomeLastTransactions
                                  .FirstOrDefault(tr =>
@@ -57,19 +61,21 @@ namespace Web_Api.online.Services
                 if (lastTr == null)
                 {
 
-                    SearshLastNoSaveTransactions(listTransactionsToSave, coin);
-                    if (listTransactionsToSave.Count() != 0)
+                    SearshLastNoSaveTransactions(listIncomeTransactionsToSave, coin);
+                    if (listIncomeTransactionsToSave.Count() != 0)
                     {
-                        await _transactionsRepository.CreateIncomeTransactionsAsync(listTransactionsToSave);
+                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
+                        await UpdateBalance(listIncomeTransactionsToSave);
                     }
                 }
                 else
                 {
-                    SearshLastNoSaveTransactions(listTransactionsToSave, lastTr, coin);
-                    if (listTransactionsToSave.Count() != 0)
+                    SearshLastNoSaveTransactions(listIncomeTransactionsToSave, lastTr, coin);
+                    if (listIncomeTransactionsToSave.Count() != 0)
                     {
-                        listTransactionsToSave = listTransactionsToSave.Where(c => c.Date > lastTr.Date).ToList();
-                        await _transactionsRepository.CreateIncomeTransactionsAsync(listTransactionsToSave);
+                        listIncomeTransactionsToSave = listIncomeTransactionsToSave.Where(c => c.Date > lastTr.Date).ToList();
+                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
+                        await UpdateBalance(listIncomeTransactionsToSave);
                     }
                 }
             }
@@ -80,7 +86,7 @@ namespace Web_Api.online.Services
             ICoinService coinService,
             int calls = 0)
         {
-            var lastTransactionsBlockchain = coinService.ListTransactions(userId, amountTransactions, calls * amountTransactions);
+            var lastTransactionsBlockchain = coinService.ListTransactions(userId, amountTransactionsToGet, calls * amountTransactionsToGet);
             var lastSavedTransaction = lastTransactionsBlockchain.FirstOrDefault(tr => tr.TxId == lastTransaction.TransactionId);
 
             if (lastSavedTransaction == null)
@@ -96,12 +102,12 @@ namespace Web_Api.online.Services
         private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
             ICoinService coinService)
         {
-            var lastTransactionsBlockchain = coinService.ListTransactions(userId);
+            var allTransactionsBlockchain = coinService.ListTransactions(userId);
 
-            if (lastTransactionsBlockchain.Count() != 0)
+            if (allTransactionsBlockchain.Count() != 0)
             {
                 incomeTransactionsResult.AddRange(
-                    ConvertListTransactionsResponseToIncomeTransactions(lastTransactionsBlockchain,
+                    ConvertListTransactionsResponseToIncomeTransactions(allTransactionsBlockchain,
                                                                             coinService.CoinShortName));
             }
         }
@@ -132,6 +138,20 @@ namespace Web_Api.online.Services
                 UserId = userId,
                 WalletId = walletId
             };
+        }
+
+        private async Task UpdateBalance(List<IncomeTransaction> incomeTransactions)
+        {
+            foreach(var tr in incomeTransactions)
+            {
+                var w = wallets.FirstOrDefault(t => t.CurrencyAcronim.ToLower() == tr.CurrencyAcronim.ToLower());
+                w.Value = w.Value + tr.Amount;
+            }
+
+            foreach(var w in wallets)
+            {
+                await _walletsRepository.UpdateWalletBalance(w);
+            }
         }
     }
 }
