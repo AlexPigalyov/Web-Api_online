@@ -10,7 +10,7 @@ namespace Web_Api.online.Models
         public decimal Amount { get; set; }
         public decimal TransactionFee { get; set; }
         public string ToAddress { get; set; }
-        public decimal Date { get; set; }
+        public double Date { get; set; }
         public string UserId { get; set; }
         public int WalletId { get; set; }
     }
