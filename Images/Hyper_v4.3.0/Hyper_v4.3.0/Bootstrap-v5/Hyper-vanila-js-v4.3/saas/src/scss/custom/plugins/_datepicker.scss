@@ -1,0 +1,116 @@
+////
+//// Datepicker
+////
+
+.datepicker {
+    padding: 0px;
+    margin-top: 7px;
+    .datepicker-picker {
+        .datepicker-controls {
+            button {
+                &.prev-btn, &.view-switch, &.next-btn {
+                    background: transparent;
+                    font-size: 13px;
+                    line-height: 28px;
+                    color: $gray-700;
+                }
+            }
+
+        }
+        .datepicker-footer {
+            background-color: transparent;
+            box-shadow: none;
+            .datepicker-controls {
+                .today-btn {
+                    border: none;
+                    color: $primary;
+                    background-color: rgba($primary, 0.25);
+                    font-size: $btn-font-size-sm;
+                    &:hover {
+                        color: $white;
+                        background-color: $primary;
+                        transition: all 0.3s;
+                    }
+                }
+                .clear-btn {
+                    border: none;
+                    color: $danger;
+                    background-color: rgba($danger, 0.25);
+                    font-size: $btn-font-size-sm;
+                    &:hover {
+                        color: $white;
+                        background-color: $danger;
+                        transition: all 0.3s;
+                    }
+                }
+            }
+        }
+        .datepicker-view {
+            .days {
+                width: 100%;
+                .datepicker-cell {
+                    &.day {
+                        background-color: transparent;
+                        border-radius: 50%;
+                        &.prev, &.next {
+                            opacity: 0.4;
+                        }
+                        &.selected, &.focused, &.range-start, &.range-end {
+                            color: $white;
+                            font-weight: $font-weight-bold;
+                            background-color: $primary !important;
+                        }
+                        &:hover {
+                            background-color: $gray-200;
+                        }
+                        &.range {
+                            background-color: rgba($primary, 0.2);
+                            border-radius: 0;
+                        }
+                        &.range-start {
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                        &.range-end {
+                            border-top-left-radius: 0;
+                            border-bottom-left-radius: 0;
+                        }
+                    }
+                    
+                }
+                .datepicker-cell.range-start.range-end {
+                    border-radius: 50%;
+                }
+            }
+            &.months, &.years {
+                .datepicker-cell {
+                    &.selected {
+                        color: $white;
+                        font-weight: $font-weight-bold;
+                        background-color: $primary !important;
+                    }
+                    &.focused, &:hover {
+                        background-color: $gray-200;
+                    }
+                }
+            }
+        }
+    }
+    &.datepicker-dropdown {
+        .datepicker-picker {
+            box-shadow: $dropdown-box-shadow;
+            border: 1px solid $dropdown-border-color;
+            &:before {
+                border-bottom-color: $dropdown-border-color;
+            }
+        }
+        &.datepicker-orient-bottom {
+            &:before {
+                top: -6px;
+            }
+            &:after {
+                top: -5px;
+            }
+        }
+    }
+}

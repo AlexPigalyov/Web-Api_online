@@ -1,0 +1,231 @@
+//
+// datatable.scss
+//
+
+// Tabulator Data Table
+.tabulator-row {
+    border-bottom: 1px solid $table-border-color;
+    min-height: 0;
+    .tabulator-cell {
+        padding: $table-cell-padding-y;
+        text-overflow: inherit;
+        div[data-max="100"] {
+            height: 5px !important;
+        }
+        .tabulator-col-title input[type="checkbox"] {
+            width: $form-check-input-width;
+            height: $form-check-input-width;
+            border: $form-check-input-border !important;
+        }
+    }
+    .tabulator-responsive-collapse {
+        table {
+            font-size: $font-size-base;
+            font-weight: $font-weight-semibold;
+            tr {
+                td {
+                    font-weight: $font-weight-normal;
+                }
+            }
+        }
+    }
+}
+
+#tabulator-table {
+    .tabulator-cell input[type="checkbox"],
+    .tabulator-col-title input[type="checkbox"] {
+        width: $form-check-input-width;
+        height: $form-check-input-width;
+        margin-top: 0.194em; // border: $form-check-input-border !important;
+    }
+    .tabulator-header {
+        .tabulator-headers {
+            :first-child {
+                &.tabulator-col {
+                    .tabulator-col-title {
+                        overflow: inherit;
+                    }
+                }
+            }
+        }
+    }
+    .tabulator-table {
+        .tabulator-row {
+            &.tabulator-selected {
+                background-color: $table-striped-bg;
+            }
+            &.tabulator-selectable {
+                &:hover {
+                    background-color: $table-hover-bg;
+                }
+            }
+        }
+    }
+    .tabulator-footer {
+        .tabulator-paginator {
+            .tabulator-page {
+                &.active {
+                    background-color: $pagination-active-bg;
+                    border-color: $pagination-active-border-color;
+                    color: $pagination-active-color;
+                }
+            }
+        }
+    }
+}
+
+.tabulator {
+    font-size: $font-size-base;
+    .tabulator-header {
+        border-bottom: 1px solid $table-border-color;
+        border-top: 0;
+        .tabulator-col {
+            background-color: $table-bg;
+            font-weight: $font-weight-semibold;
+            .tabulator-col-content {
+                padding: $table-cell-padding-y $table-cell-padding-x;
+            }
+            &.tabulator-sortable[aria-sort="none"],
+            &.tabulator-sortable[aria-sort="asc"] {
+                .tabulator-col-content {
+                    .tabulator-col-sorter {
+                        .tabulator-arrow {
+                            border-left: 4.5px solid transparent;
+                            border-right: 4.5px solid transparent;
+                            border-bottom: 4.5px solid $gray-400;
+                        }
+                    }
+                }
+            }
+            &.tabulator-sortable[aria-sort="asc"] {
+                .tabulator-col-content {
+                    .tabulator-col-sorter {
+                        .tabulator-arrow {
+                            border-bottom: 4.5px solid $dark;
+                        }
+                    }
+                }
+            }
+            &.tabulator-sortable {
+                &:hover {
+                    background-color: $table-bg;
+                }
+            }
+        }
+    }
+    .tabulator-footer {
+        border-top: 1px solid $table-border-color;
+        .tabulator-page {
+            padding: $input-btn-padding-y $input-btn-padding-x;
+            font-size: $font-size-base;
+        }
+    }
+}
+
+
+// gridjs
+
+.gridjs {
+    padding: 0;
+    display: block;
+    .gridjs-head {
+        padding: 0px 0px 8px;
+    }
+    .gridjs-wrapper {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        table {
+            .gridjs-th-content {
+                .form-check-input {
+                    cursor: pointer;
+                    display: block;
+                    margin: auto;
+                  }
+            }
+            &.gridjs-table {
+                width: 100%;
+            }
+            th {
+                &.gridjs-th {
+                    border: none;
+                }
+                &.gridjs-th-sort {
+                    &:focus, &:hover {
+                        background-color: var(--bs-table-bg);
+                    }
+                }
+            }
+            .gridjs-th, .gridjs-td {
+                border-color: transparent;
+                border-bottom: 1px solid $table-border-color;
+                padding: $table-cell-padding-y $table-cell-padding-x;
+            }
+            .gridjs-tbody {
+                .gridjs-tr {
+                    td {
+                        color: $table-color;
+                    }
+                    &.gridjs-tr-selected {
+                        td {
+                            background-color: transparent;
+                        }
+                    }
+                    
+                }
+            }
+            .gridjs-resizable {
+                padding: 0;
+                width: 0px;
+                &:hover {
+                    background-color: transparent;
+                }
+                &::after {
+                    content: "";
+                }
+            }
+        }
+        .gridjs-th-sort{
+            button {
+                &.gridjs-sort {
+                    width: 10px;
+                    height: 20px;
+                }
+                &.gridjs-sort-asc, &.gridjs-sort-desc {
+                    background-size: 8px;
+                }
+            }
+        }
+    }
+    .gridjs-footer {
+        padding: $table-cell-padding-y $table-cell-padding-x;
+    }
+    .gridjs-footer {
+        box-shadow: none;
+        border: none;
+        margin-top: .75rem;
+        border-radius: 0;
+    }
+    .gridjs-pagination {
+        .gridjs-pages {
+            button {
+                border: none;
+                padding: .375rem .75rem;
+                border-radius: 30px;
+                margin: 0 3px;
+                color: $pagination-color;
+                font-weight: $font-weight-normal;
+                &:hover {
+                    background-color: $pagination-hover-bg;
+                }
+                &:focus {
+                    box-shadow: none;
+                }
+                &.gridjs-currentPage {
+                    background-color: $pagination-active-bg;
+                    color: $pagination-active-color;
+                }
+            }
+        }
+    }
+}
