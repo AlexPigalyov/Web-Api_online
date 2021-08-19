@@ -66,6 +66,7 @@ namespace Web_Api.online
             services.AddTransient<IRatesRepository, RatesRepository>();
             services.AddTransient<IOpenOrdersRepository, OpenOrdersRepository>();
             services.AddTransient<IClosedOrdersRepository, ClosedOrdersRepository>();
+            services.AddTransient<IEventsRepository, EventsRepository>();
 
             services.AddTransient<TransactionsRepository>();
             services.AddTransient<TransactionManager>();
