@@ -117,6 +117,7 @@ namespace Web_Api.online.Services
                 var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
                 w.Value = w.Value + tr.Amount;
                 await _walletsRepository.UpdateWalletBalance(w);
+                //обновить в events
             }
         }
     }
