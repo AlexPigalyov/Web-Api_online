@@ -40,13 +40,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<Wallet> GetUserWalletsAsync(string userId, string acronim)
+        public async Task<Wallet> GetUserWalletAsync(string userId, string acronim)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    Wallet result = await db.ExecuteScalarAsync<Wallet>("spGetUserWalletsByAcronim",
+                    Wallet result = await db.QueryFirstOrDefaultAsync<Wallet>("spGetUserWalletByAcronim",
                     new { userId = userId,
                           acronim = acronim},
                     commandType: CommandType.StoredProcedure
