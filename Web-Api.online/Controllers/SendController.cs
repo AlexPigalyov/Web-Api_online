@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
+using Web_Api.online.Extensions;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 
 namespace Web_Api.online.Controllers
 {
+    [Authorize]
     public class SendController : Controller
     {
         private WalletsRepository _walletsRepository;
@@ -49,16 +53,26 @@ namespace Web_Api.online.Controllers
         }
 
         [HttpPost]
-        public IActionResult LTC(IndexModel indexModel)
+        public async Task<IActionResult> LTC(IndexModel indexModel)
         {
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    decimal _amount = Convert.ToDecimal(indexModel.Amount);
-                    _litecoinService.SendToAddress(indexModel.Address, _amount, "", "", true);
-                    indexModel.Status = "success";
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var wallet = await _walletsRepository.GetUserWalletAsync(userId, "LTC");
+                    decimal? _amount = indexModel.Amount.ConvertToDecimal();
+                    if (_amount.Value > 0 && _amount.Value <= wallet.Value)
+                    {
+                        _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
+                        //обновить в events
+                        indexModel.Status = "success";
+                    }
+                    else
+                    {
+                        indexModel.Status = "Недостаточно монет";
+                    }
                 }
                 catch
                 {
