@@ -18,7 +18,6 @@ namespace Web_Api.online.Services
 
 
         private string userId;
-        //private int amountTransactionsToGet = 10;
         private List<IncomeWallet> incomeWallets;
         private List<Wallet> wallets;
 
@@ -42,7 +41,6 @@ namespace Web_Api.online.Services
         private async Task SearchNewIncomeTransactionsAsync()
         {
             var incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId);
-
             var coinServices = _coinManager
                                 .CoinServices
                                 .Where(x => incomeWallets
@@ -58,87 +56,42 @@ namespace Web_Api.online.Services
                                  .FirstOrDefault(tr =>
                                     tr.CurrencyAcronim == coin.CoinShortName);
 
-                if (lastTr == null)
+                for (int i = 0; ; i++)
                 {
-
-                    SearchLastNoSaveTransactions(listIncomeTransactionsToSave, coin);
-                    if (listIncomeTransactionsToSave.Count() != 0)
+                    SearchLastNoSaveTransaction(listIncomeTransactionsToSave, i, coin);
+                    if (listIncomeTransactionsToSave.Count() == 0)
                     {
-                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
-                        await UpdateBalance(listIncomeTransactionsToSave);
+                        break;
+                    }
+                    else if (listIncomeTransactionsToSave.Last().TransactionId == lastTr.TransactionId)
+                    {
+                        listIncomeTransactionsToSave.Remove(listIncomeTransactionsToSave.Last());
+                        if(listIncomeTransactionsToSave.Count() != 0)
+                        {
+                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
+                            await UpdateBalance(listIncomeTransactionsToSave);
+                        }
+                        break;
                     }
                 }
-                else
-                {
-                    SearchLastNoSaveTransactions(listIncomeTransactionsToSave, lastTr, coin);
-                    if (listIncomeTransactionsToSave.Count() != 0)
-                    {
-                        listIncomeTransactionsToSave = listIncomeTransactionsToSave.Where(c => c.Date > lastTr.Date).ToList();
-                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
-                        await UpdateBalance(listIncomeTransactionsToSave);
-                    }
-                }
             }
         }
-        // идёт от 1 транзакции к последней, нужно запомнить как-то id транзакции в блокчейне
-        // и от этого id начинать выборку
-        //private void SearshLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
-        //    IncomeTransaction lastTransaction,
-        //    ICoinService coinService,
-        //    int calls = 0)
-        //{
-        //    var lastTransactionsBlockchain = coinService.ListTransactions(userId, amountTransactionsToGet, calls * amountTransactionsToGet);
-        //    var lastSavedTransaction = lastTransactionsBlockchain.FirstOrDefault(tr => tr.TxId == lastTransaction.TransactionId);
 
-        //    if (lastSavedTransaction == null)
-        //    {
-        //        SearshLastNoSaveTransactions(incomeTransactionsResult, lastTransaction, coinService, ++calls);
-        //    }
-
-        //    incomeTransactionsResult.AddRange(
-        //        ConvertTransactionsResponseToIncomeTransactions(lastTransactionsBlockchain,
-        //        coinService.CoinShortName));
-        //}
-
-        // coinService.ListTransactions(userId, amountTransactionsToGet, из бд достать количество транзакций юзера)
-        private void SearchLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
-            IncomeTransaction lastTransaction,
+        private void SearchLastNoSaveTransaction(List<IncomeTransaction> incomeTransactionsResult,
+            int from,
             ICoinService coinService)
         {
-            var allTransactionsBlockchain = coinService.ListTransactions(userId);
+            var newTransactionInBlockchain = coinService.ListTransactions(userId, 1, from).FirstOrDefault();
 
-            if (allTransactionsBlockchain.Count() != 0)
+            if (newTransactionInBlockchain != null)
             {
-                incomeTransactionsResult.AddRange(
-                    ConvertTransactionsResponseToIncomeTransactions(
-                        allTransactionsBlockchain.Where(x => x.Time > lastTransaction.Date).ToList(),
-                        coinService.CoinShortName));
+                var wallet = incomeWallets.FirstOrDefault(w => w.Address == newTransactionInBlockchain.Address);
+                incomeTransactionsResult.Add(
+                    ConvertTransactionResponseToIncomeTransaction(
+                        newTransactionInBlockchain,
+                        coinService.CoinShortName,
+                        wallet.Id));
             }
-        }
-
-        private void SearchLastNoSaveTransactions(List<IncomeTransaction> incomeTransactionsResult,
-            ICoinService coinService)
-        {
-            var allTransactionsBlockchain = coinService.ListTransactions(userId);
-
-            if (allTransactionsBlockchain.Count() != 0)
-            {
-                incomeTransactionsResult.AddRange(
-                    ConvertTransactionsResponseToIncomeTransactions(allTransactionsBlockchain,
-                                                                            coinService.CoinShortName));
-            }
-        }
-
-        private List<IncomeTransaction> ConvertTransactionsResponseToIncomeTransactions(List<TransactionResponse> transactionsResponse,
-            string shortNameCurrency)
-        {
-            List<IncomeTransaction> incomeTransactions = new List<IncomeTransaction>();
-            foreach (var tr in transactionsResponse)
-            {
-                var wallet = incomeWallets.FirstOrDefault(w => w.Address == tr.Address);
-                incomeTransactions.Add(ConvertTransactionResponseToIncomeTransaction(tr, shortNameCurrency, wallet.Id));
-            }
-            return incomeTransactions;
         }
 
         private IncomeTransaction ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
