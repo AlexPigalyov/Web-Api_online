@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Models;
+using Web_Api.online.Models.Enums;
 using Web_Api.online.Repositories;
+using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Services
@@ -15,6 +17,7 @@ namespace Web_Api.online.Services
         private TransactionsRepository _transactionsRepository;
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
+        private IEventsRepository _eventsRepository;
 
 
         private string userId;
@@ -22,11 +25,13 @@ namespace Web_Api.online.Services
         private List<Wallet> wallets;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
-            ICoinManager coinManager, WalletsRepository walletsRepository)
+            ICoinManager coinManager, WalletsRepository walletsRepository,
+            IEventsRepository eventsRepository)
         {
             _transactionsRepository = transactionsRepository;
             _coinManager = coinManager;
             _walletsRepository = walletsRepository;
+            _eventsRepository = eventsRepository;
         }
 
         public async Task<List<Wallet>> GetUpdatedWallets(string userId)
@@ -117,7 +122,15 @@ namespace Web_Api.online.Services
                 var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
                 w.Value = w.Value + tr.Amount;
                 await _walletsRepository.UpdateWalletBalance(w);
-                //обновить в events
+
+                await _eventsRepository.CreateAsync(new EventModel()
+                {
+                    UserId = userId,
+                    Type = EventType.IncomeLTC,
+                    Comment = $"Income transaction {tr.CurrencyAcronim}",
+                    Value = tr.Amount - tr.TransactionFee,
+                    WhenDate = DateTime.Now
+                });
             }
         }
     }

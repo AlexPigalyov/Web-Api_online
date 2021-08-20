@@ -11,6 +11,8 @@ using Web_Api.online.Repositories;
 using System.Security.Claims;
 using Web_Api.online.Services.Interfaces;
 using Web_Api.online.Services;
+using Web_Api.online.Models.Enums;
+using Web_Api.online.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers
 {
@@ -19,14 +21,17 @@ namespace Web_Api.online.Controllers
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
+        private IEventsRepository _eventsRepository;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
-            TransactionManager transactionManager)
+            TransactionManager transactionManager,
+            IEventsRepository eventsRepository)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
+            _eventsRepository = eventsRepository;
         }
 
         public class IndexModel
@@ -77,6 +82,15 @@ namespace Web_Api.online.Controllers
                     if (coin.CoinShortName == selectCurrency)
                     {
                         address = coin.GetNewAddress(userId);
+
+                        await _eventsRepository.CreateAsync(new EventModel()
+                        {
+                            UserId = userId,
+                            Type = EventType.Create,
+                            Comment = $"Create address {coin.CoinShortName}",
+                            WhenDate = DateTime.Now
+                        });
+
                         break;
                     }
                 }
