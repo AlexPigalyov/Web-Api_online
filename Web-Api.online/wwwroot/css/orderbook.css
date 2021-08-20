@@ -79,7 +79,6 @@
     .orderbook-tbheader-col:nth-child(5),
     .orderbook-tbheader-col:nth-child(6),
     .orderbook-tbheader-col:nth-child(7) {
-        
         text-align: right;
     }
 

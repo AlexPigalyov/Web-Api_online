@@ -1,0 +1,34 @@
+/*!
+ *
+ * Simple-DataTables
+ * Copyright (c) 2015-2017 Karl Saunders (https://mobius.ovh)
+ * Copyright (c) 2018- Johannes Wilm (https://www.johanneswilm.org)
+ * Licensed under MIT (https://www.opensource.org/licenses/mit-license.php)
+ *
+ *
+ */
+
+/*!
+ * ApexCharts v3.20.0
+ * (c) 2018-2020 Juned Chhipa
+ * Released under the MIT License.
+ */
+
+/*!
+ * Fuse.js v3.4.5 - Lightweight fuzzy-search (http://fusejs.io)
+ * 
+ * Copyright (c) 2012-2017 Kirollos Risk (http://kiro.me)
+ * All Rights Reserved. Apache Software License 2.0
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+/*! choices.js v9.0.1 | © 2019 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
+
+/*! svg.draggable.js - v2.2.2 - 2019-01-08
+  * https://github.com/svgdotjs/svg.draggable.js
+  * Copyright (c) 2019 Wout Fierens; Licensed MIT */
+
+/*! svg.filter.js - v2.0.2 - 2016-02-24
+  * https://github.com/wout/svg.filter.js
+  * Copyright (c) 2016 Wout Fierens; Licensed MIT */
