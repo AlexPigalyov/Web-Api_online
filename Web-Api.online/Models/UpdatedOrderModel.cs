@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Models
 {
-    public class TradeClosedOrderModel
+    public class UpdatedOrderModel
     {
         public BTC_USDT_OpenOrders Order { get; set; }
         public bool RemoveOpenOrderFromDataBase { get; set; }

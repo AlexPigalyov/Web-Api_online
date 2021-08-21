@@ -29,7 +29,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("buyButton").addEventListener("click", function (event) {
-    var amount = document.getElementById("amountInput").value.replace(".", ",");
+    var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
     connection.invoke("SendMessage", amount, price, true).catch(function (err) {
         return console.error(err.toString());
@@ -38,7 +38,7 @@ document.getElementById("buyButton").addEventListener("click", function (event) 
 });
 
 document.getElementById("sellButton").addEventListener("click", function (event) {
-    var amount = document.getElementById("amountInput").value.replace(".", ",");
+    var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
     connection.invoke("SendMessage", amount, price, false).catch(function (err) {
         return console.error(err.toString());

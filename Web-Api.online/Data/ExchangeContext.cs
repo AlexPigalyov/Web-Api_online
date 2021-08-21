@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 
@@ -21,7 +23,7 @@ namespace Web_Api.online.Data
         {
         }
 
-        public virtual DbSet<EventModel> Events { get; set; }
+        public virtual DbSet<Events> Events { get; set; }
         public virtual DbSet<Wallet> Wallets { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<BTC_USDT_ClosedOrders> BTC_USDT_ClosedOrders { get; set; }

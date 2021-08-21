@@ -50,11 +50,13 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         let time = null;
         let orderPrice = 0;
         let orderAmount = 0;
+        let orderTotal = 0;
         let isBuy = true;
 
         if (!isLoad) {
             orderPrice = order.Price;
             orderAmount = order.Amount;
+            orderTotal = order.Total;
             isBuy = order.IsBuy;
             if (isMarketTrades) {
                 time = new Date(order.ClosedDate);
@@ -63,6 +65,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         else {
             orderPrice = order.price;
             orderAmount = order.amount;
+            orderTotal = order.total;
             isBuy = order.isBuy;
             if (isMarketTrades) {
                 time = new Date(order.closedDate);
@@ -109,7 +112,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
             orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
         }
         else {
-            orderBookElemColThird.innerHTML = orderPrice * orderAmount;
+            orderBookElemColThird.innerHTML = orderTotal;
         }
 
         orderBookElem.appendChild(orderBookElemColThird);

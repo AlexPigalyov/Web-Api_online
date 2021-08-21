@@ -29,7 +29,7 @@
                         <div class="orderbook-row">
                             <div class="orderbook-col">@order.Price</div>
                             <div class="orderbook-col">@order.Amount</div>
-                            <div class="orderbook-col">@(order.Price * order.Amount)</div>
+                            <div class="orderbook-col">@order.Total</div>
                             <div class="orderbook-col">BTC-USDT</div>
                             <div class="orderbook-col">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">
