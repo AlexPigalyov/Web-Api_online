@@ -6,6 +6,7 @@ using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Services.Interfaces;
@@ -70,16 +71,26 @@ namespace Web_Api.online.Services
                     }
                     else if (lastTr == null && listIncomeTransactionsToSave.Count() != 0)
                     {
-                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
-                        await UpdateBalance(listIncomeTransactionsToSave);
-                        break;
+                        int countTr = listIncomeTransactionsToSave.Count();
+                        SearchLastNoSaveTransaction(listIncomeTransactionsToSave, ++i, coin);
+
+                        if(countTr == listIncomeTransactionsToSave.Count())
+                        {
+                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave
+                                .OrderBy(x=>x.Date)
+                                .ToList());
+                            await UpdateBalance(listIncomeTransactionsToSave);
+                            break;
+                        }
                     }
                     else if (listIncomeTransactionsToSave.Last().TransactionId == lastTr.TransactionId)
                     {
                         listIncomeTransactionsToSave.Remove(listIncomeTransactionsToSave.Last());
                         if (listIncomeTransactionsToSave.Count() != 0)
                         {
-                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
+                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave
+                                .OrderBy(x => x.Date)
+                                .ToList());
                             await UpdateBalance(listIncomeTransactionsToSave);
                         }
                         break;
@@ -130,7 +141,7 @@ namespace Web_Api.online.Services
                 await _walletsRepository.UpdateWalletBalance(w);
 
                 var _value = tr.Amount - tr.TransactionFee;
-                await _eventsRepository.CreateAsync(new EventModel()
+                await _eventsRepository.CreateAsync(new Events()
                 {
                     UserId = userId,
                     Type = EventType.IncomeLTC,
