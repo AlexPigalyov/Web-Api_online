@@ -68,10 +68,16 @@ namespace Web_Api.online.Services
                     {
                         break;
                     }
+                    else if (lastTr == null && listIncomeTransactionsToSave.Count() != 0)
+                    {
+                        await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
+                        await UpdateBalance(listIncomeTransactionsToSave);
+                        break;
+                    }
                     else if (listIncomeTransactionsToSave.Last().TransactionId == lastTr.TransactionId)
                     {
                         listIncomeTransactionsToSave.Remove(listIncomeTransactionsToSave.Last());
-                        if(listIncomeTransactionsToSave.Count() != 0)
+                        if (listIncomeTransactionsToSave.Count() != 0)
                         {
                             await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave);
                             await UpdateBalance(listIncomeTransactionsToSave);
@@ -123,12 +129,13 @@ namespace Web_Api.online.Services
                 w.Value = w.Value + tr.Amount;
                 await _walletsRepository.UpdateWalletBalance(w);
 
+                var _value = tr.Amount - tr.TransactionFee;
                 await _eventsRepository.CreateAsync(new EventModel()
                 {
                     UserId = userId,
                     Type = EventType.IncomeLTC,
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
-                    Value = tr.Amount - tr.TransactionFee,
+                    Value = _value,
                     WhenDate = DateTime.Now
                 });
             }
