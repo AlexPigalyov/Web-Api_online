@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-using Web_Api.online.Models;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories.Abstract
 {
     public interface IEventsRepository
-        : IBaseRepository<EventModel>
+        : IBaseRepository<Events>
     {
-        List<EventModel> GetByUserId(string userId);
+        List<Events> GetByUserId(string userId);
     }
 }

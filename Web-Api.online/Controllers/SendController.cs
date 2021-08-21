@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 using Web_Api.online.Repositories.Abstract;
 
@@ -70,7 +71,7 @@ namespace Web_Api.online.Controllers
                     if (_amount.Value > 0 && _amount.Value <= wallet.Value)
                     {
                         _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
-                        await _eventsRepository.CreateAsync(new Models.EventModel()
+                        await _eventsRepository.CreateAsync(new Events()
                         {
                             UserId = userId,
                             Type = EventType.OutcomeLTC,

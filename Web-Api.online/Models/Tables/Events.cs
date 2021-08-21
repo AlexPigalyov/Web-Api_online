@@ -1,9 +1,9 @@
 ﻿using System;
 using Web_Api.online.Models.Enums;
 
-namespace Web_Api.online.Models
+namespace Web_Api.online.Models.Tables
 {
-    public class EventModel
+    public class Events
     {
         public long Id { get; set; }
         public string UserId { get; set; }
