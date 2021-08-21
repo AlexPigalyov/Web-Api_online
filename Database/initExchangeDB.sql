@@ -181,6 +181,8 @@ CREATE TABLE [dbo].[Wallets](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (0, CAST(N'2021-08-21T03:57:27.093' AS DateTime), CAST(N'2021-08-21T03:57:42.943' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
+GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (2, CAST(N'2021-05-21T00:26:20.780' AS DateTime), CAST(N'2021-08-11T23:19:39.793' AS DateTime), 1, CAST(8.00000000000000000000 AS Decimal(38, 20)), CAST(3.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (3, CAST(N'2021-05-21T00:29:38.720' AS DateTime), CAST(N'2021-08-11T20:04:26.400' AS DateTime), 1, CAST(5.00000000000000000000 AS Decimal(38, 20)), CAST(4.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
@@ -270,6 +272,8 @@ GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (119, CAST(N'2021-08-10T19:04:08.530' AS DateTime), CAST(N'2021-08-11T19:05:42.807' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (120, CAST(N'2021-08-10T19:04:08.660' AS DateTime), CAST(N'2021-08-11T19:05:42.963' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (123, CAST(N'2021-06-08T19:26:29.747' AS DateTime), CAST(N'2021-08-20T23:59:12.223' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 0, N'1', N'1')
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (124, CAST(N'2021-08-10T19:04:33.273' AS DateTime), CAST(N'2021-08-11T19:05:43.120' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
@@ -1095,6 +1099,10 @@ INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (601, CAST(N'2021-08-15T23:45:43.240' AS DateTime), CAST(N'2021-08-15T23:45:43.497' AS DateTime), 1, CAST(11.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
+INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (1233, CAST(N'2021-06-08T19:26:29.747' AS DateTime), CAST(N'2021-08-20T23:59:19.867' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 0, N'1', N'1')
+GO
+INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (12343, CAST(N'2021-06-08T19:26:29.747' AS DateTime), CAST(N'2021-08-20T23:59:21.713' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 0, N'1', N'1')
+GO
 SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] ON 
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (10, CAST(N'2021-08-06T19:26:29.747' AS DateTime), 1, CAST(100.00000000000000000000 AS Decimal(38, 20)), CAST(2.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
@@ -1133,9 +1141,109 @@ INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (409, CAST(N'2021-08-14T01:18:20.860' AS DateTime), 0, CAST(8.00000000000000000000 AS Decimal(38, 20)), CAST(3.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (598, CAST(N'2021-08-14T01:48:48.307' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(14.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (598, CAST(N'2021-08-14T01:48:48.307' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (599, CAST(N'2021-08-14T01:48:49.847' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(6.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (599, CAST(N'2021-08-14T01:48:49.847' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (600, CAST(N'2021-08-21T03:55:11.457' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(2.00000000000000000000 AS Decimal(38, 20)), CAST(2.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (601, CAST(N'2021-08-21T03:57:27.690' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (602, CAST(N'2021-08-21T03:57:55.093' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (603, CAST(N'2021-08-21T03:57:55.353' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (604, CAST(N'2021-08-21T03:58:00.453' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (605, CAST(N'2021-08-21T03:58:01.497' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (606, CAST(N'2021-08-21T03:58:01.970' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (607, CAST(N'2021-08-21T03:58:02.327' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (608, CAST(N'2021-08-21T03:58:02.530' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (609, CAST(N'2021-08-21T03:58:02.747' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (610, CAST(N'2021-08-21T03:58:03.000' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (611, CAST(N'2021-08-21T03:59:18.553' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (612, CAST(N'2021-08-21T03:59:19.093' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (613, CAST(N'2021-08-21T03:59:19.333' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (614, CAST(N'2021-08-21T03:59:19.503' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (615, CAST(N'2021-08-21T03:59:19.673' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (616, CAST(N'2021-08-21T03:59:19.850' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (617, CAST(N'2021-08-21T03:59:20.020' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (618, CAST(N'2021-08-21T03:59:20.207' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (619, CAST(N'2021-08-21T03:59:20.470' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (620, CAST(N'2021-08-21T03:59:20.630' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (621, CAST(N'2021-08-21T04:00:08.190' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (622, CAST(N'2021-08-21T04:00:08.617' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (623, CAST(N'2021-08-21T04:00:09.073' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (624, CAST(N'2021-08-21T04:00:09.203' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (625, CAST(N'2021-08-21T04:00:24.553' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (626, CAST(N'2021-08-21T04:00:35.107' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (627, CAST(N'2021-08-21T04:00:35.520' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (628, CAST(N'2021-08-21T04:00:35.890' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (629, CAST(N'2021-08-21T04:00:36.277' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (630, CAST(N'2021-08-21T04:00:36.753' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (631, CAST(N'2021-08-21T04:00:37.350' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (632, CAST(N'2021-08-21T04:00:37.710' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (633, CAST(N'2021-08-21T04:00:37.947' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (634, CAST(N'2021-08-21T04:00:38.127' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (635, CAST(N'2021-08-21T04:00:38.310' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (636, CAST(N'2021-08-21T04:00:38.470' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (637, CAST(N'2021-08-21T04:00:38.640' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (638, CAST(N'2021-08-21T04:00:38.987' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (639, CAST(N'2021-08-21T04:00:39.157' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (640, CAST(N'2021-08-21T04:00:39.310' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (641, CAST(N'2021-08-21T04:01:01.317' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (642, CAST(N'2021-08-21T04:01:04.093' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (643, CAST(N'2021-08-21T04:01:04.383' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (644, CAST(N'2021-08-21T04:01:04.537' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (645, CAST(N'2021-08-21T04:01:04.683' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (646, CAST(N'2021-08-21T04:01:10.350' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (647, CAST(N'2021-08-21T04:01:10.513' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (648, CAST(N'2021-08-21T04:01:10.660' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (649, CAST(N'2021-08-21T04:01:10.787' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] OFF
 GO
@@ -1158,6 +1266,20 @@ GO
 INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (8, N'DASH', N'DashCoin', CAST(N'2021-04-24T03:25:17.297' AS DateTime))
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Events] ON 
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (1, N'40ffde92-878c-4c09-ac6b-c86a769d1623', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-20T22:47:07.413' AS DateTime))
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (2, N'40ffde92-878c-4c09-ac6b-c86a769d1623', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-20T22:47:07.847' AS DateTime))
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (3, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:22:31.640' AS DateTime))
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (4, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:28:20.663' AS DateTime))
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (5, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:28:58.767' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[Events] OFF
 GO
 SET IDENTITY_INSERT [dbo].[IncomeTransactions] ON 
 GO
@@ -1187,6 +1309,12 @@ INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [Curren
 GO
 INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (10, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', N'bc1qxtg6cmvd7244y8klqpms32t5mj6uczmw9a8zhk', N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', N'BTC', CAST(N'2021-08-17T23:18:06.523' AS DateTime), CAST(N'2021-08-17T23:18:06.523' AS DateTime))
 GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (11, N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'', N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'ETH', CAST(N'2021-08-19T22:01:29.587' AS DateTime), CAST(N'2021-08-19T22:01:29.587' AS DateTime))
+GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (12, N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'MW5Z1mT9xGSLLhT78bTeXAfBicrZG3oMA7', N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'LTC', CAST(N'2021-08-20T22:47:07.860' AS DateTime), CAST(N'2021-08-20T22:47:07.860' AS DateTime))
+GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (13, N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'MP4Gj8sr378tqY6UamYPFo2VwSkH5SBvkA', N'40ffde92-878c-4c09-ac6b-c86a769d1623', N'LTC', CAST(N'2021-08-20T22:47:07.860' AS DateTime), CAST(N'2021-08-20T22:47:07.860' AS DateTime))
+GO
 SET IDENTITY_INSERT [dbo].[IncomeWallets] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
@@ -1200,6 +1328,14 @@ GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (4, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'DASH', CAST(N'2021-08-17T23:17:31.333' AS DateTime), CAST(N'2021-08-17T23:17:31.333' AS DateTime), NULL)
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (5, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BCH', CAST(N'2021-08-17T23:17:38.740' AS DateTime), CAST(N'2021-08-17T23:17:38.740' AS DateTime), NULL)
+GO
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (6, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'ETH', CAST(N'2021-08-19T22:01:29.587' AS DateTime), CAST(N'2021-08-19T22:01:29.587' AS DateTime), NULL)
+GO
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (7, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-20T00:31:33.987' AS DateTime), CAST(N'2021-08-20T00:31:33.987' AS DateTime), N'6fa096b26a6a4ae3a6de1493754770d0')
+GO
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (8, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-08-20T00:31:33.997' AS DateTime), CAST(N'2021-08-20T00:31:33.997' AS DateTime), N'a553667ff2864698bb4cc40b4ff0a2a1')
+GO
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (9, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-20T22:47:07.860' AS DateTime), CAST(N'2021-08-20T22:47:07.860' AS DateTime), NULL)
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
@@ -1243,18 +1379,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spAdd_BTC_USDT_ClosedOrder]
-@createUserId nvarchar(450),
-@boughtUserId nvarchar(450),
+CREATE PROCEDURE [dbo].[spAdd_BTC_USDT_OpenOrder]
+@userid nvarchar(450),
 @isBuy bit,
 @price decimal(38,20),
-@amount decimal(38,20),
-@createDate datetime
+@amount decimal(38,20)
 AS
 BEGIN
 
-insert into BTC_USDT_ClosedOrders (CreateDate, IsBuy, Price, Amount, CreateUserId, BoughtUserId)
-values (@createDate, @isBuy, @price, @amount, @createUserId, @boughtUserId)
+insert into BTC_USDT_OpenOrders (IsBuy, Price, Amount, Total, CreateUserId)
+values (@isBuy, @price, @amount, @price * @amount, @userid)
 
 END
 GO
@@ -1262,21 +1396,17 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spAdd_BTC_USDT_Order]
+CREATE PROCEDURE [dbo].[spAddEvent]
 @userid nvarchar(450),
-@isBuy bit,
-@price decimal(38,20),
-@amount decimal(38,20),
-@new_identity    BIGINT    OUTPUT
+@type int,
+@value decimal(38,20),
+@comment nvarchar(450),
+@whenDate datetime
 AS
 BEGIN
 
-insert into BTC_USDT_OpenOrders (IsBuy, Price, Amount, CreateUserId)
-values (@isBuy, @price, @amount, @userid)
-
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity
+insert into Events (UserId, Type, Value, Comment, WhenDate)
+values (@userid, @type, @value, @comment, @whenDate)
 
 END
 GO
@@ -1369,13 +1499,42 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spGet_BTC_USDT_ClosedOrders]
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate]
+@createUserId int
 AS
 BEGIN
 
-select top 100 buco.ClosedDate, buco.IsBuy, buco.Price, buco.Amount
+SELECT * FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+WHERE CreateUserId = @createUserId
+ORDER BY ClosedDate Desc
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_ClosedOrders_Top100]
+AS
+BEGIN
+
+select top 100 buco.*
 from   [BTC_USDT_ClosedOrders] buco
 order by buco.ClosedDate desc
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OpenOrder_ById]
+@openOrderId bigint
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
+WHERE OpenOrderId = @openOrderId
 
 END
 GO
@@ -1395,20 +1554,14 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spGet_BTC_USDT_SortedOrderBook]
-@isBuy bit
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate]
+@createUserId nvarchar(450)
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
-    (SELECT SUM(D2.Amount)
-    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
-    WHERE D2.Price = D1.Price) AS Amount
-FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
-WHERE D1.IsBuy = @isBuy
-GROUP BY  D1.Price, D1.IsBuy
-ORDER BY  Price
-
+SELECT * FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
+WHERE CreateUserId = @createUserId
+ORDER BY CreateDate Desc
 
 END
 GO
@@ -1416,7 +1569,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spGet_BTC_USDT_SortedOrderBookBuy]
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookBuy_OrderByPrice]
 
 AS
 BEGIN
@@ -1437,7 +1590,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spGet_BTC_USDT_SortedOrderBookSell]
+CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByDescPrice]
 
 AS
 BEGIN
@@ -1450,6 +1603,22 @@ FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
 WHERE D1.IsBuy = 1
 GROUP BY  D1.Price, D1.IsBuy
 ORDER BY  Price desc
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetEventsByUserIdWithOrderByDescWhenDate]
+@userId nvarchar(450)
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[Events]
+WHERE UserId = @userId
+ORDER BY WhenDate Desc
 
 
 END
@@ -1478,6 +1647,20 @@ END
 
 
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetTop100_BTC_USDT_ClosedOrders]
+AS
+BEGIN
+
+select top 100 buco.ClosedDate, buco.IsBuy, buco.Price, buco.Amount
+from   [BTC_USDT_ClosedOrders] buco
+order by buco.ClosedDate desc
+
+END
 GO
 SET ANSI_NULLS ON
 GO
@@ -1534,12 +1717,37 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[spMove_BTC_USDT_FromOpenOrdersToClosedOrders]
+@createUserId nvarchar(450),
+@boughtUserId nvarchar(450),
+@closedOrderId bigint,
+@isBuy bit,
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@status int,
+@createDate datetime
+AS
+BEGIN
+
+delete from BTC_USDT_OpenOrders WHERE OpenOrderId = @closedOrderId
+
+insert into BTC_USDT_ClosedOrders (ClosedOrderId, CreateDate, IsBuy, Price, Amount, CreateUserId, BoughtUserId, Status)
+values (@closedOrderId, @createDate, @isBuy, @price, @amount, @createUserId, @boughtUserId, @status)
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[spUpdate_BTC_USDT_OpenOrder]
 @userid nvarchar(450),
 @isBuy bit,
 @price decimal(38,20),
 @amount decimal(38,20),
-@openOrderId bigint OUTPUT
+@total decimal(38,20),
+@openOrderId bigint
 AS
 BEGIN
 
@@ -1547,6 +1755,7 @@ UPDATE [BTC_USDT_OpenOrders]
 SET    IsBuy = @isBuy,
        Price = @price,
        Amount = @amount,
+	   Total = @total,
        CreateUserId = @userid
 WHERE  OpenOrderId = @openOrderId 
 
