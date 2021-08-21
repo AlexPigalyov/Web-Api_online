@@ -719,7 +719,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate]
-@createUserId int
+@createUserId nvarchar(450)
 AS
 BEGIN
 
