@@ -136,8 +136,8 @@
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
     var marketTrades = model.marketTrades
-    loadNewOrderBook(buyOpenOrders, true, false, false);
-    loadNewOrderBook(sellOpenOrders, true, false, false);
-    loadNewOrderBook(marketTrades, true, true, false);
-    loadNewOrderBook(userOpenOrders, true, false, true);
+    loadNewOrderBook(buyOpenOrders, true, true, false, false);
+    loadNewOrderBook(sellOpenOrders, true, false, false, false);
+    loadNewOrderBook(marketTrades, true, false, true, false);
+    loadNewOrderBook(userOpenOrders, true, false, false, true);
 </script>

@@ -10,12 +10,15 @@ ALTER PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
+SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
-    WHERE D2.Price = D1.Price) AS Amount
+    WHERE D2.Price = D1.Price) AS Amount,
+	(SELECT SUM(D3.Price * D3.Amount)
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D3
+	WHERE D3.Price = D1.Price) AS Total
 FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
-WHERE D1.IsBuy = 1
+WHERE D1.IsBuy = 0
 GROUP BY  D1.Price, D1.IsBuy
 ORDER BY  Price desc
 

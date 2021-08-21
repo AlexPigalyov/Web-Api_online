@@ -36,13 +36,15 @@ namespace Web_Api.online.Hubs
                 CreateDate = DateTime.Now,
             };
 
-            await _tradeRepository.spAdd_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder() 
+            long newId = await _tradeRepository.spAdd_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder() 
             { 
                 IsBuy = isBuy,
                 Amount = amountDecimal,
                 Price = priceDecimal,
                 UserId = "53cd122d-6253-4981-b290-11471f67c528"
             });
+
+            order.OpenOrderId = newId;
 
             var orders = (await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync())
                 .Where(x => x.IsBuy == !isBuy && x.Price == priceDecimal);

@@ -17,10 +17,24 @@ function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
     }
 }
 
-function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpenOrders = false) {
+function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = false, isUserOpenOrders = false) {
+
     var openOrdersObj = openOrders;
 
     let list = null;
+
+    if (openOrdersObj.length == 0 && !isMarketTrades && !isUserOpenOrders) {
+        if (isBuy) {
+            list = document.getElementsByClassName("orderbook-list")[0];
+
+            list.innerHTML = '';
+            }
+        else {
+            list = document.getElementsByClassName("orderbook-list")[1];
+
+            list.innerHTML = '';
+        }
+    }
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {

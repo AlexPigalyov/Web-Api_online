@@ -11,10 +11,12 @@ connection.on("ReceiveMessage", function (recieveModel) {
 
     let model = JSON.parse(recieveModel);
 
-    loadNewOrderBook(model.OrderBookSell, false, false, false);
-    loadNewOrderBook(model.OrderBookBuy, false, false, false);
-    loadNewOrderBook(model.MarketTrades, false, true, false);
-    loadNewOrderBook(model.CurrentOrder, false, false, true);
+    console.log(model);
+
+    loadNewOrderBook(model.OrderBookSell, false, false, false, false);
+    loadNewOrderBook(model.OrderBookBuy, false, true, false, false);
+    loadNewOrderBook(model.MarketTrades, false, false, true, false);
+    loadNewOrderBook(model.CurrentOrder, false, false, false, true);
 });
 
 connection.on("ReceiveOpenOrders", function (model) {
