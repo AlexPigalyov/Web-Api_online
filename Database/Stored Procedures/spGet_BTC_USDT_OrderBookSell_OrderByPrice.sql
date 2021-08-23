@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByDescPrice]
+ALTER PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByPrice]
 
 AS
 BEGIN
@@ -20,7 +20,7 @@ SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
 FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
 WHERE D1.IsBuy = 0
 GROUP BY  D1.Price, D1.IsBuy
-ORDER BY  Price desc
+ORDER BY  Price
 
 
 END

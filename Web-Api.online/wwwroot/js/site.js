@@ -10,10 +10,10 @@ function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
     }
 
     if (isBuy) {
-        return document.getElementsByClassName("orderbook-list")[0];
+        return document.getElementsByClassName("orderbook-list")[1];
     }
     else {
-        return document.getElementsByClassName("orderbook-list")[1];
+        return document.getElementsByClassName("orderbook-list")[0];
     }
 }
 
@@ -24,7 +24,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
     let list = null;
 
     if (openOrdersObj.length == 0 && !isMarketTrades && !isUserOpenOrders) {
-        if (isBuy) {
+        if (!isBuy) {
             list = document.getElementsByClassName("orderbook-list")[0];
 
             list.innerHTML = '';
@@ -87,7 +87,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
         }
         let orderBookElem = document.createElement('div');
         if (isMarketTrades || isUserOpenOrders) {
-            if (isBuy) {
+            if (!isBuy) {
                 orderBookElem.classList.add("orderbook-asks", "orderbook-row");
             }
             else {
@@ -99,7 +99,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
         }
 
         let orderBookElemColFirst = document.createElement('div');
-        if (isBuy) {
+        if (!isBuy) {
             orderBookElemColFirst.className = "orderbook-col";
         }
         else {
@@ -142,7 +142,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
 
         if (!isMarketTrades && !isUserOpenOrders) {
             let orderBookElemProgressBar = document.createElement('div');
-            if (isBuy) {
+            if (!isBuy) {
                 orderBookElemProgressBar.className = "orderbook-progress-bar";
             }
             else {

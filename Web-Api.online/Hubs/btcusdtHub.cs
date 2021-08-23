@@ -36,8 +36,8 @@ namespace Web_Api.online.Hubs
                 CreateDate = DateTime.Now,
             };
 
-            long newId = await _tradeRepository.spAdd_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder() 
-            { 
+            long newId = await _tradeRepository.spAdd_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
+            {
                 IsBuy = isBuy,
                 Amount = amountDecimal,
                 Price = priceDecimal,
@@ -46,85 +46,15 @@ namespace Web_Api.online.Hubs
 
             order.OpenOrderId = newId;
 
-            var orders = (await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync())
-                .Where(x => x.IsBuy == !isBuy && x.Price == priceDecimal);
+            var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
 
-            bool isOrderClosed = false;
+            var selectedOrders = orders.Where(x => x.IsBuy != isBuy && (isBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
 
-            if (orders.Count() > 0)
+            var result = ProcessOrders(selectedOrders, order);
+
+            if (result.UpdatedOrders != null)
             {
-                List<UpdatedOrderModel> updatedOrders = new List<UpdatedOrderModel>();
-
-                foreach (var openOrder in orders)
-                {
-                    if (amountDecimal > openOrder.Amount)
-                    {
-                        amountDecimal -= openOrder.Amount;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        var localOrder = order;
-                        localOrder.Amount = amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = localOrder,
-                            RemoveOpenOrderFromDataBase = false
-                        });
-
-                        order.Amount = amountDecimal;
-                    }
-
-                    if (amountDecimal < openOrder.Amount)
-                    {
-                        openOrder.Amount -= amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = false
-                        });
-
-                        order.Amount = amountDecimal;
-
-                        isOrderClosed = true;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = order,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        break;
-                    }
-
-                    if (amountDecimal == openOrder.Amount)
-                    {
-                        order.Amount = amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = order,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        isOrderClosed = true;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        break;
-                    }
-                }
-
-                foreach (var closedOrder in updatedOrders)
+                foreach (var closedOrder in result.UpdatedOrders)
                 {
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
@@ -147,7 +77,7 @@ namespace Web_Api.online.Hubs
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
-                CurrentOrder = isOrderClosed ? null : order,
+                CurrentOrder = result.IsCurrentOrderClosed ? null : order,
                 OrderBookBuy = openOrdersBuy,
                 OrderBookSell = openOrdersSell,
                 MarketTrades = marketTrades,
@@ -155,6 +85,101 @@ namespace Web_Api.online.Hubs
             };
 
             await Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(recieveResult));
+        }
+
+        private ProcessOrderResultModel ProcessOrders(IEnumerable<BTC_USDT_OpenOrders> selectedOrders, BTC_USDT_OpenOrders currentOrder)
+        {
+            if (selectedOrders.Any())
+            {
+                ProcessOrderResultModel processResult = new ProcessOrderResultModel();
+
+                List<UpdatedOrderModel> updatedOrders = new List<UpdatedOrderModel>();
+
+                decimal amountDecimal = currentOrder.Amount;
+                bool isOrderClosed = false;
+
+                foreach (var openOrder in selectedOrders)
+                {
+                    if (amountDecimal > openOrder.Amount)
+                    {
+                        amountDecimal -= openOrder.Amount;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+
+                        var localOrder = currentOrder;
+                        localOrder.Amount = amountDecimal;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = localOrder,
+                            RemoveOpenOrderFromDataBase = false
+                        });
+
+                        currentOrder.Amount = amountDecimal;
+                    }
+
+                    if (amountDecimal < openOrder.Amount)
+                    {
+                        openOrder.Amount -= amountDecimal;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = false
+                        });
+
+                        currentOrder.Amount = amountDecimal;
+
+                        isOrderClosed = true;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = currentOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+
+                        break;
+                    }
+
+                    if (amountDecimal == openOrder.Amount)
+                    {
+                        currentOrder.Amount = amountDecimal;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = currentOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+
+                        isOrderClosed = true;
+
+                        updatedOrders.Add(new UpdatedOrderModel
+                        {
+                            Order = openOrder,
+                            RemoveOpenOrderFromDataBase = true
+                        });
+
+                        break;
+                    }
+                }
+
+                processResult.UpdatedOrders = updatedOrders;
+                processResult.IsCurrentOrderClosed = isOrderClosed;
+
+                return processResult;
+            }
+            else
+            {
+                return new ProcessOrderResultModel()
+                {
+                    UpdatedOrders = null,
+                    IsCurrentOrderClosed = false
+                };
+            }
         }
     }
 }

@@ -183,7 +183,7 @@ namespace Web_Api.online.Repositories
                     var isBuyStr = isBuy ? "Buy" : "Sell";
 
                     var res = (await db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
-                        $"spGet_BTC_USDT_OrderBook{isBuyStr}_OrderBy{(isBuy ? "" : "Desc")}Price",
+                        $"spGet_BTC_USDT_OrderBook{isBuyStr}_OrderBy{(!isBuy ? "" : "Desc")}Price",
                         commandType: CommandType.StoredProcedure))
                     .Take(count);
 
