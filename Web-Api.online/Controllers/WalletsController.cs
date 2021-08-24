@@ -21,12 +21,12 @@ namespace Web_Api.online.Controllers
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
-        private IEventsRepository _eventsRepository;
+        private EventsRepository _eventsRepository;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
-            IEventsRepository eventsRepository)
+            EventsRepository eventsRepository)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
@@ -83,10 +83,10 @@ namespace Web_Api.online.Controllers
                     {
                         address = coin.GetNewAddress(userId);
 
-                        await _eventsRepository.CreateAsync(new Events()
+                        await _eventsRepository.AddEvent(new Events()
                         {
                             UserId = userId,
-                            Type = EventType.Create,
+                            Type = (int)EventType.Create,
                             Comment = $"Create address {coin.CoinShortName}",
                             WhenDate = DateTime.Now
                         });

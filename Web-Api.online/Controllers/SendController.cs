@@ -20,7 +20,7 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
-        private IEventsRepository _eventsRepository;
+        private EventsRepository _eventsRepository;
 
         public IndexModel Model { get; set; }
 
@@ -40,7 +40,7 @@ namespace Web_Api.online.Controllers
 
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
-            IEventsRepository eventsRepository)
+            EventsRepository eventsRepository)
         {
             Model = new IndexModel();
             _walletsRepository = walletsRepository;
@@ -71,10 +71,10 @@ namespace Web_Api.online.Controllers
                     if (_amount.Value > 0 && _amount.Value <= wallet.Value)
                     {
                         _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
-                        await _eventsRepository.CreateAsync(new Events()
+                        await _eventsRepository.AddEvent(new Events()
                         {
                             UserId = userId,
-                            Type = EventType.OutcomeLTC,
+                            Type = (int)EventType.OutcomeLTC,
                             Comment = "Success",
                             Value = _amount.Value,
                             WhenDate = DateTime.Now

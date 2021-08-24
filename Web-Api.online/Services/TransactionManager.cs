@@ -18,7 +18,7 @@ namespace Web_Api.online.Services
         private TransactionsRepository _transactionsRepository;
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
-        private IEventsRepository _eventsRepository;
+        private EventsRepository _eventsRepository;
 
 
         private string userId;
@@ -27,7 +27,7 @@ namespace Web_Api.online.Services
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
-            IEventsRepository eventsRepository)
+            EventsRepository eventsRepository)
         {
             _transactionsRepository = transactionsRepository;
             _coinManager = coinManager;
@@ -141,10 +141,10 @@ namespace Web_Api.online.Services
                 await _walletsRepository.UpdateWalletBalance(w);
 
                 var _value = tr.Amount - tr.TransactionFee;
-                await _eventsRepository.CreateAsync(new Events()
+                await _eventsRepository.AddEvent(new Events()
                 {
                     UserId = userId,
-                    Type = EventType.IncomeLTC,
+                    Type = (int)EventType.IncomeLTC,
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
                     Value = _value,
                     WhenDate = DateTime.Now
