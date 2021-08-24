@@ -11,10 +11,12 @@ connection.on("ReceiveMessage", function (recieveModel) {
 
     let model = JSON.parse(recieveModel);
 
-    loadNewOrderBook(model.OrderBookSell, false, false, false);
-    loadNewOrderBook(model.OrderBookBuy, false, false, false);
-    loadNewOrderBook(model.MarketTrades, false, true, false);
-    loadNewOrderBook(model.CurrentOrder, false, false, true);
+    console.log(model);
+
+    loadNewOrderBook(model.OrderBookSell, false, false, false, false);
+    loadNewOrderBook(model.OrderBookBuy, false, true, false, false);
+    loadNewOrderBook(model.MarketTrades, false, false, true, false);
+    loadNewOrderBook(model.CurrentOrder, false, false, false, true);
 });
 
 connection.on("ReceiveOpenOrders", function (model) {
@@ -29,7 +31,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("buyButton").addEventListener("click", function (event) {
-    var amount = document.getElementById("amountInput").value.replace(".", ",");
+    var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
     connection.invoke("SendMessage", amount, price, true).catch(function (err) {
         return console.error(err.toString());
@@ -38,7 +40,7 @@ document.getElementById("buyButton").addEventListener("click", function (event) 
 });
 
 document.getElementById("sellButton").addEventListener("click", function (event) {
-    var amount = document.getElementById("amountInput").value.replace(".", ",");
+    var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
     connection.invoke("SendMessage", amount, price, false).catch(function (err) {
         return console.error(err.toString());

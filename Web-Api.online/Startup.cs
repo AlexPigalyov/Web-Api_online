@@ -63,10 +63,8 @@ namespace Web_Api.online
             services.AddTransient<WalletsRepository>();
             services.AddTransient<webapionlineContext>();
             services.AddTransient<ExchangeContext>();
-            services.AddTransient<IRatesRepository, RatesRepository>();
-            services.AddTransient<IOpenOrdersRepository, OpenOrdersRepository>();
-            services.AddTransient<IClosedOrdersRepository, ClosedOrdersRepository>();
-            services.AddTransient<IEventsRepository, EventsRepository>();
+            services.AddTransient<TradeRepository>(); 
+            services.AddTransient<IRatesRepository, RatesRepository>();            
 
             services.AddTransient<TransactionsRepository>();
             services.AddTransient<TransactionManager>();

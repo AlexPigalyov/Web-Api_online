@@ -10,17 +10,31 @@ function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
     }
 
     if (isBuy) {
-        return document.getElementsByClassName("orderbook-list")[0];
+        return document.getElementsByClassName("orderbook-list")[1];
     }
     else {
-        return document.getElementsByClassName("orderbook-list")[1];
+        return document.getElementsByClassName("orderbook-list")[0];
     }
 }
 
-function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpenOrders = false) {
+function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = false, isUserOpenOrders = false) {
+
     var openOrdersObj = openOrders;
 
     let list = null;
+
+    if (openOrdersObj.length == 0 && !isMarketTrades && !isUserOpenOrders) {
+        if (!isBuy) {
+            list = document.getElementsByClassName("orderbook-list")[0];
+
+            list.innerHTML = '';
+            }
+        else {
+            list = document.getElementsByClassName("orderbook-list")[1];
+
+            list.innerHTML = '';
+        }
+    }
 
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
@@ -50,11 +64,13 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         let time = null;
         let orderPrice = 0;
         let orderAmount = 0;
+        let orderTotal = 0;
         let isBuy = true;
 
         if (!isLoad) {
             orderPrice = order.Price;
             orderAmount = order.Amount;
+            orderTotal = order.Total;
             isBuy = order.IsBuy;
             if (isMarketTrades) {
                 time = new Date(order.ClosedDate);
@@ -63,6 +79,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         else {
             orderPrice = order.price;
             orderAmount = order.amount;
+            orderTotal = order.total;
             isBuy = order.isBuy;
             if (isMarketTrades) {
                 time = new Date(order.closedDate);
@@ -70,7 +87,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         }
         let orderBookElem = document.createElement('div');
         if (isMarketTrades || isUserOpenOrders) {
-            if (isBuy) {
+            if (!isBuy) {
                 orderBookElem.classList.add("orderbook-asks", "orderbook-row");
             }
             else {
@@ -82,7 +99,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
         }
 
         let orderBookElemColFirst = document.createElement('div');
-        if (isBuy) {
+        if (!isBuy) {
             orderBookElemColFirst.className = "orderbook-col";
         }
         else {
@@ -109,7 +126,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
             orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
         }
         else {
-            orderBookElemColThird.innerHTML = orderPrice * orderAmount;
+            orderBookElemColThird.innerHTML = orderTotal;
         }
 
         orderBookElem.appendChild(orderBookElemColThird);
@@ -125,7 +142,7 @@ function loadNewOrderBook(openOrders, isLoad, isMarketTrades = false, isUserOpen
 
         if (!isMarketTrades && !isUserOpenOrders) {
             let orderBookElemProgressBar = document.createElement('div');
-            if (isBuy) {
+            if (!isBuy) {
                 orderBookElemProgressBar.className = "orderbook-progress-bar";
             }
             else {

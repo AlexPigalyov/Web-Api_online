@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+using Web_Api.online.Models.Enums;
 
 namespace Web_Api.online.Models.Tables
 {
@@ -6,13 +9,13 @@ namespace Web_Api.online.Models.Tables
     {
         [Key]
         public long ClosedOrderId { get; set; }
-        public System.DateTime CreateDate { get; set; }
-        public System.DateTime ClosedDate { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime ClosedDate { get; set; }
         public bool IsBuy { get; set; }
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
         public decimal Total { get; set; }
-        public bool Status { get; set; }
+        public ClosedOrderStatus Status { get; set; }
         public string CreateUserId { get; set; }
         public string BoughtUserId { get; set; }
     }
