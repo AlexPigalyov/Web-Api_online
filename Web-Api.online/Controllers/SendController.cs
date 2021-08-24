@@ -6,11 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Extensions;
+using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
+using Web_Api.online.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers
 {
@@ -19,7 +20,9 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
-        public IndexModel model { get; set; }
+        private IEventsRepository _eventsRepository;
+
+        public IndexModel Model { get; set; }
 
         public class IndexModel
         {
@@ -36,20 +39,22 @@ namespace Web_Api.online.Controllers
         }
 
         public SendController(WalletsRepository walletsRepository,
-            ILitecoinService litecoinService)
+            ILitecoinService litecoinService,
+            IEventsRepository eventsRepository)
         {
-            model = new IndexModel();
+            Model = new IndexModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
+            _eventsRepository = eventsRepository;
         }
 
         [HttpGet]
         public IActionResult LTC()
         {
-            model.Currency = "LTC";
-            model.AmountMin = 777;
-            model.Commission = 777;
-            return View(model);
+            Model.Currency = "LTC";
+            Model.AmountMin = 777;
+            Model.Commission = 777;
+            return View(Model);
         }
 
         [HttpPost]
@@ -66,8 +71,15 @@ namespace Web_Api.online.Controllers
                     if (_amount.Value > 0 && _amount.Value <= wallet.Value)
                     {
                         _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
-                        //обновить в events
-                        indexModel.Status = "success";
+                        await _eventsRepository.CreateAsync(new Events()
+                        {
+                            UserId = userId,
+                            Type = EventType.OutcomeLTC,
+                            Comment = "Success",
+                            Value = _amount.Value,
+                            WhenDate = DateTime.Now
+                        });
+                        indexModel.Status = "Success";
                     }
                     else
                     {

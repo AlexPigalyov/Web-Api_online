@@ -11,4 +11,4 @@ namespace Web_Api.online.Models.Tables
         public string Comment { get; set; }
         public DateTime WhenDate { get; set; }
     }
-}
+
