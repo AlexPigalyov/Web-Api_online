@@ -10,23 +10,21 @@ using System.Security.Claims;
 using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.StoredProcedures;
 
 namespace Web_Api.online.Controllers
 {
     public class TradeController : Controller
     {
         private readonly WalletsRepository _walletsRepository;
-        private readonly IOpenOrdersRepository _openOrdersRepository;
-        private readonly IClosedOrdersRepository _closedOrdersRepository;
+        private readonly TradeRepository _tradeRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
-            IOpenOrdersRepository openOrdersRepository,
-            IClosedOrdersRepository closedOrdersRepository)
+            TradeRepository tradeRepository)
         {
             _walletsRepository = walletsRepository;
-            _openOrdersRepository = openOrdersRepository;
-            _closedOrdersRepository = closedOrdersRepository;
+            _tradeRepository = tradeRepository;
         }
 
         // GET: TradeController
@@ -42,10 +40,10 @@ namespace Web_Api.online.Controllers
             public Wallet BtcWallet { get; set; }
 
             public Wallet UsdtWallet { get; set; }
-            public List<MarketTradesModel> MarketTrades { get; set; }
+            public List<BTC_USDT_ClosedOrders> MarketTrades { get; set; }
             public List<BTC_USDT_OpenOrders> UserOpenOrders { get; set; }
-            public List<OrderBookModel> BuyOrderBook { get; set; }
-            public List<OrderBookModel> SellOrderBook { get; set; }
+            public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> BuyOrderBook { get; set; }
+            public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
         }
 
         public async Task<ActionResult> CancelOrder(long id)
@@ -57,7 +55,7 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You are not authorized.");
             }
 
-            var order = await _openOrdersRepository.FindByIdAsync(id);
+            var order = await _tradeRepository.spGet_BTC_USDT_OpenOrder_ById(id);
 
             if (order == null)
             {
@@ -69,20 +67,7 @@ namespace Web_Api.online.Controllers
                 return BadRequest("This is not your order.");
             }
 
-            await _openOrdersRepository.RemoveAsync(order);
-            await _closedOrdersRepository.CreateAsync(new BTC_USDT_ClosedOrders()
-            {
-                Amount = order.Amount,
-                BoughtUserId = null,
-                Status = Convert.ToBoolean(ClosedOrderStatus.Canceled),
-                ClosedDate = DateTime.Now,
-                ClosedOrderId = order.OpenOrderId,
-                CreateDate = order.CreateDate,
-                CreateUserId = order.CreateUserId,
-                IsBuy = order.IsBuy,
-                Price = order.Price,
-                Total = order.Total
-            });
+            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId, ClosedOrderStatus.Canceled);
 
             return Ok();
         }
@@ -93,8 +78,8 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                return View(_openOrdersRepository
-                    .GetByUserId("53cd122d-6253-4981-b290-11471f67c528"));
+                return View(await _tradeRepository
+                    .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate("53cd122d-6253-4981-b290-11471f67c528"));
             }
 
             return BadRequest("You're not authorized");
@@ -106,8 +91,8 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                return View(_closedOrdersRepository
-                    .GetByUserId("53cd122d-6253-4981-b290-11471f67c528"));
+                return View(await _tradeRepository
+                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate("53cd122d-6253-4981-b290-11471f67c528"));
             }
 
             return BadRequest("You're not authorized");
@@ -169,12 +154,12 @@ namespace Web_Api.online.Controllers
 
                 model.UsdtWallet = usdtWallet;
 
-                model.UserOpenOrders = _openOrdersRepository.GetByUserId(userId);
+                model.UserOpenOrders = await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
             }
 
-            model.BuyOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(true);
-            model.SellOrderBook = await _openOrdersRepository.Get_BTC_USDT_OrderBookAsync(false);
-            model.MarketTrades = await _closedOrdersRepository.Get_BTC_USDT_ClosedOrders();
+            model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
+            model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
+            model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
 
             return View(model);
         }
