@@ -40,6 +40,24 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<Wallet> GetUserWalletAsync(string userId, string acronim)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    Wallet result = await db.QueryFirstOrDefaultAsync<Wallet>("spGetUserWalletByAcronim",
+                    new { userId = userId,
+                          acronim = acronim},
+                    commandType: CommandType.StoredProcedure
+                );
+
+                    return result;
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
+
         public async Task<List<IncomeWallet>> GetUserIncomeWalletsAsync(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))

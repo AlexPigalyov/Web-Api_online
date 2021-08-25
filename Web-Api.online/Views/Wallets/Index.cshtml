@@ -57,43 +57,73 @@
     <h1 class="display-4">Wallets</h1>
 </div>
 
-Balance:
-<ul id="balanceWalletsList">
-    @foreach (var item in Model.UserWallets)
-    {
-        <li>
-            @item.CurrencyAcronim : @item.Value
-        </li>
-    }
-</ul>
+<h4>Balance:</h4>
+<table id="balanceWalletsList" class="table table-striped table-centered mb-0">
+    <thead>
+        <tr>
+            <th>Currency</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserWallets)
+        {
+            <tr>
 
-Create income wallet:
+                <td>
+                    @item.CurrencyAcronim
+                </td>
+                <td>
+                    @item.Value
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+
+<h4>Create income wallet:</h4>
 <form asp-action="Create" method="post">
-    <div class="row">
-        <div class="column">
-            <select name="selectCurrency" id="selectCurrency">
-                @foreach (var item in Model.Currencies)
-                {
-                    <option value="@item.Acronim">@item.Acronim</option>
-                }
-            </select>
-        </div>
-        <button id="createButton" type="submit" class="column"><img src="/img/add.png" alt="add" title="add" style="height:25px;" /></button>
+    <div class="input-group">
+        <label class="input-group-text" for="inputGroupSelect01">Currency</label>
+        <select name="selectCurrency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            @foreach (var item in Model.Currencies)
+            {
+                <option value="@item.Acronim">@item.Acronim</option>
+            }
+        </select>
+        <button id="createButton" class="btn btn-outline-secondary" type="submit">Сreate</button>
     </div>
 </form>
 <hr />
 
-    Income wallets:
-<div>
-    <ul id="walletsList">
-        <li>
-            Id Currency Address Created
-        </li>
+<h4>Income wallets:</h4>
+<table id="addressList" class="table table-striped table-centered mb-0">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Currency</th>
+            <th>Address</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var item in Model.UserIncomeWallets)
         {
-            <li>
-                @item.Id @item.CurrencyAcronim @item.Address @item.Created
-            </li>
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.CurrencyAcronim
+                </td>
+                <td>
+                    @item.Address
+                </td>
+                <td>
+                    @item.Created
+                </td>
+            </tr>
         }
-    </ul>
-</div>
+    </tbody>
+</table>
