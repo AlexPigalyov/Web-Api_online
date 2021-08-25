@@ -71,6 +71,8 @@ namespace Web_Api.online.Controllers
                     if (_amount.Value > 0 && _amount.Value <= wallet.Value)
                     {
                         _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
+                        wallet.Value -= _amount.Value;
+
                         await _eventsRepository.AddEvent(new Events()
                         {
                             UserId = userId,
@@ -80,6 +82,7 @@ namespace Web_Api.online.Controllers
                             WhenDate = DateTime.Now
                         });
                         indexModel.Status = "Success";
+                        await _walletsRepository.UpdateWalletBalance(wallet);
                     }
                     else
                     {
