@@ -11,6 +11,8 @@ using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
+using Microsoft.AspNetCore.SignalR;
+using Web_Api.online.Hubs;
 
 namespace Web_Api.online.Controllers
 {
@@ -18,13 +20,16 @@ namespace Web_Api.online.Controllers
     {
         private readonly WalletsRepository _walletsRepository;
         private readonly TradeRepository _tradeRepository;
+        private readonly IHubContext<btcusdtHub> _hubcontext;
 
         public TradeController(
             WalletsRepository walletsRepository,
-            TradeRepository tradeRepository)
+            TradeRepository tradeRepository,
+            IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;
+            _hubcontext = hubcontext;            
         }
 
         // GET: TradeController
@@ -179,7 +184,7 @@ namespace Web_Api.online.Controllers
         // POST: TradeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create([FromBody]OrderModel order)
         {
             try
             {
