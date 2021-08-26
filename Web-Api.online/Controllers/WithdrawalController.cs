@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Extensions;
+using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
@@ -16,15 +17,15 @@ using Web_Api.online.Repositories.Abstract;
 namespace Web_Api.online.Controllers
 {
     [Authorize]
-    public class SendController : Controller
+    public class WithdrawalController : Controller
     {
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
         private EventsRepository _eventsRepository;
 
-        public IndexModel Model { get; set; }
+        public LTCModel Model { get; set; }
 
-        public class IndexModel
+        public class LTCModel
         {
             public string Status { get; set; }
             public decimal AmountMin { get; set; }
@@ -38,14 +39,22 @@ namespace Web_Api.online.Controllers
             public string Amount { get; set; }
         }
 
-        public SendController(WalletsRepository walletsRepository,
+        public WithdrawalController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
             EventsRepository eventsRepository)
         {
-            Model = new IndexModel();
+            Model = new LTCModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
             _eventsRepository = eventsRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
+            return View(wallets);
         }
 
         [HttpGet]
@@ -58,7 +67,7 @@ namespace Web_Api.online.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LTC(IndexModel indexModel)
+        public async Task<IActionResult> LTC(LTCModel indexModel)
         {
 
             if (ModelState.IsValid)
