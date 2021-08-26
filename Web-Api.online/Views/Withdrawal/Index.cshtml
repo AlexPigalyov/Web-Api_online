@@ -1,0 +1,34 @@
+﻿@model List<Wallet>
+@{
+    ViewData["Title"] = "Withdrawal";
+}
+
+<h4>Balance:</h4>
+<table id="balanceWalletsList" class="table table-striped table-centered mb-0">
+    <thead>
+        <tr>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @item.CurrencyAcronim
+                </td>
+                <td>
+                    @item.Value
+                </td>
+                <td>
+                    <p><a href="/Wallets">Create wallet</a></p>
+                    <p><a href="/Withdrawal/@item.CurrencyAcronim">Withdrawal @item.CurrencyAcronim</a></p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />

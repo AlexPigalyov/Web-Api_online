@@ -1,0 +1,15 @@
+﻿using System;
+
+namespace Web_Api.online.Models.Tables
+{
+    public class Transfer
+    {
+        public long Id { get; set; }
+        public int WalletFromId { get; set; }
+        public int WalletToId { get; set; }
+        public decimal Value { get; set; }
+        public DateTime Date { get; set; }
+        public string CurrensyAcronim { get; set; }
+        public string Hash { get; set; }
+    }
+}
