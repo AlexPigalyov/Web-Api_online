@@ -33,17 +33,31 @@ connection.start().then(function () {
 document.getElementById("buyButton").addEventListener("click", function (event) {
     var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
-    connection.invoke("SendMessage", amount, price, true).catch(function (err) {
-        return console.error(err.toString());
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/trade/createorder");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(new {
+        price: price,
+        amount: amount,
+        isBuy: true
     });
-    event.preventDefault();
 });
 
 document.getElementById("sellButton").addEventListener("click", function (event) {
     var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
-    connection.invoke("SendMessage", amount, price, false).catch(function (err) {
-        return console.error(err.toString());
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/trade/createorder");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(new {
+        price: price,
+        amount: amount,
+        isBuy: false
     });
-    event.preventDefault();
 });
