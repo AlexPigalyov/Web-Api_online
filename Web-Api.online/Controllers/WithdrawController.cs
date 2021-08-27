@@ -17,7 +17,7 @@ using Web_Api.online.Repositories.Abstract;
 namespace Web_Api.online.Controllers
 {
     [Authorize]
-    public class WithdrawalController : Controller
+    public class WithdrawController : Controller
     {
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
@@ -39,7 +39,7 @@ namespace Web_Api.online.Controllers
             public string Amount { get; set; }
         }
 
-        public WithdrawalController(WalletsRepository walletsRepository,
+        public WithdrawController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
             EventsRepository eventsRepository)
         {
