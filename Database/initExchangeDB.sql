@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[BTC_USDT_ClosedOrders](
 	[Status] [int] NOT NULL,
 	[CreateUserId] [nvarchar](450) NOT NULL,
 	[BoughtUserId] [nvarchar](450) NULL,
- CONSTRAINT [PK_BTC_USDT_ClosedOrders] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_BTC_USDT_ClosedOrders] PRIMARY KEY CLUSTERED
 (
 	[ClosedOrderId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -33,7 +33,7 @@ CREATE TABLE [dbo].[BTC_USDT_OpenOrders](
 	[Amount] [decimal](38, 20) NOT NULL,
 	[Total] [decimal](38, 20) NOT NULL,
 	[CreateUserId] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_BTC_USDT_OpenOrders] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_BTC_USDT_OpenOrders] PRIMARY KEY CLUSTERED
 (
 	[OpenOrderId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -61,7 +61,7 @@ CREATE TABLE [dbo].[Events](
 	[Value] [decimal](38, 20) NOT NULL,
 	[Comment] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
- CONSTRAINT [PK_UsersEvents] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_UsersEvents] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -76,7 +76,7 @@ CREATE TABLE [dbo].[Exceptions](
 	[Value] [nvarchar](max) NOT NULL,
 	[WhenDate] [datetime] NOT NULL,
 	[UserId] [uniqueidentifier] NULL,
- CONSTRAINT [PK_Exceptions] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Exceptions] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[Date] [float] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
 	[IncomeWalletsId] [int] NOT NULL,
- CONSTRAINT [PK_IncomeTransactions] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_IncomeTransactions] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -114,7 +114,7 @@ CREATE TABLE [dbo].[IncomeWallets](
 	[CurrencyAcronim] [nvarchar](10) NULL,
 	[Created] [datetime] NOT NULL,
 	[LastUpdate] [datetime] NOT NULL,
- CONSTRAINT [PK_IncomeWallets] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_IncomeWallets] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -131,7 +131,7 @@ CREATE TABLE [dbo].[News](
 	[AuthorId] [uniqueidentifier] NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
 	[Active] [bit] NULL,
- CONSTRAINT [PK_New] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_New] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -176,7 +176,7 @@ CREATE TABLE [dbo].[Wallets](
 	[Created] [datetime] NOT NULL,
 	[LastUpdate] [datetime] NOT NULL,
 	[Address] [nvarchar](max) NULL,
- CONSTRAINT [PK_Wallets] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Wallets] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -490,7 +490,7 @@ INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (158, CAST(N'2021-08-23T11:22:25.700' AS DateTime), CAST(N'2021-08-23T11:22:25.700' AS DateTime), 1, CAST(6.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] ON 
+SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] ON
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (116, CAST(N'2021-08-21T21:26:53.857' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
@@ -504,7 +504,7 @@ INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price
 GO
 SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] OFF
 GO
-SET IDENTITY_INSERT [dbo].[Currencies] ON 
+SET IDENTITY_INSERT [dbo].[Currencies] ON
 GO
 INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (1, N'BTC', N'Bitcoin', CAST(N'2021-04-22T04:17:22.167' AS DateTime))
 GO
@@ -524,7 +524,7 @@ INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (8, N'DASH
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
-SET IDENTITY_INSERT [dbo].[Events] ON 
+SET IDENTITY_INSERT [dbo].[Events] ON
 GO
 INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (1, N'40ffde92-878c-4c09-ac6b-c86a769d1623', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-20T22:47:07.413' AS DateTime))
 GO
@@ -558,7 +558,7 @@ INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) V
 GO
 SET IDENTITY_INSERT [dbo].[Events] OFF
 GO
-SET IDENTITY_INSERT [dbo].[IncomeTransactions] ON 
+SET IDENTITY_INSERT [dbo].[IncomeTransactions] ON
 GO
 INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (4, N'LTC', N'd07be03a6fde4176398b6910d8a646817037eef52ae27cf536b621d2e8942b81', CAST(0.00021000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', 1629906834, N'8082acc0-2a64-4983-9227-9ea395279df3', 18)
 GO
@@ -570,7 +570,7 @@ INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Am
 GO
 SET IDENTITY_INSERT [dbo].[IncomeTransactions] OFF
 GO
-SET IDENTITY_INSERT [dbo].[IncomeWallets] ON 
+SET IDENTITY_INSERT [dbo].[IncomeWallets] ON
 GO
 INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (1, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', N'bc1qdum4hpgcultjp0g97u7l2dgtu943r9vrf7gv5j', N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', N'BTC', CAST(N'2021-08-17T23:17:09.683' AS DateTime), CAST(N'2021-08-17T23:17:09.683' AS DateTime))
 GO
@@ -610,7 +610,7 @@ INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [Curren
 GO
 SET IDENTITY_INSERT [dbo].[IncomeWallets] OFF
 GO
-SET IDENTITY_INSERT [dbo].[Wallets] ON 
+SET IDENTITY_INSERT [dbo].[Wallets] ON
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-17T23:17:09.687' AS DateTime), CAST(N'2021-08-17T23:17:09.687' AS DateTime), NULL)
 GO
@@ -908,7 +908,7 @@ CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -932,7 +932,7 @@ CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -981,7 +981,7 @@ Select transactions.* From IncomeTransactions transactions
 				 GROUP BY transactionGroup.CurrencyAcronim)
 	transactionMaxIdByAcronim
 	On transactions.Id = transactionMaxIdByAcronim.LastId
-	
+
 END
 
 
@@ -1129,7 +1129,7 @@ SET    IsBuy = @isBuy,
        Amount = @amount,
 	   Total = @total,
        CreateUserId = @userid
-WHERE  OpenOrderId = @openOrderId 
+WHERE  OpenOrderId = @openOrderId
 
 END
 
