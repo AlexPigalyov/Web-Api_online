@@ -27,7 +27,7 @@ namespace Web_Api.online.Repositories
                     p.Add("walletFromId", transfer.WalletFromId);
                     p.Add("walletToId", transfer.WalletToId);
                     p.Add("value", transfer.Value);
-                    p.Add("currensyAcronim", transfer.CurrensyAcronim);
+                    p.Add("currensyAcronim", transfer.CurrencyAcronim);
                     p.Add("hash", transfer.Hash);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

@@ -9,7 +9,8 @@ namespace Web_Api.online.Models.Tables
         public int WalletToId { get; set; }
         public decimal Value { get; set; }
         public DateTime Date { get; set; }
-        public string CurrensyAcronim { get; set; }
+        public string CurrencyAcronim { get; set; }
         public string Hash { get; set; }
+        public string Comment { get; set; }
     }
 }
