@@ -23,6 +23,7 @@ namespace Web_Api.online.Hash
                 $"{transfer.CurrencyAcronim} " +
                 $"{transfer.Value} " +
                 $"{transfer.Date} " +
+                $"{transfer.Comment} " +
                 $"{salt}");
 
             byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
