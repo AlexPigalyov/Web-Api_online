@@ -13,9 +13,11 @@ using Web_Api.online.Services.Interfaces;
 using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Repositories.Abstract;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web_Api.online.Controllers
 {
+    [Authorize]
     public class WalletsController : Controller
     {
         private WalletsRepository _walletsRepository;
