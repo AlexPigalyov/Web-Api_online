@@ -155,14 +155,14 @@ namespace Web_Api.online.Repositories
                             receiverUserId = sendCoinsModel.EventReceiver.UserId,
                             typeSend = sendCoinsModel.EventSender.Type,
                             typeRecieve = sendCoinsModel.EventReceiver.Type,
-                            senderCommentEvent = sendCoinsModel.EventSender.Comment,
-                            receiverCommentEvent = sendCoinsModel.EventReceiver.Comment,
+
+                            comment = sendCoinsModel.EventSender.Comment,
                             currencyAcronim = sendCoinsModel.EventSender.CurrencyAcronim,
                             value = sendCoinsModel.EventSender.Value,
-                            senderWalletId = sendCoinsModel.WalletSender.Id,
-                            senderNewWalletBalance = sendCoinsModel.WalletSender.Value,
-                            receiverWalletId = sendCoinsModel.WalletReceiver.Id,
-                            receiverNewWalletBalance = sendCoinsModel.WalletReceiver.Value
+
+                            senderWalletId = sendCoinsModel.Transfer.WalletFromId,
+                            receiverWalletId = sendCoinsModel.Transfer.WalletToId,
+                            hash = sendCoinsModel.Transfer.Hash
                         },
                               commandType: CommandType.StoredProcedure);
 
