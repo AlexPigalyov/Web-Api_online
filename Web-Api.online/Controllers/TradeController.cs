@@ -108,6 +108,13 @@ namespace Web_Api.online.Controllers
         [Route("trade/createorder")]
         public async Task<ActionResult> CreateOrder([FromBody]OrderModel orderModel)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You're not authorized");
+            }
+
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
             decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
 
@@ -116,7 +123,7 @@ namespace Web_Api.online.Controllers
                 IsBuy = orderModel.IsBuy,
                 Price = priceDecimal,
                 Amount = amountDecimal,
-                CreateUserId = "53cd122d-6253-4981-b290-11471f67c528",
+                CreateUserId = userId,
                 CreateDate = DateTime.Now,
             };
 
@@ -125,7 +132,7 @@ namespace Web_Api.online.Controllers
                 IsBuy = orderModel.IsBuy,
                 Amount = amountDecimal,
                 Price = priceDecimal,
-                UserId = "53cd122d-6253-4981-b290-11471f67c528"
+                UserId = userId
             });
 
             order.OpenOrderId = newId;
