@@ -83,7 +83,7 @@ namespace Web_Api.online.Controllers
                     {
                         address = coin.GetNewAddress(userId);
 
-                        await _eventsRepository.AddEvent(new Events()
+                        await _eventsRepository.CreateEvent(new Events()
                         {
                             UserId = userId,
                             Type = (int)EventType.CreateAddress,

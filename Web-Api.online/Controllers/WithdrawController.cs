@@ -82,7 +82,7 @@ namespace Web_Api.online.Controllers
                         _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
                         wallet.Value -= _amount.Value;
 
-                        await _eventsRepository.AddEvent(new Events()
+                        await _eventsRepository.CreateEvent(new Events()
                         {
                             UserId = userId,
                             Type = (int)EventType.Withdraw,

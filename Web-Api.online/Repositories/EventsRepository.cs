@@ -20,7 +20,7 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task AddEvent(Events model)
+        public async Task CreateEvent(Events model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {

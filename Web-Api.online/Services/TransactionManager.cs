@@ -141,7 +141,7 @@ namespace Web_Api.online.Services
                 await _walletsRepository.UpdateWalletBalance(w);
 
                 var _value = tr.Amount - tr.TransactionFee;
-                await _eventsRepository.AddEvent(new Events()
+                await _eventsRepository.CreateEvent(new Events()
                 {
                     UserId = userId,
                     Type = (int)EventType.Income,
