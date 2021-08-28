@@ -34,15 +34,15 @@ document.getElementById("buyButton").addEventListener("click", function (event) 
     var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/trade/createorder");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.send(new {
-        price: price,
-        amount: amount,
-        isBuy: true
+    $.ajax({
+        url: '/trade/createorder',
+        type: 'POST',
+        data: JSON.stringify({
+            Price: price,
+            Amount: amount,
+            IsBuy: true
+        }),
+        contentType: 'application/json; charset=utf-8'
     });
 });
 
@@ -50,14 +50,14 @@ document.getElementById("sellButton").addEventListener("click", function (event)
     var amount = document.getElementById("amountInput").value;
     var price = document.getElementById("priceInput").value;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/trade/createorder");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.send(new {
-        price: price,
-        amount: amount,
-        isBuy: false
+    $.ajax({
+        url: '/trade/createorder',
+        type: 'POST',
+        data: JSON.stringify({
+            Price: price,
+            Amount: amount,
+            IsBuy: false
+        }),
+        contentType: 'application/json; charset=utf-8'
     });
 });
