@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Extensions;
+using Web_Api.online.Hash;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
@@ -22,35 +23,37 @@ namespace Web_Api.online.Controllers
         private ILitecoinService _litecoinService;
         private EventsRepository _eventsRepository;
 
-        public LTCModel Model { get; set; }
+        public CoinsModel Model { get; set; }
         private decimal amountMin = 0.0000001M;
 
-        public class LTCModel
+        public class CoinsModel
         {
             public string Status { get; set; }
             public decimal AmountMin { get; set; }
             public decimal Commission { get; set; }
 
-            [Required]
-            public string Currency { get; set; }
+
             [Required]
             public string UserId { get; set; }
             [Required]
+            public string Currency { get; set; }
+            [Required]
             public string Amount { get; set; }
+            public string Comment { get; set; }
         }
 
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
             EventsRepository eventsRepository)
         {
-            Model = new LTCModel();
+            Model = new CoinsModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
             _eventsRepository = eventsRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
@@ -58,34 +61,41 @@ namespace Web_Api.online.Controllers
         }
 
         [HttpGet]
-        public IActionResult LTC()
+        public IActionResult Coins(string currency)
         {
-            Model.Currency = "LTC";
+            Model.Currency = currency;
             Model.AmountMin = amountMin;
             Model.Commission = 0;
             return View(Model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> LTC(LTCModel indexModel)
+        public async Task<IActionResult> Coins(CoinsModel coinsModel)
         {
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, "LTC");
-                    var walletTo = await _walletsRepository.GetUserWalletAsync(indexModel.UserId, "LTC");
+                    var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, coinsModel.Currency);
+                    var walletTo = await _walletsRepository.GetUserWalletAsync(coinsModel.UserId, coinsModel.Currency);
 
-                    decimal? _amount = indexModel.Amount.ConvertToDecimal();
-                    if(walletFrom !=null && walletTo!=null)
+                    decimal? _amount = coinsModel.Amount.ConvertToDecimal();
+
+                    if (walletFrom != null && walletTo != null)
                     {
                         if (_amount.Value > 0 && _amount.Value <= walletFrom.Value &&
                         amountMin < _amount.Value)
                         {
-                            walletFrom.Value -= _amount.Value;
-                            walletTo.Value += _amount.Value;
+                            Transfer transfer = new()
+                            {
+                                WalletFromId = walletFrom.Id,
+                                WalletToId = walletTo.Id,
+                                Value = _amount.Value,
+                                CurrencyAcronim = coinsModel.Currency,
+                                Comment = coinsModel.Comment
+                            };
+                            GenerateHash.ComputeHash(transfer);
 
                             SendCoinsModel sendRecieve = new()
                             {
@@ -93,45 +103,42 @@ namespace Web_Api.online.Controllers
                                 {
                                     UserId = userId,
                                     Type = (int)EventType.Send,
-                                    Comment = "Send success",
+                                    Comment = coinsModel.Comment,
                                     Value = _amount.Value,
-                                    WhenDate = DateTime.Now,
-                                    CurrencyAcronim = "LTC"
+                                    CurrencyAcronim = coinsModel.Currency,
                                 },
                                 EventReceiver = new Events()
                                 {
-                                    UserId = indexModel.UserId,
+                                    UserId = coinsModel.UserId,
                                     Type = (int)EventType.Recieve,
-                                    Comment = "Recieve success",
+                                    Comment = coinsModel.Comment,
                                     Value = _amount.Value,
-                                    WhenDate = DateTime.Now,
-                                    CurrencyAcronim = "LTC"
+                                    CurrencyAcronim = coinsModel.Currency,
                                 },
-                                WalletSender = walletFrom,
-                                WalletReceiver = walletTo,
+                                Transfer = transfer
                             };
 
                             await _walletsRepository.SendCoinsAync(sendRecieve);
-                            indexModel.Status = "Success";
+                            coinsModel.Status = "Success";
                         }
                         else
                         {
-                            indexModel.Status = "Not enough coins";
+                            coinsModel.Status = "Not enough coins";
                         }
                     }
                     else
                     {
-                        indexModel.Status = "Error invalid address";
+                        coinsModel.Status = "Error invalid address";
                     }
                 }
                 catch
                 {
-                    indexModel.Status = "Error";
-                    return View(indexModel);
+                    coinsModel.Status = "Error";
+                    return View(coinsModel);
                 }
 
             }
-            return View(nameof(LTC), indexModel);
+            return View(coinsModel);
         }
 
     }
