@@ -25,14 +25,15 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spAddEvent",
+                    "spCreateEvent",
                     new
                     {
                         userid = model.UserId,
                         type = model.Type,
                         value = model.Value,
                         comment = model.Comment,
-                        whenDate = model.WhenDate
+                        whenDate = model.WhenDate,
+                        currencyAcronim = model.CurrencyAcronim ,
                     },
                     commandType: CommandType.StoredProcedure);
             }

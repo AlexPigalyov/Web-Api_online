@@ -144,10 +144,11 @@ namespace Web_Api.online.Services
                 await _eventsRepository.AddEvent(new Events()
                 {
                     UserId = userId,
-                    Type = (int)EventType.IncomeLTC,
+                    Type = (int)EventType.Income,
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
                     Value = _value,
-                    WhenDate = DateTime.Now
+                    WhenDate = DateTime.Now,
+                    CurrencyAcronim = "LTC"
                 });
             }
         }

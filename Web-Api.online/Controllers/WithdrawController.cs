@@ -85,10 +85,11 @@ namespace Web_Api.online.Controllers
                         await _eventsRepository.AddEvent(new Events()
                         {
                             UserId = userId,
-                            Type = (int)EventType.OutcomeLTC,
+                            Type = (int)EventType.Withdraw,
                             Comment = "Success",
                             Value = _amount.Value,
-                            WhenDate = DateTime.Now
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = "LTC"
                         });
                         indexModel.Status = "Success";
                         await _walletsRepository.UpdateWalletBalance(wallet);

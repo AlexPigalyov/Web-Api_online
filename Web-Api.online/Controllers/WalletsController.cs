@@ -86,9 +86,10 @@ namespace Web_Api.online.Controllers
                         await _eventsRepository.AddEvent(new Events()
                         {
                             UserId = userId,
-                            Type = (int)EventType.Create,
+                            Type = (int)EventType.CreateAddress,
                             Comment = $"Create address {coin.CoinShortName}",
-                            WhenDate = DateTime.Now
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = "LTC"
                         });
 
                         break;
