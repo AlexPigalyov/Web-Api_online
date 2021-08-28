@@ -17,15 +17,23 @@ namespace Web_Api.online.Hash
 
         public static Transfer ComputeHash(Transfer transfer)
         {
-            byte[] inputBytes = Encoding.UTF8.GetBytes($"{transfer.CurrensyAcronim} " +
+            byte[] inputBytes = Encoding.UTF8.GetBytes($"{transfer.CurrencyAcronim} " +
                 $"{transfer.WalletFromId} " +
                 $"{transfer.WalletToId} " +
+                $"{transfer.CurrencyAcronim} " +
                 $"{transfer.Value} " +
+                $"{transfer.Date} " +
+                $"{transfer.Comment} " +
                 $"{salt}");
 
             byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
 
-            transfer.Hash = BitConverter.ToString(hashedBytes);
+            var sBuilder = new StringBuilder();
+            for (int i = 0; i < hashedBytes.Length; i++)
+            {
+                sBuilder.Append(hashedBytes[i].ToString("x2"));
+            }
+            transfer.Hash = sBuilder.ToString();
 
             return transfer;
         }
