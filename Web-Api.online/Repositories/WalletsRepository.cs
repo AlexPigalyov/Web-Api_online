@@ -47,8 +47,11 @@ namespace Web_Api.online.Repositories
                 try
                 {
                     Wallet result = await db.QueryFirstOrDefaultAsync<Wallet>("spGetUserWalletByAcronim",
-                    new { userId = userId,
-                          acronim = acronim},
+                    new
+                    {
+                        userId = userId,
+                        acronim = acronim
+                    },
                     commandType: CommandType.StoredProcedure
                 );
 
@@ -127,8 +130,40 @@ namespace Web_Api.online.Repositories
                 try
                 {
                     await db.QueryAsync<Wallet>("spUpdateWalletBalance",
-                        new { walletId = wallet.Id ,
-                              newWalletBalance = wallet.Value},
+                        new
+                        {
+                            walletId = wallet.Id,
+                            newWalletBalance = wallet.Value
+                        },
+                              commandType: CommandType.StoredProcedure);
+
+                }
+                catch (Exception ex) { return; }
+            }
+        }
+
+        public async Task SendCoinsAync(SendCoinsModel sendCoinsModel)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    await db.QueryAsync<Wallet>("spSendCoins",
+                        new
+                        {
+                            senderUserId = sendCoinsModel.EventSender.UserId,
+                            receiverUserId = sendCoinsModel.EventReceiver.UserId,
+                            typeSend = sendCoinsModel.EventSender.Type,
+                            typeRecieve = sendCoinsModel.EventReceiver.Type,
+
+                            comment = sendCoinsModel.EventSender.Comment,
+                            currencyAcronim = sendCoinsModel.EventSender.CurrencyAcronim,
+                            value = sendCoinsModel.EventSender.Value,
+
+                            senderWalletId = sendCoinsModel.Transfer.WalletFromId,
+                            receiverWalletId = sendCoinsModel.Transfer.WalletToId,
+                            hash = sendCoinsModel.Transfer.Hash
+                        },
                               commandType: CommandType.StoredProcedure);
 
                 }

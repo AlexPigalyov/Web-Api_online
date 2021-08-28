@@ -61,6 +61,7 @@ CREATE TABLE [dbo].[Events](
 	[Value] [decimal](38, 20) NOT NULL,
 	[Comment] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
+	[CurrencyAcronim] [nvarchar](10) NOT NULL,
  CONSTRAINT [PK_UsersEvents] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -160,8 +161,10 @@ CREATE TABLE [dbo].[Transfers](
 	[WalletToId] [int] NOT NULL,
 	[Value] [decimal](38, 20) NOT NULL,
 	[Date] [datetime] NOT NULL,
-	[CurrencyAcronim] [nvarchar](10) NULL
-) ON [PRIMARY]
+	[CurrencyAcronim] [nvarchar](10) NOT NULL,
+	[Hash] [varchar](66) NOT NULL,
+	[Comment] [nvarchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
 GO
@@ -413,8 +416,6 @@ INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (115, CAST(N'2021-08-21T21:26:53.710' AS DateTime), CAST(N'2021-08-23T11:21:55.393' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (116, CAST(N'2021-08-21T21:26:53.857' AS DateTime), CAST(N'2021-08-25T15:06:47.827' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
-GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (117, CAST(N'2021-08-21T21:26:55.710' AS DateTime), CAST(N'2021-08-21T21:26:58.253' AS DateTime), 1, CAST(4.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(4.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (118, CAST(N'2021-08-21T21:26:55.987' AS DateTime), CAST(N'2021-08-21T21:26:58.390' AS DateTime), 1, CAST(4.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(4.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
@@ -463,8 +464,6 @@ INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (140, CAST(N'2021-08-21T21:27:02.397' AS DateTime), CAST(N'2021-08-21T21:27:02.397' AS DateTime), 1, CAST(4.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (141, CAST(N'2021-08-23T11:21:52.677' AS DateTime), CAST(N'2021-08-25T15:06:48.130' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
-GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (145, CAST(N'2021-08-23T11:21:54.743' AS DateTime), CAST(N'2021-08-23T11:21:54.753' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (146, CAST(N'2021-08-23T11:21:55.390' AS DateTime), CAST(N'2021-08-23T11:21:55.390' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
@@ -493,25 +492,17 @@ INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate
 GO
 INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (158, CAST(N'2021-08-23T11:22:25.700' AS DateTime), CAST(N'2021-08-23T11:22:25.700' AS DateTime), 1, CAST(6.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
 GO
-INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (162, CAST(N'2021-08-25T15:06:47.800' AS DateTime), CAST(N'2021-08-25T15:06:47.823' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
-GO
-INSERT [dbo].[BTC_USDT_ClosedOrders] ([ClosedOrderId], [CreateDate], [ClosedDate], [IsBuy], [Price], [Amount], [Total], [Status], [CreateUserId], [BoughtUserId]) VALUES (163, CAST(N'2021-08-25T15:06:48.130' AS DateTime), CAST(N'2021-08-25T15:06:48.130' AS DateTime), 0, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), 1, N'53cd122d-6253-4981-b290-11471f67c528', N'53cd122d-6253-4981-b290-11471f67c528')
-GO
 SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] ON 
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (116, CAST(N'2021-08-21T21:26:53.857' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
+GO
+INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (141, CAST(N'2021-08-23T11:21:52.677' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (142, CAST(N'2021-08-23T11:21:53.243' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (143, CAST(N'2021-08-23T11:21:53.577' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (144, CAST(N'2021-08-23T11:21:53.747' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
-GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (159, CAST(N'2021-08-25T15:06:45.603' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
-GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (160, CAST(N'2021-08-25T15:06:47.080' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
-GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (161, CAST(N'2021-08-25T15:06:47.380' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
-GO
-INSERT [dbo].[BTC_USDT_OpenOrders] ([OpenOrderId], [CreateDate], [IsBuy], [Price], [Amount], [Total], [CreateUserId]) VALUES (164, CAST(N'2021-08-25T15:06:49.307' AS DateTime), 1, CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), N'53cd122d-6253-4981-b290-11471f67c528')
 GO
 SET IDENTITY_INSERT [dbo].[BTC_USDT_OpenOrders] OFF
 GO
@@ -537,33 +528,43 @@ SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Events] ON 
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (1, N'40ffde92-878c-4c09-ac6b-c86a769d1623', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-20T22:47:07.413' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (5, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 6, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-28T13:53:54.940' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (2, N'40ffde92-878c-4c09-ac6b-c86a769d1623', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-20T22:47:07.847' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (6, N'8082acc0-2a64-4983-9227-9ea395279df3', 4, CAST(0.00020000000000000000 AS Decimal(38, 20)), N'Send success', CAST(N'2021-08-28T13:55:45.483' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (3, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:22:31.640' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (7, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00020000000000000000 AS Decimal(38, 20)), N'Recieve success', CAST(N'2021-08-28T13:55:45.483' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (4, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:28:20.663' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (8, N'8082acc0-2a64-4983-9227-9ea395279df3', 4, CAST(0.00200000000000000000 AS Decimal(38, 20)), N'Send success', CAST(N'2021-08-28T13:57:11.843' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (5, N'1', 2, CAST(1.43000000000000000000 AS Decimal(38, 20)), N'1', CAST(N'2021-08-20T23:28:58.767' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (9, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00200000000000000000 AS Decimal(38, 20)), N'Recieve success', CAST(N'2021-08-28T13:57:11.843' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (6, N'e0519b6d-3a94-43b2-b423-fc4891246a93', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address BTC', CAST(N'2021-08-24T22:19:00.527' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (10, N'8082acc0-2a64-4983-9227-9ea395279df3', 4, CAST(0.00011000000000000000 AS Decimal(38, 20)), N'Send success', CAST(N'2021-08-28T14:03:26.953' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (7, N'e0519b6d-3a94-43b2-b423-fc4891246a93', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-24T22:19:08.447' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (11, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00011000000000000000 AS Decimal(38, 20)), N'Recieve success', CAST(N'2021-08-28T14:03:26.957' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (8, N'8082acc0-2a64-4983-9227-9ea395279df3', 50000000, CAST(0.00000000000000000000 AS Decimal(38, 20)), N'Create address LTC', CAST(N'2021-08-25T18:52:08.717' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (12, N'8082acc0-2a64-4983-9227-9ea395279df3', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'Send success', CAST(N'2021-08-28T14:07:12.850' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (9, N'8082acc0-2a64-4983-9227-9ea395279df3', 10000001, CAST(0.00021000000000000000 AS Decimal(38, 20)), N'Income transaction LTC', CAST(N'2021-08-25T18:54:16.340' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (13, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'Recieve success', CAST(N'2021-08-28T14:07:12.853' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (10, N'8082acc0-2a64-4983-9227-9ea395279df3', 10000001, CAST(0.00021000000000000000 AS Decimal(38, 20)), N'Income transaction LTC', CAST(N'2021-08-25T19:03:48.830' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (14, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'Send success', CAST(N'2021-08-28T14:10:12.873' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (11, N'8082acc0-2a64-4983-9227-9ea395279df3', 10000001, CAST(0.00031000000000000000 AS Decimal(38, 20)), N'Income transaction LTC', CAST(N'2021-08-25T19:04:24.187' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (15, N'8082acc0-2a64-4983-9227-9ea395279df3', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'Recieve success', CAST(N'2021-08-28T14:10:12.913' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (12, N'8082acc0-2a64-4983-9227-9ea395279df3', 20000001, CAST(0.00020000000000000000 AS Decimal(38, 20)), N'Success', CAST(N'2021-08-25T19:17:37.870' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (16, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:43:29.020' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (13, N'8082acc0-2a64-4983-9227-9ea395279df3', 10000001, CAST(0.00018660000000000000 AS Decimal(38, 20)), N'Income transaction LTC', CAST(N'2021-08-25T19:17:42.210' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (17, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:43:29.087' AS DateTime), N'LTC')
 GO
-INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate]) VALUES (14, N'8082acc0-2a64-4983-9227-9ea395279df3', 20000001, CAST(0.00020000000000000000 AS Decimal(38, 20)), N'Success', CAST(N'2021-08-25T19:21:04.307' AS DateTime))
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (18, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:46:07.597' AS DateTime), N'LTC')
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (19, N'8082acc0-2a64-4983-9227-9ea395279df3', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:46:07.623' AS DateTime), N'LTC')
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (20, N'8082acc0-2a64-4983-9227-9ea395279df3', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:51:53.690' AS DateTime), N'LTC')
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (21, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:51:53.690' AS DateTime), N'LTC')
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (22, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', 4, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:53:12.433' AS DateTime), N'LTC')
+GO
+INSERT [dbo].[Events] ([Id], [UserId], [Type], [Value], [Comment], [WhenDate], [CurrencyAcronim]) VALUES (23, N'8082acc0-2a64-4983-9227-9ea395279df3', 5, CAST(0.00008510000000000000 AS Decimal(38, 20)), N'com', CAST(N'2021-08-28T17:53:12.433' AS DateTime), N'LTC')
 GO
 SET IDENTITY_INSERT [dbo].[Events] OFF
 GO
@@ -574,6 +575,10 @@ GO
 INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (5, N'LTC', N'8eeca2c8862b7c0262b05a1438c6e8b460ba4323f8a2e1c2b135b4d864f2161f', CAST(0.00031000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', 1629907452, N'8082acc0-2a64-4983-9227-9ea395279df3', 18)
 GO
 INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (6, N'LTC', N'eed57f5771622a33095fbfa6fef2138bc02f1e36f5ed63166c541381bb12f5a6', CAST(0.00018660000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', 1629908243, N'8082acc0-2a64-4983-9227-9ea395279df3', 18)
+GO
+INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (7, N'LTC', N'87e294faea0ae519caaebae9e08decf7289d4d6858f7924e3f44406de2c67a20', CAST(0.00050000000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', 1629919866, N'8082acc0-2a64-4983-9227-9ea395279df3', 18)
+GO
+INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (8, N'LTC', N'9a1b7f65cad5b915c1b17d8d1b8896217e4db6f0606a2dad1fe5c9c8cb8738fa', CAST(0.00117850000000000000 AS Decimal(38, 20)), CAST(0.00000000000000000000 AS Decimal(38, 20)), N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', 1630090291, N'8082acc0-2a64-4983-9227-9ea395279df3', 18)
 GO
 SET IDENTITY_INSERT [dbo].[IncomeTransactions] OFF
 GO
@@ -615,33 +620,33 @@ INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [Curren
 GO
 INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (18, N'8082acc0-2a64-4983-9227-9ea395279df3', N'M8GGkgkfEvQsq6UQXk9SauXNAPgEugpdyp', N'8082acc0-2a64-4983-9227-9ea395279df3', N'LTC', CAST(N'2021-08-25T18:52:09.210' AS DateTime), CAST(N'2021-08-25T18:52:09.210' AS DateTime))
 GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (19, N'8082acc0-2a64-4983-9227-9ea395279df3', N'bc1qv3028u2przx3av99p8w9e8y7qw98v7vyf2238m', N'8082acc0-2a64-4983-9227-9ea395279df3', N'BTC', CAST(N'2021-08-28T12:12:58.557' AS DateTime), CAST(N'2021-08-28T12:12:58.557' AS DateTime))
+GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (20, N'8082acc0-2a64-4983-9227-9ea395279df3', N'M8mHhVoajHmmpapWwn8hmBZzo2hVAPo8SM', N'8082acc0-2a64-4983-9227-9ea395279df3', N'LTC', CAST(N'2021-08-28T12:13:06.090' AS DateTime), CAST(N'2021-08-28T12:13:06.090' AS DateTime))
+GO
+INSERT [dbo].[IncomeWallets] ([Id], [UserId], [Address], [AddressLabel], [CurrencyAcronim], [Created], [LastUpdate]) VALUES (21, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', N'MSEcitxyqetRrhU63ieYtqDRANreed3dud', N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', N'LTC', CAST(N'2021-08-28T13:53:55.250' AS DateTime), CAST(N'2021-08-28T13:53:55.250' AS DateTime))
+GO
 SET IDENTITY_INSERT [dbo].[IncomeWallets] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Transfers] ON 
+GO
+INSERT [dbo].[Transfers] ([Id], [WalletFromId], [WalletToId], [Value], [Date], [CurrencyAcronim], [Hash], [Comment]) VALUES (5, 14, 14, CAST(0.00008510000000000000 AS Decimal(38, 20)), CAST(N'2021-08-28T17:43:28.543' AS DateTime), N'LTC', N'GWXCq+zeQdK30tk0as4pdQvC1PWpzNwuHFKKN0khqU0=', N'com')
+GO
+INSERT [dbo].[Transfers] ([Id], [WalletFromId], [WalletToId], [Value], [Date], [CurrencyAcronim], [Hash], [Comment]) VALUES (6, 14, 12, CAST(0.00008510000000000000 AS Decimal(38, 20)), CAST(N'2021-08-28T17:46:07.597' AS DateTime), N'LTC', N'45h23DvPk337zKEcaDjfWRxcWk+MMBxLTdbzJbaFPE0=', N'com')
+GO
+INSERT [dbo].[Transfers] ([Id], [WalletFromId], [WalletToId], [Value], [Date], [CurrencyAcronim], [Hash], [Comment]) VALUES (7, 12, 14, CAST(0.00008510000000000000 AS Decimal(38, 20)), CAST(N'2021-08-28T17:51:53.680' AS DateTime), N'LTC', N'd9fce1eef0d16adda4ec6c2f35de8388123c86d0cbf041e1749924a2eafbe858', N'com')
+GO
+INSERT [dbo].[Transfers] ([Id], [WalletFromId], [WalletToId], [Value], [Date], [CurrencyAcronim], [Hash], [Comment]) VALUES (8, 14, 12, CAST(0.00008510000000000000 AS Decimal(38, 20)), CAST(N'2021-08-28T17:53:12.430' AS DateTime), N'LTC', N'e39876dc3bcf937dfbcca11c6838df591c5c5a4f8c301c4b4dd6f325b6853c4d', N'com')
+GO
+SET IDENTITY_INSERT [dbo].[Transfers] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-17T23:17:09.687' AS DateTime), CAST(N'2021-08-17T23:17:09.687' AS DateTime), NULL)
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (12, N'8082acc0-2a64-4983-9227-9ea395279df3', CAST(0.00008510000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-25T18:52:09.220' AS DateTime), CAST(N'2021-08-28T17:53:12.430' AS DateTime), NULL)
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00020000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-17T23:17:14.640' AS DateTime), CAST(N'2021-08-17T23:17:14.640' AS DateTime), NULL)
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (13, N'8082acc0-2a64-4983-9227-9ea395279df3', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-28T12:12:58.557' AS DateTime), CAST(N'2021-08-28T12:12:58.557' AS DateTime), NULL)
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (3, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'DOGE', CAST(N'2021-08-17T23:17:24.640' AS DateTime), CAST(N'2021-08-17T23:17:24.640' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (4, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'DASH', CAST(N'2021-08-17T23:17:31.333' AS DateTime), CAST(N'2021-08-17T23:17:31.333' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (5, N'53482f0f-47a2-4fb3-8c5e-66e2ab2136d1', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BCH', CAST(N'2021-08-17T23:17:38.740' AS DateTime), CAST(N'2021-08-17T23:17:38.740' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (6, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'ETH', CAST(N'2021-08-19T22:01:29.587' AS DateTime), CAST(N'2021-08-19T22:01:29.587' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (7, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-20T00:31:33.987' AS DateTime), CAST(N'2021-08-20T00:31:33.987' AS DateTime), N'6fa096b26a6a4ae3a6de1493754770d0')
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (8, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-08-20T00:31:33.997' AS DateTime), CAST(N'2021-08-20T00:31:33.997' AS DateTime), N'a553667ff2864698bb4cc40b4ff0a2a1')
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (9, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(0.00023000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-20T22:47:07.860' AS DateTime), CAST(N'2021-08-20T22:47:07.860' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (10, N'e0519b6d-3a94-43b2-b423-fc4891246a93', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'BTC', CAST(N'2021-08-24T22:19:00.830' AS DateTime), CAST(N'2021-08-24T22:19:00.830' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (11, N'e0519b6d-3a94-43b2-b423-fc4891246a93', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-24T22:19:08.453' AS DateTime), CAST(N'2021-08-24T22:19:08.453' AS DateTime), NULL)
-GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (12, N'8082acc0-2a64-4983-9227-9ea395279df3', CAST(0.00071660000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-25T18:52:09.220' AS DateTime), CAST(N'2021-08-25T18:52:09.220' AS DateTime), NULL)
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (14, N'2a36f77f-20b9-41b3-9276-ce72ac5e68e4', CAST(0.00000000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2021-08-28T13:53:55.250' AS DateTime), CAST(N'2021-08-28T17:53:12.430' AS DateTime), NULL)
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
@@ -702,17 +707,18 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spAddEvent]
+CREATE PROCEDURE [dbo].[spCreateEvent]
 @userid nvarchar(450),
 @type int,
 @value decimal(38,20),
 @comment nvarchar(450),
-@whenDate datetime
+@whenDate datetime,
+@currencyAcronim nvarchar(10)
 AS
 BEGIN
 
-insert into Events (UserId, Type, Value, Comment, WhenDate)
-values (@userid, @type, @value, @comment, @whenDate)
+insert into Events (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+values (@userid, @type, @value, @comment, @whenDate, @currencyAcronim)
 
 END
 
@@ -752,6 +758,33 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[spCreateTransfer]
+@walletFromId int,
+@walletToId int,
+@value decimal(38,20),
+@currencyAcronim nvarchar(10),
+@hash varchar(66),
+@new_identity    INT    OUTPUT
+AS
+BEGIN
+
+INSERT INTO Transfers(WalletFromId, WalletToId, Value,
+Date, CurrencyAcronim, Hash)
+VALUES (@walletFromId, @walletToId, @value, GETDATE(),
+@currencyAcronim, @hash)
+
+SELECT @new_identity = SCOPE_IDENTITY()
+
+SELECT @new_identity AS id
+
+RETURN
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[spCreateUserIncomeWallet]
 @userid nvarchar(450),
 @address nvarchar(max),
@@ -768,7 +801,7 @@ SELECT @new_identity = SCOPE_IDENTITY()
 
 SELECT @new_identity AS id
 
---–°–æ–∑–¥–∞—ë–º –≤–Ω—É—Ç—Ä–µ–Ω–Ω–∏–π –∫–æ—à–µ–ª—ë–∫, –µ—Å–ª–∏ –µ–≥–æ –Ω–µ –±—ã–ª–æ
+--—ÓÁ‰‡∏Ï ‚ÌÛÚÂÌÌËÈ ÍÓ¯ÂÎ∏Í, ÂÒÎË Â„Ó ÌÂ ·˚ÎÓ
 --insert wallet if not exist
 If Not Exists(SELECT 1 FROM Wallets WHERE UserId = @userid AND CurrencyAcronim = @currencyAcronim)
 Begin
@@ -888,7 +921,7 @@ CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -912,7 +945,7 @@ CREATE PROCEDURE [dbo].[spGet_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy,
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -961,7 +994,7 @@ Select transactions.* From IncomeTransactions transactions
 				 GROUP BY transactionGroup.CurrencyAcronim)
 	transactionMaxIdByAcronim
 	On transactions.Id = transactionMaxIdByAcronim.LastId
-	
+
 END
 
 
@@ -1093,6 +1126,46 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[spSendCoins]
+@senderUserId nvarchar(450),
+@receiverUserId nvarchar(450),
+@typeSend int,
+@typeRecieve int,
+
+@Comment nvarchar(450),
+@currencyAcronim nvarchar(10),
+@value decimal(38,20),
+
+@senderWalletId int,
+@receiverWalletId int,
+@hash varchar(66)
+AS
+BEGIN
+
+UPDATE Wallets
+SET Value -= @value, LastUpdate = GETDATE()
+WHERE ID = @senderWalletId
+
+UPDATE Wallets
+SET Value += @value, LastUpdate = GETDATE()
+WHERE Id = @receiverWalletId
+
+insert into Transfers (WalletFromId, WalletToId, Value, Date, CurrencyAcronim, Hash, Comment)
+values (@senderWalletId, @receiverWalletId, @value, GETDATE(), @currencyAcronim, @hash, @Comment)
+
+insert into Events (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+values (@senderUserId, @typeSend, @value, @Comment, GETDATE(), @currencyAcronim)
+
+insert into Events (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+values (@receiverUserId, @typeRecieve, @value, @Comment, GETDATE(), @currencyAcronim)
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[spUpdate_BTC_USDT_OpenOrder]
 @userid nvarchar(450),
 @isBuy bit,
@@ -1109,7 +1182,7 @@ SET    IsBuy = @isBuy,
        Amount = @amount,
 	   Total = @total,
        CreateUserId = @userid
-WHERE  OpenOrderId = @openOrderId 
+WHERE  OpenOrderId = @openOrderId
 
 END
 
@@ -1132,8 +1205,4 @@ RETURN
 
 END
 
-GO
-USE [master]
-GO
-ALTER DATABASE [Exchange] SET  READ_WRITE 
 GO
