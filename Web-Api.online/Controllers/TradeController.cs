@@ -117,21 +117,37 @@ namespace Web_Api.online.Controllers
 
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
             decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
+            decimal total = priceDecimal * amountDecimal
+
+            var wallet = await _walletsRepository
+                .GetUserWalletAsync(
+                    userId, 
+                    orderModel.IsBuy ? "USDT" : "BTC");
+
+            if(wallet.Value < total)
+            {
+                return BadRequest("You doesn't have enough money for deal");
+            }
+
+            wallet.Value -= total;
+            await _walletsRepository.UpdateWalletBalance(wallet);
 
             BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
             {
                 IsBuy = orderModel.IsBuy,
                 Price = priceDecimal,
                 Amount = amountDecimal,
+                Total = total,
                 CreateUserId = userId,
                 CreateDate = DateTime.Now,
             };
 
-            long newId = await _tradeRepository.spAdd_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
+            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
             {
                 IsBuy = orderModel.IsBuy,
                 Amount = amountDecimal,
                 Price = priceDecimal,
+                Total = total,
                 UserId = userId
             });
 
@@ -149,6 +165,15 @@ namespace Web_Api.online.Controllers
                 {
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
+                        var closedOrderUserWallet = await _walletsRepository
+                            .GetUserWalletAsync(
+                                closedOrder.Order.CreateUserId,
+                                closedOrder.Order.IsBuy ? "BTC" : "USDT");
+
+                        closedOrderUserWallet.Value += closedOrder.Order.Total;
+
+                        await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
+
                         await _tradeRepository
                             .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
                                 closedOrder.Order,

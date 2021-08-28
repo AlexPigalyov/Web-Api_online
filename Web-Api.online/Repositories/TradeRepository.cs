@@ -115,7 +115,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<long> spAdd_BTC_USDT_Order(Args_spAdd_BTC_USDT_OpenOrder model)
+        public async Task<long> spCreate_BTC_USDT_Order(Args_spAdd_BTC_USDT_OpenOrder model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -126,10 +126,11 @@ namespace Web_Api.online.Repositories
                     parameters.Add("isBuy", model.IsBuy);
                     parameters.Add("price", model.Price);
                     parameters.Add("amount", model.Amount);
+                    parameters.Add("total", model.Total);
                     parameters.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                     long result = await db.QueryFirstAsync<long>(
-                        "spAdd_BTC_USDT_OpenOrder",
+                        "spCreate_BTC_USDT_OpenOrder",
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
