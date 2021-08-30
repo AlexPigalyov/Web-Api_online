@@ -98,7 +98,7 @@ namespace Web_Api.online.Controllers
             if (!string.IsNullOrEmpty(userId))
             {
                 return View(await _tradeRepository
-                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate("53cd122d-6253-4981-b290-11471f67c528"));
+                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
             }
 
             return BadRequest("You're not authorized");
