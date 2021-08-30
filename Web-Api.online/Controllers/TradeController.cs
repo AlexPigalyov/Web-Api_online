@@ -88,7 +88,7 @@ namespace Web_Api.online.Controllers
                     .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
             }
 
-            return BadRequest("You're not authorized");
+            return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
         }
 
         public async Task<ActionResult> ClosedOrders()
@@ -101,7 +101,7 @@ namespace Web_Api.online.Controllers
                     .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
             }
 
-            return BadRequest("You're not authorized");
+            return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
         }
 
         [HttpPost]
