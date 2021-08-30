@@ -117,7 +117,7 @@ namespace Web_Api.online.Controllers
 
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
             decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
-            decimal total = priceDecimal * amountDecimal
+            decimal total = priceDecimal * amountDecimal;
 
             var wallet = await _walletsRepository
                 .GetUserWalletAsync(
