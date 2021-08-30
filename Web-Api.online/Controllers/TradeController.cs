@@ -11,6 +11,7 @@ using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
@@ -52,6 +53,7 @@ namespace Web_Api.online.Controllers
             public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
         }
 
+        [Authorize]
         public async Task<ActionResult> CancelOrder(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -78,6 +80,7 @@ namespace Web_Api.online.Controllers
             return Ok();
         }
 
+        [Authorize]
         public async Task<ActionResult> OpenOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -91,6 +94,7 @@ namespace Web_Api.online.Controllers
             return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
         }
 
+        [Authorize]
         public async Task<ActionResult> ClosedOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -104,6 +108,7 @@ namespace Web_Api.online.Controllers
             return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("trade/createorder")]
         public async Task<ActionResult> CreateOrder([FromBody]OrderModel orderModel)
