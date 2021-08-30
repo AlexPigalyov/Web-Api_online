@@ -31,7 +31,7 @@ namespace Web_Api.online.Controllers
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;
-            _hubcontext = hubcontext;            
+            _hubcontext = hubcontext;
         }
 
         // GET: TradeController
@@ -111,7 +111,7 @@ namespace Web_Api.online.Controllers
         [Authorize]
         [HttpPost]
         [Route("trade/createorder")]
-        public async Task<ActionResult> CreateOrder([FromBody]OrderModel orderModel)
+        public async Task<ActionResult> CreateOrder([FromBody] OrderModel orderModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -126,10 +126,10 @@ namespace Web_Api.online.Controllers
 
             var wallet = await _walletsRepository
                 .GetUserWalletAsync(
-                    userId, 
+                    userId,
                     orderModel.IsBuy ? "USDT" : "BTC");
 
-            if(wallet.Value < total)
+            if (wallet.Value < total)
             {
                 return BadRequest("You doesn't have enough money for deal");
             }

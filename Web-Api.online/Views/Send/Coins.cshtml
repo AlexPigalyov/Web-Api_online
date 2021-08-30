@@ -18,7 +18,11 @@
                     <input asp-for="Currency" type="hidden" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="UserId" class="control-label">User id</label>
+                    <label asp-for="Balance" class="control-label">Balance @Model.Balance</label>
+                    <input asp-for="Balance" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label">User name, email, phone, wallet</label>
                     <input asp-for="UserId" class="form-control" />
                     <span asp-validation-for="UserId" class="text-danger"></span>
                 </div>
