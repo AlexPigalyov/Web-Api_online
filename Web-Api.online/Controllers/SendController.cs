@@ -37,6 +37,7 @@ namespace Web_Api.online.Controllers
             public string UserId { get; set; }
             [Required]
             public string Currency { get; set; }
+            public decimal Balance { get; set; }
             [Required]
             public string Amount { get; set; }
             public string Comment { get; set; }
@@ -60,15 +61,20 @@ namespace Web_Api.online.Controllers
             return View(wallets);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Coins(string currency)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Model.Currency = currency;
             Model.AmountMin = amountMin;
+            Model.Balance = _walletsRepository.GetUserWalletAsync(userId, currency).Result.Value;
             Model.Commission = 0;
             return View(Model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Coins(CoinsModel coinsModel)
         {

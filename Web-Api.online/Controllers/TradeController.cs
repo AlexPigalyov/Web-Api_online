@@ -11,6 +11,7 @@ using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
@@ -32,7 +33,7 @@ namespace Web_Api.online.Controllers
             IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
-            _tradeRepository = tradeRepository;
+            _tradeRepository = tradeRepository;          
             _botAuthCodesRepository = botAuthCodesRepository;
             _hubcontext = hubcontext;            
         }
@@ -56,6 +57,7 @@ namespace Web_Api.online.Controllers
             public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
         }
 
+        [Authorize]
         public async Task<ActionResult> CancelOrder(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -82,6 +84,7 @@ namespace Web_Api.online.Controllers
             return Ok();
         }
 
+        [Authorize]
         public async Task<ActionResult> OpenOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -89,12 +92,13 @@ namespace Web_Api.online.Controllers
             if (!string.IsNullOrEmpty(userId))
             {
                 return View(await _tradeRepository
-                    .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate("53cd122d-6253-4981-b290-11471f67c528"));
+                    .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
             }
 
-            return BadRequest("You're not authorized");
+            return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
         }
 
+        [Authorize]
         public async Task<ActionResult> ClosedOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -102,15 +106,15 @@ namespace Web_Api.online.Controllers
             if (!string.IsNullOrEmpty(userId))
             {
                 return View(await _tradeRepository
-                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate("53cd122d-6253-4981-b290-11471f67c528"));
+                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
             }
 
-            return BadRequest("You're not authorized");
+            return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
         }
 
         [HttpPost]
         [Route("trade/createorder")]
-        public async Task<ActionResult> CreateOrder([FromBody]OrderModel orderModel)
+        public async Task<ActionResult> CreateOrder([FromBody] OrderModel orderModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

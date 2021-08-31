@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Web_Api.online</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css?2" />
     <link rel="stylesheet" href="~/css/orderbook.css" />
     <!-- third party css -->
     <link href="~/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
@@ -42,7 +42,7 @@
                         <div class="collapse" id="sidebarTrades">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="/Trade/">Main</a>
+                                    <a href="/Trade/">Markets</a>
                                 </li>
                                 <li>
                                     <a href="/Trade/OpenOrders">Open orders</a>
@@ -62,17 +62,19 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="/Withdraw" class="side-nav-link">
-                            <i class="uil-comments-alt"></i>
-                            <span> Withdraw  </span>
-                        </a>
-                    </li>
-                    <li class="side-nav-item">
                         <a href="/Send" class="side-nav-link">
                             <i class="uil-comments-alt"></i>
                             <span> Send  </span>
                         </a>
                     </li>
+
+                    <li class="side-nav-item">
+                        <a href="/Withdraw" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Withdraw  </span>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -113,43 +115,43 @@
                         {
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                                   aria-expanded="false">
+                               aria-expanded="false">
                                     <span>
                                         <span class="account-user-name"> @User.Identity.Name</span>
                                     </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
                                     <!-- item-->
-                                    <div class=" dropdown-header noti-title">
+                                <div class=" dropdown-header noti-title">
                                         <h6 class="text-overflow m-0">Welcome !</h6>
                                     </div>
 
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <i class="mdi mdi-account-circle me-1"></i>
                                         <span>My Account</span>
                                     </a>
 
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <i class="mdi mdi-account-edit me-1"></i>
                                         <span>Settings</span>
                                     </a>
 
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <i class="mdi mdi-lifebuoy me-1"></i>
                                         <span>Support</span>
                                     </a>
 
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <i class="mdi mdi-lock-outline me-1"></i>
                                         <span>Lock Screen</span>
                                     </a>
 
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <i class="mdi mdi-logout me-1"></i>
                                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                             <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
@@ -194,7 +196,6 @@
     <script src="~/js/app.min.js"></script>
 
     <!-- third party js -->
-    
     <!-- third party js ends -->
     <!-- demo app -->
     <script src="~/js/pages/demo.dashboard.js"></script>
