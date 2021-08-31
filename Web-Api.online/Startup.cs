@@ -19,6 +19,7 @@ using Web_Api.online.Services.DI;
 using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Services;
+using Web_Api.online.Models.Constants;
 
 namespace Web_Api.online
 {
@@ -66,6 +67,7 @@ namespace Web_Api.online
             services.AddTransient<TradeRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
             services.AddTransient<EventsRepository>();
+            services.AddTransient<BotAuthCodesRepository>();
 
 
             services.AddTransient<TransactionsRepository>();
@@ -74,7 +76,7 @@ namespace Web_Api.online
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
@@ -112,6 +114,60 @@ namespace Web_Api.online
                 endpoints.MapHub<btcusdtHub>("/btcusdthub");
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
+
+            await BotAuthCodesSeed(serviceProvider);
+        }
+
+        private async Task BotAuthCodesSeed(IServiceProvider serviceProvider)
+        {
+            var botAuthCodesRepository = serviceProvider.GetService<BotAuthCodesRepository>();
+
+            var authCodes = await botAuthCodesRepository.GetBotAuthCodesByUserId(UserId.DefaultUser);                       
+
+            if(!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
+            {
+                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                {
+                    BotAuthCode = BotAuthCode.Binance,
+                    UserId = UserId.DefaultUser
+                });
+            }
+
+            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.BitFinex))
+            {
+                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                {
+                    BotAuthCode = BotAuthCode.BitFinex,
+                    UserId = UserId.DefaultUser
+                });
+            }
+
+            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Huobi))
+            {
+                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                {
+                    BotAuthCode = BotAuthCode.Huobi,
+                    UserId = UserId.DefaultUser
+                });
+            }
+
+            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Kucoin))
+            {
+                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                {
+                    BotAuthCode = BotAuthCode.Kucoin,
+                    UserId = UserId.DefaultUser
+                });
+            }
+
+            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Poloniex))
+            {
+                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                {
+                    BotAuthCode = BotAuthCode.Poloniex,
+                    UserId = UserId.DefaultUser
+                });
+            }
         }
     }
 }

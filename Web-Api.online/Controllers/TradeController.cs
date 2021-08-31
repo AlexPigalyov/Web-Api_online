@@ -14,6 +14,7 @@ using Web_Api.online.Models.StoredProcedures;
 using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
+using Web_Api.online.Models.Constants;
 
 namespace Web_Api.online.Controllers
 {
@@ -22,14 +23,17 @@ namespace Web_Api.online.Controllers
         private readonly WalletsRepository _walletsRepository;
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<btcusdtHub> _hubcontext;
+        private readonly BotAuthCodesRepository _botAuthCodesRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
             TradeRepository tradeRepository,
+            BotAuthCodesRepository botAuthCodesRepository,
             IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;
+            _botAuthCodesRepository = botAuthCodesRepository;
             _hubcontext = hubcontext;            
         }
 
@@ -110,27 +114,57 @@ namespace Web_Api.online.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            bool isBot = false;
+
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("You're not authorized");
+                if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
+                {
+                    var botAuthCode = await _botAuthCodesRepository.GetBotAuthCodeByBotAuthCode(orderModel.BotAuthCode);
+
+                    if (botAuthCode.UserId != UserId.DefaultUser)
+                    {
+                        if(botAuthCode.UserId != userId)
+                        { 
+                            return BadRequest("You're not authorized");
+                        }
+                        else
+                        {
+                            isBot = true;
+                            userId = botAuthCode.UserId;
+                        }
+                    }
+                    else
+                    {
+                        isBot = true;
+                        userId = botAuthCode.UserId;
+                    }
+                }
+                else
+                {
+                    return BadRequest("You're not authorized");
+                }                
             }
 
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
             decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
-            decimal total = priceDecimal * amountDecimal
+            decimal total = priceDecimal * amountDecimal;
 
-            var wallet = await _walletsRepository
+            if (!isBot)
+            {
+                var wallet = await _walletsRepository
                 .GetUserWalletAsync(
-                    userId, 
+                    userId,
                     orderModel.IsBuy ? "USDT" : "BTC");
 
-            if(wallet.Value < total)
-            {
-                return BadRequest("You doesn't have enough money for deal");
-            }
+                if (wallet.Value < total)
+                {
+                    return BadRequest("You doesn't have enough money for deal");
+                }
 
-            wallet.Value -= total;
-            await _walletsRepository.UpdateWalletBalance(wallet);
+                wallet.Value -= total;
+                await _walletsRepository.UpdateWalletBalance(wallet);
+            }           
 
             BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
             {
@@ -165,14 +199,17 @@ namespace Web_Api.online.Controllers
                 {
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
-                        var closedOrderUserWallet = await _walletsRepository
+                        if(isBot == false)
+                        {
+                            var closedOrderUserWallet = await _walletsRepository
                             .GetUserWalletAsync(
                                 closedOrder.Order.CreateUserId,
                                 closedOrder.Order.IsBuy ? "BTC" : "USDT");
 
-                        closedOrderUserWallet.Value += closedOrder.Order.Total;
+                            closedOrderUserWallet.Value += closedOrder.Order.Total;
 
-                        await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
+                            await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
+                        }                        
 
                         await _tradeRepository
                             .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
