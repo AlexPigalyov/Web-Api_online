@@ -11,8 +11,11 @@ using Web_Api.online.Extensions;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.WithdrawModels;
 using Web_Api.online.Repositories;
 using Web_Api.online.Repositories.Abstract;
+using Web_Api.online.Services;
+using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Controllers
 {
@@ -20,93 +23,59 @@ namespace Web_Api.online.Controllers
     public class WithdrawController : Controller
     {
         private WalletsRepository _walletsRepository;
-        private ILitecoinService _litecoinService;
-        private EventsRepository _eventsRepository;
-
-        public LTCModel Model { get; set; }
-
-        public class LTCModel
-        {
-            public string Status { get; set; }
-            public decimal AmountMin { get; set; }
-            public decimal Commission { get; set; }
-
-            [Required]
-            public string Currency { get; set; }
-            [Required]
-            public string Address { get; set; }
-            [Required]
-            public string Amount { get; set; }
-        }
+        private WithdrawService _withdrawService;
 
         public WithdrawController(WalletsRepository walletsRepository,
-            ILitecoinService litecoinService,
-            EventsRepository eventsRepository)
+            WithdrawService withdrawService)
         {
-            Model = new LTCModel();
             _walletsRepository = walletsRepository;
-            _litecoinService = litecoinService;
-            _eventsRepository = eventsRepository;
+            _withdrawService = withdrawService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currency)
         {
+            //нужно ещё проверить есть ли монета с таким акронимом
+            if (!string.IsNullOrEmpty(currency))
+            {
+                if(currency == "LTC")
+                {
+                    //пример для как делать кастомный вывод
+                    // создаём кастомную модель и вьюшку
+                    return View("LTC", new LTCWithdrawModel());
+                }
+
+                return View("GeneralWithdrawPage", new GeneralWithdrawModel(currency));
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
             return View(wallets);
         }
 
-        [HttpGet]
-        public IActionResult LTC()
+        [HttpPost]
+        public async Task<IActionResult> Index(GeneralWithdrawModel model)
         {
-            Model.Currency = "LTC";
-            Model.AmountMin = 777;
-            Model.Commission = 777;
-            return View(Model);
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var m = await _withdrawService.Send(model, userId);
+                return View(m.Currency, m);
+            }
+            return View(model.Currency, model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> LTC(LTCModel indexModel)
+        public async Task<IActionResult> LTC(LTCWithdrawModel model)
         {
-
+            //пример для как делать кастомный вывод
+            //ниже можно написать какую-то другую логику
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var wallet = await _walletsRepository.GetUserWalletAsync(userId, "LTC");
-                    decimal? _amount = indexModel.Amount.ConvertToDecimal();
-                    if (_amount.Value > 0 && _amount.Value <= wallet.Value)
-                    {
-                        _litecoinService.SendToAddress(indexModel.Address, _amount.Value, "", "", true);
-                        wallet.Value -= _amount.Value;
-
-                        await _eventsRepository.CreateEvent(new Events()
-                        {
-                            UserId = userId,
-                            Type = (int)EventType.Withdraw,
-                            Comment = "Success",
-                            Value = _amount.Value,
-                            WhenDate = DateTime.Now,
-                            CurrencyAcronim = "LTC"
-                        });
-                        indexModel.Status = "Success";
-                        await _walletsRepository.UpdateWalletBalance(wallet);
-                    }
-                    else
-                    {
-                        indexModel.Status = "Недостаточно монет";
-                    }
-                }
-                catch
-                {
-                    indexModel.Status = "error";
-                    return View(indexModel);
-                }
-
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var m = await _withdrawService.Send(model, userId);
+                return View(m.Currency, m);
             }
-            return View(nameof(LTC), indexModel);
+            return View(model.Currency, model);
         }
     }
 }

@@ -72,6 +72,7 @@ namespace Web_Api.online
 
             services.AddTransient<TransactionsRepository>();
             services.AddTransient<TransactionManager>();
+            services.AddTransient<WithdrawService>();
             services.AddCoinManager(Configuration);
         }
 
