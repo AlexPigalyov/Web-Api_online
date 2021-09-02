@@ -126,7 +126,7 @@ namespace Web_Api.online.Controllers
                 {
                     var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
 
-                    if (botAuthCode.UserId != UserId.DefaultUser)
+                    if (botAuthCode.UserId != UserId.ParserBot)
                     {
                         if (botAuthCode.UserId != userId)
                         {
@@ -178,6 +178,12 @@ namespace Web_Api.online.Controllers
                 CreateDate = DateTime.Now,
             };
 
+            var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
+
+            var selectedOrders = orders.Where(x => x.IsBuy != orderModel.IsBuy && (orderModel.IsBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
+
+            var result = ProcessOrders(selectedOrders, order);
+
             long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
             {
                 IsBuy = orderModel.IsBuy,
@@ -188,12 +194,6 @@ namespace Web_Api.online.Controllers
             });
 
             order.OpenOrderId = newId;
-
-            var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
-
-            var selectedOrders = orders.Where(x => x.IsBuy != orderModel.IsBuy && (orderModel.IsBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
-
-            var result = ProcessOrders(selectedOrders, order);
 
             if (result.UpdatedOrders != null)
             {

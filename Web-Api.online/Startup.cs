@@ -20,6 +20,7 @@ using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Services;
 using Web_Api.online.Models.Constants;
+using Web_Api.online.Models;
 
 namespace Web_Api.online
 {
@@ -116,22 +117,75 @@ namespace Web_Api.online
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
 
-            await BotAuthCodesSeed(serviceProvider);
+            UserSeed(serviceProvider).Wait();
+            WalletSeed(serviceProvider).Wait();
+            BotAuthCodesSeed(serviceProvider).Wait();
+        }
+        private async Task UserSeed(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+
+            var user = await userManager.FindByIdAsync(UserId.ParserBot);
+
+            if (user == null)
+            {
+                await userManager.CreateAsync(new IdentityUser()
+                {
+                    Id = UserId.ParserBot,
+                    UserName = "BotParserAccount",
+                    Email = "Bot@account.com"
+                }, "botaccountpassword");
+            }
+        }
+
+        private async Task WalletSeed(IServiceProvider serviceProvider)
+        {
+            var walletRepository = serviceProvider.GetService<WalletsRepository>();
+
+            var wallets = await walletRepository.GetUserWalletsAsync(UserId.ParserBot);
+
+            if (wallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "BTC",
+                    UserId = UserId.ParserBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+
+            if (wallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "USDT",
+                    UserId = UserId.ParserBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
         }
 
         private async Task BotAuthCodesSeed(IServiceProvider serviceProvider)
         {
             var botsRepository = serviceProvider.GetService<BotsRepository>();
 
-            var authCodes = await botsRepository.GetBotByUserId(UserId.DefaultUser);                       
+            var authCodes = await botsRepository.GetBotByUserId(UserId.ParserBot);
 
-            if(!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
+            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
             {
                 await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
                     Name = "Binance",
                     BotAuthCode = BotAuthCode.Binance,
-                    UserId = UserId.DefaultUser
+                    UserId = UserId.ParserBot
                 });
             }
 
@@ -141,7 +195,7 @@ namespace Web_Api.online
                 {
                     Name = "BitFinex",
                     BotAuthCode = BotAuthCode.BitFinex,
-                    UserId = UserId.DefaultUser
+                    UserId = UserId.ParserBot
                 });
             }
 
@@ -151,7 +205,7 @@ namespace Web_Api.online
                 {
                     Name = "Huobi",
                     BotAuthCode = BotAuthCode.Huobi,
-                    UserId = UserId.DefaultUser
+                    UserId = UserId.ParserBot
                 });
             }
 
@@ -161,7 +215,7 @@ namespace Web_Api.online
                 {
                     Name = "Kucoin",
                     BotAuthCode = BotAuthCode.Kucoin,
-                    UserId = UserId.DefaultUser
+                    UserId = UserId.ParserBot
                 });
             }
 
@@ -171,7 +225,7 @@ namespace Web_Api.online
                 {
                     Name = "Poloniex",
                     BotAuthCode = BotAuthCode.Poloniex,
-                    UserId = UserId.DefaultUser
+                    UserId = UserId.ParserBot
                 });
             }
         }
