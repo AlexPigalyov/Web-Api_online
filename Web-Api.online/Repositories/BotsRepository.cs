@@ -12,23 +12,24 @@ using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
 {
-    public class BotAuthCodesRepository
+    public class BotsRepository
     {
         private readonly IConfiguration _configuration;
 
-        public BotAuthCodesRepository(IConfiguration configuration)
+        public BotsRepository(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task CreateBotAuthCode(Args_spCreateBotAuthCode model)
+        public async Task CreateBot(Args_spCreateBot model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spCreateBotAuthCode",
+                    "spCreateBot",
                     new
                     {
+                        name = model.Name,
                         botAuthCode = model.BotAuthCode,
                         userId = model.UserId
                     },
@@ -36,12 +37,12 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task DeleteBotAuthCodeById(string id)
+        public async Task DeleteBotById(string id)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spDeleteBotAuthCode_ById",
+                    "spDeleteBots_ById",
                     new
                     {
                         id = id
@@ -50,13 +51,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<BotAuthCodes>> GetBotAuthCodesByUserId(string userId)
+        public async Task<List<Bots>> GetBotByUserId(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<BotAuthCodes> result = (List<BotAuthCodes>)
-                    await db.QueryAsync<BotAuthCodes>(
-                        "spGetBotAuthCodes_ById",
+                List<Bots> result = (List<Bots>)
+                    await db.QueryAsync<Bots>(
+                        "spGetBots_ById",
                         new { userid = userId },
                         commandType: CommandType.StoredProcedure);
 
@@ -64,12 +65,12 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<BotAuthCodes> GetBotAuthCodeByBotAuthCode(string botAuthCode)
+        public async Task<Bots> GetBotByBotAuthCode(string botAuthCode)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                BotAuthCodes result = await db.QueryFirstAsync<BotAuthCodes>(
-                        "spGetBotAuthCode_ByBotAuthCode",
+                Bots result = await db.QueryFirstAsync<Bots>(
+                        "spGetBots_ByBotAuthCode",
                         new { botAuthCode = botAuthCode },
                         commandType: CommandType.StoredProcedure);
 

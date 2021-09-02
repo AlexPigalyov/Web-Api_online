@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Web-Api.online";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bots</h1>
+</div>
+
+<div class="row mb-2">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Warning - </strong> Do not close this page, otherwise the bot will stop working
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-modal">Create new bot</button>
+        <div id="create-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                        <form class="pl-3 pr-3" method="post" asp-controller="Bots" asp-action="CreateBot">
+                            <div class="form-group">
+                                <label for="username">Name</label>
+                                <input class="form-control" type="text" id="name" required="" placeholder="Bot-1">
+                            </div>
+
+                            <div class="form-group text-center">
+                                <button class="btn btn-primary" type="submit">Create</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<table id="botsList" class="table table-striped table-centered mb-0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Valute Pair</th>
+            <th>Srategy</th>
+            <th>Balance</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    <select name="valutePairs" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option value="0">BTC-USDT</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="strategy" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option value="0">Standart</option>
+                    </select>
+                </td>
+                <td>
+                    60$
+                    <a href="javascript:void(0);" class="btn btn-danger ml-2">
+                        <i class="mdi mdi-plus-circle mr-2"></i>
+                        Add Balance
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" class="btn btn-danger ml-2">
+                        <i class="mdi mdi-plus-circle mr-2"></i>
+                        Start
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="~/js/site.js"></script>

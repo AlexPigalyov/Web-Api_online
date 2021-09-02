@@ -5,12 +5,12 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[spGetBotAuthCode_ByBotAuthCode]
-@botAuthCode nvarchar(450)
+ALTER PROCEDURE [dbo].[spGetBots_ById]
+@userid nvarchar(450)
 AS
 BEGIN
 
-SELECT * FROM BotAuthCodes WHERE BotAuthCode = @botAuthCode
+SELECT * FROM Bots WHERE UserId = @userid
 	
 END
 

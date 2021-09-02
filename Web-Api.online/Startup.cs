@@ -67,7 +67,7 @@ namespace Web_Api.online
             services.AddTransient<TradeRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
             services.AddTransient<EventsRepository>();
-            services.AddTransient<BotAuthCodesRepository>();
+            services.AddTransient<BotsRepository>();
 
 
             services.AddTransient<TransactionsRepository>();
@@ -121,14 +121,15 @@ namespace Web_Api.online
 
         private async Task BotAuthCodesSeed(IServiceProvider serviceProvider)
         {
-            var botAuthCodesRepository = serviceProvider.GetService<BotAuthCodesRepository>();
+            var botsRepository = serviceProvider.GetService<BotsRepository>();
 
-            var authCodes = await botAuthCodesRepository.GetBotAuthCodesByUserId(UserId.DefaultUser);                       
+            var authCodes = await botsRepository.GetBotByUserId(UserId.DefaultUser);                       
 
             if(!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
             {
-                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
+                    Name = "Binance",
                     BotAuthCode = BotAuthCode.Binance,
                     UserId = UserId.DefaultUser
                 });
@@ -136,8 +137,9 @@ namespace Web_Api.online
 
             if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.BitFinex))
             {
-                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
+                    Name = "BitFinex",
                     BotAuthCode = BotAuthCode.BitFinex,
                     UserId = UserId.DefaultUser
                 });
@@ -145,8 +147,9 @@ namespace Web_Api.online
 
             if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Huobi))
             {
-                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
+                    Name = "Huobi",
                     BotAuthCode = BotAuthCode.Huobi,
                     UserId = UserId.DefaultUser
                 });
@@ -154,8 +157,9 @@ namespace Web_Api.online
 
             if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Kucoin))
             {
-                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
+                    Name = "Kucoin",
                     BotAuthCode = BotAuthCode.Kucoin,
                     UserId = UserId.DefaultUser
                 });
@@ -163,8 +167,9 @@ namespace Web_Api.online
 
             if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Poloniex))
             {
-                await botAuthCodesRepository.CreateBotAuthCode(new Models.StoredProcedures.Args_spCreateBotAuthCode()
+                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
+                    Name = "Poloniex",
                     BotAuthCode = BotAuthCode.Poloniex,
                     UserId = UserId.DefaultUser
                 });
