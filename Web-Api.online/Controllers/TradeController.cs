@@ -24,18 +24,18 @@ namespace Web_Api.online.Controllers
         private readonly WalletsRepository _walletsRepository;
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<btcusdtHub> _hubcontext;
-        private readonly BotAuthCodesRepository _botAuthCodesRepository;
+        private readonly BotsRepository _botsRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
             TradeRepository tradeRepository,
-            BotAuthCodesRepository botAuthCodesRepository,
+            BotsRepository botsRepository,
             IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
-            _tradeRepository = tradeRepository;          
-            _botAuthCodesRepository = botAuthCodesRepository;
-            _hubcontext = hubcontext;            
+            _tradeRepository = tradeRepository;
+            _botsRepository = botsRepository;
+            _hubcontext = hubcontext;
         }
 
         // GET: TradeController
@@ -124,12 +124,12 @@ namespace Web_Api.online.Controllers
             {
                 if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
                 {
-                    var botAuthCode = await _botAuthCodesRepository.GetBotAuthCodeByBotAuthCode(orderModel.BotAuthCode);
+                    var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
 
                     if (botAuthCode.UserId != UserId.DefaultUser)
                     {
-                        if(botAuthCode.UserId != userId)
-                        { 
+                        if (botAuthCode.UserId != userId)
+                        {
                             return BadRequest("You're not authorized");
                         }
                         else
@@ -147,28 +147,26 @@ namespace Web_Api.online.Controllers
                 else
                 {
                     return BadRequest("You're not authorized");
-                }                
+                }
             }
 
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
             decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
             decimal total = priceDecimal * amountDecimal;
 
-            if (!isBot)
-            {
-                var wallet = await _walletsRepository
+            var wallet = await _walletsRepository
                 .GetUserWalletAsync(
                     userId,
                     orderModel.IsBuy ? "USDT" : "BTC");
 
-                if (wallet.Value < total)
-                {
-                    return BadRequest("You doesn't have enough money for deal");
-                }
+            if (wallet.Value < total)
+            {
+                return BadRequest("You doesn't have enough money for deal");
+            }
 
-                wallet.Value -= total;
-                await _walletsRepository.UpdateWalletBalance(wallet);
-            }           
+            wallet.Value -= total;
+            await _walletsRepository.UpdateWalletBalance(wallet);
+
 
             BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
             {
@@ -203,17 +201,14 @@ namespace Web_Api.online.Controllers
                 {
                     if (closedOrder.RemoveOpenOrderFromDataBase == true)
                     {
-                        if(isBot == false)
-                        {
-                            var closedOrderUserWallet = await _walletsRepository
-                            .GetUserWalletAsync(
-                                closedOrder.Order.CreateUserId,
-                                closedOrder.Order.IsBuy ? "BTC" : "USDT");
+                        var closedOrderUserWallet = await _walletsRepository
+                        .GetUserWalletAsync(
+                            closedOrder.Order.CreateUserId,
+                            closedOrder.Order.IsBuy ? "BTC" : "USDT");
 
-                            closedOrderUserWallet.Value += closedOrder.Order.Total;
+                        closedOrderUserWallet.Value += closedOrder.Order.Total;
 
-                            await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
-                        }                        
+                        await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
 
                         await _tradeRepository
                             .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
@@ -405,61 +400,6 @@ namespace Web_Api.online.Controllers
             model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
 
             return View(model);
-        }
-
-        // GET: TradeController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: TradeController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-
-        // GET: TradeController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: TradeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: TradeController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: TradeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
