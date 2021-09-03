@@ -35,18 +35,14 @@ namespace Web_Api.online.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string currency)
         {
-            //нужно ещё проверить есть ли монета с таким акронимом
-            if (!string.IsNullOrEmpty(currency))
-            {
-                if(currency == "LTC")
-                {
-                    //пример для как делать кастомный вывод
-                    // создаём кастомную модель и вьюшку
-                    return View("LTC", new LTCWithdrawModel());
-                }
+            var currencies = await _walletsRepository.GetCurrenciesAsync();
+            var _currency = currencies.FirstOrDefault(x => x.Acronim == currency);
 
-                return View("GeneralWithdrawPage", new GeneralWithdrawModel(currency));
+            if (_currency != null)
+            {
+                return View("GeneralWithdrawPage", new GeneralWithdrawModel(_currency.Name));
             }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
             return View(wallets);
@@ -55,20 +51,6 @@ namespace Web_Api.online.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(GeneralWithdrawModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var m = await _withdrawService.Send(model, userId);
-                return View(m.Currency, m);
-            }
-            return View(model.Currency, model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LTC(LTCWithdrawModel model)
-        {
-            //пример для как делать кастомный вывод
-            //ниже можно написать какую-то другую логику
             if (ModelState.IsValid)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
