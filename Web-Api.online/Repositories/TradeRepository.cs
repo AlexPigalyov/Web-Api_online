@@ -72,6 +72,30 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<decimal> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrders openOrder)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    var p = new DynamicParameters();
+                    p.Add("createUserId", openOrder.CreateUserId);
+                    p.Add("isBuy", openOrder.IsBuy);
+                    p.Add("price", openOrder.Price);
+                    p.Add("amount", openOrder.Amount);
+                    p.Add("total", openOrder.Total);
+                    p.Add("openOrderId", openOrder.OpenOrderId);
+                    p.Add("createDate", openOrder.CreateDate);
+                    p.Add("updatedOrderAmount", dbType: DbType.Decimal, direction: ParameterDirection.Output);
+
+                    await db.QueryAsync<decimal>("spProcess_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
+
+                    return p.Get<decimal>("updatedOrderAmount");
+                }
+                catch (Exception ex) { return 0; }
+            }
+        }
+
         public async Task spMove_BTC_USDT_FromOpenOrdersToClosedOrders(BTC_USDT_OpenOrders openOrder, string boughtUserId, ClosedOrderStatus status)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))

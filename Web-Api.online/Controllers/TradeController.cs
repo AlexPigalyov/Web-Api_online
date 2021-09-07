@@ -167,6 +167,14 @@ namespace Web_Api.online.Controllers
             wallet.Value -= total;
             await _walletsRepository.UpdateWalletBalance(wallet);
 
+            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
+            {
+                IsBuy = orderModel.IsBuy,
+                Amount = amountDecimal,
+                Price = priceDecimal,
+                Total = total,
+                UserId = userId
+            });
 
             BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
             {
@@ -178,50 +186,47 @@ namespace Web_Api.online.Controllers
                 CreateDate = DateTime.Now,
             };
 
-            var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
-
-            var selectedOrders = orders.Where(x => x.IsBuy != orderModel.IsBuy && (orderModel.IsBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
-
-            var result = ProcessOrders(selectedOrders, order);
-
-            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
-            {
-                IsBuy = orderModel.IsBuy,
-                Amount = amountDecimal,
-                Price = priceDecimal,
-                Total = total,
-                UserId = userId
-            });
-
             order.OpenOrderId = newId;
 
-            if (result.UpdatedOrders != null)
+            //var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
+
+            //var selectedOrders = orders.Where(x => x.IsBuy != orderModel.IsBuy && (orderModel.IsBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
+
+            //var result = ProcessOrders(selectedOrders, order);
+
+            var updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
+            while(updatedAmount != order.Amount && updatedAmount != 0)
             {
-                foreach (var closedOrder in result.UpdatedOrders)
-                {
-                    if (closedOrder.RemoveOpenOrderFromDataBase == true)
-                    {
-                        var closedOrderUserWallet = await _walletsRepository
-                        .GetUserWalletAsync(
-                            closedOrder.Order.CreateUserId,
-                            closedOrder.Order.IsBuy ? "BTC" : "USDT");
-
-                        closedOrderUserWallet.Value += closedOrder.Order.Total;
-
-                        await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
-
-                        await _tradeRepository
-                            .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
-                                closedOrder.Order,
-                                order.CreateUserId,
-                                ClosedOrderStatus.Completed);
-                    }
-                    else
-                    {
-                        await _tradeRepository.spUpdate_BTC_USDT_OpenOrder(closedOrder.Order);
-                    }
-                }
+                updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
             }
+            
+            //if (result.UpdatedOrders != null)
+            //{
+            //    foreach (var closedOrder in result.UpdatedOrders)
+            //    {
+            //        if (closedOrder.RemoveOpenOrderFromDataBase == true)
+            //        {
+            //            var closedOrderUserWallet = await _walletsRepository
+            //            .GetUserWalletAsync(
+            //                closedOrder.Order.CreateUserId,
+            //                closedOrder.Order.IsBuy ? "BTC" : "USDT");
+
+            //            closedOrderUserWallet.Value += closedOrder.Order.Total;
+
+            //            await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
+
+            //            await _tradeRepository
+            //                .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
+            //                    closedOrder.Order,
+            //                    order.CreateUserId,
+            //                    ClosedOrderStatus.Completed);
+            //        }
+            //        else
+            //        {
+            //            await _tradeRepository.spUpdate_BTC_USDT_OpenOrder(closedOrder.Order);
+            //        }
+            //    }
+            //}
 
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
@@ -229,7 +234,7 @@ namespace Web_Api.online.Controllers
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
-                CurrentOrder = result.IsCurrentOrderClosed ? null : order,
+                CurrentOrder = updatedAmount == 0 ? null : order,
                 OrderBookBuy = openOrdersBuy,
                 OrderBookSell = openOrdersSell,
                 MarketTrades = marketTrades,
