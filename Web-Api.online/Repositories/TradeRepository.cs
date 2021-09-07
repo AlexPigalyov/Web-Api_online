@@ -86,13 +86,13 @@ namespace Web_Api.online.Repositories
                     p.Add("total", openOrder.Total);
                     p.Add("openOrderId", openOrder.OpenOrderId);
                     p.Add("createDate", openOrder.CreateDate);
-                    p.Add("updatedOrderAmount", dbType: DbType.Decimal, direction: ParameterDirection.Output);
 
-                    await db.QueryAsync<decimal>("spProcess_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
-
-                    return p.Get<decimal>("updatedOrderAmount");
+                    return await db.QueryFirstAsync<decimal>("spProcess_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
                 }
-                catch (Exception ex) { return 0; }
+                catch (Exception ex) 
+                {
+                    return await spProcess_BTC_USDT_Order(openOrder);
+                }
             }
         }
 

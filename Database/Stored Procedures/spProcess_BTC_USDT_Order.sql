@@ -12,8 +12,7 @@ ALTER PROCEDURE [dbo].[spProcess_BTC_USDT_Order]
 @amount decimal(38,20),
 @total decimal(38,20),
 @openOrderId bigint,
-@createDate datetime,
-@updatedOrderAmount decimal(38,20) OUTPUT
+@createDate datetime
 AS
 BEGIN
 
@@ -21,8 +20,8 @@ SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   BTC_USDT_OpenOrders
 WHERE  IsBuy != @isBuy AND 
-	   (( IsBuy = 1 AND @price >= Price ) OR 
-	   ( IsBuy = 0 AND @price <= Price ))
+	   (( IsBuy = 1 AND @price <= Price ) OR 
+	   ( IsBuy = 0 AND @price >= Price ))
 ORDER  BY Price,
           CreateDate
 
@@ -30,14 +29,20 @@ DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
 	(SELECT Amount FROM #selectedOrder) 
 
+DECLARE @selectedOrderAmountLocal DECIMAL(38, 20);
+SET @selectedOrderAmountLocal = 0;
+
+DECLARE @amountLocal DECIMAL(38, 20);
+SET @amountLocal = 0;
+
 IF NOT EXISTS(SELECT * FROM #selectedOrder)
 BEGIN	
-	SELECT 0
+	SELECT 0;
 END
 ELSE IF (@amount > @selectOrderAmount)
 BEGIN
-	SET @amount = @amount - @selectOrderAmount;
-
+	SET @amountLocal = @amount - @selectOrderAmount;
+	
 	DELETE FROM BTC_USDT_OpenOrders
 	WHERE  OpenOrderId = 
 		(SELECT OpenOrderId FROM #selectedOrder) 
@@ -76,14 +81,16 @@ BEGIN
 	UPDATE [BTC_USDT_OpenOrders]
 	SET    IsBuy = @isBuy,
 		   Price = @price,
-		   Amount = @amount,
+		   Amount = @amountLocal,
 		   CreateUserId = @createUserId
 	WHERE  OpenOrderId = @openOrderId 	
+	
+	SELECT @amountLocal
 END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
-	SET @selectOrderAmount = @selectOrderAmount - @amount;
-
+	SET @selectedOrderAmountLocal = @selectOrderAmount - @amount;
+	
 	DELETE FROM BTC_USDT_OpenOrders
 	WHERE  OpenOrderId = @openOrderId
 	
@@ -121,17 +128,21 @@ BEGIN
 	UPDATE [BTC_USDT_OpenOrders]
 	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
 		   Price = (SELECT Price FROM #selectedOrder),
-		   Amount = @selectOrderAmount,
+		   Amount = @selectedOrderAmountLocal,
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  OpenOrderId = (SELECT OpenOrderId FROM #selectedOrder)
 
-	SET @amount = 0;
+	SELECT 0
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
+
 	DELETE FROM BTC_USDT_OpenOrders
 	WHERE  OpenOrderId = 
 		(SELECT OpenOrderId FROM #selectedOrder) 
+		
+	DELETE FROM BTC_USDT_OpenOrders
+	WHERE  OpenOrderId = @openOrderId
 
 	INSERT INTO BTC_USDT_ClosedOrders (
 				ClosedOrderId, Total, CreateDate,
@@ -162,10 +173,7 @@ BEGIN
 		WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 			AND CurrencyAcronim = 'USDT' 
 	END
-	
-	DELETE FROM BTC_USDT_OpenOrders
-	WHERE  OpenOrderId = @openOrderId
-	
+
 	INSERT INTO BTC_USDT_ClosedOrders (
 				ClosedOrderId, Total, CreateDate,
 				ClosedDate, IsBuy, Price, Amount,
@@ -197,12 +205,8 @@ BEGIN
 			AND CurrencyAcronim = 'USDT' 
 	END
 
-	SET @amount = 0;
+	SELECT 0
 END
 DROP TABLE #selectedOrder
-
-SET @updatedOrderAmount = @amount;
-
-SELECT @updatedOrderAmount
 
 END
