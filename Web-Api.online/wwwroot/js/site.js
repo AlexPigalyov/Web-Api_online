@@ -73,6 +73,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
             orderTotal = order.Total;
             isBuy = order.IsBuy;
             if (isMarketTrades) {
+                orderPrice = order.ExposedPrice;
                 time = new Date(order.ClosedDate);
             }
         }
@@ -82,6 +83,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
             orderTotal = order.total;
             isBuy = order.isBuy;
             if (isMarketTrades) {
+                orderPrice = order.exposedPrice;
                 time = new Date(order.closedDate);
             }
         }

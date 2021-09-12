@@ -72,6 +72,21 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<decimal> spGetLastPrice_BTC_USDT_ClosedOrder()
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    return await db.QueryFirstAsync<decimal>("spGetLastPrice_BTC_USDT_ClosedOrder", commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
         public async Task<decimal> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrders openOrder)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))

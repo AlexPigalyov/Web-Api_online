@@ -20,7 +20,7 @@ BEGIN
 
 delete from BTC_USDT_OpenOrders WHERE OpenOrderId = @closedOrderId
 
-insert into BTC_USDT_ClosedOrders (ClosedOrderId, Total, CreateDate, ClosedDate, IsBuy, Price, Amount, CreateUserId, BoughtUserId, Status)
-values (@closedOrderId, @total, @createDate, getdate(), @isBuy, @price, @amount, @createUserId, @boughtUserId, @status)
+insert into BTC_USDT_ClosedOrders (ClosedOrderId, Total, CreateDate, ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount, CreateUserId, BoughtUserId, Status)
+values (@closedOrderId, @total, @createDate, getdate(), @isBuy, @price, @price, @amount,0, @createUserId, @boughtUserId, @status)
 
 END

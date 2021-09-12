@@ -49,7 +49,7 @@ BEGIN
 
 	INSERT INTO BTC_USDT_ClosedOrders (	
 				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, Price, Amount,
+				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
 		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
@@ -58,6 +58,8 @@ BEGIN
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
 				(SELECT Price FROM #selectedOrder),
+				@price,
+				((SELECT Price FROM #selectedOrder) - @price),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -96,7 +98,7 @@ BEGIN
 	
 	INSERT INTO BTC_USDT_ClosedOrders (
 				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, Price, Amount,
+				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@openOrderId,
@@ -105,6 +107,8 @@ BEGIN
 				getdate(),
 				@isBuy,
 				@price,
+				(SELECT Price FROM #selectedOrder),
+				(@price - (SELECT Price FROM #selectedOrder)),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -146,7 +150,7 @@ BEGIN
 
 	INSERT INTO BTC_USDT_ClosedOrders (
 				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, Price, Amount,
+				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
 				(SELECT Total FROM #selectedOrder),
@@ -154,6 +158,8 @@ BEGIN
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
 				(SELECT Price FROM #selectedOrder),
+				@price,
+				((SELECT Price FROM #selectedOrder) - @price),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -176,7 +182,7 @@ BEGIN
 
 	INSERT INTO BTC_USDT_ClosedOrders (
 				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, Price, Amount,
+				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@openOrderId,
@@ -185,6 +191,8 @@ BEGIN
 				getdate(),
 				@isBuy,
 				@price,
+				(SELECT Price FROM #selectedOrder),
+				(@price - (SELECT Price FROM #selectedOrder)),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 

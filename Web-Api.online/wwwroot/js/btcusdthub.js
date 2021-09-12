@@ -11,7 +11,14 @@ connection.on("ReceiveMessage", function (recieveModel) {
 
     let model = JSON.parse(recieveModel);
 
-    console.log(model);
+    var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+    currentMarketTradeDoc.children[0].innerHTML = model.MarketTrades[0].ExposedPrice;
+
+    currentMarketTradeDoc.classList.remove('status-buy');
+    currentMarketTradeDoc.classList.remove('status-sell');
+    currentMarketTradeDoc.classList.add((model.MarketTrades[0].IsBuy ? 'status-buy' : 'status-sell'));
+
+    currentMarketTradeDoc.children[1].style.transform = (model.MarketTrades[0].IsBuy ? 'rotate(180deg)' : 'rotate(360deg)');
 
     loadNewOrderBook(model.OrderBookSell, false, false, false, false);
     loadNewOrderBook(model.OrderBookBuy, false, true, false, false);

@@ -30,7 +30,7 @@
                     </div>
                     <div class="orderbook-ticker">
                         <div class="orderbook-ticker-status status-buy">
-                            6.233
+                            <span>0</span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);"><path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path></svg>
                         </div>
                         <div class="orderbook-ticker-markprice">$6.24</div>
@@ -137,6 +137,16 @@
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
     var marketTrades = model.marketTrades
+
+    var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+    currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
+
+    currentMarketTradeDoc.classList.remove('status-buy');
+    currentMarketTradeDoc.classList.remove('status-sell');
+    currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
+
+    currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
+
     loadNewOrderBook(buyOpenOrders, true, true, false, false);
     loadNewOrderBook(sellOpenOrders, true, false, false, false);
     loadNewOrderBook(marketTrades, true, false, true, false);
