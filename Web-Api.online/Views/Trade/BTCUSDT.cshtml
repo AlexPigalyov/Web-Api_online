@@ -147,6 +147,8 @@
 
     currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
 
+    console.log(userOpenOrders);
+
     loadNewOrderBook(buyOpenOrders, true, true, false, false);
     loadNewOrderBook(sellOpenOrders, true, false, false, false);
     loadNewOrderBook(marketTrades, true, false, true, false);

@@ -23,11 +23,10 @@ connection.on("ReceiveMessage", function (recieveModel) {
     loadNewOrderBook(model.OrderBookSell, false, false, false, false);
     loadNewOrderBook(model.OrderBookBuy, false, true, false, false);
     loadNewOrderBook(model.MarketTrades, false, false, true, false);
-    loadNewOrderBook(model.CurrentOrder, false, false, false, true);
 });
 
-connection.on("ReceiveOpenOrders", function (model) {
-    console.log(model);
+connection.on("ReceiveNewOrder", function (model) {
+    loadNewOrderBook(model, false, false, false, true);
 });
 
 

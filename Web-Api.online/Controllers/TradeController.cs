@@ -243,102 +243,9 @@ namespace Web_Api.online.Controllers
 
             await _hubcontext.Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(recieveResult));
 
+            await _hubcontext.Clients.User(userId).SendAsync("ReceiveNewOrder", updatedAmount == 0 ? null : JsonConvert.SerializeObject(order));
+
             return Ok();
-        }
-
-        private ProcessOrderResultModel ProcessOrders(IEnumerable<BTC_USDT_OpenOrders> selectedOrders, BTC_USDT_OpenOrders currentOrder)
-        {
-            if (selectedOrders.Any())
-            {
-                ProcessOrderResultModel processResult = new ProcessOrderResultModel();
-
-                List<UpdatedOrderModel> updatedOrders = new List<UpdatedOrderModel>();
-
-                decimal amountDecimal = currentOrder.Amount;
-                bool isOrderClosed = false;
-
-                foreach (var openOrder in selectedOrders)
-                {
-                    if (amountDecimal > openOrder.Amount)
-                    {
-                        amountDecimal -= openOrder.Amount;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        var localOrder = currentOrder;
-                        localOrder.Amount = amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = localOrder,
-                            RemoveOpenOrderFromDataBase = false
-                        });
-
-                        currentOrder.Amount = amountDecimal;
-                    }
-
-                    if (amountDecimal < openOrder.Amount)
-                    {
-                        openOrder.Amount -= amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = false
-                        });
-
-                        currentOrder.Amount = amountDecimal;
-
-                        isOrderClosed = true;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = currentOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        break;
-                    }
-
-                    if (amountDecimal == openOrder.Amount)
-                    {
-                        currentOrder.Amount = amountDecimal;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = currentOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        isOrderClosed = true;
-
-                        updatedOrders.Add(new UpdatedOrderModel
-                        {
-                            Order = openOrder,
-                            RemoveOpenOrderFromDataBase = true
-                        });
-
-                        break;
-                    }
-                }
-
-                processResult.UpdatedOrders = updatedOrders;
-                processResult.IsCurrentOrderClosed = isOrderClosed;
-
-                return processResult;
-            }
-            else
-            {
-                return new ProcessOrderResultModel()
-                {
-                    UpdatedOrders = null,
-                    IsCurrentOrderClosed = false
-                };
-            }
         }
 
         public async Task<ActionResult> BTCUSDT()
@@ -403,6 +310,7 @@ namespace Web_Api.online.Controllers
             model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
             model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
+            model.UserOpenOrders = await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
 
             return View(model);
         }
