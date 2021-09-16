@@ -68,7 +68,7 @@ BEGIN
 	IF ((SELECT IsBuy FROM #selectedOrder) = 1)
 	BEGIN
 		UPDATE Wallets 
-		SET Value = Value + (SELECT Total FROM #selectedOrder)
+		SET Value = Value + (SELECT Amount FROM #selectedOrder)
 		WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 			AND CurrencyAcronim = 'BTC'  			
 	END
@@ -117,7 +117,7 @@ BEGIN
 	IF (@isBuy = 1)
 	BEGIN
 		UPDATE Wallets 
-		SET Value = Value + @total
+		SET Value = Value + @amount
 		WHERE UserId = @createUserId 
 			AND CurrencyAcronim = 'BTC'  			
 	END
@@ -168,7 +168,7 @@ BEGIN
 	IF ((SELECT IsBuy FROM #selectedOrder) = 1)
 	BEGIN
 		UPDATE Wallets 
-		SET Value = Value + (SELECT Total FROM #selectedOrder)
+		SET Value = Value + (SELECT Amount FROM #selectedOrder)
 		WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 			AND CurrencyAcronim = 'BTC'  			
 	END
@@ -201,7 +201,7 @@ BEGIN
 	IF (@isBuy = 1)
 	BEGIN
 		UPDATE Wallets 
-		SET Value = Value + @total
+		SET Value = Value + @amount
 		WHERE UserId = @createUserId 
 			AND CurrencyAcronim = 'BTC'  			
 	END

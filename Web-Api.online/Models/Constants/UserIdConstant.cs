@@ -2,6 +2,9 @@
 {
     public static class UserId
     {
-        public const string ParserBot = "cf685ef7-9a1f-4062-aa2a-365088511f7d";
+        public const string BinanceBot = "0996e6bb-ea74-447b-9832-d1b5a02d4a70";
+        public const string BitFinexBot = "1d6254fc-8f94-4229-b09f-a2b225c128b0";
+        public const string KucoinBot = "cce4bbb8-e74c-4d2b-af4c-b87da455c6cf";
+        public const string PoloniexBot = "824bef62-0f83-4e98-bec1-85ddca883324";
     }
 }

@@ -20,13 +20,15 @@ connection.on("ReceiveMessage", function (recieveModel) {
 
     currentMarketTradeDoc.children[1].style.transform = (model.MarketTrades[0].IsBuy ? 'rotate(180deg)' : 'rotate(360deg)');
 
-    loadNewOrderBook(model.OrderBookSell, false, false, false, false);
-    loadNewOrderBook(model.OrderBookBuy, false, true, false, false);
-    loadNewOrderBook(model.MarketTrades, false, false, true, false);
+    loadOrderBook(model.OrderBookSell, false, false);
+    loadOrderBook(model.OrderBookBuy, false, true);
+    loadMarketTrades(model.MarketTrades, false);
 });
 
 connection.on("ReceiveNewOrder", function (model) {
-    loadNewOrderBook(model, false, false, false, true);
+
+
+    loadUserOpenOrders(model, false);
 });
 
 

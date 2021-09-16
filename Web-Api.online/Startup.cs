@@ -131,26 +131,47 @@ namespace Web_Api.online
             {
                 await userManager.CreateAsync(new IdentityUser()
                 {
-                    Id = UserId.ParserBot,
-                    UserName = "BotParserAccount",
-                    Email = "Bot@account.com"
-                }, "botaccountpassword");
+                    Id = UserId.BinanceBot,
+                    UserName = "BinanceBotParserAccount",
+                    Email = "BinanceBot@account.com"
+                }, "binancebotaccountpassword");
+
+                await userManager.CreateAsync(new IdentityUser()
+                {
+                    Id = UserId.BitFinexBot,
+                    UserName = "BitFinexBotParserAccount",
+                    Email = "BitFinexBot@account.com"
+                }, "bitfinexbotaccountpassword");
+
+                await userManager.CreateAsync(new IdentityUser()
+                {
+                    Id = UserId.KucoinBot,
+                    UserName = "KucoinBotParserAccount",
+                    Email = "KucoinBot@account.com"
+                }, "kucoinbotaccountpassword");
+
+                await userManager.CreateAsync(new IdentityUser()
+                {
+                    Id = UserId.PoloniexBot,
+                    UserName = "PoloniexBotParserAccount",
+                    Email = "PoloniexBot@account.com"
+                }, "poloniexbotaccountpassword");
             }
         }
 
         private async Task WalletSeed(IServiceProvider serviceProvider)
         {
             var walletRepository = serviceProvider.GetService<WalletsRepository>();
+            #region BinanceWallet
+            var binanceWallets = await walletRepository.GetUserWalletsAsync(UserId.BinanceBot);
 
-            var wallets = await walletRepository.GetUserWalletsAsync(UserId.ParserBot);
-
-            if (wallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
                 {
                     Address = "",
                     CurrencyAcronim = "BTC",
-                    UserId = UserId.ParserBot
+                    UserId = UserId.BinanceBot
                 });
 
                 wallet.Value = 1000000;
@@ -158,74 +179,164 @@ namespace Web_Api.online
                 await walletRepository.UpdateWalletBalance(wallet);
             }
 
-            if (wallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
                 {
                     Address = "",
                     CurrencyAcronim = "USDT",
-                    UserId = UserId.ParserBot
+                    UserId = UserId.BinanceBot
                 });
 
                 wallet.Value = 1000000;
 
                 await walletRepository.UpdateWalletBalance(wallet);
             }
+            #endregion
+            #region BitFinexWallet
+            var bitFinexWallets = await walletRepository.GetUserWalletsAsync(UserId.BitFinexBot);
+
+            if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "BTC",
+                    UserId = UserId.BitFinexBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+
+            if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "USDT",
+                    UserId = UserId.BitFinexBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+            #endregion
+            #region KucoinWallet
+            var kucoinWallets = await walletRepository.GetUserWalletsAsync(UserId.KucoinBot);
+
+            if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "BTC",
+                    UserId = UserId.KucoinBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+
+            if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "USDT",
+                    UserId = UserId.KucoinBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+            #endregion
+            #region PoloniexWallet
+            var poloniexWallets = await walletRepository.GetUserWalletsAsync(UserId.PoloniexBot);
+
+            if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "BTC",
+                    UserId = UserId.PoloniexBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+
+            if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                {
+                    Address = "",
+                    CurrencyAcronim = "USDT",
+                    UserId = UserId.PoloniexBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalance(wallet);
+            }
+            #endregion
         }
 
         private async Task BotAuthCodesSeed(IServiceProvider serviceProvider)
         {
             var botsRepository = serviceProvider.GetService<BotsRepository>();
 
-            var authCodes = await botsRepository.GetBotByUserId(UserId.ParserBot);
+            var binanceAuthCodes = await botsRepository.GetBotByUserId(UserId.BinanceBot);
 
-            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
+            if (!binanceAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
             {
                 await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
                     Name = "Binance",
                     BotAuthCode = BotAuthCode.Binance,
-                    UserId = UserId.ParserBot
+                    UserId = UserId.BinanceBot
                 });
             }
 
-            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.BitFinex))
+            var bitFinexAuthCodes = await botsRepository.GetBotByUserId(UserId.BitFinexBot);
+
+            if (!bitFinexAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.BitFinex))
             {
                 await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
                     Name = "BitFinex",
                     BotAuthCode = BotAuthCode.BitFinex,
-                    UserId = UserId.ParserBot
+                    UserId = UserId.BitFinexBot
                 });
             }
 
-            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Huobi))
-            {
-                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
-                {
-                    Name = "Huobi",
-                    BotAuthCode = BotAuthCode.Huobi,
-                    UserId = UserId.ParserBot
-                });
-            }
+            var kucoinAuthCodes = await botsRepository.GetBotByUserId(UserId.KucoinBot);
 
-            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Kucoin))
+            if (!kucoinAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Kucoin))
             {
                 await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
                     Name = "Kucoin",
                     BotAuthCode = BotAuthCode.Kucoin,
-                    UserId = UserId.ParserBot
+                    UserId = UserId.KucoinBot
                 });
             }
 
-            if (!authCodes.Any(x => x.BotAuthCode == BotAuthCode.Poloniex))
+            var poloniexAuthCodes = await botsRepository.GetBotByUserId(UserId.PoloniexBot);
+
+            if (!poloniexAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Poloniex))
             {
                 await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
                 {
                     Name = "Poloniex",
                     BotAuthCode = BotAuthCode.Poloniex,
-                    UserId = UserId.ParserBot
+                    UserId = UserId.PoloniexBot
                 });
             }
         }

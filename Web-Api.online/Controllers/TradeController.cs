@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
 using Web_Api.online.Models.Constants;
+using Web_Api.online.Models.MVCPages;
 
 namespace Web_Api.online.Controllers
 {
@@ -42,19 +43,6 @@ namespace Web_Api.online.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-        public class BTC_USDTModel
-        {
-            public string UserId { get; set; }
-            public List<Wallet> UserWallets { get; set; }
-            public Wallet BtcWallet { get; set; }
-
-            public Wallet UsdtWallet { get; set; }
-            public List<BTC_USDT_ClosedOrders> MarketTrades { get; set; }
-            public List<BTC_USDT_OpenOrders> UserOpenOrders { get; set; }
-            public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> BuyOrderBook { get; set; }
-            public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
         }
 
         [Authorize]
@@ -118,30 +106,19 @@ namespace Web_Api.online.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            bool isBot = false;
-
             if (string.IsNullOrEmpty(userId))
             {
                 if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
                 {
                     var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
 
-                    if (botAuthCode.UserId != UserId.ParserBot)
+                    if (botAuthCode != null)
                     {
-                        if (botAuthCode.UserId != userId)
-                        {
-                            return BadRequest("You're not authorized");
-                        }
-                        else
-                        {
-                            isBot = true;
-                            userId = botAuthCode.UserId;
-                        }
+                        userId = botAuthCode.UserId;
                     }
                     else
                     {
-                        isBot = true;
-                        userId = botAuthCode.UserId;
+                        return BadRequest("You're not authorized");
                     }
                 }
                 else
@@ -159,13 +136,26 @@ namespace Web_Api.online.Controllers
                     userId,
                     orderModel.IsBuy ? "USDT" : "BTC");
 
-            if (wallet.Value < total)
+            if (orderModel.IsBuy)
             {
-                return BadRequest("You doesn't have enough money for deal");
-            }
+                if (wallet.Value < total)
+                {
+                    return BadRequest("You doesn't have enough money for deal");
+                }
 
-            wallet.Value -= total;
-            await _walletsRepository.UpdateWalletBalance(wallet);
+                wallet.Value -= total;
+                await _walletsRepository.UpdateWalletBalance(wallet);
+            }
+            else
+            {
+                if (wallet.Value < amountDecimal)
+                {
+                    return BadRequest("You doesn't have enough money for deal");
+                }
+
+                wallet.Value -= amountDecimal;
+                await _walletsRepository.UpdateWalletBalance(wallet);
+            }
 
             long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
             {
@@ -188,45 +178,11 @@ namespace Web_Api.online.Controllers
 
             order.OpenOrderId = newId;
 
-            //var orders = await _tradeRepository.Get_BTC_USDT_OpenOrdersAsync();
-
-            //var selectedOrders = orders.Where(x => x.IsBuy != orderModel.IsBuy && (orderModel.IsBuy ? priceDecimal >= x.Price : priceDecimal <= x.Price));
-
-            //var result = ProcessOrders(selectedOrders, order);
-
             var updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
-            while(updatedAmount != order.Amount && updatedAmount != 0)
+            while (updatedAmount != order.Amount && updatedAmount != 0)
             {
                 updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
             }
-            
-            //if (result.UpdatedOrders != null)
-            //{
-            //    foreach (var closedOrder in result.UpdatedOrders)
-            //    {
-            //        if (closedOrder.RemoveOpenOrderFromDataBase == true)
-            //        {
-            //            var closedOrderUserWallet = await _walletsRepository
-            //            .GetUserWalletAsync(
-            //                closedOrder.Order.CreateUserId,
-            //                closedOrder.Order.IsBuy ? "BTC" : "USDT");
-
-            //            closedOrderUserWallet.Value += closedOrder.Order.Total;
-
-            //            await _walletsRepository.UpdateWalletBalance(closedOrderUserWallet);
-
-            //            await _tradeRepository
-            //                .spMove_BTC_USDT_FromOpenOrdersToClosedOrders(
-            //                    closedOrder.Order,
-            //                    order.CreateUserId,
-            //                    ClosedOrderStatus.Completed);
-            //        }
-            //        else
-            //        {
-            //            await _tradeRepository.spUpdate_BTC_USDT_OpenOrder(closedOrder.Order);
-            //        }
-            //    }
-            //}
 
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);

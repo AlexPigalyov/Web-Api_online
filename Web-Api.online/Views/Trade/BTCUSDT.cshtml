@@ -113,14 +113,7 @@
             </div>
             <div class="orderbook-container">
                 <div class="orderbook-list orderbook-list-bids">
-                    <div class="orderbook-row">
-                        <div class="orderbook-col">452.518</div>
-                        <div class="orderbook-col">8132.234</div>
-                        <div class="orderbook-col">15.08.21 1:46:01</div>
-                        <div class="orderbook-col">
-                            <a href="/trade/cancelorder/1">Cancel</a>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -149,8 +142,8 @@
 
     console.log(userOpenOrders);
 
-    loadNewOrderBook(buyOpenOrders, true, true, false, false);
-    loadNewOrderBook(sellOpenOrders, true, false, false, false);
-    loadNewOrderBook(marketTrades, true, false, true, false);
-    loadNewOrderBook(userOpenOrders, true, false, false, true);
+    loadOrderBook(buyOpenOrders, true, true);
+    loadOrderBook(sellOpenOrders, true, false);
+    loadMarketTrades(marketTrades, true);
+    loadUserOpenOrders(userOpenOrders, true);
 </script>
