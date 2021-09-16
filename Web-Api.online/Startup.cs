@@ -125,9 +125,9 @@ namespace Web_Api.online
         {
             var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
 
-            var user = await userManager.FindByIdAsync(UserId.ParserBot);
+            var binanceAcc = await userManager.FindByIdAsync(UserId.BinanceBot);
 
-            if (user == null)
+            if (binanceAcc == null)
             {
                 await userManager.CreateAsync(new IdentityUser()
                 {
@@ -135,21 +135,36 @@ namespace Web_Api.online
                     UserName = "BinanceBotParserAccount",
                     Email = "BinanceBot@account.com"
                 }, "binancebotaccountpassword");
+            }
 
+            var bitFinexAcc = await userManager.FindByIdAsync(UserId.BitFinexBot);
+            
+            if(bitFinexAcc == null)
+            {
                 await userManager.CreateAsync(new IdentityUser()
                 {
                     Id = UserId.BitFinexBot,
                     UserName = "BitFinexBotParserAccount",
                     Email = "BitFinexBot@account.com"
                 }, "bitfinexbotaccountpassword");
+            }
 
+            var kucoinAcc = await userManager.FindByIdAsync(UserId.KucoinBot);
+
+            if (kucoinAcc == null)
+            {
                 await userManager.CreateAsync(new IdentityUser()
                 {
                     Id = UserId.KucoinBot,
                     UserName = "KucoinBotParserAccount",
                     Email = "KucoinBot@account.com"
                 }, "kucoinbotaccountpassword");
+            }
 
+            var poloniexAcc = await userManager.FindByIdAsync(UserId.PoloniexBot);
+
+            if (poloniexAcc == null)
+            {
                 await userManager.CreateAsync(new IdentityUser()
                 {
                     Id = UserId.PoloniexBot,
