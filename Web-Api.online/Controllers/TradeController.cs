@@ -106,25 +106,19 @@ namespace Web_Api.online.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
+            {
+                var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
+
+                if (botAuthCode != null)
+                {
+                    userId = botAuthCode.UserId;
+                }
+            }
+
             if (string.IsNullOrEmpty(userId))
             {
-                if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
-                {
-                    var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
-
-                    if (botAuthCode != null)
-                    {
-                        userId = botAuthCode.UserId;
-                    }
-                    else
-                    {
-                        return BadRequest("You're not authorized");
-                    }
-                }
-                else
-                {
-                    return BadRequest("You're not authorized");
-                }
+                return BadRequest("You're not authorized");
             }
 
             decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
@@ -135,6 +129,11 @@ namespace Web_Api.online.Controllers
                 .GetUserWalletAsync(
                     userId,
                     orderModel.IsBuy ? "USDT" : "BTC");
+
+            if (wallet == null)
+            {
+                return BadRequest("You dont have a wallets. Create them");
+            }
 
             if (orderModel.IsBuy)
             {
