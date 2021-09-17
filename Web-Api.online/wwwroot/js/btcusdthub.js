@@ -2,9 +2,6 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/btcusdthub").build();
 
-//Disable send button until connection is established
-document.getElementById("buyButton").disabled = true;
-
 connection.on("ReceiveMessage", function (recieveModel) {
     //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     //var encodedMsg = user + " says " + msg;
