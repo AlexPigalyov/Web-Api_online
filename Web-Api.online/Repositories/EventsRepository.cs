@@ -20,6 +20,20 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
+        public async Task<List<Events>> spGetLastThreeEvents_ByUserId(string userId)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                List<Events> result = (List<Events>)
+                    await db.QueryAsync<Events>(
+                        "spGetLastThreeEvents_ByUserId",
+                        new { userId = userId },
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+        }
+
         public async Task CreateEvent(Events model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
