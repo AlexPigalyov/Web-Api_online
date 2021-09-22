@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Models.Tables;
 using Web_Api.online.Repositories;
 
 namespace Web_Api.online.Controllers
@@ -43,7 +44,7 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                await _botsRepository.CreateBot(new Args_spCreateBot()
+                await _botsRepository.CreateBot(new BotsTableModel()
                 {
                     BotAuthCode = Guid.NewGuid().ToString(),
                     Name = botName,

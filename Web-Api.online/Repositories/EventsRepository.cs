@@ -20,12 +20,12 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<List<Events>> spGetLastThreeEvents_ByUserId(string userId)
+        public async Task<List<EventTableModel>> spGetLastThreeEvents_ByUserId(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<Events> result = (List<Events>)
-                    await db.QueryAsync<Events>(
+                List<EventTableModel> result = (List<EventTableModel>)
+                    await db.QueryAsync<EventTableModel>(
                         "spGetLastThreeEvents_ByUserId",
                         new { userId = userId },
                         commandType: CommandType.StoredProcedure);
@@ -34,7 +34,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task CreateEvent(Events model)
+        public async Task CreateEvent(EventTableModel model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -53,12 +53,12 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<Events>> GetByUserId(string userId)
+        public async Task<List<EventTableModel>> GetByUserId(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<Events> result = (List<Events>)
-                    await db.QueryAsync<Events>(
+                List<EventTableModel> result = (List<EventTableModel>)
+                    await db.QueryAsync<EventTableModel>(
                         "spGetEventsByUserIdWithOrderByDescWhenDate",
                         new { userId = userId },
                         commandType: CommandType.StoredProcedure);

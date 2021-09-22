@@ -15,7 +15,7 @@ namespace Web_Api.online.Hash
             salt = "qweg547SGxzckgfiBCXwqrszxcs12qwadfd";
         }
 
-        public static Transfer ComputeHash(Transfer transfer)
+        public static TransferTableModel ComputeHash(TransferTableModel transfer)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes($"{transfer.CurrencyAcronim} " +
                 $"{transfer.WalletFromId} " +

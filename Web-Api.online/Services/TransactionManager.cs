@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Models;
@@ -23,7 +24,7 @@ namespace Web_Api.online.Services
 
         private string userId;
         private List<IncomeWallet> incomeWallets;
-        private List<Wallet> wallets;
+        private List<WalletTableModel> wallets;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
@@ -35,7 +36,7 @@ namespace Web_Api.online.Services
             _eventsRepository = eventsRepository;
         }
 
-        public async Task<List<Wallet>> GetUpdatedWallets(string userId)
+        public async Task<List<WalletTableModel>> GetUpdatedWallets(string userId)
         {
             this.userId = userId;
             incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
@@ -56,7 +57,7 @@ namespace Web_Api.online.Services
 
             foreach (var coin in coinServices)
             {
-                var listIncomeTransactionsToSave = new List<IncomeTransaction>();
+                var listIncomeTransactionsToSave = new List<IncomeTransactionTableModel>();
 
                 var lastTr = incomeLastTransactions
                                  .FirstOrDefault(tr =>
@@ -99,7 +100,7 @@ namespace Web_Api.online.Services
             }
         }
 
-        private void SearchLastNoSaveTransaction(List<IncomeTransaction> incomeTransactionsResult,
+        private void SearchLastNoSaveTransaction(List<IncomeTransactionTableModel> incomeTransactionsResult,
             int from,
             ICoinService coinService)
         {
@@ -116,10 +117,10 @@ namespace Web_Api.online.Services
             }
         }
 
-        private IncomeTransaction ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
+        private IncomeTransactionTableModel ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
             string shortNameCurrency, int walletId)
         {
-            return new IncomeTransaction()
+            return new IncomeTransactionTableModel()
             {
                 CurrencyAcronim = shortNameCurrency,
                 TransactionId = transaction.TxId,
@@ -132,7 +133,7 @@ namespace Web_Api.online.Services
             };
         }
 
-        private async Task UpdateBalance(List<IncomeTransaction> incomeTransactions)
+        private async Task UpdateBalance(List<IncomeTransactionTableModel> incomeTransactions)
         {
             foreach (var tr in incomeTransactions)
             {
@@ -141,10 +142,10 @@ namespace Web_Api.online.Services
                 await _walletsRepository.UpdateWalletBalance(w);
 
                 var _value = tr.Amount - tr.TransactionFee;
-                await _eventsRepository.CreateEvent(new Events()
+                await _eventsRepository.CreateEvent(new EventTableModel()
                 {
                     UserId = userId,
-                    Type = (int)EventType.Income,
+                    Type = (int)EventTypeEnum.Income,
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
                     Value = _value,
                     WhenDate = DateTime.Now,

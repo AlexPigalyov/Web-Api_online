@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
-using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 
 #nullable disable
@@ -23,11 +22,11 @@ namespace Web_Api.online.Data
         {
         }
 
-        public virtual DbSet<Events> Events { get; set; }
-        public virtual DbSet<Wallet> Wallets { get; set; }
-        public virtual DbSet<Currency> Currencies { get; set; }
-        public virtual DbSet<BTC_USDT_ClosedOrders> BTC_USDT_ClosedOrders { get; set; }
-        public virtual DbSet<BTC_USDT_OpenOrders> BTC_USDT_OpenOrders { get; set; }
+        public virtual DbSet<EventTableModel> Events { get; set; }
+        public virtual DbSet<WalletTableModel> Wallets { get; set; }
+        public virtual DbSet<CurrencyTableModel> Currencies { get; set; }
+        public virtual DbSet<BTC_USDT_ClosedOrderTableModel> BTC_USDT_ClosedOrders { get; set; }
+        public virtual DbSet<BTC_USDT_OpenOrderTableModel> BTC_USDT_OpenOrders { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

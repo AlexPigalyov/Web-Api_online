@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Web_Api.online.Models.ViewModels
 @using Web_Api.online.Models.Enums
+
+@model ProfileViewModel
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
@@ -17,7 +20,7 @@
                 }
                 else
                 {
-                    <img src="@Model.ProfilePhotoPath" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+                    <img src="@Model.UserInfo.ProfilePhotoPath" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                 }
 
                 <h4 class="mb-0 mt-2">@User.Identity.Name</h4>
@@ -61,148 +64,218 @@
                         <a href="@(string.IsNullOrEmpty(Model.UserInfo.TwitterLink) ? "javascript: void(0);" : Model.UserInfo.TwitterLink)" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="@(string.IsNullOrEmpty(Model.UserInfo.GithubLink) ? "javascript: void(0);" : Model.UserInfo.GithubLinkну)" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
+                        <a href="@(string.IsNullOrEmpty(Model.UserInfo.GithubLink) ? "javascript: void(0);" : Model.UserInfo.GithubLink)" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                <div id="simple-donut" class="apex-charts"></div>
+            </div>
+            <!-- end card body-->
+        </div>
     </div>
     <div class="col-xl-8 col-lg-7">
-            <div class="card">
-                <div class="card-body">
-                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                        <li class="nav-item">
-                            <a href="#events" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
-                                Events
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                Profile-Settings
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="events">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                    <li class="nav-item">
+                        <a href="#events" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
+                            Events
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                            Profile-Settings
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="events">
 
-                            <h5 class="text-uppercase">
-                                <i class="mdi mdi-briefcase me-1"></i>
-                                Events
-                            </h5>
-                            @if(Model.LastThreeEvents != null){
-                                <div class="timeline-alt pb-0">
-                                    @foreach (var eventModel in Model.LastThreeEvents)
-                                    {
-                                    //@(((EventType)item.Type).ToString())-@(item.Comment)-@(item.WhenDate.ToString("dd.mm.yyyy hh:mm:ss"))
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <h5 class="mt-0 mb-1">@((EventType)eventModel.Type).ToString()</h5>
-                                                <p class="font-14">DateTime: @(eventModel.WhenDate.ToString("dd.mm.yyyy hh:mm:ss"))</p>
-                                                <p class="text-muted mt-2 mb-0 pb-3">
-                                                    @(eventModel.Description)
-                                                </p>
-                                            </div>
+                        <h5 class="text-uppercase">
+                            <i class="mdi mdi-briefcase me-1"></i>
+                            Events <a href="/My/Events">(Check all events)</a>
+                        </h5>
+                        @if (Model.LastThreeEvents != null)
+                        {
+                            <div class="timeline-alt pb-0">
+                                @foreach (var eventModel in Model.LastThreeEvents)
+                                {
+                                    <div class="timeline-item">
+                                        <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
+                                        <div class="timeline-item-info">
+                                            <h5 class="mt-0 mb-1">@((EventTypeEnum)eventModel.Type).ToString()</h5>
+                                            <p class="font-14">DateTime: @(eventModel.WhenDate.ToString("dd.mm.yyyy hh:mm:ss"))</p>
+                                            <p class="text-muted mt-2 mb-0 pb-3">
+                                                @(eventModel.Comment)
+                                            </p>
                                         </div>
-                                    }
+                                    </div>
+                                }
 
+                            </div>
+                        }
+                    </div>
+                    <div class="tab-pane" id="settings">
+                        <form asp-controller="My" asp-action="UpdateProfileData" method="post">
+                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="fullname" class="form-label">FullName</label>
+                                        <input asp-for="UserInfo.FullName" type="text" class="form-control" id="fullname-" placeholder="Enter Full Name">
+                                    </div>
                                 </div>
-                            }
-                        </div>
-                        <div class="tab-pane" id="settings">
-                            <form>
-                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="username" class="form-label">FullName</label>
-                                            <input type="text" class="form-control" id="fullname-" placeholder="Enter fullname">
+                            </div> <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="userbio" class="form-label">Bio</label>
+                                        <textarea asp-for="UserInfo.AboutMe" class="form-control" id="userbio" rows="4" placeholder="Write something..."></textarea>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+
+                            <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-fb" class="form-label">Facebook</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-facebook"></i></span>
+                                            <input asp-for="UserInfo.FacebookLink" type="text" class="form-control" id="social-fb" placeholder="Url">
                                         </div>
                                     </div>
-                                </div> <!-- end row -->
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="userbio" class="form-label">Bio</label>
-                                            <textarea class="form-control" id="userbio" rows="4" placeholder="Write something..."></textarea>
-                                        </div>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
-
-                                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social</h5>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-fb" class="form-label">Facebook</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-facebook"></i></span>
-                                                <input type="text" class="form-control" id="social-fb" placeholder="Url">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-tw" class="form-label">Twitter</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-twitter"></i></span>
-                                                <input type="text" class="form-control" id="social-tw" placeholder="Username">
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-insta" class="form-label">Instagram</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-instagram"></i></span>
-                                                <input type="text" class="form-control" id="social-insta" placeholder="Url">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-lin" class="form-label">Linkedin</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-linkedin"></i></span>
-                                                <input type="text" class="form-control" id="social-lin" placeholder="Url">
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-sky" class="form-label">Skype</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-skype"></i></span>
-                                                <input type="text" class="form-control" id="social-sky" placeholder="username">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="social-gh" class="form-label">Github</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="mdi mdi-github"></i></span>
-                                                <input type="text" class="form-control" id="social-gh" placeholder="Username">
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
-
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Save</button>
                                 </div>
-                            </form>
-                        </div>
-                        <!-- end settings content-->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-tw" class="form-label">Twitter</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-twitter"></i></span>
+                                            <input asp-for="UserInfo.TwitterLink" type="text" class="form-control" id="social-tw" placeholder="Username">
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
 
-                    </div> <!-- end tab-content -->
-                </div> <!-- end card body -->
-            </div> <!-- end card -->
-        </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-insta" class="form-label">Instagram</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-instagram"></i></span>
+                                            <input asp-for="UserInfo.InstagramLink" type="text" class="form-control" id="social-insta" placeholder="Url">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-lin" class="form-label">Linkedin</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-linkedin"></i></span>
+                                            <input asp-for="UserInfo.LinkedinLink" type="text" class="form-control" id="social-lin" placeholder="Url">
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-sky" class="form-label">Skype</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-skype"></i></span>
+                                            <input asp-for="UserInfo.SkypeLink" type="text" class="form-control" id="social-sky" placeholder="username">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="social-gh" class="form-label">Github</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="mdi mdi-github"></i></span>
+                                            <input asp-for="UserInfo.GithubLink" type="text" class="form-control" id="social-gh" placeholder="Username">
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- end settings content-->
+
+                </div> <!-- end tab-content -->
+            </div> <!-- end card body -->
+        </div> <!-- end card -->
+
+    </div>
 </div>
+
+<script src="~/js/vendor/apexcharts.min.js"></script>
+<script>
+var model = @Html.Raw(Json.Serialize(Model));
+
+var colors = [];
+var series = [];
+var labels = [];
+
+if (model.notEmptyWallets == null) {
+    colors.push("#e2ebef");
+    series.push(0);
+    labels.push("");
+} else {
+    var sumValues = model.notEmptyWallets.map(a => a.value).reduce(function(a, b) {
+        return a + b;
+    }, 0);
+
+    model.notEmptyWallets.forEach(wallet => {
+        colors.push(makeRandomColor());
+        series.push(wallet.value / sumValues * 100);
+        labels.push(wallet.currencyAcronim);
+    });
+}
+
+var options = {
+    chart: {
+        height: 320,
+        type: 'donut',
+    },
+    series: series,
+    legend: {
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        verticalAlign: 'middle',
+        floating: false,
+        fontSize: '14px',
+        offsetX: 0,
+        offsetY: 7
+    },
+    labels: labels,
+    colors: colors,
+    responsive: [{
+        breakpoint: 600,
+        options: {
+            chart: {
+                height: 240
+            },
+            legend: {
+                show: false
+            },
+        }
+    }]
+}
+
+var chart = new ApexCharts(
+    document.querySelector("#simple-donut"),
+    options
+);
+
+chart.render();
+</script>

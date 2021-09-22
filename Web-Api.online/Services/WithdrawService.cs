@@ -49,10 +49,10 @@ namespace Web_Api.online.Services
                     coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
                     wallet.Value -= _amount.Value;
 
-                    await _eventsRepository.CreateEvent(new Events()
+                    await _eventsRepository.CreateEvent(new EventTableModel()
                     {
                         UserId = userId,
-                        Type = (int)EventType.Withdraw,
+                        Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
                         WhenDate = DateTime.Now,

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Web_Api.online.Models.StoredProcedures;
-using Web_Api.online.Models;
 using System;
-
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
 {
@@ -22,13 +21,13 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<List<IncomeTransaction>> GetLastIncomeTransactionsByUserIdAsync(string userId)
+        public async Task<List<IncomeTransactionTableModel>> GetLastIncomeTransactionsByUserIdAsync(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    List<IncomeTransaction> result = (List<IncomeTransaction>)(await db.QueryAsync<IncomeTransaction>
+                    List<IncomeTransactionTableModel> result = (List<IncomeTransactionTableModel>)(await db.QueryAsync<IncomeTransactionTableModel>
                         ("spGetLastIncomeTransactionsByUserId",
                           new { userId = userId },
                           commandType: CommandType.StoredProcedure));
@@ -39,7 +38,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<IncomeTransaction> CreateIncomeTransactionAsync(IncomeTransaction incomeTransaction)
+        public async Task<IncomeTransactionTableModel> CreateIncomeTransactionAsync(IncomeTransactionTableModel incomeTransaction)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -66,7 +65,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task CreateIncomeTransactionsAsync(List<IncomeTransaction> incomeTransactions)
+        public async Task CreateIncomeTransactionsAsync(List<IncomeTransactionTableModel> incomeTransactions)
         {
             foreach(var tr in incomeTransactions)
             {

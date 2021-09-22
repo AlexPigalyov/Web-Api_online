@@ -670,6 +670,23 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[spGetNotEmptyValueWallet_ByUserId]
+@userid nvarchar(450)
+AS
+BEGIN
+
+SELECT UserId,
+	   CurrencyAcronim,
+       Value
+  FROM [Wallets] 
+  WHERE UserId = @userid AND Value != 0
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[spGetUserIncomeWallets]
 @userid nvarchar(450)
 AS

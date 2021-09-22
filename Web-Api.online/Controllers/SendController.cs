@@ -93,7 +93,7 @@ namespace Web_Api.online.Controllers
                         if (_amount.Value > 0 && _amount.Value <= walletFrom.Value &&
                         amountMin < _amount.Value)
                         {
-                            Transfer transfer = new()
+                            TransferTableModel transfer = new()
                             {
                                 WalletFromId = walletFrom.Id,
                                 WalletToId = walletTo.Id,
@@ -105,18 +105,18 @@ namespace Web_Api.online.Controllers
 
                             SendCoinsModel sendRecieve = new()
                             {
-                                EventSender = new Events()
+                                EventSender = new EventTableModel()
                                 {
                                     UserId = userId,
-                                    Type = (int)EventType.Send,
+                                    Type = (int)EventTypeEnum.Send,
                                     Comment = coinsModel.Comment,
                                     Value = _amount.Value,
                                     CurrencyAcronim = coinsModel.Currency,
                                 },
-                                EventReceiver = new Events()
+                                EventReceiver = new EventTableModel()
                                 {
                                     UserId = coinsModel.UserId,
-                                    Type = (int)EventType.Recieve,
+                                    Type = (int)EventTypeEnum.Recieve,
                                     Comment = coinsModel.Comment,
                                     Value = _amount.Value,
                                     CurrencyAcronim = coinsModel.Currency,

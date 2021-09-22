@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.Enums
 {
-    public enum EventType
+    public enum EventTypeEnum
     {
         Registration = 1,
         Income = 2,

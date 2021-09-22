@@ -19,10 +19,10 @@ namespace Web_Api.online.Models.Tables
         {
         }
 
-        public virtual DbSet<CoinsRate> CoinsRates { get; set; }
-        public virtual DbSet<Currency> Currencies { get; set; }
-        public virtual DbSet<DpdCity> DpdCities { get; set; }
-        public virtual DbSet<Rate> Rates { get; set; }
+        public virtual DbSet<CoinsRateTableModel> CoinsRates { get; set; }
+        public virtual DbSet<CurrencyTableModel> Currencies { get; set; }
+        public virtual DbSet<DpdCityTableModel> DpdCities { get; set; }
+        public virtual DbSet<RateTableModel> Rates { get; set; }
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -42,7 +42,7 @@ namespace Web_Api.online.Models.Tables
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 
-            modelBuilder.Entity<CoinsRate>(entity =>
+            modelBuilder.Entity<CoinsRateTableModel>(entity =>
             {
                 entity.Property(e => e.Acronim)
                     .IsRequired()
@@ -72,7 +72,7 @@ namespace Web_Api.online.Models.Tables
             //        .HasMaxLength(50);
             //});
 
-            modelBuilder.Entity<DpdCity>(entity =>
+            modelBuilder.Entity<DpdCityTableModel>(entity =>
             {
                 entity.HasKey(e => e.CityId)
                     .HasName("PK_DpdCities_48");
@@ -134,7 +134,7 @@ namespace Web_Api.online.Models.Tables
                     .IsFixedLength(true);
             });
 
-            modelBuilder.Entity<Rate>(entity =>
+            modelBuilder.Entity<RateTableModel>(entity =>
             {
                 entity.Property(e => e.Acronim)
                     .IsRequired()

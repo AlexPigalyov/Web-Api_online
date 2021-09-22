@@ -13,7 +13,7 @@ namespace Web_Api.online.Models.StoredProcedures
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
         public decimal Total { get; set; }
-        public ClosedOrderStatus Status { get; set; }
+        public ClosedOrderStatusEnum Status { get; set; }
         public string CreateUserId { get; set; }
         public string BoughtUserId { get; set; }
     }

@@ -182,7 +182,7 @@ namespace Web_Api.online
 
             if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "BTC",
@@ -196,7 +196,7 @@ namespace Web_Api.online
 
             if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "USDT",
@@ -213,7 +213,7 @@ namespace Web_Api.online
 
             if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "BTC",
@@ -227,7 +227,7 @@ namespace Web_Api.online
 
             if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "USDT",
@@ -244,7 +244,7 @@ namespace Web_Api.online
 
             if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "BTC",
@@ -258,7 +258,7 @@ namespace Web_Api.online
 
             if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "USDT",
@@ -275,7 +275,7 @@ namespace Web_Api.online
 
             if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "BTC",
@@ -289,7 +289,7 @@ namespace Web_Api.online
 
             if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
-                var wallet = await walletRepository.CreateUserWalletAsync(new Wallet()
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
                     Address = "",
                     CurrencyAcronim = "USDT",
@@ -311,7 +311,7 @@ namespace Web_Api.online
 
             if (!binanceAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Binance))
             {
-                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
+                await botsRepository.CreateBot(new BotsTableModel()
                 {
                     Name = "Binance",
                     BotAuthCode = BotAuthCode.Binance,
@@ -323,7 +323,7 @@ namespace Web_Api.online
 
             if (!bitFinexAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.BitFinex))
             {
-                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
+                await botsRepository.CreateBot(new BotsTableModel()
                 {
                     Name = "BitFinex",
                     BotAuthCode = BotAuthCode.BitFinex,
@@ -335,7 +335,7 @@ namespace Web_Api.online
 
             if (!kucoinAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Kucoin))
             {
-                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
+                await botsRepository.CreateBot(new BotsTableModel()
                 {
                     Name = "Kucoin",
                     BotAuthCode = BotAuthCode.Kucoin,
@@ -347,7 +347,7 @@ namespace Web_Api.online
 
             if (!poloniexAuthCodes.Any(x => x.BotAuthCode == BotAuthCode.Poloniex))
             {
-                await botsRepository.CreateBot(new Models.StoredProcedures.Args_spCreateBot()
+                await botsRepository.CreateBot(new BotsTableModel()
                 {
                     Name = "Poloniex",
                     BotAuthCode = BotAuthCode.Poloniex,

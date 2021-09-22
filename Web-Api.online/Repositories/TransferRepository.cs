@@ -17,7 +17,7 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<Transfer> CreateUserIncomeWalletAsync(Transfer transfer)
+        public async Task<TransferTableModel> CreateUserIncomeWalletAsync(TransferTableModel transfer)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {

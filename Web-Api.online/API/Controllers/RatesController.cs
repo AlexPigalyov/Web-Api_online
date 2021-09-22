@@ -62,7 +62,7 @@ namespace Web_Api.online.API.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,Value")] Rate rate)
+        public async Task<IActionResult> Create([Bind("Id,Date,Value")] RateTableModel rate)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace Web_Api.online.API.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Date,Value")] Rate rate)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Date,Value")] RateTableModel rate)
         {
             if (id != rate.Id)
             {

@@ -20,13 +20,13 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<UsersInfo> spGetUserInfo_ByUserId(string userId)
+        public async Task<UserInfoTableModel> spGetUserInfo_ByUserId(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 try
                 {
-                    return await db.QueryFirstAsync<UsersInfo>(
+                    return await db.QueryFirstAsync<UserInfoTableModel>(
                         "spGetUserInfo_ByUserId",
                         new 
                         {
@@ -40,19 +40,55 @@ namespace Web_Api.online.Repositories
                 }
             }
         }
-
-        public async Task spCreateUserInfo(UsersInfo model)
+        public async Task spCreateOrUpdateUsersInfoLocation(UserInfoTableModel model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 try
                 {
                     await db.ExecuteAsync(
-                        "spCreateUserInfo",
+                        "spCreateOrUpdateUsersInfoLocation",
                         new
                         {
                             userId = model.UserId,
-                            profilePhotoPath = model.ProfilePhotoPath,
+                            location = model.Location
+                        },
+                        commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        public async Task spCreateOrUpdateProfileUsersInfoPhoto(UserInfoTableModel model)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    await db.ExecuteAsync(
+                        "spCreateOrUpdateProfileUsersInfoPhoto",
+                        new
+                        {
+                            userId = model.UserId,
+                            profilePhotoPath = model.ProfilePhotoPath
+                        },
+                        commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        public async Task spCreateOrUpdateProfileUserInfo(UserInfoTableModel model)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    await db.ExecuteAsync(
+                        "spCreateOrUpdateProfileUserInfo",
+                        new
+                        {
+                            userId = model.UserId,
                             fullName = model.FullName,
                             aboutMe = model.AboutMe,
                             facebookLink = model.FacebookLink,
@@ -60,8 +96,7 @@ namespace Web_Api.online.Repositories
                             skypeLink = model.SkypeLink,
                             twitterLink = model.TwitterLink,
                             linkedinLink = model.LinkedinLink,
-                            githubLink = model.GithubLink,
-                            location = model.Location
+                            githubLink = model.GithubLink
                         },
                         commandType: CommandType.StoredProcedure);
                 }

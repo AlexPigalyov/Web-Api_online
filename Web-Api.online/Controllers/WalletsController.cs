@@ -38,19 +38,19 @@ namespace Web_Api.online.Controllers
 
         public class IndexModel
         {
-            public List<Currency> Currencies { get; set; }
+            public List<CurrencyTableModel> Currencies { get; set; }
             public List<IncomeWallet> UserIncomeWallets { get; set; }
-            public List<Wallet> UserWallets { get; set; }
+            public List<WalletTableModel> UserWallets { get; set; }
         }
 
         // GET: WalletsController
         public async Task<ActionResult> Index()
         {
-            List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
+            List<CurrencyTableModel> currencies = await _walletsRepository.GetCurrenciesAsync();
 
             IndexModel model = new IndexModel();
             model.Currencies = currencies;
-            model.UserWallets = new List<Wallet>();
+            model.UserWallets = new List<WalletTableModel>();
             model.UserIncomeWallets = new List<IncomeWallet>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -85,10 +85,10 @@ namespace Web_Api.online.Controllers
                     {
                         address = coin.GetNewAddress(userId);
 
-                        await _eventsRepository.CreateEvent(new Events()
+                        await _eventsRepository.CreateEvent(new EventTableModel()
                         {
                             UserId = userId,
-                            Type = (int)EventType.CreateAddress,
+                            Type = (int)EventTypeEnum.CreateAddress,
                             Comment = $"Create address {coin.CoinShortName}",
                             WhenDate = DateTime.Now,
                             CurrencyAcronim = "LTC"

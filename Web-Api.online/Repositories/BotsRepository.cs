@@ -7,7 +7,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Repositories
@@ -21,7 +20,7 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task CreateBot(Args_spCreateBot model)
+        public async Task CreateBot(BotsTableModel model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -51,12 +50,12 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<Bots>> GetBotByUserId(string userId)
+        public async Task<List<BotsTableModel>> GetBotByUserId(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<Bots> result = (List<Bots>)
-                    await db.QueryAsync<Bots>(
+                List<BotsTableModel> result = (List<BotsTableModel>)
+                    await db.QueryAsync<BotsTableModel>(
                         "spGetBots_ById",
                         new { userid = userId },
                         commandType: CommandType.StoredProcedure);
@@ -65,11 +64,11 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<Bots> GetBotByBotAuthCode(string botAuthCode)
+        public async Task<BotsTableModel> GetBotByBotAuthCode(string botAuthCode)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                Bots result = await db.QueryFirstAsync<Bots>(
+                BotsTableModel result = await db.QueryFirstAsync<BotsTableModel>(
                         "spGetBots_ByBotAuthCode",
                         new { botAuthCode = botAuthCode },
                         commandType: CommandType.StoredProcedure);

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
 using Web_Api.online.Models.Constants;
-using Web_Api.online.Models.MVCPages;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
 {
@@ -67,7 +67,7 @@ namespace Web_Api.online.Controllers
                 return BadRequest("This is not your order.");
             }
 
-            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId, ClosedOrderStatus.Canceled);
+            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId, ClosedOrderStatusEnum.Canceled);
 
             return Ok();
         }
@@ -156,16 +156,16 @@ namespace Web_Api.online.Controllers
                 await _walletsRepository.UpdateWalletBalance(wallet);
             }
 
-            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new Args_spAdd_BTC_USDT_OpenOrder()
+            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new BTC_USDT_OpenOrderTableModel()
             {
                 IsBuy = orderModel.IsBuy,
                 Amount = amountDecimal,
                 Price = priceDecimal,
                 Total = total,
-                UserId = userId
+                CreateUserId = userId
             });
 
-            BTC_USDT_OpenOrders order = new BTC_USDT_OpenOrders
+            BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
                 IsBuy = orderModel.IsBuy,
                 Price = priceDecimal,
@@ -185,7 +185,7 @@ namespace Web_Api.online.Controllers
 
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
-            List<BTC_USDT_ClosedOrders> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
+            List<BTC_USDT_ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
@@ -205,11 +205,11 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> BTCUSDT()
         {
-            List<Wallet> userWallets = new List<Wallet>();
+            List<WalletTableModel> userWallets = new List<WalletTableModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            BTC_USDTModel model = new BTC_USDTModel();
+            BTC_USDTViewModel model = new BTC_USDTViewModel();
 
             if (!string.IsNullOrEmpty(userId))
             {
@@ -219,11 +219,11 @@ namespace Web_Api.online.Controllers
 
                 model.UserWallets = userWallets;
 
-                Wallet btcWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC");
+                WalletTableModel btcWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC");
 
                 if (btcWallet == null)
                 {
-                    btcWallet = new Wallet
+                    btcWallet = new WalletTableModel
                     {
                         UserId = userId,
                         CurrencyAcronim = "BTC",
@@ -238,11 +238,11 @@ namespace Web_Api.online.Controllers
 
                 model.BtcWallet = btcWallet;
 
-                Wallet usdtWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT");
+                WalletTableModel usdtWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT");
 
                 if (usdtWallet == null)
                 {
-                    usdtWallet = new Wallet
+                    usdtWallet = new WalletTableModel
                     {
                         UserId = userId,
                         CurrencyAcronim = "USDT",

@@ -23,13 +23,13 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<List<Wallet>> GetUserWalletsAsync(string userId)
+        public async Task<List<WalletTableModel>> GetUserWalletsAsync(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    List<Wallet> result = (List<Wallet>)(await db.QueryAsync<Wallet>("spGetUserWallets",
+                    List<WalletTableModel> result = (List<WalletTableModel>)(await db.QueryAsync<WalletTableModel>("spGetUserWallets",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure
                 ));
@@ -40,13 +40,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<Wallet> GetUserWalletAsync(string userId, string acronim)
+        public async Task<WalletTableModel> GetUserWalletAsync(string userId, string acronim)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    Wallet result = await db.QueryFirstOrDefaultAsync<Wallet>("spGetUserWalletByAcronim",
+                    WalletTableModel result = await db.QueryFirstOrDefaultAsync<WalletTableModel>("spGetUserWalletByAcronim",
                     new
                     {
                         userId = userId,
@@ -101,7 +101,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<Wallet> CreateUserWalletAsync(Wallet wallet)
+        public async Task<WalletTableModel> CreateUserWalletAsync(WalletTableModel wallet)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -123,13 +123,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task UpdateWalletBalance(Wallet wallet)
+        public async Task UpdateWalletBalance(WalletTableModel wallet)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    await db.QueryAsync<Wallet>("spUpdateWalletBalance",
+                    await db.QueryAsync<WalletTableModel>("spUpdateWalletBalance",
                         new
                         {
                             walletId = wallet.Id,
@@ -142,13 +142,32 @@ namespace Web_Api.online.Repositories
             }
         }
 
+        public async Task<List<spGetNotEmptyValueWallet_ByUserId>> GetNotEmptyWalletsByUserId(string userId)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
+            {
+                try
+                {
+                    return (await db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("spUpdateWalletBalance",
+                        new
+                        {
+                            userId = userId
+                        },
+                        commandType: CommandType.StoredProcedure))
+                        .ToList();
+
+                }
+                catch (Exception ex) { return null; }
+            }
+        }
+
         public async Task SendCoinsAync(SendCoinsModel sendCoinsModel)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    await db.QueryAsync<Wallet>("spSendCoins",
+                    await db.QueryAsync<WalletTableModel>("spSendCoins",
                         new
                         {
                             senderUserId = sendCoinsModel.EventSender.UserId,
@@ -171,7 +190,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<Currency>> GetCurrenciesAsync()
+        public async Task<List<CurrencyTableModel>> GetCurrenciesAsync()
         {
             using (var ctx = new ExchangeContext())
             {

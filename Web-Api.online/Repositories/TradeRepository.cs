@@ -25,12 +25,12 @@ namespace Web_Api.online.Repositories
             _configuration = configuration;
         }
 
-        public async Task<BTC_USDT_OpenOrders> spGet_BTC_USDT_OpenOrder_ById(long openOrderId)
+        public async Task<BTC_USDT_OpenOrderTableModel> spGet_BTC_USDT_OpenOrder_ById(long openOrderId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                BTC_USDT_OpenOrders result =
-                    await db.QueryFirstAsync<BTC_USDT_OpenOrders>(
+                BTC_USDT_OpenOrderTableModel result =
+                    await db.QueryFirstAsync<BTC_USDT_OpenOrderTableModel>(
                         "spGet_BTC_USDT_OpenOrder_ById",
                         new { openOrderId = openOrderId },
                         commandType: CommandType.StoredProcedure);
@@ -39,12 +39,12 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<BTC_USDT_ClosedOrders>> spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(string userId)
+        public async Task<List<BTC_USDT_ClosedOrderTableModel>> spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
-                List<BTC_USDT_ClosedOrders> result = (List<BTC_USDT_ClosedOrders>)
-                    await db.QueryAsync<BTC_USDT_ClosedOrders>(
+                List<BTC_USDT_ClosedOrderTableModel> result = (List<BTC_USDT_ClosedOrderTableModel>)
+                    await db.QueryAsync<BTC_USDT_ClosedOrderTableModel>(
                         "spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
                         new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
@@ -53,7 +53,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task spUpdate_BTC_USDT_OpenOrder(BTC_USDT_OpenOrders model)
+        public async Task spUpdate_BTC_USDT_OpenOrder(BTC_USDT_OpenOrderTableModel model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -87,7 +87,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<decimal> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrders openOrder)
+        public async Task<decimal> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrderTableModel openOrder)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -111,7 +111,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task spMove_BTC_USDT_FromOpenOrdersToClosedOrders(BTC_USDT_OpenOrders openOrder, string boughtUserId, ClosedOrderStatus status)
+        public async Task spMove_BTC_USDT_FromOpenOrdersToClosedOrders(BTC_USDT_OpenOrderTableModel openOrder, string boughtUserId, ClosedOrderStatusEnum status)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
@@ -136,14 +136,14 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<BTC_USDT_OpenOrders>> spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId)
+        public async Task<List<BTC_USDT_OpenOrderTableModel>> spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    List<BTC_USDT_OpenOrders> result = (List<BTC_USDT_OpenOrders>)
-                    await db.QueryAsync<BTC_USDT_OpenOrders>(
+                    List<BTC_USDT_OpenOrderTableModel> result = (List<BTC_USDT_OpenOrderTableModel>)
+                    await db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
                         "spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
                         new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
@@ -154,14 +154,14 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<long> spCreate_BTC_USDT_Order(Args_spAdd_BTC_USDT_OpenOrder model)
+        public async Task<long> spCreate_BTC_USDT_Order(BTC_USDT_OpenOrderTableModel model)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
                     var parameters = new DynamicParameters();
-                    parameters.Add("userid", model.UserId);
+                    parameters.Add("userid", model.CreateUserId);
                     parameters.Add("isBuy", model.IsBuy);
                     parameters.Add("price", model.Price);
                     parameters.Add("amount", model.Amount);
@@ -179,14 +179,14 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<BTC_USDT_OpenOrders>> Get_BTC_USDT_OpenOrdersAsync()
+        public async Task<List<BTC_USDT_OpenOrderTableModel>> Get_BTC_USDT_OpenOrdersAsync()
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    List<BTC_USDT_OpenOrders> result = (List<BTC_USDT_OpenOrders>)
-                    await db.QueryAsync<BTC_USDT_OpenOrders>(
+                    List<BTC_USDT_OpenOrderTableModel> result = (List<BTC_USDT_OpenOrderTableModel>)
+                    await db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
                         "spGet_BTC_USDT_OpenOrders",
                         commandType: CommandType.StoredProcedure);
 
@@ -197,14 +197,14 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<BTC_USDT_ClosedOrders>> spGet_BTC_USDT_ClosedOrders_Top100()
+        public async Task<List<BTC_USDT_ClosedOrderTableModel>> spGet_BTC_USDT_ClosedOrders_Top100()
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    var res = (List<BTC_USDT_ClosedOrders>)
-                        await db.QueryAsync<BTC_USDT_ClosedOrders>(
+                    var res = (List<BTC_USDT_ClosedOrderTableModel>)
+                        await db.QueryAsync<BTC_USDT_ClosedOrderTableModel>(
                             "spGet_BTC_USDT_ClosedOrders_Top100",
                             commandType: CommandType.StoredProcedure);
 
