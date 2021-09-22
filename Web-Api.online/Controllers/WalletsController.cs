@@ -14,6 +14,7 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Repositories.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Nethereum.Web3;
 
 namespace Web_Api.online.Controllers
 {
@@ -46,6 +47,9 @@ namespace Web_Api.online.Controllers
         // GET: WalletsController
         public async Task<ActionResult> Index()
         {
+            var web3 = new Web3("https://95.165.26.169:8545");
+            var ac = await web3.Eth.Accounts.SendRequestAsync();
+
             List<Currency> currencies = await _walletsRepository.GetCurrenciesAsync();
 
             IndexModel model = new IndexModel();
@@ -91,7 +95,7 @@ namespace Web_Api.online.Controllers
                             Type = (int)EventType.CreateAddress,
                             Comment = $"Create address {coin.CoinShortName}",
                             WhenDate = DateTime.Now,
-                            CurrencyAcronim = "LTC"
+                            CurrencyAcronim = selectCurrency
                         });
 
                         break;
