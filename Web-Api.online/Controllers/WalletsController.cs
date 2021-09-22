@@ -91,7 +91,7 @@ namespace Web_Api.online.Controllers
                             Type = (int)EventTypeEnum.CreateAddress,
                             Comment = $"Create address {coin.CoinShortName}",
                             WhenDate = DateTime.Now,
-                            CurrencyAcronim = "LTC"
+                            CurrencyAcronim = selectCurrency
                         });
 
                         break;
