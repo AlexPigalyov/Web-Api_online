@@ -18,16 +18,19 @@ namespace Web_Api.online.Controllers
         private readonly UsersInfoRepository _usersInfoRepository;
         private readonly UserManager<IdentityUser> _usersManager;
         private readonly WalletsRepository _walletsRepository;
+        private readonly TradeRepository _tradeRepository;
         public MyController(
             EventsRepository eventsRepository,
             UsersInfoRepository usersInfoRepository,
             UserManager<IdentityUser> usersManager,
-            WalletsRepository walletsRepository)
+            WalletsRepository walletsRepository,
+            TradeRepository tradeRepository)
         {
             _eventsRepository = eventsRepository;
             _usersInfoRepository = usersInfoRepository;
             _usersManager = usersManager;
             _walletsRepository = walletsRepository;
+            _tradeRepository = tradeRepository;
         }
 
         [HttpPost]
@@ -60,6 +63,7 @@ namespace Web_Api.online.Controllers
             UserInfoTableModel userInfo = (await _usersInfoRepository.spGetUserInfo_ByUserId(userId)) ?? new UserInfoTableModel();
             List<EventTableModel> lastThreeEvents = await _eventsRepository.spGetLastThreeEvents_ByUserId(userId);
             List<spGetNotEmptyValueWallet_ByUserId> notEmptyWallets = await _walletsRepository.GetNotEmptyWalletsByUserId(userId);
+            decimal btcPrice = await _tradeRepository.spGetLastPrice_BTC_USDT_ClosedOrder();
 
             var user = await _usersManager.FindByIdAsync(userId);            
 
@@ -69,7 +73,8 @@ namespace Web_Api.online.Controllers
                 PhoneNumber = user.PhoneNumber,
                 UserInfo = userInfo,
                 LastThreeEvents = lastThreeEvents,
-                NotEmptyWallets = notEmptyWallets
+                NotEmptyWallets = notEmptyWallets,
+                BtcPrice = btcPrice
             };
 
             return View(model);

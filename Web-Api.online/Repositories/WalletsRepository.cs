@@ -148,10 +148,10 @@ namespace Web_Api.online.Repositories
             {
                 try
                 {
-                    return (await db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("spUpdateWalletBalance",
+                    return (await db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("spGetNotEmptyValueWallet_ByUserId",
                         new
                         {
-                            userId = userId
+                            userid = userId
                         },
                         commandType: CommandType.StoredProcedure))
                         .ToList();
