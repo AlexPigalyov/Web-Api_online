@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Web_Api.online.Models.StoredProcedures;
-using Web_Api.online.Repositories.Abstract;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online.API.Controllers
 {

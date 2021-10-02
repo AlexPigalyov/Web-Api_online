@@ -10,6 +10,7 @@
     ViewData["Title"] = "Profile";
 }
 
+
 <div class="row">
     <div class="col-xl-4 col-lg-5">
         <div class="card text-center">
@@ -71,19 +72,18 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="col-6">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-xs-12">
                             <div class="donut-container text-left"></div>
-                            <div class="legend-chart-container text-left"></div>
                         </div>
-                        <div class="col-6">
-
+                        <div class="col-sm-12 col-md-6 col-xs-12">
+                            <div class="legend-chart-container text-left"></div>
                         </div>
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     </div>
@@ -233,118 +233,172 @@
 <script src="~/js/vendor/britecharts.min.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script>
-var briteChartApp = window.briteChartApp || {};
+    var briteChartApp = window.briteChartApp || {};
 
-(function($, context) {
+    (function($, context) {
 
-    const makeRandomColor = function() {
-        var c = '';
-        while (c.length < 6) {
-            c += (Math.random()).toString(16).substr(-6).substr(-1)
+        const makeRandomColor = function() {
+            var c = '';
+            while (c.length < 6) {
+                c += (Math.random()).toString(16).substr(-6).substr(-1)
+            }
+            return '#' + c;
         }
-        return '#' + c;
-    }
 
-    var model = @Html.Raw(Json.Serialize(Model));
+        var model = @Html.Raw(Json.Serialize(Model));
 
-    var colors = []
+        var colors = []
 
-    model.notEmptyWallets.forEach(item => {
-        colors.push(makeRandomColor());
-    })
+       
 
-    context.createDonutChart = function(elementSelector, data) {
-        var donutChart = britecharts.donut(),
-            legendChart = britecharts.legend(),
-            legendContainer = void 0;
+        model.notEmptyWallets.forEach(item => {
+            colors.push(makeRandomColor());
+        })
 
-        legendChart
-            .width(250)
-            .height(160)
+        context.createDonutChart = function(elementSelector, data) {
+            var stepContainer = d3.select(elementSelector),
+              containerWidth = stepContainer.node()
+                ? stepContainer.node().parentNode.parentNode.getBoundingClientRect().width
+                : false
 
-            .colorSchema(colors)
-            .numberFormat("s");
+            var donutChart = britecharts.donut(),
+                legendChart = britecharts.legend(),
+                legendContainer = void 0;
 
-        donutChart
-            .width(300)
-            .height(300)
-            .highlightSliceById(11)
-            .colorSchema(colors)
-            .hasFixedHighlightedSlice(true)
-            .externalRadius(80)
-            .internalRadius(90)
-            .on('customMouseOver', function(data) {
-                legendChart.highlight(data.data.id);
-            })
-            .on('customMouseOut', function() {
-                legendChart.clearHighlight();
+            let legendHeight = 0;
+
+            if(model.notEmptyWallets > 3){
+                legendHeight = 250;
+            }
+            else{
+                legendHeight = 150;
+            }
+
+            legendChart
+                .width(170)
+                .height(legendHeight)
+                .colorSchema(colors)
+                .numberFormat("s");
+
+
+            let radius = 0;
+
+            if(containerWidth < 400){
+                radius = containerWidth / 4;
+            }
+            else{
+                radius = containerWidth / 5;
+            }
+
+            donutChart
+                .width(containerWidth / 2)
+                .height(containerWidth / 2)
+                .highlightSliceById(2)
+                .colorSchema(colors)
+                .hasFixedHighlightedSlice(true)
+                .externalRadius(radius)
+                .internalRadius(radius / 2)
+                .on('customMouseOver', function(data) {
+                    legendChart.highlight(data.data.id);
+                })
+                .on('customMouseOut', function() {
+                    legendChart.clearHighlight();
+                });
+
+            //donutChart
+            //    .width(containerWidth / 2)
+            //    .height(containerWidth / 2)
+            //    .highlightSliceById(11)
+            //    .colorSchema(colors)
+            //    .hasFixedHighlightedSlice(true)
+            //    .externalRadius(containerWidth / 5)
+            //    .internalRadius(containerWidth / 10)
+            //    .on('customMouseOver', function(data) {
+            //        legendChart.highlight(data.data.id);
+            //    })
+            //    .on('customMouseOut', function() {
+            //        legendChart.clearHighlight();
+            //    });
+
+            d3.select(elementSelector)
+                .datum(data)
+                .call(donutChart);
+            legendContainer = d3.select(".legend-chart-container");
+            legendContainer.datum(data).call(legendChart);
+        };
+
+        var donutData = [];
+
+        if (model.notEmptyWallets == null || model.notEmptyWallets.length == 0) {
+            donutData.push({
+                name: "Empty wallet",
+                id: 0,
+                quantity: 0,
+                percentage: 0
             });
-
-        d3.select(elementSelector)
-            .datum(data)
-            .call(donutChart);
-        legendContainer = d3.select(".legend-chart-container");
-        legendContainer.datum(data).call(legendChart);
-    };
-
-    var donutData = [];
-
-    if (model.notEmptyWallets == null || model.notEmptyWallets.length == 0) {
-        donutData.push({
-            name: "Empty wallet",
-            id: 0,
-            quantity: 0,
-            percentage: 0
-        });
-        //colors.push("#313a46");;
-    } else {
-        var sumValues = model.notEmptyWallets.map(a => a.value).reduce(function(a, b) {
-            return a + b;
-        }, 0);
-
-
-        var mainWallets = []
-
-        if (model.notEmptyWallets.length > 5) {
-            mainWallets = model.notEmptyWallets.sort((a, b) => b.value - a.value).slice(0, 4);
-
-            var otherWalletsValues = model.notEmptyWallets.sort((a, b) => b.value - a.value).slice(4, model.notEmptyWallets.length).reduce(function(a, b) {
+            //colors.push("#313a46");;
+        } else {
+            var sumValues = model.notEmptyWallets.map(a => a.value).reduce(function(a, b) {
                 return a + b;
             }, 0);
 
-            mainWallets.push({
-                userId: "",
-                currencyAcronim: "Other",
-                value: otherWalletsValues
+
+            var mainWallets = []
+
+            if (model.notEmptyWallets.length > 5) {
+                mainWallets = model.notEmptyWallets.sort((a, b) => b.value - a.value).slice(0, 4);
+
+                var otherWalletsValues = model.notEmptyWallets.sort((a, b) => b.value - a.value).slice(4, model.notEmptyWallets.length).reduce(function(a, b) {
+                    return a + b;
+                }, 0);
+
+                mainWallets.push({
+                    userId: "",
+                    currencyAcronim: "Other",
+                    value: otherWalletsValues
+                });
+            }
+
+            var index = 0;
+
+            model.notEmptyWallets.forEach(wallet => {
+                let percent = wallet.value / sumValues * 100;
+
+                if (percent < 1) {
+                    percent = Math.ceil(percent);
+                } else {
+                    percent = Math.floor(percent);
+                }
+
+                donutData.push({
+                    name: wallet.currencyAcronim,
+                    id: index,
+                    quantity: wallet.value,
+                    percentage: percent
+                });
+
+                index++;
             });
         }
 
-        var index = 0;
-
-        model.notEmptyWallets.forEach(wallet => {
-            let percent = wallet.value / sumValues * 100;
-
-            if (percent < 1) {
-                percent = Math.ceil(percent);
-            } else {
-                percent = Math.floor(percent);
-            }
-
-            donutData.push({
-                name: wallet.currencyAcronim,
-                id: index,
-                quantity: wallet.value,
-                percentage: percent
-            });
-
-            index++;
+        $(window).on('resize', function (e) {
+          e.preventDefault();
+          setTimeout(drawCharts, 200);
         });
-    }
 
-    if ($(".donut-container").length > 0) {
-        briteChartApp.createDonutChart(".donut-container", donutData);
-    }
-})(jQuery, briteChartApp);
+        const drawCharts = function(){
+            d3.selectAll('.donut-chart').remove();
+            d3.selectAll('.britechart-legend').remove();
+
+            if ($(".donut-container").length > 0) {
+                briteChartApp.createDonutChart(".donut-container", donutData);
+            }
+        }
+    
+        drawCharts();
+
+       
+    })(jQuery, briteChartApp);
 </script>
 
 }

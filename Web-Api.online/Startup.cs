@@ -1,26 +1,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web_Api.online.Data;
 using Microsoft.OpenApi.Models;
-using Web_Api.online.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Services.DI;
-using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Services;
 using Web_Api.online.Models.Constants;
-using Web_Api.online.Models;
+using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online
 {
@@ -63,6 +59,7 @@ namespace Web_Api.online
             });
 
             services.AddTransient<WalletsRepository>();
+            services.AddTransient<CandleStickRepository>();
             services.AddTransient<UsersInfoRepository>();
             services.AddTransient<webapionlineContext>();
             services.AddTransient<ExchangeContext>();
@@ -116,6 +113,19 @@ namespace Web_Api.online
                 endpoints.MapHub<btcusdtHub>("/btcusdthub");
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
+
+            _ = Task.Run(async () =>
+            {
+                var candleStickRepository = serviceProvider.GetService<CandleStickRepository>();
+
+                while (true)
+                {
+                    await Task.Delay(1000 * 60);
+
+                    _ = candleStickRepository.spProcess_BTC_USDT_CandleStick();
+                }
+            });
+
 
             UserSeed(serviceProvider).Wait();
             WalletSeed(serviceProvider).Wait();
@@ -180,7 +190,7 @@ namespace Web_Api.online
             #region BinanceWallet
             var binanceWallets = await walletRepository.GetUserWalletsAsync(UserId.BinanceBot);
 
-            if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -194,7 +204,7 @@ namespace Web_Api.online
                 await walletRepository.UpdateWalletBalance(wallet);
             }
 
-            if (binanceWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -211,7 +221,7 @@ namespace Web_Api.online
             #region BitFinexWallet
             var bitFinexWallets = await walletRepository.GetUserWalletsAsync(UserId.BitFinexBot);
 
-            if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            if (bitFinexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -225,7 +235,7 @@ namespace Web_Api.online
                 await walletRepository.UpdateWalletBalance(wallet);
             }
 
-            if (bitFinexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            if (bitFinexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -242,7 +252,7 @@ namespace Web_Api.online
             #region KucoinWallet
             var kucoinWallets = await walletRepository.GetUserWalletsAsync(UserId.KucoinBot);
 
-            if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            if (kucoinWallets?.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -256,7 +266,7 @@ namespace Web_Api.online
                 await walletRepository.UpdateWalletBalance(wallet);
             }
 
-            if (kucoinWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            if (kucoinWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -273,7 +283,7 @@ namespace Web_Api.online
             #region PoloniexWallet
             var poloniexWallets = await walletRepository.GetUserWalletsAsync(UserId.PoloniexBot);
 
-            if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
+            if (poloniexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "BTC") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {
@@ -287,7 +297,7 @@ namespace Web_Api.online
                 await walletRepository.UpdateWalletBalance(wallet);
             }
 
-            if (poloniexWallets.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
+            if (poloniexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
                 {

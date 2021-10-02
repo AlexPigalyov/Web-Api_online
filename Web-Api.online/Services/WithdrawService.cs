@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web_Api.online.Clients.Interfaces;
+
+using Web_Api.online.Data.Repositories;
 using Web_Api.online.Extensions;
-using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.WithdrawModels;
-using Web_Api.online.Repositories;
 using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Services

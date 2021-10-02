@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-4">
         <div class="text-wrap">
             @if (SignInManager.IsSignedIn(User))
             {
@@ -85,8 +85,11 @@
                 </div>
             }
         </div>
+        <div class="row">
+            <div id="simple-candlestick" class="apex-charts" data-colors="#0acf97,#fa5c7c"></div>
+        </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-4 text-right">
         <div class="orderbook">
             <div class="orderbook-header">
                 <div class="orderbook-header-col">Market Trades</div>
@@ -122,7 +125,63 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/site.js"></script>
-<script src="~/js/btcusdthub.js?2"></script>
+<script src="~/js/vendor/d3.min.js"></script>
+<script src="~/js/btcusdthub.js?3"></script>
+<script src="~/js/vendor/apexcharts.min.js"></script>
+
+<script>
+$.get("/candlestick/getcandlestick", function(data) {
+
+    var seriesData = []
+
+    data.forEach(candleStick => {
+        seriesData.push({
+            x: candleStick.closeTime,
+            y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
+        })
+    });
+
+    var colors = ["#0acf97", "#fa5c7c"];
+    var dataColors = $("#simple-candlestick").data('colors');
+    if (dataColors) {
+        colors = dataColors.split(",");
+    }
+    var options = {
+        chart: {
+            height: 400,
+            type: 'candlestick',
+        },
+        plotOptions: {
+            candlestick: {
+                colors: {
+                    upward: colors[0],
+                    downward: colors[1]
+                }
+            }
+        },
+        series: [{
+            data: seriesData
+        }],
+        xaxis: {
+            type: 'datetime'
+        },
+        yaxis: {
+          tooltip: {
+            enabled: true
+          }
+        }
+    }
+
+    var chart = new ApexCharts(
+        document.querySelector("#simple-candlestick"),
+        options
+    );
+
+    chart.render();
+
+    
+});
+</script>
 
 <script>
     var model = @Html.Raw(Json.Serialize(Model));
@@ -130,6 +189,12 @@
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
     var marketTrades = model.marketTrades
+
+    model.candleStick.forEach(item => {
+        candleStick.push(new {
+        
+            })
+    });
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
     currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
@@ -140,10 +205,13 @@
 
     currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
 
-    console.log(userOpenOrders);
-
     loadOrderBook(buyOpenOrders, true, true);
     loadOrderBook(sellOpenOrders, true, false);
     loadMarketTrades(marketTrades, true);
     loadUserOpenOrders(userOpenOrders, true);
+
+
+
+    
 </script>
+

@@ -4,10 +4,8 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-using Web_Api.online.Models;
-using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.Tables;
-using Web_Api.online.Repositories;
 
 namespace Web_Api.online.Controllers
 {

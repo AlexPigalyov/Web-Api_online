@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web_Api.online.Repositories;
 using Web_Api.online.Models;
 using System.Security.Claims;
-using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
@@ -15,8 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Web_Api.online.Hubs;
 using Newtonsoft.Json;
-using Web_Api.online.Models.Constants;
 using Web_Api.online.Models.ViewModels;
+using Web_Api.online.Data.Repositories;
 
 namespace Web_Api.online.Controllers
 {
@@ -26,16 +23,19 @@ namespace Web_Api.online.Controllers
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<btcusdtHub> _hubcontext;
         private readonly BotsRepository _botsRepository;
+        private readonly CandleStickRepository _candleStickRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
             TradeRepository tradeRepository,
             BotsRepository botsRepository,
+            CandleStickRepository candleStickRepository,
             IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;
             _botsRepository = botsRepository;
+            _candleStickRepository = candleStickRepository;
             _hubcontext = hubcontext;
         }
 
@@ -186,6 +186,7 @@ namespace Web_Api.online.Controllers
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
             List<BTC_USDT_ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
+            List<CandleStickTableModel> candleStick = await _candleStickRepository.spGet_BTC_USDT_CandleStick();
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {
@@ -193,6 +194,7 @@ namespace Web_Api.online.Controllers
                 OrderBookBuy = openOrdersBuy,
                 OrderBookSell = openOrdersSell,
                 MarketTrades = marketTrades,
+                CandleStick = candleStick,
                 IsBuy = orderModel.IsBuy
             };
 

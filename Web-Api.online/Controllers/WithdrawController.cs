@@ -1,21 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Web_Api.online.Clients.Interfaces;
-using Web_Api.online.Extensions;
-using Web_Api.online.Models;
-using Web_Api.online.Models.Enums;
-using Web_Api.online.Models.Tables;
+
+using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.WithdrawModels;
-using Web_Api.online.Repositories;
-using Web_Api.online.Repositories.Abstract;
 using Web_Api.online.Services;
-using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Controllers
 {

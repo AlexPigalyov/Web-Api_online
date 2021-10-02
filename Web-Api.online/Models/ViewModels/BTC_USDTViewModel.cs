@@ -15,5 +15,6 @@ namespace Web_Api.online.Models.ViewModels
         public List<BTC_USDT_OpenOrderTableModel> UserOpenOrders { get; set; }
         public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> BuyOrderBook { get; set; }
         public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
+        public List<CandleStickTableModel> CandleStick { get; set; }
     }
 }
