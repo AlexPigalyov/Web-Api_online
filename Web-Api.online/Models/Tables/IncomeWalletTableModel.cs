@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Web_Api.online.Models
+namespace Web_Api.online.Models.Tables
 {
     /// <summary>
     /// Кошелёк входящих платежей, адрес создаётся в кошельке ноды и в самом блокчейне.
     /// </summary>
-    public class IncomeWallet
+    public class IncomeWalletTableModel
     {
         public int Id { get; set; }
         public string UserId { get; set; }

@@ -40,7 +40,7 @@ namespace Web_Api.online.Controllers
         public class IndexModel
         {
             public List<CurrencyTableModel> Currencies { get; set; }
-            public List<IncomeWallet> UserIncomeWallets { get; set; }
+            public List<IncomeWalletTableModel> UserIncomeWallets { get; set; }
             public List<WalletTableModel> UserWallets { get; set; }
         }
 
@@ -52,7 +52,7 @@ namespace Web_Api.online.Controllers
             IndexModel model = new IndexModel();
             model.Currencies = currencies;
             model.UserWallets = new List<WalletTableModel>();
-            model.UserIncomeWallets = new List<IncomeWallet>();
+            model.UserIncomeWallets = new List<IncomeWalletTableModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -103,7 +103,7 @@ namespace Web_Api.online.Controllers
                     CurrencyAcronim = selectCurrency
                 });
 
-                IncomeWallet incomeWallet = new IncomeWallet()
+                IncomeWalletTableModel incomeWallet = new IncomeWalletTableModel()
                 {
                     UserId = userId,
                     CurrencyAcronim = selectCurrency,

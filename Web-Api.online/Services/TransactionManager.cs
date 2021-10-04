@@ -22,7 +22,7 @@ namespace Web_Api.online.Services
 
 
         private string userId;
-        private List<IncomeWallet> incomeWallets;
+        private List<IncomeWalletTableModel> incomeWallets;
         private List<WalletTableModel> wallets;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
