@@ -148,7 +148,7 @@ namespace Web_Api.online.Services
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
                     Value = _value,
                     WhenDate = DateTime.Now,
-                    CurrencyAcronim = "LTC"
+                    CurrencyAcronim = tr.CurrencyAcronim
                 });
             }
         }
