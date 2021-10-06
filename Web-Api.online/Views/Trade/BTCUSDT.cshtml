@@ -254,8 +254,6 @@ $.get("/candlestick/getcandlestick", function(data) {
 
     });
 });
-
-
     
 </script>
 
@@ -267,7 +265,9 @@ $.get("/candlestick/getcandlestick", function(data) {
     var marketTrades = model.marketTrades
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-    currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
+    if(marketTrades != null){
+        currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
+    }   
 
     currentMarketTradeDoc.classList.remove('status-buy');
     currentMarketTradeDoc.classList.remove('status-sell');

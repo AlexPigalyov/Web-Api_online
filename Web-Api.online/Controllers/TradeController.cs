@@ -245,8 +245,7 @@ namespace Web_Api.online.Controllers
 
             model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
             model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
-            model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
-            model.UserOpenOrders = await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
+            model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();            
 
             return View(model);
         }
