@@ -67,7 +67,7 @@ namespace Web_Api.online.Repositories
             {
                 try
                 {
-                    List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await db.QueryAsync<IncomeWalletTableModel>("spGetUserIncomeWallets",
+                    List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await db.QueryAsync<IncomeWalletTableModel>("GetUserIncomeWallets",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure
                 ));
