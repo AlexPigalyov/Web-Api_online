@@ -61,13 +61,13 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<List<IncomeWallet>> GetUserIncomeWalletsAsync(string userId)
+        public async Task<List<IncomeWalletTableModel>> GetUserIncomeWalletsAsync(string userId)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 try
                 {
-                    List<IncomeWallet> result = (List<IncomeWallet>)(await db.QueryAsync<IncomeWallet>("GetUserIncomeWallets",
+                    List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await db.QueryAsync<IncomeWalletTableModel>("spGetUserIncomeWallets",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure
                 ));
@@ -78,7 +78,7 @@ namespace Web_Api.online.Repositories
             }
         }
 
-        public async Task<IncomeWallet> CreateUserIncomeWalletAsync(IncomeWallet wallet)
+        public async Task<IncomeWalletTableModel> CreateUserIncomeWalletAsync(IncomeWalletTableModel wallet)
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {

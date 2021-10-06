@@ -57,11 +57,11 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task<List<IncomeWallet>> GetUserIncomeWalletsAsync(string userId)
+        public async Task<List<IncomeWalletTableModel>> GetUserIncomeWalletsAsync(string userId)
         {
             try
             {
-                List<IncomeWallet> result = (List<IncomeWallet>)(await _db.QueryAsync<IncomeWallet>("spGetUserIncomeWallets",
+                List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await _db.QueryAsync<IncomeWalletTableModel>("spGetUserIncomeWallets",
                 new { userId = userId },
                 commandType: CommandType.StoredProcedure
             ));
@@ -71,7 +71,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task<IncomeWallet> CreateUserIncomeWalletAsync(IncomeWallet wallet)
+        public async Task<IncomeWalletTableModel> CreateUserIncomeWalletAsync(IncomeWalletTableModel wallet)
         {
             try
             {

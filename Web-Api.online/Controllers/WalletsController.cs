@@ -11,6 +11,7 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Web_Api.online.Data.Repositories;
+using Nethereum.Web3;
 
 namespace Web_Api.online.Controllers
 {
@@ -21,22 +22,25 @@ namespace Web_Api.online.Controllers
         private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
+        private Web3 _web3;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
-            EventsRepository eventsRepository)
+            EventsRepository eventsRepository,
+            Web3 web3)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
+            _web3 = web3;
         }
 
         public class IndexModel
         {
             public List<CurrencyTableModel> Currencies { get; set; }
-            public List<IncomeWallet> UserIncomeWallets { get; set; }
+            public List<IncomeWalletTableModel> UserIncomeWallets { get; set; }
             public List<WalletTableModel> UserWallets { get; set; }
         }
 
@@ -48,7 +52,7 @@ namespace Web_Api.online.Controllers
             IndexModel model = new IndexModel();
             model.Currencies = currencies;
             model.UserWallets = new List<WalletTableModel>();
-            model.UserIncomeWallets = new List<IncomeWallet>();
+            model.UserIncomeWallets = new List<IncomeWalletTableModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -61,12 +65,6 @@ namespace Web_Api.online.Controllers
             return View(model);
         }
 
-        public ActionResult Details(string name)
-        {
-            return View();
-        }
-
-        // POST: WalletsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(string selectCurrency)
@@ -76,26 +74,36 @@ namespace Web_Api.online.Controllers
             {
                 string address = "";
 
-                foreach (var coin in _coinManager.CoinServices)
+                if (selectCurrency == "ETH")
                 {
-                    if (coin.CoinShortName == selectCurrency)
+                    address = await _web3.Personal.NewAccount.SendRequestAsync(userId);
+                }
+                else
+                {
+                    foreach (var coin in _coinManager.CoinServices)
                     {
-                        address = coin.GetNewAddress(userId);
-
-                        await _eventsRepository.CreateEvent(new EventTableModel()
+                        if (coin.CoinShortName == selectCurrency)
                         {
-                            UserId = userId,
-                            Type = (int)EventTypeEnum.CreateAddress,
-                            Comment = $"Create address {coin.CoinShortName}",
-                            WhenDate = DateTime.Now,
-                            CurrencyAcronim = selectCurrency
-                        });
-
-                        break;
+                            address = coin.GetNewAddress(userId);
+                            break;
+                        }
                     }
                 }
+                if (address == "")
+                {
+                    return RedirectToAction("Index");
+                }
 
-                IncomeWallet incomeWallet = new IncomeWallet()
+                await _eventsRepository.CreateEvent(new EventTableModel()
+                {
+                    UserId = userId,
+                    Type = (int)EventTypeEnum.CreateAddress,
+                    Comment = $"Create address {selectCurrency}",
+                    WhenDate = DateTime.Now,
+                    CurrencyAcronim = selectCurrency
+                });
+
+                IncomeWalletTableModel incomeWallet = new IncomeWalletTableModel()
                 {
                     UserId = userId,
                     CurrencyAcronim = selectCurrency,
@@ -109,48 +117,6 @@ namespace Web_Api.online.Controllers
             else
             {
                 return Redirect("/Identity/Account/Login");
-            }
-        }
-
-        // GET: WalletsController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: WalletsController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: WalletsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: WalletsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
             }
         }
     }
