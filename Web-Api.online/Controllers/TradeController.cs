@@ -135,27 +135,6 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You dont have a wallets. Create them");
             }
 
-            if (orderModel.IsBuy)
-            {
-                if (wallet.Value < total)
-                {
-                    return BadRequest("You doesn't have enough money for deal");
-                }
-
-                wallet.Value -= total;
-                await _walletsRepository.UpdateWalletBalance(wallet);
-            }
-            else
-            {
-                if (wallet.Value < amountDecimal)
-                {
-                    return BadRequest("You doesn't have enough money for deal");
-                }
-
-                wallet.Value -= amountDecimal;
-                await _walletsRepository.UpdateWalletBalance(wallet);
-            }
-
             long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new BTC_USDT_OpenOrderTableModel()
             {
                 IsBuy = orderModel.IsBuy,

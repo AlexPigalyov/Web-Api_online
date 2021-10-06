@@ -26,7 +26,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<spGetLastRatesResult>> GetLastRatesAsync()
         {
             List<spGetLastRatesResult> result =
-                (List<spGetLastRatesResult>)await _db.QueryAsync<spGetLastRatesResult>("exec spGetLastRates");
+                (List<spGetLastRatesResult>)await _db.QueryAsync<spGetLastRatesResult>("exec GetLastRates");
 
             return result;
         }
@@ -34,7 +34,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<spGetTickerRatesResult>> GetTickerInformationAsync()
         {
             List<spGetTickerRatesResult> result =
-                (List<spGetTickerRatesResult>)await _db.QueryAsync<spGetTickerRatesResult>("exec spGetTickerRates");
+                (List<spGetTickerRatesResult>)await _db.QueryAsync<spGetTickerRatesResult>("exec GetTickerRates");
 
             return result;
         }
@@ -42,7 +42,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<spGetLastCoinsRatesResult>> GetLastCoinsRatesAsync()
         {
             List<spGetLastCoinsRatesResult> result =
-                (List<spGetLastCoinsRatesResult>)await _db.QueryAsync<spGetLastCoinsRatesResult>("exec spGetLastCoinsRates");
+                (List<spGetLastCoinsRatesResult>)await _db.QueryAsync<spGetLastCoinsRatesResult>("exec GetLastCoinsRates");
 
             return result;
         }
@@ -50,7 +50,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<spGetCoinRatesByAcronimResult>> GetCoinsByAcronimAsync(string acronim)
         {
             List<spGetCoinRatesByAcronimResult> result =
-                (List<spGetCoinRatesByAcronimResult>)await _db.QueryAsync<spGetCoinRatesByAcronimResult>("spGetCoinRatesByAcronim",
+                (List<spGetCoinRatesByAcronimResult>)await _db.QueryAsync<spGetCoinRatesByAcronimResult>("GetCoinRatesByAcronim",
                     new { acronim = acronim },
                     commandType: CommandType.StoredProcedure
                 );
@@ -61,7 +61,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<spGetCoinRatesByAcronimAndSiteResult>> GetCoinsByAcronimAndSiteAsync(string acronim, string site)
         {
             List<spGetCoinRatesByAcronimAndSiteResult> result = (List<spGetCoinRatesByAcronimAndSiteResult>)
-                await _db.QueryAsync<spGetCoinRatesByAcronimAndSiteResult>("spGetCoinRatesByAcronimAndSite",
+                await _db.QueryAsync<spGetCoinRatesByAcronimAndSiteResult>("GetCoinRatesByAcronimAndSite",
                 new
                 {
                     acronim = acronim,

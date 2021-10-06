@@ -25,7 +25,7 @@ namespace Web_Api.online.Repositories
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                List<spGetLastRatesResult> result = (List<spGetLastRatesResult>)(await db.QueryAsync<spGetLastRatesResult>("exec spGetLastRates"));
+                List<spGetLastRatesResult> result = (List<spGetLastRatesResult>)(await db.QueryAsync<spGetLastRatesResult>("exec GetLastRates"));
 
                 return result;
             }
@@ -35,7 +35,7 @@ namespace Web_Api.online.Repositories
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                List<spGetTickerRatesResult> result = (List<spGetTickerRatesResult>)(await db.QueryAsync<spGetTickerRatesResult>("exec spGetTickerRates"));
+                List<spGetTickerRatesResult> result = (List<spGetTickerRatesResult>)(await db.QueryAsync<spGetTickerRatesResult>("exec GetTickerRates"));
 
                 return result;
             }
@@ -45,7 +45,7 @@ namespace Web_Api.online.Repositories
         {
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                List<spGetLastCoinsRatesResult> result = (List<spGetLastCoinsRatesResult>)(await db.QueryAsync<spGetLastCoinsRatesResult>("exec spGetLastCoinsRates"));
+                List<spGetLastCoinsRatesResult> result = (List<spGetLastCoinsRatesResult>)(await db.QueryAsync<spGetLastCoinsRatesResult>("exec GetLastCoinsRates"));
 
                 return result;
             }
@@ -56,7 +56,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
 
-                List<spGetCoinRatesByAcronimResult> result = (List<spGetCoinRatesByAcronimResult>)(await db.QueryAsync<spGetCoinRatesByAcronimResult>("spGetCoinRatesByAcronim",
+                List<spGetCoinRatesByAcronimResult> result = (List<spGetCoinRatesByAcronimResult>)(await db.QueryAsync<spGetCoinRatesByAcronimResult>("GetCoinRatesByAcronim",
                     new { acronim = acronim },
                     commandType: CommandType.StoredProcedure
                 ));
@@ -70,7 +70,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
 
-                List<spGetCoinRatesByAcronimAndSiteResult> result = (List<spGetCoinRatesByAcronimAndSiteResult>)(await db.QueryAsync<spGetCoinRatesByAcronimAndSiteResult>("spGetCoinRatesByAcronimAndSite",
+                List<spGetCoinRatesByAcronimAndSiteResult> result = (List<spGetCoinRatesByAcronimAndSiteResult>)(await db.QueryAsync<spGetCoinRatesByAcronimAndSiteResult>("GetCoinRatesByAcronimAndSite",
                     new
                     {
                         acronim = acronim,

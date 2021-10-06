@@ -30,7 +30,7 @@
                     </div>
                     <div class="orderbook-ticker">
                         <div class="orderbook-ticker-status status-buy">
-                            <span>0</span>
+                            <span class="current-price">0</span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);"><path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path></svg>
                         </div>
                         <div class="orderbook-ticker-markprice">$6.24</div>
@@ -128,17 +128,27 @@
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/btcusdthub.js?3"></script>
 <script src="~/js/vendor/apexcharts.min.js"></script>
-
 <script>
+
+var currentCandleStick = null;
+
 $.get("/candlestick/getcandlestick", function(data) {
 
-    var seriesData = []
+    currentCandleStick = data.currentCandleStick;
 
-    data.forEach(candleStick => {
-        seriesData.push({
-            x: candleStick.closeTime,
-            y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
-        })
+    var seriesData = []
+    if(data.lastCandleSticks != null){
+        data.lastCandleSticks.forEach(candleStick => {
+            seriesData.push({
+                x: candleStick.closeTime,
+                y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
+            })
+        });
+    }    
+
+    seriesData.push({
+        x: data.currentCandleStick.closeTime,
+        y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
     });
 
     var colors = ["#0acf97", "#fa5c7c"];
@@ -166,9 +176,9 @@ $.get("/candlestick/getcandlestick", function(data) {
             type: 'datetime'
         },
         yaxis: {
-          tooltip: {
-            enabled: true
-          }
+            tooltip: {
+                enabled: true
+            }
         }
     }
 
@@ -179,8 +189,74 @@ $.get("/candlestick/getcandlestick", function(data) {
 
     chart.render();
 
-    
+    let lastPrice = 0;
+    $(document).ready(function() {
+
+        var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+
+        var currentHigh = currentCandleStick.high;
+        var currentLow = currentCandleStick.low;
+        var currentOpen = currentCandleStick.open;
+        var currentClose = currentCandleStick.close;
+        var currentCloseDate = new Date(Date.parse(currentCandleStick.closeTime));
+
+        $(".current-price").on('DOMSubtreeModified', function(changedNode) {
+
+            if(changedNode.currentTarget.firstChild != null){
+                var price = changedNode.currentTarget.firstChild.data;
+
+            var newSeries = []
+
+            if (price != lastPrice) {
+
+                var high = currentHigh < price ? price : currentHigh;
+                var low = currentLow > price ? price : currentLow;
+
+                if (currentCloseDate > (new Date())) {
+
+                    seriesData.pop();
+
+                    seriesData.push({
+                        x: currentCloseDate,
+                        y: [currentOpen, high, low, price]
+                    });
+
+                    chart.updateSeries([{
+                        data: seriesData
+                    }]);
+
+                    currentHigh = high;
+                    currentLow = low;
+                    currentClose = price;
+                } else {
+                    currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
+                    currentLow = price;
+                    currentHigh = price;
+                    currentClose = price;
+                    currentClose = price;
+
+                    seriesData.push({
+                        x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
+                        y: [price, price, price, price]
+                    });
+
+                    chart.updateSeries({
+                        data: newSeries
+                    });
+
+
+                }
+
+                lastPrice = price;
+            }
+            }                        
+        });
+
+    });
 });
+
+
+    
 </script>
 
 <script>
@@ -189,12 +265,6 @@ $.get("/candlestick/getcandlestick", function(data) {
     var buyOpenOrders = model.buyOrderBook
     var sellOpenOrders = model.sellOrderBook
     var marketTrades = model.marketTrades
-
-    model.candleStick.forEach(item => {
-        candleStick.push(new {
-        
-            })
-    });
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
     currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
@@ -208,10 +278,6 @@ $.get("/candlestick/getcandlestick", function(data) {
     loadOrderBook(buyOpenOrders, true, true);
     loadOrderBook(sellOpenOrders, true, false);
     loadMarketTrades(marketTrades, true);
-    loadUserOpenOrders(userOpenOrders, true);
-
-
-
-    
+    loadUserOpenOrders(userOpenOrders, true);    
 </script>
 

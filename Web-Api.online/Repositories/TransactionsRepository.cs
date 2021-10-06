@@ -28,7 +28,7 @@ namespace Web_Api.online.Repositories
                 try
                 {
                     List<IncomeTransactionTableModel> result = (List<IncomeTransactionTableModel>)(await db.QueryAsync<IncomeTransactionTableModel>
-                        ("spGetLastIncomeTransactionsByUserId",
+                        ("GetLastIncomeTransactionsByUserId",
                           new { userId = userId },
                           commandType: CommandType.StoredProcedure));
 
@@ -55,7 +55,7 @@ namespace Web_Api.online.Repositories
                     p.Add("incomeWalletId", incomeTransaction.WalletId);
                     p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                    await db.QueryAsync<int>("spCreateIncomeTransaction", p, commandType: CommandType.StoredProcedure);
+                    await db.QueryAsync<int>("CreateIncomeTransaction", p, commandType: CommandType.StoredProcedure);
 
                     incomeTransaction.Id = p.Get<int>("new_identity");
 

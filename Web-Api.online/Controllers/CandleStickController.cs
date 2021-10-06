@@ -3,6 +3,7 @@
 using System.Threading.Tasks;
 
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
 {
@@ -19,7 +20,15 @@ namespace Web_Api.online.Controllers
         {
             var candleStick = await _candleStickRepository.spGet_BTC_USDT_CandleStick();
 
-            return Ok(candleStick);
+            var currentCandleStick = await _candleStickRepository.spGetCurrent_BTC_USDT_CandleStick();
+
+            var model = new CandleStickViewModel()
+            {
+                CurrentCandleStick = currentCandleStick,
+                LastCandleSticks = candleStick
+            };
+
+            return Ok(model);
         }
     }
 }

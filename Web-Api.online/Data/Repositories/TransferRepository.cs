@@ -34,7 +34,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("hash", transfer.Hash);
                 p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _db.QueryAsync<int>("spCreateTransfer", p, commandType: CommandType.StoredProcedure);
+                await _db.QueryAsync<int>("CreateTransfer", p, commandType: CommandType.StoredProcedure);
 
                 transfer.Id = p.Get<int>("new_identity");
 

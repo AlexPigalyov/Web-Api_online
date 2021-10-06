@@ -31,7 +31,7 @@ namespace Web_Api.online.Repositories
             {
                 BTC_USDT_OpenOrderTableModel result =
                     await db.QueryFirstAsync<BTC_USDT_OpenOrderTableModel>(
-                        "spGet_BTC_USDT_OpenOrder_ById",
+                        "Get_BTC_USDT_OpenOrder_ById",
                         new { openOrderId = openOrderId },
                         commandType: CommandType.StoredProcedure);
 
@@ -45,7 +45,7 @@ namespace Web_Api.online.Repositories
             {
                 List<BTC_USDT_ClosedOrderTableModel> result = (List<BTC_USDT_ClosedOrderTableModel>)
                     await db.QueryAsync<BTC_USDT_ClosedOrderTableModel>(
-                        "spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
+                        "Get_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
                         new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
 
@@ -58,7 +58,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spUpdate_BTC_USDT_OpenOrder",
+                    "Update_BTC_USDT_OpenOrder",
                     new
                     {
                         userid = model.CreateUserId,
@@ -78,7 +78,7 @@ namespace Web_Api.online.Repositories
             {
                 try
                 {
-                    return await db.QueryFirstAsync<decimal>("spGetLastPrice_BTC_USDT_ClosedOrder", commandType: CommandType.StoredProcedure);
+                    return await db.QueryFirstAsync<decimal>("GetLastPrice_BTC_USDT_ClosedOrder", commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -102,7 +102,7 @@ namespace Web_Api.online.Repositories
                     p.Add("openOrderId", openOrder.OpenOrderId);
                     p.Add("createDate", openOrder.CreateDate);
 
-                    return await db.QueryFirstAsync<decimal>("spProcess_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
+                    return await db.QueryFirstAsync<decimal>("Process_BTC_USDT_Order", p, commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex) 
                 {
@@ -118,7 +118,7 @@ namespace Web_Api.online.Repositories
                 try
                 {
                     await db.ExecuteAsync(
-                        "spMove_BTC_USDT_FromOpenOrdersToClosedOrders",
+                        "Move_BTC_USDT_FromOpenOrdersToClosedOrders",
                         new
                         {
                             createUserId = openOrder.CreateUserId,
@@ -144,7 +144,7 @@ namespace Web_Api.online.Repositories
                 {
                     List<BTC_USDT_OpenOrderTableModel> result = (List<BTC_USDT_OpenOrderTableModel>)
                     await db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
-                        "spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
+                        "Get_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
                         new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
 
@@ -169,7 +169,7 @@ namespace Web_Api.online.Repositories
                     parameters.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                     long result = await db.QueryFirstAsync<long>(
-                        "spCreate_BTC_USDT_OpenOrder",
+                        "Create_BTC_USDT_OpenOrder",
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
@@ -187,7 +187,7 @@ namespace Web_Api.online.Repositories
                 {
                     List<BTC_USDT_OpenOrderTableModel> result = (List<BTC_USDT_OpenOrderTableModel>)
                     await db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
-                        "spGet_BTC_USDT_OpenOrders",
+                        "Get_BTC_USDT_OpenOrders",
                         commandType: CommandType.StoredProcedure);
 
                     return result;
@@ -205,7 +205,7 @@ namespace Web_Api.online.Repositories
                 {
                     var res = (List<BTC_USDT_ClosedOrderTableModel>)
                         await db.QueryAsync<BTC_USDT_ClosedOrderTableModel>(
-                            "spGet_BTC_USDT_ClosedOrders_Top100",
+                            "Get_BTC_USDT_ClosedOrders_Top100",
                             commandType: CommandType.StoredProcedure);
 
                     return res;
@@ -223,7 +223,7 @@ namespace Web_Api.online.Repositories
                     var isBuyStr = isBuy ? "Buy" : "Sell";
 
                     var res = (await db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
-                        $"spGet_BTC_USDT_OrderBook{isBuyStr}_OrderBy{(!isBuy ? "" : "Desc")}Price",
+                        $"Get_BTC_USDT_OrderBook{isBuyStr}_OrderBy{(!isBuy ? "" : "Desc")}Price",
                         commandType: CommandType.StoredProcedure))
                     .Take(count);
 

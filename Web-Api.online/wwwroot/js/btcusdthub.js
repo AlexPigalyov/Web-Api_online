@@ -22,12 +22,6 @@ connection.on("ReceiveMessage", function (recieveModel) {
     loadMarketTrades(model.MarketTrades, false);
 });
 
-connection.on("ReceiveNewOrder", function (model) {
-
-
-    loadUserOpenOrders(model, false);
-});
-
 
 connection.start().then(function () {
     document.getElementById("buyButton").disabled = false;

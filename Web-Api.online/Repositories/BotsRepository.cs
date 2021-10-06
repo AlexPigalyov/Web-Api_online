@@ -25,7 +25,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spCreateBot",
+                    "CreateBot",
                     new
                     {
                         name = model.Name,
@@ -41,7 +41,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 await db.ExecuteAsync(
-                    "spDeleteBots_ById",
+                    "DeleteBots_ById",
                     new
                     {
                         id = id
@@ -56,7 +56,7 @@ namespace Web_Api.online.Repositories
             {
                 List<BotsTableModel> result = (List<BotsTableModel>)
                     await db.QueryAsync<BotsTableModel>(
-                        "spGetBots_ById",
+                        "GetBots_ById",
                         new { userid = userId },
                         commandType: CommandType.StoredProcedure);
 
@@ -69,7 +69,7 @@ namespace Web_Api.online.Repositories
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection")))
             {
                 BotsTableModel result = await db.QueryFirstAsync<BotsTableModel>(
-                        "spGetBots_ByBotAuthCode",
+                        "GetBots_ByBotAuthCode",
                         new { botAuthCode = botAuthCode },
                         commandType: CommandType.StoredProcedure);
 

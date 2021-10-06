@@ -26,7 +26,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 return await _db.QueryFirstAsync<UserInfoTableModel>(
-                    "spGetUserInfo_ByUserId",
+                    "GetUserInfo_ByUserId",
                     new
                     {
                         userId = userId
@@ -43,7 +43,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 await _db.ExecuteAsync(
-                    "spCreateOrUpdateUsersInfoLocation",
+                    "CreateOrUpdateUsersInfoLocation",
                     new
                     {
                         userId = model.UserId,
@@ -59,7 +59,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 await _db.ExecuteAsync(
-                    "spCreateOrUpdateProfileUsersInfoPhoto",
+                    "CreateOrUpdateProfileUsersInfoPhoto",
                     new
                     {
                         userId = model.UserId,
@@ -75,7 +75,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 await _db.ExecuteAsync(
-                    "spCreateOrUpdateProfileUserInfo",
+                    "CreateOrUpdateProfileUserInfo",
                     new
                     {
                         userId = model.UserId,

@@ -25,7 +25,7 @@ namespace Web_Api.online.Data.Repositories
         {
             List<EventTableModel> result = (List<EventTableModel>)
                 await _db.QueryAsync<EventTableModel>(
-                    "spGetLastThreeEvents_ByUserId",
+                    "GetLastThreeEvents_ByUserId",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure);
 
@@ -36,7 +36,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task CreateEvent(EventTableModel model)
         {
             await _db.ExecuteAsync(
-                "spCreateEvent",
+                "CreateEvent",
                 new
                 {
                     userid = model.UserId,
@@ -53,7 +53,7 @@ namespace Web_Api.online.Data.Repositories
         {
             List<EventTableModel> result = (List<EventTableModel>)
                 await _db.QueryAsync<EventTableModel>(
-                    "spGetEventsByUserIdWithOrderByDescWhenDate",
+                    "GetEventsByUserIdWithOrderByDescWhenDate",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure);
 

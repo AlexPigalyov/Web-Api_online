@@ -27,8 +27,22 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                return (await _db.QueryAsync<CandleStickTableModel>("spGet_BTC_USDT_CandleStick", commandType: CommandType.StoredProcedure))
+                return (await _db.QueryAsync<CandleStickTableModel>("Get_BTC_USDT_CandleStick", commandType: CommandType.StoredProcedure))
                     .ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<CandleStickTableModel> spGetCurrent_BTC_USDT_CandleStick()
+        {
+            try
+            {
+                return await _db.QueryFirstAsync<CandleStickTableModel>(
+                    "GetCurrent_BTC_USDT_CandleStick",
+                    commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -40,7 +54,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                await _db.ExecuteAsync("spProcess_BTC_USDT_CandleStick", commandType: CommandType.StoredProcedure);
+                await _db.ExecuteAsync("Process_BTC_USDT_CandleStick", commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex) { }
         }
@@ -57,7 +71,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("open", candleStick.Open);
                 p.Add("openTime", candleStick.OpenTime);
 
-                await _db.ExecuteAsync("spCreate_BTC_USDT_CandleStick", p, commandType: CommandType.StoredProcedure);
+                await _db.ExecuteAsync("Create_BTC_USDT_CandleStick", p, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex) { }
         }

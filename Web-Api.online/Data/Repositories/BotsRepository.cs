@@ -25,7 +25,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task CreateBot(BotsTableModel model)
         {
             await _db.ExecuteAsync(
-                "spCreateBot",
+                "CreateBot",
                 new
                 {
                     name = model.Name,
@@ -38,7 +38,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task DeleteBotById(string id)
         {
             await _db.ExecuteAsync(
-                "spDeleteBots_ById",
+                "DeleteBots_ById",
                 new
                 {
                     id = id
@@ -50,7 +50,7 @@ namespace Web_Api.online.Data.Repositories
         {
             List<BotsTableModel> result = (List<BotsTableModel>)
                 await _db.QueryAsync<BotsTableModel>(
-                    "spGetBots_ById",
+                    "GetBots_ById",
                     new { userid = userId },
                     commandType: CommandType.StoredProcedure);
 
@@ -61,7 +61,7 @@ namespace Web_Api.online.Data.Repositories
         public async Task<BotsTableModel> GetBotByBotAuthCode(string botAuthCode)
         {
             BotsTableModel result = await _db.QueryFirstAsync<BotsTableModel>(
-                    "spGetBots_ByBotAuthCode",
+                    "GetBots_ByBotAuthCode",
                     new { botAuthCode = botAuthCode },
                     commandType: CommandType.StoredProcedure);
 
