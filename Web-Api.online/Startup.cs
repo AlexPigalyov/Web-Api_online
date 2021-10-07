@@ -128,7 +128,6 @@ namespace Web_Api.online
                 }
             });
 
-
             UserSeed(serviceProvider).Wait();
             WalletSeed(serviceProvider).Wait();
             BotAuthCodesSeed(serviceProvider).Wait();
