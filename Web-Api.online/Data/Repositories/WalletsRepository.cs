@@ -29,7 +29,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 List<WalletTableModel> result = (List<WalletTableModel>)await _db.QueryAsync<WalletTableModel>(
-                    "spGetUserWallets",
+                    "GetUserWallets",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure
             );
@@ -43,7 +43,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                WalletTableModel result = await _db.QueryFirstOrDefaultAsync<WalletTableModel>("spGetUserWalletByAcronim",
+                WalletTableModel result = await _db.QueryFirstOrDefaultAsync<WalletTableModel>("GetUserWalletByAcronim",
                 new
                 {
                     userId = userId,
@@ -61,7 +61,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await _db.QueryAsync<IncomeWalletTableModel>("spGetUserIncomeWallets",
+                List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await _db.QueryAsync<IncomeWalletTableModel>("GetUserIncomeWallets",
                 new { userId = userId },
                 commandType: CommandType.StoredProcedure
             ));
@@ -82,7 +82,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("currencyAcronim", wallet.CurrencyAcronim);
                 p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _db.QueryAsync<int>("spCreateUserIncomeWallet", p, commandType: CommandType.StoredProcedure);
+                await _db.QueryAsync<int>("CreateUserIncomeWallet", p, commandType: CommandType.StoredProcedure);
 
                 wallet.Id = p.Get<int>("new_identity");
 
@@ -101,7 +101,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("currencyAcronim", wallet.CurrencyAcronim);
                 p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _db.QueryAsync<int>("spCreateUserWallet", p, commandType: CommandType.StoredProcedure);
+                await _db.QueryAsync<int>("CreateUserWallet", p, commandType: CommandType.StoredProcedure);
 
                 wallet.Id = p.Get<int>("new_identity");
 
@@ -114,7 +114,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                await _db.QueryAsync<WalletTableModel>("spUpdateWalletBalance",
+                await _db.QueryAsync<WalletTableModel>("UpdateWalletBalance",
                     new
                     {
                         walletId = wallet.Id,
@@ -130,7 +130,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                return (await _db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("spGetNotEmptyValueWallet_ByUserId",
+                return (await _db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("GetNotEmptyValueWallet_ByUserId",
                     new
                     {
                         userid = userId
@@ -146,7 +146,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                await _db.QueryAsync<WalletTableModel>("spSendCoins",
+                await _db.QueryAsync<WalletTableModel>("SendCoins",
                     new
                     {
                         senderUserId = sendCoinsModel.EventSender.UserId,
