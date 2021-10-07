@@ -252,6 +252,12 @@ INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (8, N'DASH
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
+SET IDENTITY_INSERT [dbo].[IncomeTransactions] ON 
+GO
+INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [FromAddress], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (1, N'ETH', N'zxc', CAST(10.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), NULL, N'addressETH', 0, N'testETH', 1)
+GO
+SET IDENTITY_INSERT [dbo].[IncomeTransactions] OFF
+GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000006.22836390956472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
@@ -401,6 +407,39 @@ VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
 SELECT @new_identity = SCOPE_IDENTITY()
 
 SELECT @new_identity AS id
+
+RETURN
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CreateIncomeTransaction_UpdateBalance_CreateEvent]
+@currencyAcronim nvarchar(10),
+@transactionId nvarchar(max),
+@amount decimal(38, 20),
+@transactionFee decimal(38, 20),
+@fromAddress nvarchar(max),
+@toAddress nvarchar(max),
+@dateFloat decimal(38, 20),
+@userId nvarchar(450),
+@incomeWalletId int
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
+TransactionFee, ToAddress, Date, UserId, IncomeWalletsId)
+VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
+@toAddress, @dateFloat, @userId, @incomeWalletId)
+
+UPDATE [Exchange].[dbo].[Wallets]
+SET Value = Value + @amount
+WHERE CurrencyAcronim = @currencyAcronim
+
+INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
 
 RETURN
 
