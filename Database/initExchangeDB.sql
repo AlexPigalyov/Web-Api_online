@@ -128,6 +128,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[TransactionId] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
+	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
