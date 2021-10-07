@@ -37,6 +37,9 @@ function loadOrderBook(openOrders, isLoad, isBuy = false) {
             return;
         }
     }
+    else {
+        return;
+    }
     
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
