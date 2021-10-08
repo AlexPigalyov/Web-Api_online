@@ -196,7 +196,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 return (await _db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
-                        $"Get_BTC_USDT_OrderBookSell_OrderByDescPrice",
+                        $"Get_BTC_USDT_OrderBookSell_OrderByPrice",
                         commandType: CommandType.StoredProcedure))
                     .ToList();
             }
@@ -208,7 +208,7 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 return (await _db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
-                    $"Get_BTC_USDT_OrderBookBuy_OrderByPrice",
+                    $"Get_BTC_USDT_OrderBookBuy_OrderByDescPrice",
                     commandType: CommandType.StoredProcedure))
                 .ToList();
             }
