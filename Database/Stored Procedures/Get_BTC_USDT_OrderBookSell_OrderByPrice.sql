@@ -3,7 +3,7 @@ ALTER PROCEDURE [dbo].[Get_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -14,6 +14,5 @@ FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
 WHERE D1.IsBuy = 0
 GROUP BY  D1.Price, D1.IsBuy
 ORDER BY  Price
-
 
 END

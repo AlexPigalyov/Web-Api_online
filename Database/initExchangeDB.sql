@@ -128,7 +128,6 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[TransactionId] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
-	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
@@ -252,17 +251,11 @@ INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (8, N'DASH
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
-SET IDENTITY_INSERT [dbo].[IncomeTransactions] ON 
-GO
-INSERT [dbo].[IncomeTransactions] ([Id], [CurrencyAcronim], [TransactionId], [Amount], [TransactionFee], [FromAddress], [ToAddress], [Date], [UserId], [IncomeWalletsId]) VALUES (1, N'ETH', N'zxc', CAST(10.00000000000000000000 AS Decimal(38, 20)), CAST(1.00000000000000000000 AS Decimal(38, 20)), NULL, N'addressETH', 0, N'testETH', 1)
-GO
-SET IDENTITY_INSERT [dbo].[IncomeTransactions] OFF
-GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000006.22836390956472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000006.36917390956472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1625283.09888776822738921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1636191.28958306822738921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (3, N'1d6254fc-8f94-4229-b09f-a2b225c128b0', CAST(999999.96980768990051358754 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
@@ -281,17 +274,6 @@ GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (10, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(10.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:57.767' AS DateTime), CAST(N'2021-09-16T21:36:57.767' AS DateTime), N'59bdef4edf9e4a2bad9f6f521a184c96')
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
-GO
-CREATE NONCLUSTERED INDEX [closedDateIndex] ON [dbo].[BTC_USDT_ClosedOrders]
-(
-	[ClosedDate] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [ndx1] ON [dbo].[BTC_USDT_OpenOrders]
-(
-	[IsBuy] ASC,
-	[Price] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
@@ -407,39 +389,6 @@ VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
 SELECT @new_identity = SCOPE_IDENTITY()
 
 SELECT @new_identity AS id
-
-RETURN
-
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CreateIncomeTransaction_UpdateBalance_CreateEvent]
-@currencyAcronim nvarchar(10),
-@transactionId nvarchar(max),
-@amount decimal(38, 20),
-@transactionFee decimal(38, 20),
-@fromAddress nvarchar(max),
-@toAddress nvarchar(max),
-@dateFloat decimal(38, 20),
-@userId nvarchar(450),
-@incomeWalletId int
-AS
-BEGIN
-
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
-TransactionFee, ToAddress, Date, UserId, IncomeWalletsId)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
-@toAddress, @dateFloat, @userId, @incomeWalletId)
-
-UPDATE [Exchange].[dbo].[Wallets]
-SET Value = Value + @amount
-WHERE CurrencyAcronim = @currencyAcronim
-
-INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
 
 RETURN
 
@@ -606,7 +555,7 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -629,7 +578,7 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-SELECT DISTINCT COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
+SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price, D1.IsBuy, 
     (SELECT SUM(D2.Amount)
     FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D2
     WHERE D2.Price = D1.Price) AS Amount,
@@ -640,7 +589,6 @@ FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
 WHERE D1.IsBuy = 0
 GROUP BY  D1.Price, D1.IsBuy
 ORDER BY  Price
-
 
 END
 GO
