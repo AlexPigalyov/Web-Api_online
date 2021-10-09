@@ -20,23 +20,27 @@ function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
 function loadOrderBook(openOrders, isLoad, isBuy = false) {
 
     let list = null;
+    if (openOrders != null) {
+        if (openOrders.length != 0) {
+            if (!isBuy) {
+                list = document.getElementsByClassName("orderbook-list")[0];
 
-    if (openOrders.length != 0) {
-        if (!isBuy) {
-            list = document.getElementsByClassName("orderbook-list")[0];
+                list.innerHTML = '';
+            }
+            else {
+                list = document.getElementsByClassName("orderbook-list")[1];
 
-            list.innerHTML = '';
+                list.innerHTML = '';
+            }
         }
         else {
-            list = document.getElementsByClassName("orderbook-list")[1];
-
-            list.innerHTML = '';
+            return;
         }
     }
     else {
         return;
     }
-
+    
     var openOrdersObjMaxAmount = null;
     if (isLoad) {
         openOrdersObjMaxAmount = Math.max.apply(null, openOrders.map(item => item.amount));

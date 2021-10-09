@@ -162,8 +162,8 @@ namespace Web_Api.online.Controllers
                 updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
             }
 
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
+            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
+            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
             List<BTC_USDT_ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
             List<CandleStickTableModel> candleStick = await _candleStickRepository.spGet_BTC_USDT_CandleStick();
 
@@ -243,8 +243,8 @@ namespace Web_Api.online.Controllers
                 model.UserOpenOrders = await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
             }
 
-            model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(true);
-            model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_OrderBookAsync(false);
+            model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
+            model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
             model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();            
 
             return View(model);

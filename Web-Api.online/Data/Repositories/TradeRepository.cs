@@ -24,7 +24,7 @@ namespace Web_Api.online.Data.Repositories
         public TradeRepository(IConfiguration configuration)
         {
             _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection"));            
+            _db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection"));
         }
 
         public async Task<BTC_USDT_OpenOrderTableModel> spGet_BTC_USDT_OpenOrder_ById(long openOrderId)
@@ -191,18 +191,26 @@ namespace Web_Api.online.Data.Repositories
             catch { return null; }
         }
 
-        public async Task<List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>> Get_BTC_USDT_OrderBookAsync(bool isBuy, int count = 15)
+        public async Task<List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>> Get_BTC_USDT_SellOrderBookAsync()
         {
             try
             {
-                var isBuyStr = isBuy ? "Buy" : "Sell";
+                return (await _db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
+                        $"Get_BTC_USDT_OrderBookSell_OrderByPrice",
+                        commandType: CommandType.StoredProcedure))
+                    .ToList();
+            }
+            catch { return null; }
+        }
 
-                var res = (await _db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
-                    $"Get_BTC_USDT_OrderBook{isBuyStr}_OrderBy{(!isBuy ? "" : "Desc")}Price",
+        public async Task<List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>> Get_BTC_USDT_BuyOrderBookAsync()
+        {
+            try
+            {
+                return (await _db.QueryAsync<spGetOrderByDescPrice_BTC_USDT_OrderBookResult>(
+                    $"Get_BTC_USDT_OrderBookBuy_OrderByDescPrice",
                     commandType: CommandType.StoredProcedure))
-                .Take(count);
-
-                return res.ToList();
+                .ToList();
             }
             catch { return null; }
         }
