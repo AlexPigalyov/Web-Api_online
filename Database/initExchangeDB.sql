@@ -1588,6 +1588,39 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[CreateIncomeTransaction_UpdateBalance_CreateEvent]
+@currencyAcronim nvarchar(10),
+@transactionId nvarchar(max),
+@amount decimal(38, 20),
+@transactionFee decimal(38, 20),
+@fromAddress nvarchar(max),
+@toAddress nvarchar(max),
+@dateFloat decimal(38, 20),
+@userId nvarchar(450),
+@incomeWalletId int
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
+TransactionFee, FromAddress, ToAddress, Date, UserId, IncomeWalletsId)
+VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @fromAddress,
+@toAddress, @dateFloat, @userId, @incomeWalletId)
+
+UPDATE [Exchange].[dbo].[Wallets]
+SET Value = Value + @amount
+WHERE CurrencyAcronim = @currencyAcronim and UserId = @userId
+
+INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
+
+RETURN
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 create PROCEDURE [dbo].[CreateUserIncomeWallet]
 @userid nvarchar(450),
 @address nvarchar(max),
@@ -1604,7 +1637,7 @@ SELECT @new_identity = SCOPE_IDENTITY()
 
 SELECT @new_identity AS id
 
---Создаём внутренний кошелёк, если его не было
+--РЎРѕР·РґР°С‘Рј РІРЅСѓС‚СЂРµРЅРЅРёР№ РєРѕС€РµР»С‘Рє, РµСЃР»Рё РµРіРѕ РЅРµ Р±С‹Р»Рѕ
 --insert wallet if not exist
 IF NOT EXISTS(SELECT 1 FROM [Exchange].[dbo].[Wallets] WHERE UserId = @userid AND CurrencyAcronim = @currencyAcronim)
 BEGIN
