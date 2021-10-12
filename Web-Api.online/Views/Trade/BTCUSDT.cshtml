@@ -146,10 +146,12 @@ $.get("/candlestick/getcandlestick", function(data) {
         });
     }    
 
-    seriesData.push({
-        x: data.currentCandleStick.closeTime,
-        y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
-    });
+    if(data.currentCandleStick != null){
+        seriesData.push({
+            x: data.currentCandleStick.closeTime,
+            y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
+        });
+    }    
 
     var colors = ["#0acf97", "#fa5c7c"];
     var dataColors = $("#simple-candlestick").data('colors');
@@ -265,7 +267,7 @@ $.get("/candlestick/getcandlestick", function(data) {
     var marketTrades = model.marketTrades
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-    if(marketTrades != null){
+    if(marketTrades.length > 0){
         currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
     }   
 
