@@ -1,3 +1,10 @@
+USE [Exchange]
+GO
+/****** Object:  StoredProcedure [dbo].[Process_BTC_USDT_SellOrder]    Script Date: 12.10.2021 23:54:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 ALTER PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 @createUserId nvarchar(450),
 @isBuy bit,
@@ -44,12 +51,11 @@ BEGIN
 		(SELECT OpenOrderId FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate, 
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
-				(SELECT Total FROM #selectedOrder),
+		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
@@ -72,12 +78,11 @@ END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES (NEXT VALUE FOR [dbo].[BTC_USDT_OpenOrderId_Sequence],
-				@total,
+		VALUES (@total,
 				@createDate,
 				getdate(),
 				@isBuy,
@@ -111,11 +116,10 @@ BEGIN
 		(SELECT OpenOrderId FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
+				Total, CreateDate,
 				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
-		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
-				(SELECT Total FROM #selectedOrder),
+		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
@@ -134,12 +138,11 @@ BEGIN
 		AND CurrencyAcronim = 'BTC'  			
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES (NEXT VALUE FOR [dbo].[BTC_USDT_OpenOrderId_Sequence],
-				@total,
+		VALUES (@total,
 				@createDate,
 				getdate(),
 				@isBuy,
