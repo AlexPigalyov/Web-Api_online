@@ -622,6 +622,7 @@ SELECT TOP 15
     SUM(c.Price * c.Amount) Total  
 FROM cte c
 	GROUP BY c.Price
+order by c.Price DESC
 
 END
 GO
