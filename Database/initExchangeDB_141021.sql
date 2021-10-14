@@ -128,6 +128,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[TransactionId] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
+	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
@@ -367,19 +368,22 @@ CREATE PROCEDURE [dbo].[CreateIncomeTransaction_UpdateBalance_CreateEvent]
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
-TransactionFee, ToAddress, Date, UserId, IncomeWalletsId)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
-@toAddress, @dateFloat, @userId, @incomeWalletId)
+if 0 = (Select Count(*) From IncomeTransactions Where TransactionId = @transactionId) 
+	BEGIN
+		INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
+			TransactionFee, FromAddress, ToAddress, Date, UserId, IncomeWalletsId)
+		VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @fromAddress,
+			@toAddress, @dateFloat, @userId, @incomeWalletId)
 
-UPDATE [Exchange].[dbo].[Wallets]
-SET Value = Value + @amount
-WHERE CurrencyAcronim = @currencyAcronim
+		UPDATE [Exchange].[dbo].[Wallets]
+		SET Value = Value + @amount
+		WHERE CurrencyAcronim = @currencyAcronim and UserId = @userId
 
-INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
+		INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+		VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
 
-RETURN
+		RETURN
+	END
 
 END
 GO
@@ -403,7 +407,7 @@ SELECT @new_identity = SCOPE_IDENTITY()
 
 SELECT @new_identity AS id
 
---РЎРѕР·РґР°С‘Рј РІРЅСѓС‚СЂРµРЅРЅРёР№ РєРѕС€РµР»С‘Рє, РµСЃР»Рё РµРіРѕ РЅРµ Р±С‹Р»Рѕ
+--Создаём внутренний кошелёк, если его не было
 --insert wallet if not exist
 IF NOT EXISTS(SELECT 1 FROM [Exchange].[dbo].[Wallets] WHERE UserId = @userid AND CurrencyAcronim = @currencyAcronim)
 BEGIN
