@@ -128,6 +128,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[TransactionId] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
+	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
@@ -219,18 +220,6 @@ CREATE TABLE [dbo].[Wallets](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-094721] ON [dbo].[BTC_USDT_ClosedOrders]
-(
-	[ClosedDate] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-160532] ON [dbo].[BTC_USDT_OpenOrders]
-(
-	[IsBuy] ASC,
-	[Price] DESC
-)
-INCLUDE([Amount]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 SET IDENTITY_INSERT [dbo].[Bots] ON 
 GO
 INSERT [dbo].[Bots] ([Id], [Name], [BotAuthCode], [UserId]) VALUES (1, N'Binance', N'51899c8f-a387-4d1f-9062-31b02c2350c4', N'0996e6bb-ea74-447b-9832-d1b5a02d4a70')
@@ -286,6 +275,18 @@ GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (10, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(10.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:57.767' AS DateTime), CAST(N'2021-09-16T21:36:57.767' AS DateTime), N'59bdef4edf9e4a2bad9f6f521a184c96')
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-094721] ON [dbo].[BTC_USDT_ClosedOrders]
+(
+	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-160532] ON [dbo].[BTC_USDT_OpenOrders]
+(
+	[IsBuy] ASC,
+	[Price] DESC
+)
+INCLUDE([Amount]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
@@ -423,19 +424,22 @@ CREATE PROCEDURE [dbo].[CreateIncomeTransaction_UpdateBalance_CreateEvent]
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
-TransactionFee, ToAddress, Date, UserId, IncomeWalletsId)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
-@toAddress, @dateFloat, @userId, @incomeWalletId)
+if 0 = (Select Count(*) From IncomeTransactions Where TransactionId = @transactionId) 
+	BEGIN
+		INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
+			TransactionFee, FromAddress, ToAddress, Date, UserId, IncomeWalletsId)
+		VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @fromAddress,
+			@toAddress, @dateFloat, @userId, @incomeWalletId)
 
-UPDATE [Exchange].[dbo].[Wallets]
-SET Value = Value + @amount
-WHERE CurrencyAcronim = @currencyAcronim
+		UPDATE [Exchange].[dbo].[Wallets]
+		SET Value = Value + @amount
+		WHERE CurrencyAcronim = @currencyAcronim and UserId = @userId
 
-INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
+		INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
+		VALUES (@userid, 2, @amount, 'Income transaction '+ @currencyAcronim, GETDATE(), @currencyAcronim)
 
-RETURN
+		RETURN
+	END
 
 END
 GO
