@@ -137,19 +137,21 @@ $.get("/candlestick/getcandlestick", function(data) {
     currentCandleStick = data.currentCandleStick;
 
     var seriesData = []
-    if(data.lastCandleSticks != null){
+    if (data.lastCandleSticks != null) {
         data.lastCandleSticks.forEach(candleStick => {
             seriesData.push({
                 x: candleStick.closeTime,
                 y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
             })
         });
-    }    
+    }
 
-    seriesData.push({
-        x: data.currentCandleStick.closeTime,
-        y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
-    });
+    if (data.currentCandleStick != null) {
+        seriesData.push({
+            x: data.currentCandleStick.closeTime,
+            y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
+        });
+    }
 
     var colors = ["#0acf97", "#fa5c7c"];
     var dataColors = $("#simple-candlestick").data('colors');
@@ -191,67 +193,67 @@ $.get("/candlestick/getcandlestick", function(data) {
 
     let lastPrice = 0;
     $(document).ready(function() {
+        if (currentCandleStick != null) {
+            var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
 
-        var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+            var currentHigh = currentCandleStick.high;
+            var currentLow = currentCandleStick.low;
+            var currentOpen = currentCandleStick.open;
+            var currentClose = currentCandleStick.close;
+            var currentCloseDate = new Date(Date.parse(currentCandleStick.closeTime));
 
-        var currentHigh = currentCandleStick.high;
-        var currentLow = currentCandleStick.low;
-        var currentOpen = currentCandleStick.open;
-        var currentClose = currentCandleStick.close;
-        var currentCloseDate = new Date(Date.parse(currentCandleStick.closeTime));
+            $(".current-price").on('DOMSubtreeModified', function(changedNode) {
 
-        $(".current-price").on('DOMSubtreeModified', function(changedNode) {
+                if (changedNode.currentTarget.firstChild != null) {
+                    var price = changedNode.currentTarget.firstChild.data;
 
-            if(changedNode.currentTarget.firstChild != null){
-                var price = changedNode.currentTarget.firstChild.data;
+                    var newSeries = []
 
-            var newSeries = []
+                    if (price != lastPrice) {
 
-            if (price != lastPrice) {
+                        var high = currentHigh < price ? price : currentHigh;
+                        var low = currentLow > price ? price : currentLow;
 
-                var high = currentHigh < price ? price : currentHigh;
-                var low = currentLow > price ? price : currentLow;
+                        if (currentCloseDate > (new Date())) {
 
-                if (currentCloseDate > (new Date())) {
+                            seriesData.pop();
 
-                    seriesData.pop();
+                            seriesData.push({
+                                x: currentCloseDate,
+                                y: [currentOpen, high, low, price]
+                            });
 
-                    seriesData.push({
-                        x: currentCloseDate,
-                        y: [currentOpen, high, low, price]
-                    });
+                            chart.updateSeries([{
+                                data: seriesData
+                            }]);
 
-                    chart.updateSeries([{
-                        data: seriesData
-                    }]);
+                            currentHigh = high;
+                            currentLow = low;
+                            currentClose = price;
+                        } else {
+                            currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
+                            currentLow = price;
+                            currentHigh = price;
+                            currentClose = price;
+                            currentClose = price;
 
-                    currentHigh = high;
-                    currentLow = low;
-                    currentClose = price;
-                } else {
-                    currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
-                    currentLow = price;
-                    currentHigh = price;
-                    currentClose = price;
-                    currentClose = price;
+                            seriesData.push({
+                                x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
+                                y: [price, price, price, price]
+                            });
 
-                    seriesData.push({
-                        x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
-                        y: [price, price, price, price]
-                    });
-
-                    chart.updateSeries({
-                        data: newSeries
-                    });
+                            chart.updateSeries({
+                                data: newSeries
+                            });
 
 
+                        }
+
+                        lastPrice = price;
+                    }
                 }
-
-                lastPrice = price;
-            }
-            }                        
-        });
-
+            });
+        }
     });
 });
     
@@ -265,15 +267,15 @@ $.get("/candlestick/getcandlestick", function(data) {
     var marketTrades = model.marketTrades
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-    if(marketTrades != null){
+    if(marketTrades.length > 0){
         currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].exposedPrice;
-    }   
 
-    currentMarketTradeDoc.classList.remove('status-buy');
-    currentMarketTradeDoc.classList.remove('status-sell');
-    currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
+        currentMarketTradeDoc.classList.remove('status-buy');
+        currentMarketTradeDoc.classList.remove('status-sell');
+        currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
 
-    currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
+        currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
+    }          
 
     loadOrderBook(buyOpenOrders, true, true);
     loadOrderBook(sellOpenOrders, true, false);

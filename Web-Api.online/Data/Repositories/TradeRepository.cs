@@ -79,7 +79,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<decimal> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrderTableModel openOrder)
+        public async Task<spProcess_BTC_USDT_Order> spProcess_BTC_USDT_Order(BTC_USDT_OpenOrderTableModel openOrder)
         {
             try
             {
@@ -89,13 +89,22 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("price", openOrder.Price);
                 p.Add("amount", openOrder.Amount);
                 p.Add("total", openOrder.Total);
-                p.Add("openOrderId", openOrder.OpenOrderId);
                 p.Add("createDate", openOrder.CreateDate);
 
-                return await _db.QueryFirstAsync<decimal>(
-                    $"Process_BTC_USDT_{(openOrder.IsBuy ? "Buy" : "Sell")}Order",
-                    p,
-                    commandType: CommandType.StoredProcedure);
+                if (openOrder.IsBuy)
+                {
+                    return await _db.QueryFirstAsync<spProcess_BTC_USDT_Order>(
+                        $"Process_BTC_USDT_BuyOrder",
+                        p,
+                        commandType: CommandType.StoredProcedure);
+                }
+                else
+                {
+                    return await _db.QueryFirstAsync<spProcess_BTC_USDT_Order>(
+                        $"Process_BTC_USDT_SellOrder",
+                        p,
+                        commandType: CommandType.StoredProcedure);
+                }
             }
             catch
             {

@@ -1,20 +1,25 @@
+USE [Exchange]
+GO
+/****** Object:  StoredProcedure [dbo].[Process_BTC_USDT_BuyOrder]    Script Date: 12.10.2021 23:56:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 ALTER PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 @createUserId nvarchar(450),
 @isBuy bit,
 @price decimal(38,20),
 @amount decimal(38,20),
 @total decimal(38,20),
-@openOrderId bigint,
 @createDate datetime
 AS
 BEGIN
-SET NOCOUNT ON;
 
 SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders]
 WHERE  IsBuy = 0 AND @price >= Price
-ORDER  BY Price
+ORDER  BY Price DESC
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
@@ -25,7 +30,17 @@ SET @amountLocal = 0;
 
 IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
-	SELECT 0;
+	DECLARE @newId bigint
+
+	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder]
+		@userId = @createUserId,
+		@isBuy = @isBuy,
+		@price = @price,
+		@amount = @amount,
+		@total = @total,
+		@new_identity = @newId output
+
+	SELECT @amount as Amount, @newId as Id;
 END
 ELSE IF (@amount > @selectOrderAmount)
 BEGIN
@@ -36,12 +51,11 @@ BEGIN
 		(SELECT OpenOrderId FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				ClosedOrderId, Total, CreateDate,
+				Total, CreateDate,
 				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
-				(SELECT Total FROM #selectedOrder),
+		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
@@ -57,26 +71,18 @@ BEGIN
 	SET Value = Value + (SELECT Total FROM #selectedOrder)
 	WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 		AND CurrencyAcronim = 'USDT' 
+
 	
-	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	SET    IsBuy = @isBuy,
-		   Price = @price,
-		   Amount = @amountLocal,
-		   CreateUserId = @createUserId
-	WHERE  OpenOrderId = @openOrderId 	
+	SELECT @amountLocal as Amount, -1 as Id
 END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = @openOrderId
-	
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES (@openOrderId,
-				@total,
+		VALUES (@total,
 				@createDate,
 				getdate(),
 				@isBuy,
@@ -99,6 +105,8 @@ BEGIN
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  OpenOrderId = (SELECT OpenOrderId FROM #selectedOrder)
+	
+	SELECT 0 as Amount, -1 as Id
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
@@ -106,16 +114,12 @@ BEGIN
 	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
 	WHERE  OpenOrderId = 
 		(SELECT OpenOrderId FROM #selectedOrder) 
-		
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = @openOrderId
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
-		VALUES ((SELECT OpenOrderId FROM #selectedOrder),
-				(SELECT Total FROM #selectedOrder),
+		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				(SELECT IsBuy FROM #selectedOrder),
@@ -132,15 +136,13 @@ BEGIN
 	SET Value = Value + (SELECT Total FROM #selectedOrder)
 	WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 		AND CurrencyAcronim = 'USDT' 
-	
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				ClosedOrderId, Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
 				CreateUserId, BoughtUserId, Status)
 
-		VALUES (@openOrderId,
-				@total,
+		VALUES (@total,
 				@createDate,
 				getdate(),
 				@isBuy,
@@ -155,10 +157,9 @@ BEGIN
 	UPDATE [Exchange].[dbo].[Wallets]
 	SET Value = Value + @amount
 	WHERE UserId = @createUserId 
-		AND CurrencyAcronim = 'BTC'  			
-END
-DROP TABLE #selectedOrder
-SET NOCOUNT OFF;
+		AND CurrencyAcronim = 'BTC'  	
 
-SELECT @amountLocal
+	SELECT 0 as Amount, -1 as Id
+END
+
 END

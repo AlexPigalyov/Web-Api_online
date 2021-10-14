@@ -135,15 +135,6 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You dont have a wallets. Create them");
             }
 
-            long newId = await _tradeRepository.spCreate_BTC_USDT_Order(new BTC_USDT_OpenOrderTableModel()
-            {
-                IsBuy = orderModel.IsBuy,
-                Amount = amountDecimal,
-                Price = priceDecimal,
-                Total = total,
-                CreateUserId = userId
-            });
-
             BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
                 IsBuy = orderModel.IsBuy,
@@ -154,32 +145,18 @@ namespace Web_Api.online.Controllers
                 CreateDate = DateTime.Now,
             };
 
-            order.OpenOrderId = newId;
+            var result = await _tradeRepository.spProcess_BTC_USDT_Order(order);
 
-            var updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
-            while (updatedAmount != order.Amount && updatedAmount != 0)
+            while (result.Amount != order.Amount && result.Amount != 0)
             {
-                updatedAmount = await _tradeRepository.spProcess_BTC_USDT_Order(order);
+                order.Amount = result.Amount;
+
+                result = await _tradeRepository.spProcess_BTC_USDT_Order(order);
             }
 
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
-            List<BTC_USDT_ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
-            List<CandleStickTableModel> candleStick = await _candleStickRepository.spGet_BTC_USDT_CandleStick();
+            order.OpenOrderId = result.Id;
 
-            RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
-            {
-                CurrentOrder = updatedAmount == 0 ? null : order,
-                OrderBookBuy = openOrdersBuy,
-                OrderBookSell = openOrdersSell,
-                MarketTrades = marketTrades,
-                CandleStick = candleStick,
-                IsBuy = orderModel.IsBuy
-            };
-
-            await _hubcontext.Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(recieveResult));
-
-            await _hubcontext.Clients.User(userId).SendAsync("ReceiveNewOrder", updatedAmount == 0 ? null : JsonConvert.SerializeObject(order));
+            await _hubcontext.Clients.User(userId).SendAsync("ReceiveNewOrder", result.Id != -1 ? JsonConvert.SerializeObject(order) : null);
 
             return Ok();
         }
@@ -245,7 +222,7 @@ namespace Web_Api.online.Controllers
 
             model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
             model.SellOrderBook = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
-            model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();            
+            model.MarketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
 
             return View(model);
         }
