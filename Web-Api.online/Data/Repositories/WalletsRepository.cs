@@ -43,14 +43,14 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                WalletTableModel result = await _db.QueryFirstOrDefaultAsync<WalletTableModel>("GetUserWalletByAcronim",
+                WalletTableModel result = ((List<WalletTableModel>)await _db.QueryAsync<WalletTableModel>("GetUserWalletByAcronim",
                 new
                 {
                     userId = userId,
                     acronim = acronim
                 },
                 commandType: CommandType.StoredProcedure
-            );
+            )).FirstOrDefault();
 
                 return result;
             }
