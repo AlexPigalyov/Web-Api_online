@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Web3;
+using System;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 using Web_Api.online.Data.Repositories;
@@ -16,6 +20,7 @@ namespace Web_Api.online.Services
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
         private EventsRepository _eventsRepository;
+        private Web3 web3;
 
         public WithdrawService(WalletsRepository walletsRepository,
            EventsRepository eventsRepository,
@@ -30,21 +35,34 @@ namespace Web_Api.online.Services
         {
             try
             {
-                var coinService = _coinManager
-                                .CoinServices
-                                .FirstOrDefault(x => x.CoinShortName == model.Currency);
-
-                if(coinService == null)
-                {
-                    model.Status = "Error";
-                    return model;
-                }
-
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
-                if (_amount.Value > 0 && _amount.Value <= wallet.Value)
+
+                if (_amount.Value > 0 && _amount.Value <= wallet.Value
+                    && wallet !=null)
                 {
-                    coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                    if (model.Currency == "ETH")
+                    {
+                        await web3.TransactionManager.SendTransactionAsync(
+                            wallet.Address, model.Address,
+                            new HexBigInteger(new BigInteger(_amount.Value)));
+
+                    }
+                    else
+                    {
+                        var coinService = _coinManager
+                                   .CoinServices
+                                   .FirstOrDefault(x => x.CoinShortName == model.Currency);
+
+                        if (coinService == null)
+                        {
+                            model.Status = "Error";
+                            return model;
+                        }
+
+                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                    }
+
                     wallet.Value -= _amount.Value;
 
                     await _eventsRepository.CreateEvent(new EventTableModel()
