@@ -106,7 +106,7 @@ namespace Web_Api.online.Data.Repositories
                         commandType: CommandType.StoredProcedure);
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return await spProcess_BTC_USDT_Order(openOrder);
             }
