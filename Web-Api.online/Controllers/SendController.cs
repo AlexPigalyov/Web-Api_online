@@ -60,7 +60,6 @@ namespace Web_Api.online.Controllers
             return View(wallets);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult Coins(string currency)
         {
@@ -73,7 +72,6 @@ namespace Web_Api.online.Controllers
             return View(Model);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Coins(CoinsModel coinsModel)
         {
