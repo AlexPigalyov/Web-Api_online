@@ -122,7 +122,7 @@ namespace Web_Api.online
 
                 while (true)
                 {
-                    await Task.Delay(1000 * 60);
+                    await Task.Delay(1000 * 20);
 
                     _ = candleStickRepository.spProcess_BTC_USDT_CandleStick();
                 }

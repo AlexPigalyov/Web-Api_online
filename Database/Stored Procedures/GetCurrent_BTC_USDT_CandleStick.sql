@@ -22,7 +22,7 @@ INTO #closedOrdersByLastMinute
 FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
 
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedOrderId DESC
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
 
 INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
 VALUES ((SELECT [Close] FROM #lastCandleStick),

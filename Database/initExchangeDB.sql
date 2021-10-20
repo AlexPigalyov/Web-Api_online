@@ -269,11 +269,6 @@ CREATE TABLE [dbo].[Wallets](
  CONSTRAINT [PK_Wallets] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [UC_Wallets] UNIQUE NONCLUSTERED 
-(
-	[UserId] ASC,
-	[CurrencyAcronim] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -311,9 +306,9 @@ SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000007.74130390956472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000012.84446303766472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1777710.54108786822738921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(3184345.30627306471538921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (3, N'1d6254fc-8f94-4229-b09f-a2b225c128b0', CAST(999999.96980768990051358754 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
@@ -333,33 +328,13 @@ INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-094721] ON [dbo].[BTC_USDT_ClosedOrders]
-(
-	[ClosedDate] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+SET ANSI_PADDING ON
 GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-160532] ON [dbo].[BTC_USDT_OpenOrders]
+ALTER TABLE [dbo].[Wallets] ADD  CONSTRAINT [UC_Wallets] UNIQUE NONCLUSTERED 
 (
-	[IsBuy] ASC,
-	[Price] DESC
-)
-INCLUDE([Amount]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-065306] ON [dbo].[BTC_USDT_OpenOrders]
-(
-	[IsBuy] ASC,
-	[Price] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055453] ON [dbo].[BTC_USDT_OpenOrders_Buy]
-(
-	[Price] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055512] ON [dbo].[BTC_USDT_OpenOrders_Sell]
-(
-	[Price] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	[UserId] ASC,
+	[CurrencyAcronim] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
@@ -417,6 +392,50 @@ BEGIN
 
 INSERT INTO [Exchange].[dbo].[BTC_USDT_OpenOrders] (IsBuy, Price, Amount, Total, CreateUserId)
 VALUES (@isBuy, @price, @amount, @total, @userid)
+
+SELECT @new_identity = SCOPE_IDENTITY()
+
+SELECT @new_identity
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[Create_BTC_USDT_OpenOrder_Buy]
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@new_identity bigint OUTPUT
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] (Price, Amount, Total, CreateUserId)
+VALUES (@price, @amount, @total, @userid)
+
+SELECT @new_identity = SCOPE_IDENTITY()
+
+SELECT @new_identity
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[Create_BTC_USDT_OpenOrder_Sell]
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@new_identity bigint OUTPUT
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] (Price, Amount, Total, CreateUserId)
+VALUES (@price, @amount, @total, @userid)
 
 SELECT @new_identity = SCOPE_IDENTITY()
 
@@ -687,25 +706,16 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-;WITH cte
-as
-(
-	SELECT top 1000  
-		D1.Price, 
-		D1.Amount  
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
-	WHERE D1.IsBuy = 1
-	ORDER BY D1.Price DESC
-) 
-
-SELECT TOP 15
-    COUNT(c.Price) AS CountPrices,
-	c.Price, 
-	SUM(c.Amount) Amount,
-    SUM(c.Price * c.Amount) Total  
-FROM cte c
-	GROUP BY c.Price
-order by c.Price DESC
+SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price,
+    (SELECT SUM(D2.Amount)
+    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D2
+    WHERE D2.Price = D1.Price) AS Amount,
+	(SELECT SUM(D3.Price * D3.Amount)
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D3
+	WHERE D3.Price = D1.Price) AS Total
+FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D1
+GROUP BY  D1.Price
+ORDER BY  Price DESC
 
 END
 GO
@@ -718,24 +728,16 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-;WITH cte
-as
-(
-	SELECT top 1000  
-		D1.Price, 
-		D1.Amount  
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
-	WHERE D1.IsBuy = 0
-	ORDER BY D1.Price
-) 
-
-SELECT TOP 15
-    COUNT(c.Price) AS CountPrices,
-	c.Price, 
-	SUM(c.Amount) Amount,
-    SUM(c.Price * c.Amount) Total  
-FROM cte c
-	GROUP BY c.Price
+SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price,
+    (SELECT SUM(D2.Amount)
+    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D2
+    WHERE D2.Price = D1.Price) AS Amount,
+	(SELECT SUM(D3.Price * D3.Amount)
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D3
+	WHERE D3.Price = D1.Price) AS Total
+FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D1
+GROUP BY  D1.Price
+ORDER BY  Price
 
 END
 GO
@@ -868,7 +870,7 @@ INTO #closedOrdersByLastMinute
 FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
 
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedOrderId DESC
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
 
 INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
 VALUES ((SELECT [Close] FROM #lastCandleStick),
@@ -1034,8 +1036,8 @@ BEGIN
 
 SELECT TOP 1 *
 INTO   #selectedOrder
-FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders]
-WHERE  IsBuy = 0 AND @price >= Price
+FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+WHERE  @price >= Price
 ORDER  BY Price DESC
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
@@ -1049,9 +1051,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder]
+	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder_Buy]
 		@userId = @createUserId,
-		@isBuy = @isBuy,
 		@price = @price,
 		@amount = @amount,
 		@total = @total,
@@ -1063,9 +1064,9 @@ ELSE IF (@amount > @selectOrderAmount)
 BEGIN
 	SET @amountLocal = @amount - @selectOrderAmount;
 	
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	WHERE  Id =  
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
 				Total, CreateDate,
@@ -1116,21 +1117,20 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'BTC'  			
 	
-	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
-		   Price = (SELECT Price FROM #selectedOrder),
+	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	SET    Price = (SELECT Price FROM #selectedOrder),
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
-	WHERE  OpenOrderId = (SELECT OpenOrderId FROM #selectedOrder)
+	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
 	SELECT 0 as Amount, -1 as Id
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
 
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	WHERE  Id = 
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
 				Total, CreateDate, ClosedDate,
@@ -1201,8 +1201,8 @@ BEGIN
 	FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 	WHERE DATEADD(minute, -1, GETDATE()) < ClosedDate and ClosedDate < GETDATE()
 
-	SELECT TOP (1) * INTO #firstOrder FROM #closedOrdersByLastMinute ORDER BY ClosedOrderId
-	SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedOrderId DESC
+	SELECT TOP (1) * INTO #firstOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate
+	SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_CandleStick]([Open], OpenTime, High, Low, [Close], CloseTime)
 	VALUES ((SELECT ExposedPrice FROM #firstOrder),
@@ -1219,7 +1219,7 @@ BEGIN
 	FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 	WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
 
-	SELECT TOP (1) * INTO #lastOrderByCandleStick FROM #closedOrdersByLastCandleStick ORDER BY ClosedOrderId DESC
+	SELECT TOP (1) * INTO #lastOrderByCandleStick FROM #closedOrdersByLastCandleStick ORDER BY ClosedDate DESC
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_CandleStick]([Open], OpenTime, High, Low, [Close], CloseTime)
 	VALUES ((SELECT [Close] FROM #lastCandleStick),
@@ -1248,8 +1248,8 @@ BEGIN
 
 SELECT TOP 1 *
 INTO   #selectedOrder
-FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders]
-WHERE  IsBuy = 1 AND @price <= Price 
+FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+WHERE  @price <= Price 
 ORDER  BY Price
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
@@ -1263,9 +1263,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder]
+	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder_Sell]
 		@userId = @createUserId,
-		@isBuy = @isBuy,
 		@price = @price,
 		@amount = @amount,
 		@total = @total,
@@ -1277,9 +1276,9 @@ ELSE IF (@amount > @selectOrderAmount)
 BEGIN
 	SET @amountLocal = @amount - @selectOrderAmount;
 	
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+	WHERE  Id = 
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
 				Total, CreateDate, ClosedDate, 
@@ -1330,21 +1329,21 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'USDT' 
 	
-	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders]
+	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
 	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
 		   Price = (SELECT Price FROM #selectedOrder),
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
-	WHERE  OpenOrderId = (SELECT OpenOrderId FROM #selectedOrder)
+	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
 	SELECT 0 as Amount, -1 as Id
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
 
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+	WHERE  Id = 
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
 				Total, CreateDate,
@@ -1454,6 +1453,46 @@ SET    IsBuy = @isBuy,
        Amount = @amount,
        CreateUserId = @userid
 WHERE  OpenOrderId = @openOrderId 
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[Update_BTC_USDT_OpenOrder_Buy]
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@Id bigint
+AS
+BEGIN
+
+UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+SET    Price = @price,
+       Amount = @amount,
+       CreateUserId = @userid
+WHERE  Id = @Id 
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[Update_BTC_USDT_OpenOrder_Sell]
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@Id bigint
+AS
+BEGIN
+
+UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+SET    Price = @price,
+       Amount = @amount,
+       CreateUserId = @userid
+WHERE  Id = @Id 
 
 END
 GO

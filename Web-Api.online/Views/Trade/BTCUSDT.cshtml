@@ -129,12 +129,7 @@
 <script src="~/js/btcusdthub.js?3"></script>
 <script src="~/js/vendor/apexcharts.min.js"></script>
 <script>
-
-var currentCandleStick = null;
-
 $.get("/candlestick/getcandlestick", function(data) {
-
-    currentCandleStick = data.currentCandleStick;
 
     var seriesData = []
     if (data.lastCandleSticks != null) {
@@ -193,14 +188,15 @@ $.get("/candlestick/getcandlestick", function(data) {
 
     let lastPrice = 0;
     $(document).ready(function() {
-        if (currentCandleStick != null) {
+
+        if (data.currentCandleStick != null) {
             var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
 
-            var currentHigh = currentCandleStick.high;
-            var currentLow = currentCandleStick.low;
-            var currentOpen = currentCandleStick.open;
-            var currentClose = currentCandleStick.close;
-            var currentCloseDate = new Date(Date.parse(currentCandleStick.closeTime));
+            var currentHigh = data.currentCandleStick.high;
+            var currentLow = data.currentCandleStick.low;
+            var currentOpen = data.currentCandleStick.open;
+            var currentClose = data.currentCandleStick.close;
+            var currentCloseDate = new Date(Date.parse(data.currentCandleStick.closeTime));
 
             $(".current-price").on('DOMSubtreeModified', function(changedNode) {
 
@@ -213,6 +209,8 @@ $.get("/candlestick/getcandlestick", function(data) {
 
                         var high = currentHigh < price ? price : currentHigh;
                         var low = currentLow > price ? price : currentLow;
+
+                        var lastZoom = chart.zoom;
 
                         if (currentCloseDate > (new Date())) {
 
@@ -249,6 +247,8 @@ $.get("/candlestick/getcandlestick", function(data) {
 
                         }
 
+                        chart.zoomX(lastZoom);
+
                         lastPrice = price;
                     }
                 }
@@ -275,11 +275,11 @@ $.get("/candlestick/getcandlestick", function(data) {
         currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
 
         currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
-    }          
+    }
 
     loadOrderBook(buyOpenOrders, true, true);
     loadOrderBook(sellOpenOrders, true, false);
     loadMarketTrades(marketTrades, true);
-    loadUserOpenOrders(userOpenOrders, true);    
+    //loadUserOpenOrders(userOpenOrders, true);    
 </script>
 

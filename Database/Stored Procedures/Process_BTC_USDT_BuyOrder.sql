@@ -17,8 +17,8 @@ BEGIN
 
 SELECT TOP 1 *
 INTO   #selectedOrder
-FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders]
-WHERE  IsBuy = 0 AND @price >= Price
+FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+WHERE  @price >= Price
 ORDER  BY Price DESC
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
@@ -32,9 +32,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder]
+	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder_Buy]
 		@userId = @createUserId,
-		@isBuy = @isBuy,
 		@price = @price,
 		@amount = @amount,
 		@total = @total,
@@ -46,9 +45,9 @@ ELSE IF (@amount > @selectOrderAmount)
 BEGIN
 	SET @amountLocal = @amount - @selectOrderAmount;
 	
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	WHERE  Id =  
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
 				Total, CreateDate,
@@ -99,21 +98,20 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'BTC'  			
 	
-	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
-		   Price = (SELECT Price FROM #selectedOrder),
+	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	SET    Price = (SELECT Price FROM #selectedOrder),
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
-	WHERE  OpenOrderId = (SELECT OpenOrderId FROM #selectedOrder)
+	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
 	SELECT 0 as Amount, -1 as Id
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
 
-	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-	WHERE  OpenOrderId = 
-		(SELECT OpenOrderId FROM #selectedOrder) 
+	DELETE FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+	WHERE  Id = 
+		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
 				Total, CreateDate, ClosedDate,

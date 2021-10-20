@@ -51,6 +51,7 @@ namespace Web_Api.online.Data.Repositories
 
         public async Task spUpdate_BTC_USDT_OpenOrder(BTC_USDT_OpenOrderTableModel model)
         {
+            //NOT UPDATED
             await _db.ExecuteAsync(
                 "Update_BTC_USDT_OpenOrder",
                 new

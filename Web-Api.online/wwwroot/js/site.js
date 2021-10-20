@@ -51,24 +51,23 @@ function loadOrderBook(openOrders, isLoad, isBuy = false) {
 
     list.innerHTML = '';
 
+    let isBuyLocal = isBuy;
+
     openOrders.forEach(order => {
         let time = null;
         let orderPrice = 0;
         let orderAmount = 0;
         let orderTotal = 0;
-        let isBuyLocal = true;
 
         if (!isLoad) {
             orderPrice = order.Price;
             orderAmount = order.Amount;
             orderTotal = order.Total;
-            isBuyLocal = order.IsBuy;
         }
         else {
             orderPrice = order.price;
             orderAmount = order.amount;
             orderTotal = order.total;
-            isBuyLocal = order.isBuy;
         }
 
         let orderBookElem = document.createElement('div');
