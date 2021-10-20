@@ -2,15 +2,24 @@ ALTER PROCEDURE [dbo].[Get_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price,
-    (SELECT SUM(D2.Amount)
-    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D2
-    WHERE D2.Price = D1.Price) AS Amount,
-	(SELECT SUM(D3.Price * D3.Amount)
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D3
-	WHERE D3.Price = D1.Price) AS Total
-FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D1
-GROUP BY  D1.Price
-ORDER BY  Price DESC
+;WITH cte
+as
+(
+	SELECT top 1000  
+		D1.Price, 
+		D1.Amount  
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
+	WHERE D1.IsBuy = 1
+	ORDER BY D1.Price DESC
+) 
+
+SELECT TOP 15
+    COUNT(c.Price) AS CountPrices,
+	c.Price, 
+	SUM(c.Amount) Amount,
+    SUM(c.Price * c.Amount) Total  
+FROM cte c
+	GROUP BY c.Price
+order by c.Price DESC
 
 END
