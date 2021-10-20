@@ -306,9 +306,9 @@ SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000012.84446303766472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000012.99879081916472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(3184345.30627306471538921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(3204910.74750266055938921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (3, N'1d6254fc-8f94-4229-b09f-a2b225c128b0', CAST(999999.96980768990051358754 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
@@ -1076,7 +1076,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),
@@ -1139,7 +1139,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),
@@ -1288,7 +1288,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				 1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),
@@ -1330,8 +1330,7 @@ BEGIN
 		AND CurrencyAcronim = 'USDT' 
 	
 	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
-	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
-		   Price = (SELECT Price FROM #selectedOrder),
+	SET    Price = (SELECT Price FROM #selectedOrder),
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  Id = (SELECT Id FROM #selectedOrder)
@@ -1352,7 +1351,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),

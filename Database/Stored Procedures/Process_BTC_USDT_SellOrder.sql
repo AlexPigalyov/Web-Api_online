@@ -57,7 +57,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				 1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),
@@ -99,8 +99,7 @@ BEGIN
 		AND CurrencyAcronim = 'USDT' 
 	
 	UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
-	SET    IsBuy = (SELECT IsBuy FROM #selectedOrder),
-		   Price = (SELECT Price FROM #selectedOrder),
+	SET    Price = (SELECT Price FROM #selectedOrder),
 		   Amount = (@selectOrderAmount - @amount),
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  Id = (SELECT Id FROM #selectedOrder)
@@ -121,7 +120,7 @@ BEGIN
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
-				(SELECT IsBuy FROM #selectedOrder),
+				1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
 				((SELECT Price FROM #selectedOrder) - @price),
