@@ -73,7 +73,7 @@ namespace Web_Api.online
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
             services.AddCoinManager(Configuration);
-            services.AddSingleton(new Web3());
+            services.AddSingleton(new Web3()); //"http://192.168.1.75:8547/"
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
