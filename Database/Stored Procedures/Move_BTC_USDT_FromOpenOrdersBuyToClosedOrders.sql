@@ -1,4 +1,4 @@
-ALTER PROCEDURE [dbo].[Move_BTC_USDT_FromOpenOrdersToClosedOrders]
+ALTER PROCEDURE [dbo].[Move_BTC_USDT_FromOpenOrdersBuyToClosedOrders]
 @createUserId nvarchar(450),
 @boughtUserId nvarchar(450),
 @closedOrderId bigint,

@@ -1,10 +1,3 @@
-USE [Exchange]
-GO
-/****** Object:  StoredProcedure [dbo].[Process_BTC_USDT_BuyOrder]    Script Date: 12.10.2021 23:56:54 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 ALTER PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -83,7 +76,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -142,7 +135,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
