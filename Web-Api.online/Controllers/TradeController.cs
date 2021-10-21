@@ -14,6 +14,7 @@ using Web_Api.online.Hubs;
 using Newtonsoft.Json;
 using Web_Api.online.Models.ViewModels;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Mappers;
 
 namespace Web_Api.online.Controllers
 {
@@ -121,8 +122,8 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You're not authorized");
             }
 
-            decimal priceDecimal = Convert.ToDecimal(orderModel.Price);
-            decimal amountDecimal = Convert.ToDecimal(orderModel.Amount);
+            decimal priceDecimal = orderModel.Price.ParseToDecimal();
+            decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
             var wallet = await _walletsRepository
