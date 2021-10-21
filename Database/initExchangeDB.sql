@@ -60,24 +60,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[BTC_USDT_OpenOrders](
-	[OpenOrderId] [bigint] IDENTITY(1,1) NOT NULL,
-	[CreateDate] [datetime] NOT NULL,
-	[IsBuy] [bit] NOT NULL,
-	[Price] [decimal](38, 20) NOT NULL,
-	[Amount] [decimal](38, 20) NOT NULL,
-	[Total] [decimal](38, 20) NOT NULL,
-	[CreateUserId] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_BTC_USDT_OpenOrders] PRIMARY KEY CLUSTERED 
-(
-	[OpenOrderId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE TABLE [dbo].[BTC_USDT_OpenOrders_Buy](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
@@ -269,10 +251,25 @@ CREATE TABLE [dbo].[Wallets](
  CONSTRAINT [PK_Wallets] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UC_Wallets] UNIQUE NONCLUSTERED 
+(
+	[UserId] ASC,
+	[CurrencyAcronim] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-SET IDENTITY_INSERT [dbo].[Bots] ON 
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-094721] ON [dbo].[BTC_USDT_ClosedOrders]
+(
+	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055453] ON [dbo].[BTC_USDT_OpenOrders_Buy]
+(
+	[Price] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055512] ON [dbo].[BTC_USDT_OpenOrders_Sell]
 GO
 INSERT [dbo].[Bots] ([Id], [Name], [BotAuthCode], [UserId]) VALUES (1, N'Binance', N'51899c8f-a387-4d1f-9062-31b02c2350c4', N'0996e6bb-ea74-447b-9832-d1b5a02d4a70')
 GO
@@ -329,12 +326,6 @@ GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
 SET ANSI_PADDING ON
-GO
-ALTER TABLE [dbo].[Wallets] ADD  CONSTRAINT [UC_Wallets] UNIQUE NONCLUSTERED 
-(
-	[UserId] ASC,
-	[CurrencyAcronim] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
@@ -666,8 +657,10 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OpenOrder_ById]
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
-WHERE OpenOrderId = @openOrderId
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+UNION
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+WHERE Id = @openOrderId
 
 END
 GO
@@ -692,7 +685,10 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCre
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+WHERE CreateUserId = @createUserId
+UNION
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 WHERE CreateUserId = @createUserId
 ORDER BY CreateDate DESC
 
@@ -706,16 +702,24 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookBuy_OrderByDescPrice]
 AS
 BEGIN
 
-SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price,
-    (SELECT SUM(D2.Amount)
-    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D2
-    WHERE D2.Price = D1.Price) AS Amount,
-	(SELECT SUM(D3.Price * D3.Amount)
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D3
-	WHERE D3.Price = D1.Price) AS Total
-FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D1
-GROUP BY  D1.Price
-ORDER BY  Price DESC
+;WITH cte
+as
+(
+	SELECT top 1000  
+		D1.Price, 
+		D1.Amount  
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D1
+	ORDER BY D1.Price DESC
+) 
+
+SELECT TOP 15
+    COUNT(c.Price) AS CountPrices,
+	c.Price, 
+	SUM(c.Amount) Amount,
+    SUM(c.Price * c.Amount) Total  
+FROM cte c
+	GROUP BY c.Price
+order by c.Price DESC
 
 END
 GO
@@ -728,16 +732,23 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_OrderBookSell_OrderByPrice]
 AS
 BEGIN
 
-SELECT DISTINCT TOP(15) COUNT(D1.Price) AS CountPrices, D1.Price,
-    (SELECT SUM(D2.Amount)
-    FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D2
-    WHERE D2.Price = D1.Price) AS Amount,
-	(SELECT SUM(D3.Price * D3.Amount)
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D3
-	WHERE D3.Price = D1.Price) AS Total
-FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D1
-GROUP BY  D1.Price
-ORDER BY  Price
+;WITH cte
+as
+(
+	SELECT top 1000  
+		D1.Price, 
+		D1.Amount  
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] AS D1
+	ORDER BY D1.Price
+) 
+
+SELECT TOP 15
+    COUNT(c.Price) AS CountPrices,
+	c.Price, 
+	SUM(c.Amount) Amount,
+    SUM(c.Price * c.Amount) Total  
+FROM cte c
+	GROUP BY c.Price
 
 END
 GO
@@ -1000,6 +1011,29 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[Move_BTC_USDT_FromOpenOrdersSellToClosedOrders]
+@createUserId nvarchar(450),
+@boughtUserId nvarchar(450),
+@id bigint,
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@status int,
+@createDate datetime
+AS
+BEGIN
+
+delete from [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] WHERE Id = @id
+
+insert into [Exchange].[dbo].[BTC_USDT_ClosedOrders] (Total, CreateDate, ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount, CreateUserId, BoughtUserId, Status)
+values (@total, @createDate, getdate(), 0, @price, @price, @amount,0, @createUserId, @boughtUserId, @status)
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[Move_BTC_USDT_FromOpenOrdersToClosedOrders]
 @createUserId nvarchar(450),
 @boughtUserId nvarchar(450),
@@ -1026,7 +1060,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 @createUserId nvarchar(450),
-@isBuy bit,
 @price decimal(38,20),
 @amount decimal(38,20),
 @total decimal(38,20),
@@ -1103,7 +1136,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -1162,7 +1195,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -1238,7 +1271,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 @createUserId nvarchar(450),
-@isBuy bit,
 @price decimal(38,20),
 @amount decimal(38,20),
 @total decimal(38,20),
@@ -1315,7 +1347,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -1374,7 +1406,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -1463,15 +1495,17 @@ CREATE PROCEDURE [dbo].[Update_BTC_USDT_OpenOrder_Buy]
 @userid nvarchar(450),
 @price decimal(38,20),
 @amount decimal(38,20),
-@Id bigint
+@total decimal(38,20),
+@id bigint
 AS
 BEGIN
 
 UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
 SET    Price = @price,
        Amount = @amount,
+	   Total = @total,
        CreateUserId = @userid
-WHERE  Id = @Id 
+WHERE  Id = @id 
 
 END
 GO
@@ -1483,6 +1517,7 @@ CREATE PROCEDURE [dbo].[Update_BTC_USDT_OpenOrder_Sell]
 @userid nvarchar(450),
 @price decimal(38,20),
 @amount decimal(38,20),
+@total decimal(38,20),
 @Id bigint
 AS
 BEGIN
@@ -1490,6 +1525,7 @@ BEGIN
 UPDATE [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 SET    Price = @price,
        Amount = @amount,
+	   Total = @total,
        CreateUserId = @userid
 WHERE  Id = @Id 
 
