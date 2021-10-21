@@ -137,7 +137,6 @@ namespace Web_Api.online.Controllers
 
             BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
-                IsBuy = orderModel.IsBuy,
                 Price = priceDecimal,
                 Amount = amountDecimal,
                 Total = total,
@@ -145,16 +144,16 @@ namespace Web_Api.online.Controllers
                 CreateDate = DateTime.Now,
             };
 
-            var result = await _tradeRepository.spProcess_BTC_USDT_Order(order);
+            var result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
 
             while (result.Amount != order.Amount && result.Amount != 0)
             {
                 order.Amount = result.Amount;
 
-                result = await _tradeRepository.spProcess_BTC_USDT_Order(order);
+                result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
             }
 
-            order.OpenOrderId = result.Id;
+            order.Id = result.Id;
 
             await _hubcontext.Clients.User(userId).SendAsync("ReceiveNewOrder", result.Id != -1 ? JsonConvert.SerializeObject(order) : null);
 

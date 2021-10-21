@@ -126,11 +126,11 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return; }
         }
 
-        public async Task<List<spGetNotEmptyValueWallet_ByUserId>> GetNotEmptyWalletsByUserId(string userId)
+        public async Task<List<spGetNotEmptyValueWallet_ByUserIdResult>> GetNotEmptyWalletsByUserId(string userId)
         {
             try
             {
-                return (await _db.QueryAsync<spGetNotEmptyValueWallet_ByUserId>("GetNotEmptyValueWallet_ByUserId",
+                return (await _db.QueryAsync<spGetNotEmptyValueWallet_ByUserIdResult>("GetNotEmptyValueWallet_ByUserId",
                     new
                     {
                         userid = userId

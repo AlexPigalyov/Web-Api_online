@@ -3,7 +3,10 @@ ALTER PROCEDURE [dbo].[Get_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCrea
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[BTC_USDT_OpenOrders]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
+WHERE CreateUserId = @createUserId
+UNION
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 WHERE CreateUserId = @createUserId
 ORDER BY CreateDate DESC
 

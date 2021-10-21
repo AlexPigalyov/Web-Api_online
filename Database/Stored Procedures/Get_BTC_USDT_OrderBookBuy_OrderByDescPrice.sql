@@ -8,8 +8,7 @@ as
 	SELECT top 1000  
 		D1.Price, 
 		D1.Amount  
-	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders] AS D1
-	WHERE D1.IsBuy = 1
+	FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] AS D1
 	ORDER BY D1.Price DESC
 ) 
 

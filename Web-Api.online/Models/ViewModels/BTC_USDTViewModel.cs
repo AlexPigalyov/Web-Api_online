@@ -12,7 +12,7 @@ namespace Web_Api.online.Models.ViewModels
         public WalletTableModel BtcWallet { get; set; }
         public WalletTableModel UsdtWallet { get; set; }
         public List<BTC_USDT_ClosedOrderTableModel> MarketTrades { get; set; }
-        public List<BTC_USDT_OpenOrderTableModel> UserOpenOrders { get; set; }
+        public List<spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate> UserOpenOrders { get; set; }
         public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> BuyOrderBook { get; set; }
         public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
         public List<CandleStickTableModel> CandleStick { get; set; }

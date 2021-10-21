@@ -7,7 +7,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 ALTER PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 @createUserId nvarchar(450),
-@isBuy bit,
 @price decimal(38,20),
 @amount decimal(38,20),
 @total decimal(38,20),
@@ -84,7 +83,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
@@ -143,7 +142,7 @@ BEGIN
 		VALUES (@total,
 				@createDate,
 				getdate(),
-				@isBuy,
+				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
 				(@price - (SELECT Price FROM #selectedOrder)),
