@@ -240,7 +240,7 @@ $.get("/candlestick/getcandlestick", function(data) {
                                 y: [price, price, price, price]
                             });
 
-                            chart.updateSeries({
+                            chart.appendSeries({
                                 data: newSeries
                             });
 

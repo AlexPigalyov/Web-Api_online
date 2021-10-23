@@ -152,11 +152,23 @@ namespace Web_Api.online.Controllers
                 order.Amount = result.Amount;
 
                 result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
+
+                if(result.ClosedOrderUserId != "-1")
+                {
+                    await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
+                }
             }
 
             order.Id = result.Id;
 
-            await _hubcontext.Clients.User(userId).SendAsync("ReceiveNewOrder", result.Id != -1 ? JsonConvert.SerializeObject(order) : null);
+            if(result.Id == -1)
+            {
+                await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
+            }
+            else
+            {
+                await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
+            }            
 
             return Ok();
         }

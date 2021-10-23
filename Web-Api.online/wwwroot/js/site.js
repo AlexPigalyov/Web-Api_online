@@ -17,6 +17,71 @@ function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
     }
 }
 
+function removeUserOpenOrder(id) {
+    var list = document.getElementsByClassName("orderbook-list")[3];
+
+    for (let i = 0; i < list.childElementCount; i++) {
+        if (list.childNodes[i].lastChild.firstChild.getAttribute('href') == id) {
+            list.childNodes[i].outerHTML = '';
+        }
+    }
+}
+
+function createUserOpenOrder(order) {
+    var list = document.getElementsByClassName("orderbook-list")[3];
+
+    let orderBookElem = document.createElement('div');
+
+    if (!order.isBuy) {
+        orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+    }
+    else {
+        orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+    }
+
+    let orderBookElemColFirst = document.createElement('div');
+    if (!order.isBuy) {
+        orderBookElemColFirst.className = "orderbook-col";
+    }
+    else {
+        orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+    }
+
+    orderBookElemColFirst.innerHTML = order.orderPrice;
+
+    orderBookElem.appendChild(orderBookElemColFirst);
+
+    let orderBookElemColSecond = document.createElement('div');
+    orderBookElemColSecond.className = "orderbook-col";
+    orderBookElemColSecond.innerHTML = order.orderAmount;
+
+    orderBookElem.appendChild(orderBookElemColSecond);
+
+    let orderBookElemColThird = document.createElement('div');
+    orderBookElemColThird.className = "orderbook-col";
+
+    let hour = order.time.getHours();
+    let minutes = order.time.getMinutes();
+    let seconds = order.time.getSeconds();
+
+    orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
+
+
+    orderBookElem.appendChild(orderBookElemColThird);
+
+    let orderBookElemButton = document.createElement('div');
+    orderBookElemButton.className = "orderbook-col";
+
+    let orderBookElemButtonA = document.createElement('a');
+    orderBookElemButtonA.href = "/trade/cancelorder/" + order.id;
+    orderBookElemButtonA.innerHTML = "Cancel";
+
+    orderBookElemButton.appendChild(orderBookElemButtonA);
+    orderBookElem.appendChild(orderBookElemButton);
+
+    list.prepend(orderBookElem);
+}
+
 function loadOrderBook(openOrders, isLoad, isBuy = false) {
 
     let list = null;
@@ -194,7 +259,7 @@ function loadMarketTrades(openOrders, isLoad) {
 }
 
 function loadUserOpenOrders(openOrders, isLoad) {
-
+    console.log(openOrders);
     let list = document.getElementsByClassName("orderbook-list")[3];
 
     const loadUserOpenOrder = (order) => {
@@ -209,14 +274,14 @@ function loadUserOpenOrders(openOrders, isLoad) {
             orderAmount = order.Amount;
             isBuy = order.IsBuy;
             time = new Date(order.CreateDate);
-            openOrderId = order.OpenOrderId;
+            openOrderId = order.Id;
         }
         else {
             orderPrice = order.price;
             orderAmount = order.amount;
             isBuy = order.isBuy;
             time = new Date(order.createDate);
-            openOrderId = order.openOrderId;
+            openOrderId = order.id;
         }
 
         let orderBookElem = document.createElement('div');
@@ -264,7 +329,7 @@ function loadUserOpenOrders(openOrders, isLoad) {
         let orderBookElemButtonA = document.createElement('a');
         orderBookElemButtonA.href = "/trade/cancelorder/" + openOrderId;
         orderBookElemButtonA.innerHTML = "Cancel";
-
+         
         orderBookElemButton.appendChild(orderBookElemButtonA);
         orderBookElem.appendChild(orderBookElemButton);
 

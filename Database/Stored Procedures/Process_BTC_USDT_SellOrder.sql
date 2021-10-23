@@ -38,7 +38,7 @@ BEGIN
 		@total = @total,
 		@new_identity = @newId output
 
-	SELECT @amount as Amount, @newId as Id;
+	SELECT @amount as Amount, @newId as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount > @selectOrderAmount)
 BEGIN
@@ -71,7 +71,7 @@ BEGIN
 	WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 		AND CurrencyAcronim = 'BTC'
 	
-	SELECT @amountLocal as Amount, -1 as Id
+	SELECT @amountLocal as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
@@ -103,7 +103,7 @@ BEGIN
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
@@ -156,7 +156,7 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'USDT' 
 		
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 
 END

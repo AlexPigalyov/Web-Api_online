@@ -22,6 +22,20 @@ connection.on("ReceiveMessage", function (recieveModel) {
     loadMarketTrades(model.MarketTrades, false);
 });
 
+connection.on("OrderWasClosed", function (recieveModel) {
+    //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    //var encodedMsg = user + " says " + msg;
+
+    removeUserOpenOrder(receiveModel);
+});
+
+connection.on("OrderWasCreated", function (recieveModel) {
+    //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    //var encodedMsg = user + " says " + msg;
+
+    createUserOpenOrder(receiveModel);
+});
+
 
 connection.start().then(function () {
     document.getElementById("buyButton").disabled = false;
