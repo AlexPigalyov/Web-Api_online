@@ -14,6 +14,23 @@ ALTER PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 AS
 BEGIN
 
+--IF OBJECT_ID(N'tempdb..#selectedOrder') IS NOT NULL
+--BEGIN
+--DROP TABLE #selectedOrder
+--END
+
+--declare @createUserId nvarchar(450);
+--declare @price decimal(38,20);
+--declare @amount decimal(38,20);
+--declare @total decimal(38,20);
+--declare @createDate datetime;
+
+--set @createUserId = 'c7523ee3-fa66-4d84-90b6-ef049e60af67';
+--set @price = 5;
+--set @amount = 20;
+--set @total = 100;
+--set @createDate = '23/10/2021';
+
 SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
