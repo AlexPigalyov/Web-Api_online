@@ -408,9 +408,7 @@ BEGIN
 INSERT INTO [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy] (Price, Amount, Total, CreateUserId)
 VALUES (@price, @amount, @total, @userid)
 
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity
+set @new_identity = SCOPE_IDENTITY()
 
 END
 GO
@@ -430,9 +428,7 @@ BEGIN
 INSERT INTO [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell] (Price, Amount, Total, CreateUserId)
 VALUES (@price, @amount, @total, @userid)
 
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity
+set @new_identity = SCOPE_IDENTITY()
 
 END
 GO
@@ -543,19 +539,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
-@walletId int,
+@fromWalletId int,
+@fromAdress nvarchar(max),
+@toAdress nvarchar(max),
 @value decimal(38,20),
-@outcomingWallet nvarchar(max),
 @currencyAcronim nvarchar(10),
 @state int,
-@lastUpdateDate datetime,
 @errorText nvarchar(max)
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[OutcomeTransactions] (FromWalletId, Value, FromAddress, CurrencyAcronim,
-State, LastUpdateDate, ErrorText)
-VALUES (@walletId, @value, @outcomingWallet, @currencyAcronim, @state, @lastUpdateDate, @errorText)
+INSERT INTO [Exchange].[dbo].[OutcomeTransactions] (FromWalletId, FromAddress, ToAddress,
+			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, ErrorText)
+VALUES (@fromWalletId, @fromAdress, @toAdress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(), @errorText)
 
 END
 
@@ -818,69 +814,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCreatedOutcomeTransactionAndSetStateInWork]
-@currencyAcronim nvarchar(10)
-AS
-BEGIN
-
---IF OBJECT_ID('tempdb..#Temp') IS NOT NULL
---    DROP TABLE #Temp
-
---create table #Temp
---(
---	[Id] [bigint],
---	[WalletId] [int],
---	[Value] [decimal](38, 20),
---	[Date] [datetime],
---	[OutcomingWallet] [nvarchar](max),
---	[CurrencyAcronim] [nvarchar](10),
---	[State] [int],
---	[LastUpdateDate] [datetime],
---	[ErrorText] [nvarchar](max)
---)
-
---Insert Into #Temp
---Select [Id]
---      ,[WalletId]
---      ,[Value]
---      ,[Date]
---      ,[OutcomingWallet]
---      ,[CurrencyAcronim]
---      ,[State]
---      ,[LastUpdateDate]
---      ,[ErrorText] 
---from OutcomeTransactions
-
---UPDATE [OutcomeTransactions]
---SET [State] = 2
---FROM [OutcomeTransactions]
---INNER JOIN ON #Temp.Id = [OutcomeTransactions].Id
-
-
-
-
-declare @transactionId int;
-
-set @transactionId = (select top(1) Id from OutcomeTransactions 
-						where [State] = 1 AND CurrencyAcronim = @currencyAcronim)
-
-UPDATE [OutcomeTransactions]
-SET [State] = 2,
-LastUpdateDate = GetDate()
-Where OutcomeTransactions.Id = @transactionId
-
-select top(1) * from OutcomeTransactions 
-Where OutcomeTransactions.Id = @transactionId
-
-
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetCurrent_BTC_USDT_CandleStick]
 AS
 BEGIN
@@ -958,6 +891,33 @@ END
 
 
 
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetManagerConfirmedOutcomeTransactionAndSetStateInWork]
+@currencyAcronim nvarchar(10)
+AS
+BEGIN
+
+declare @transactionId int;
+
+set @transactionId = (select top(1) Id from OutcomeTransactions 
+						where [State] = 1 AND CurrencyAcronim = @currencyAcronim)
+
+UPDATE [OutcomeTransactions]
+SET [State] = 3,
+LastUpdateDate = GetDate()
+Where OutcomeTransactions.Id = @transactionId
+
+select top(1) * from OutcomeTransactions 
+Where OutcomeTransactions.Id = @transactionId
+
+
+END
 
 
 GO
@@ -1113,6 +1073,25 @@ CREATE PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 AS
 BEGIN
 
+--IF OBJECT_ID(N'tempdb..#selectedOrder') IS NOT NULL
+--BEGIN
+--DROP TABLE #selectedOrder
+--END
+
+--declare @createUserId nvarchar(450);
+--declare @price decimal(38,20);
+--declare @amount decimal(38,20);
+--declare @total decimal(38,20);
+--declare @createDate datetime;
+
+--set @createUserId = 'c7523ee3-fa66-4d84-90b6-ef049e60af67';
+--set @price = 15;
+--set @amount = 20;
+--set @total = 100;
+--set @createDate = '24/10/2021';
+
+--select sell order with hight price
+
 SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
@@ -1137,7 +1116,7 @@ BEGIN
 		@total = @total,
 		@new_identity = @newId output
 
-	SELECT @amount as Amount, @newId as Id;
+	SELECT @amount as Amount, @newId as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount > @selectOrderAmount)
 BEGIN
@@ -1170,7 +1149,7 @@ BEGIN
 		AND CurrencyAcronim = 'USDT' 
 
 	
-	SELECT @amountLocal as Amount, -1 as Id
+	SELECT @amountLocal as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
@@ -1202,7 +1181,7 @@ BEGIN
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
@@ -1255,7 +1234,7 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'BTC'  	
 
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 
 END
@@ -1324,6 +1303,23 @@ CREATE PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 AS
 BEGIN
 
+--IF OBJECT_ID(N'tempdb..#selectedOrder') IS NOT NULL
+--BEGIN
+--DROP TABLE #selectedOrder
+--END
+
+--declare @createUserId nvarchar(450);
+--declare @price decimal(38,20);
+--declare @amount decimal(38,20);
+--declare @total decimal(38,20);
+--declare @createDate datetime;
+
+--set @createUserId = 'c7523ee3-fa66-4d84-90b6-ef049e60af67';
+--set @price = 5;
+--set @amount = 20;
+--set @total = 100;
+--set @createDate = '23/10/2021';
+
 SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
@@ -1348,7 +1344,7 @@ BEGIN
 		@total = @total,
 		@new_identity = @newId output
 
-	SELECT @amount as Amount, @newId as Id;
+	SELECT @amount as Amount, @newId as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount > @selectOrderAmount)
 BEGIN
@@ -1381,7 +1377,7 @@ BEGIN
 	WHERE UserId = (SELECT CreateUserId FROM #selectedOrder) 
 		AND CurrencyAcronim = 'BTC'
 	
-	SELECT @amountLocal as Amount, -1 as Id
+	SELECT @amountLocal as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
@@ -1413,7 +1409,7 @@ BEGIN
 		   CreateUserId = (SELECT CreateUserId FROM #selectedOrder)
 	WHERE  Id = (SELECT Id FROM #selectedOrder)
 	
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, '-1' as ClosedOrderUserId, -1 as ClosedOrderId;
 END
 ELSE IF (@amount = @selectOrderAmount)
 BEGIN
@@ -1466,7 +1462,7 @@ BEGIN
 	WHERE UserId = @createUserId 
 		AND CurrencyAcronim = 'USDT' 
 		
-	SELECT 0 as Amount, -1 as Id
+	SELECT 0 as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
 
 END
@@ -1576,6 +1572,24 @@ SET    Price = @price,
 WHERE  Id = @Id 
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateStateOutcomeTransaction]
+@id int,
+@state int,
+@errorText nvarchar(max)
+AS
+BEGIN
+
+UPDATE [Exchange].[dbo].[OutcomeTransactions]
+SET State = @state, LastUpdateDate = GETDATE(), ErrorText = @errorText
+WHERE Id = @id
+
+END
+
 GO
 SET ANSI_NULLS ON
 GO
