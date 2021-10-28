@@ -184,8 +184,8 @@ function loadMarketTrades(openOrders, isLoad) {
     let list = document.getElementsByClassName("orderbook-list")[2];
 
     var openOrdersObjMaxAmount = null;
-
-    if (openOrders.length == 0) {
+    
+    if (openOrders == null || openOrders.length == 0) {
         return;
     }
 
@@ -338,7 +338,7 @@ function loadUserOpenOrders(openOrders, isLoad) {
     };
 
     if (isLoad) {
-        if (openOrders.length == 0) {
+        if (openOrders == null || openOrders.length == 0) {
             return;
         }
 
