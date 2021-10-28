@@ -429,12 +429,16 @@ function ($) {
         $('input[type=checkbox][name=color-scheme-mode]').change(function () {
             switch ($(this).val()) {
                 case 'light':
+                    $(this).val('dark');
+                    $("label[for='" + $(this).attr('id') + "']").text('Dark Mode');
                     $.App.deactivateDarkMode();
                     // $.App.activateDefaultSidebarTheme();
                     $('#default-check').prop('checked', true);
                     $('input[type=checkbox][name=theme]').prop('disabled', false);
                     break;
                 case 'dark':
+                    $(this).val('light');
+                    $("label[for='" + $(this).attr('id') + "']").text('Light Mode');
                     $.App.activateDarkMode();
                     $('#dark-check').prop('checked', true);
 
