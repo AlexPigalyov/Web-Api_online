@@ -12,6 +12,7 @@ namespace Web_Api.online.Services
         private IDashService dash;
         private IDogecoinService dogecoin;
         private ILitecoinService litecoin;
+        private IZCashService zcash;
 
         public List<ICoinService> CoinServices => coinServices;
 
@@ -21,19 +22,24 @@ namespace Web_Api.online.Services
 
         public IDashService Dash => dash;
 
+        public IZCashService ZCash => zcash;
+
         public IDogecoinService Dogecoin => dogecoin;
 
         public ILitecoinService Litecoin => litecoin;
 
+
         public CoinManager(IBitcoinCashService bitcoinCash,
             IBitcoinService bitcoin,
             IDashService dash,
+            IZCashService zcash,
             IDogecoinService dogecoin,
             ILitecoinService litecoin)
         {
             this.bitcoinCash = bitcoinCash;
             this.bitcoin = bitcoin;
             this.dash = dash;
+            this.zcash = zcash;
             this.dogecoin = dogecoin;
             this.litecoin = litecoin;
 
@@ -42,6 +48,7 @@ namespace Web_Api.online.Services
             coinServices.Add(bitcoinCash);
             coinServices.Add(bitcoin);
             coinServices.Add(dash);
+            coinServices.Add(zcash);
             coinServices.Add(dogecoin);
             coinServices.Add(litecoin);
         }

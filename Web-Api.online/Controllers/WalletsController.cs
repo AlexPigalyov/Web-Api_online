@@ -84,6 +84,12 @@ namespace Web_Api.online.Controllers
                     {
                         if (coin.CoinShortName == selectCurrency)
                         {
+                            if (selectCurrency == "ZEC")
+                            {
+                                address = coin.GetNewAddress("");
+                                break;
+                            }
+
                             address = coin.GetNewAddress(userId);
                             break;
                         }
