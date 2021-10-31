@@ -9839,6 +9839,8 @@ body[data-leftbar-theme="dark"][data-leftbar-compact-mode="condensed"] .side-nav
 body[data-leftbar-theme="dark"][data-leftbar-compact-mode="condensed"] .side-nav .side-nav-item:hover > .collapse > ul,
 body[data-leftbar-theme="dark"][data-leftbar-compact-mode="condensed"] .side-nav .side-nav-item:hover > .collapsing > ul {
   background: #3a444e; }
+  
+body[data-leftbar-theme=dark] .list-unstyled.topbar-menu a{color: #8391a2 !important;}
 
 .navbar-custom {
   padding: 0 24px;

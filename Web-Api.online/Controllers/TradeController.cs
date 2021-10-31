@@ -136,6 +136,11 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You dont have a wallets. Create them");
             }
 
+            if (wallet.Value < total)
+            {
+                return BadRequest("You dont have wallet balance.");
+            }
+
             BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
                 Price = priceDecimal,

@@ -11,7 +11,9 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Web_Api.online.Data.Repositories;
-using Nethereum.Web3;
+using System.Net;
+using System.IO;
+using Web_Api.online.Requests;
 
 namespace Web_Api.online.Controllers
 {
@@ -22,19 +24,19 @@ namespace Web_Api.online.Controllers
         private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
-        private Web3 _web3;
+        private OutcomeTransactionRepository _outcomeTransactionRepository;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
-            EventsRepository eventsRepository,
-            Web3 web3)
+            EventsRepository eventsRepository, 
+            OutcomeTransactionRepository outcomeTransactionRepository)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
-            _web3 = web3;
+            _outcomeTransactionRepository = outcomeTransactionRepository;
         }
 
         public class IndexModel
@@ -76,7 +78,7 @@ namespace Web_Api.online.Controllers
 
                 if (selectCurrency == "ETH")
                 {
-                    address = await _web3.Personal.NewAccount.SendRequestAsync(userId);
+                    address = ETH.GetNewAddress(userId);
                 }
                 else
                 {
