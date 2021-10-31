@@ -11,6 +11,9 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Web_Api.online.Data.Repositories;
+using System.Net;
+using System.IO;
+using Web_Api.online.Requests;
 
 namespace Web_Api.online.Controllers
 {
@@ -21,16 +24,19 @@ namespace Web_Api.online.Controllers
         private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
+        private OutcomeTransactionRepository _outcomeTransactionRepository;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
-            EventsRepository eventsRepository)
+            EventsRepository eventsRepository, 
+            OutcomeTransactionRepository outcomeTransactionRepository)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
+            _outcomeTransactionRepository = outcomeTransactionRepository;
         }
 
         public class IndexModel
@@ -72,6 +78,7 @@ namespace Web_Api.online.Controllers
 
                 if (selectCurrency == "ETH")
                 {
+                    address = ETH.GetNewAddress(userId);
                 }
                 else
                 {

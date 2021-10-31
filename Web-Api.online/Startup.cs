@@ -69,6 +69,7 @@ namespace Web_Api.online
             services.AddTransient<BotsRepository>();
 
             services.AddTransient<TransactionsRepository>();
+            services.AddTransient<OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
             services.AddCoinManager(Configuration);
