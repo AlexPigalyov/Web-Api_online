@@ -1,4 +1,6 @@
-﻿namespace Web_Api.online.Models.Tables
+﻿using System;
+
+namespace Web_Api.online.Models.Tables
 {
     public class UserInfoTableModel
     {
@@ -13,5 +15,6 @@
         public string LinkedinLink {  get; set;}
         public string GithubLink {  get; set; }
         public string Location { get; set; }
+        public DateTime RegistrationDate { get; set; }
     }
 }
