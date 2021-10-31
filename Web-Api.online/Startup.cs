@@ -37,7 +37,8 @@ namespace Web_Api.online
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -48,17 +49,18 @@ namespace Web_Api.online
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-                .AddEntityFrameworkStores<WebApiDbContext>();
+            .AddEntityFrameworkStores<WebApiDbContext>();
+
             services.AddControllersWithViews();
 
             services.AddSignalR();
+
+            services.AddRazorPages();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_Api.online", Version = "v1" });
             });
-
-            services.AddTransient<RoleManager<IdentityRole>>();
 
             services.AddTransient<WalletsRepository>();
             services.AddTransient<CandleStickRepository>();
@@ -221,12 +223,7 @@ namespace Web_Api.online
                     Email = "BinanceBot@account.com"
                 };
 
-                var res = await userManager.CreateAsync(newAcc, "binancebotaccountpassword");
-
-                if (res.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newAcc, RolesNameConstant.User);
-                }
+                await userManager.CreateAsync(newAcc, "binancebotaccountpassword");
             }
             #endregion
             #region BitFinexAcc
@@ -241,12 +238,7 @@ namespace Web_Api.online
                     Email = "BitFinexBot@account.com"
                 };
 
-                var res = await userManager.CreateAsync(newAcc, "bitfinexbotaccountpassword");
-
-                if (res.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newAcc, RolesNameConstant.User);
-                }                
+                await userManager.CreateAsync(newAcc, "bitfinexbotaccountpassword");           
             }
             #endregion
             #region KucoinAcc
@@ -261,12 +253,7 @@ namespace Web_Api.online
                     Email = "KucoinBot@account.com"
                 };
 
-                var res = await userManager.CreateAsync(newAcc, "kucoinbotaccountpassword");
-
-                if (res.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newAcc, RolesNameConstant.User);
-                }
+                await userManager.CreateAsync(newAcc, "kucoinbotaccountpassword");
             }
             #endregion
             #region PoloniexAcc
@@ -281,12 +268,7 @@ namespace Web_Api.online
                     Email = "PoloniexBot@account.com"
                 };
 
-                var res = await userManager.CreateAsync(newAcc, "poloniexbotaccountpassword");
-
-                if (res.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newAcc, RolesNameConstant.User);
-                }
+                await userManager.CreateAsync(newAcc, "poloniexbotaccountpassword");
             }
             #endregion
         }
