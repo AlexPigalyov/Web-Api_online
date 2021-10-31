@@ -3,6 +3,8 @@
     public enum RestMethods
     {
         //== Blockchain ==
+        z_sendmany,
+        listaddresses,
         getbestblockhash,
         getblock,
         getblockchaininfo,

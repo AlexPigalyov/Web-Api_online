@@ -12,6 +12,7 @@ using Web_Api.online.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Web_Api.online.Data.Repositories;
 using Nethereum.Web3;
+using Web_Api.online.Clients;
 
 namespace Web_Api.online.Controllers
 {
@@ -78,18 +79,17 @@ namespace Web_Api.online.Controllers
                 {
                     address = await _web3.Personal.NewAccount.SendRequestAsync(userId);
                 }
+                else if (selectCurrency == "ZEC")
+                {
+                    var zcashClient = new ZCashService();
+                    address = zcashClient.GetNewAddress();
+                }
                 else
                 {
                     foreach (var coin in _coinManager.CoinServices)
                     {
                         if (coin.CoinShortName == selectCurrency)
                         {
-                            if (selectCurrency == "ZEC")
-                            {
-                                address = coin.GetNewAddress("");
-                                break;
-                            }
-
                             address = coin.GetNewAddress(userId);
                             break;
                         }
