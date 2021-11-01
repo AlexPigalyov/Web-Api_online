@@ -126,6 +126,8 @@ namespace Web_Api.online.Controllers
             decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
+            //Sell - BTC
+            //Buy - USDT
             var wallet = await _walletsRepository
                 .GetUserWalletAsync(
                     userId,
