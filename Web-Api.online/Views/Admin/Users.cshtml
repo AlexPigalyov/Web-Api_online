@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@{
+    ViewData["Title"] = "Users";
+}
+
+@if (User.IsInRole(RolesNameConstant.Admin))
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Users</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="dataTables_length" id="products-datatable_length">
+                                        <label>
+                                            Display
+                                            <select class="custom-select custom-select-sm ml-1 mr-1">
+                                                <option value="5">
+                                                    5
+                                                </option>
+                                                <option value="10">
+                                                    10
+
+                                                </option>
+                                                <option value="20">20</option>
+                                                <option value="-1">All</option>
+                                            </select> users
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <div id="products-datatable_filter" class="dataTables_filter">
+                                        <label>
+                                            Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="products-datatable">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div><div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-centered w-100 dt-responsive nowrap dataTable no-footer dtr-inline" id="products-datatable" role="grid" aria-describedby="products-datatable_info" style="width: 2209px;">
+                                        <thead class="thead-light">
+                                            <tr role="row">
+                                                <th class="all sorting_asc" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 656.8px;" aria-sort="ascending" aria-label="Username: activate to sort column descending">Username</th>
+                                                <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 290.8px;" aria-label="FullName: activate to sort column ascending">FullName</th>
+                                                <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 264.8px;" aria-label="Email: activate to sort column ascending">Email</th>
+                                                <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 166.8px;" aria-label="Registration Date: activate to sort column ascending">Registration Date</th>
+                                                <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 209.8px;" aria-label="Location: activate to sort column ascending">Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr role="row" class="odd">
+                                                    <td>
+                                                        @item.UserName
+                                                    </td>
+                                                    <td>
+                                                        @item.FullName
+                                                    </td>
+                                                    <td>
+                                                        @item.Email
+                                                    </td>
+                                                    <td>
+                                                        @item.RegistrationDate
+                                                    </td>
+                                                    <td>
+                                                        @item.Location
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="dataTables_info" id="products-datatable_info" role="status" aria-live="polite">
+                                        Showing users 1 to 15 of @Model.PageViewModel.TotalPages
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate">
+                                        <ul class="pagination pagination-rounded">
+                                            @if (Model.PageViewModel.HasPreviousPage)
+                                            {
+                                                <li class="paginate_button page-item previous disabled" id="products-datatable_previous">
+                                                    <a href="#" aria-controls="products-datatable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                        <i class="mdi mdi-chevron-left">
+                                                        </i>
+                                                    </a>
+                                                </li>
+                                                <li class="paginate_button page-item active">
+                                                    <a href="/Admin/Users?page=@(Model.PageViewModel.PageNumber - 1)" aria-controls="products-datatable" data-dt-idx="1" tabindex="0" class="page-link">
+                                                        @(Model.PageViewModel.PageNumber - 1)
+                                                    </a>
+                                                </li>
+                                            }
+                                            <li class="paginate_button page-item ">
+                                                <a href="/Admin/Users?page=@Model.PageViewModel.PageNumber" aria-controls="products-datatable" data-dt-idx="2" tabindex="0" class="page-link">
+                                                    @Model.PageViewModel.PageNumber
+                                                </a>
+                                            </li>
+                                            @if (Model.PageViewModel.HasNextPage)
+                                            {
+                                                <li class="paginate_button page-item">
+                                                    <a href="/Admin/Users?page=@(Model.PageViewModel.PageNumber + 1)" aria-controls="products-datatable" data-dt-idx="3" tabindex="0" class="page-link">
+                                                        @(Model.PageViewModel.PageNumber + 1)
+                                                    </a>
+                                                </li>
+                                                <li class="paginate_button page-item next" id="products-datatable_next">
+                                                    <a href="/Admin/Users?page=@Model.PageViewModel.TotalPages" aria-controls="products-datatable" data-dt-idx="4" tabindex="0" class="page-link">
+                                                        Last
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+}
