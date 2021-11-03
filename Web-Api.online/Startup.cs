@@ -17,6 +17,7 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Constants;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Data.Repositories.Abstract;
+using Web_Api.online.Clients;
 
 namespace Web_Api.online
 {
@@ -79,6 +80,8 @@ namespace Web_Api.online
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
             services.AddCoinManager(Configuration);
+
+            services.AddSingleton<ZCashService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

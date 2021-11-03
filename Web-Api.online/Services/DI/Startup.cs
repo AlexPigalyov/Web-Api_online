@@ -15,7 +15,6 @@ namespace Web_Api.online.Services.DI
             services.AddSingleton<IDashService, DashService>();
             services.AddSingleton<IDogecoinService, DogecoinService>();
             services.AddSingleton<ILitecoinService, LitecoinService>();
-            //services.AddSingleton<IZCashService, ZCashService>();
 
             services.AddSingleton<ICoinManager, CoinManager>();
         }

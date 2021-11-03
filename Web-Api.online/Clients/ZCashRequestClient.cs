@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,17 +13,36 @@ namespace Web_Api.online.Clients
 {
     public class ZCashRequestClient
     {
-        public ZCashRequestClient()
-        {
 
+        private string daemonUrl;
+        private string rpcPassword;
+        private string rpcUsername;
+
+
+        public ZCashRequestClient(IConfiguration _configuration)
+        {
+            rpcUsername = _configuration["ZCash_RpcUsername"];
+            rpcPassword = _configuration["ZCash_RpcPassword"];
+            string isTestnet = _configuration["ZCash_testnet"];
+
+            if (isTestnet == "true")
+            {
+                daemonUrl = _configuration["ZCash_DaemonUrl_Testnet"];
+            }
+            else
+            {
+                daemonUrl = _configuration["ZCash_DaemonUrl"];
+            }
         }
+
+
 
         public T MakeRequest<T>(RestMethods rpcMethod, params object[] parameters)
         {
             var jsonRpcRequest = new JsonRpcRequest(1, rpcMethod.ToString(), parameters);
-            var webRequest = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:18232/");
+            var webRequest = (HttpWebRequest)WebRequest.Create(daemonUrl);
             SetBasicAuthHeader(webRequest, "1", "1");
-            webRequest.Credentials = new NetworkCredential("1", "1");
+            webRequest.Credentials = new NetworkCredential(rpcUsername, rpcPassword);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
             webRequest.Proxy = null;

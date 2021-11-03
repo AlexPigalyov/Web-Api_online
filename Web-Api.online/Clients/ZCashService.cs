@@ -9,13 +9,13 @@ using Web_Api.online.Clients.Models.ZecModels;
 
 namespace Web_Api.online.Clients
 {
-    public class ZCashService
+    public class ZCashService 
     {
         private ZCashRequestClient client;
 
-        public ZCashService()
+        public ZCashService(IConfiguration config)
         {
-            this.client = new();
+            this.client = new(config);
         }
 
 
@@ -51,6 +51,24 @@ namespace Web_Api.online.Clients
             var resp = client.MakeRequest<ZecBalance>(RestMethods.getaddressbalance, addressList);
 
             return resp;
+        }
+
+
+        public List<ZecDeltas> GetAddressDeltas(string address)
+        {
+            var resp = client.MakeRequest<List<ZecDeltas>>(RestMethods.getaddressdeltas,
+                new Dictionary<string, List<string>>() { { "addresses", new List<string>() { address } } });
+
+            return resp;
+        }
+
+
+        public List<string> GetAddressIncomingTransactions(string address)
+        {
+            List<ZecDeltas> deltas = GetAddressDeltas(address);
+            List<string> incomingTxs = deltas.Where(x => x.Satoshis > 0).Select(x => x.TxId).ToList();
+
+            return incomingTxs;
         }
 
 

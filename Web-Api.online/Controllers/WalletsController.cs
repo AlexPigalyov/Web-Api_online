@@ -27,18 +27,21 @@ namespace Web_Api.online.Controllers
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
         private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private ZCashService _zecService;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
             EventsRepository eventsRepository, 
-            OutcomeTransactionRepository outcomeTransactionRepository)
+            OutcomeTransactionRepository outcomeTransactionRepository,
+            ZCashService zecService)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
             _outcomeTransactionRepository = outcomeTransactionRepository;
+            _zecService = zecService;
         }
 
         public class IndexModel
@@ -84,7 +87,7 @@ namespace Web_Api.online.Controllers
                 }
                 else if (selectCurrency == "ZEC")
                 {
-                    var zcashClient = new ZCashService();
+                    var zcashClient = _zecService;
                     address = zcashClient.GetNewAddress();
                 }
                 else
