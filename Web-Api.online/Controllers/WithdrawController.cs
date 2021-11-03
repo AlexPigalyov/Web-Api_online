@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using Web_Api.online.Clients;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.WithdrawModels;
 using Web_Api.online.Services;
@@ -16,12 +16,14 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private WithdrawService _withdrawService;
+        ZCashService _zecService;
 
         public WithdrawController(WalletsRepository walletsRepository,
-            WithdrawService withdrawService)
+            WithdrawService withdrawService, ZCashService zecService)
         {
             _walletsRepository = walletsRepository;
             _withdrawService = withdrawService;
+            _zecService = zecService;
         }
 
         [HttpGet]
@@ -46,7 +48,19 @@ namespace Web_Api.online.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var m = await _withdrawService.Send(model, userId);
+
+                GeneralWithdrawModel m;
+
+                if(model.Currency == "ZEC")
+                {
+                    m = await _zecService.SendToAddress(model, userId);
+                }
+                else
+                {
+                    m = await _withdrawService.Send(model, userId);
+                }
+
+                
                 return View(m.Currency, m);
             }
             return View(model.Currency, model);

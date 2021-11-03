@@ -37,7 +37,7 @@ namespace Web_Api.online.Clients
 
 
 
-        public T MakeRequest<T>(RestMethods rpcMethod, params object[] parameters)
+        public T MakeRequest<T>(ZecRestMethods rpcMethod, params object[] parameters)
         {
             var jsonRpcRequest = new JsonRpcRequest(1, rpcMethod.ToString(), parameters);
             var webRequest = (HttpWebRequest)WebRequest.Create(daemonUrl);
