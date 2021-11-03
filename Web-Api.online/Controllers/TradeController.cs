@@ -126,6 +126,8 @@ namespace Web_Api.online.Controllers
             decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
+            //Sell - BTC
+            //Buy - USDT
             var wallet = await _walletsRepository
                 .GetUserWalletAsync(
                     userId,
@@ -158,7 +160,7 @@ namespace Web_Api.online.Controllers
 
                 result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
 
-                if(result.ClosedOrderUserId != "-1")
+                if (result.ClosedOrderUserId != "-1")
                 {
                     await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
                 }
@@ -166,14 +168,14 @@ namespace Web_Api.online.Controllers
 
             order.Id = result.Id;
 
-            if(result.Id == -1)
+            if (result.Id == -1)
             {
                 await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
             }
             else
             {
                 await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
-            }            
+            }
 
             return Ok();
         }
