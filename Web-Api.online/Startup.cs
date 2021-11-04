@@ -291,7 +291,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
 
             if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
@@ -305,7 +305,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
             #endregion
             #region BitFinexWallet
@@ -322,7 +322,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
 
             if (bitFinexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
@@ -336,7 +336,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
             #endregion
             #region KucoinWallet
@@ -353,7 +353,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
 
             if (kucoinWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
@@ -367,7 +367,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
             #endregion
             #region PoloniexWallet
@@ -384,7 +384,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
 
             if (poloniexWallets?.FirstOrDefault(x => x.CurrencyAcronim == "USDT") == null)
@@ -398,7 +398,7 @@ namespace Web_Api.online
 
                 wallet.Value = 1000000;
 
-                await walletRepository.UpdateWalletBalance(wallet);
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
             #endregion
         }

@@ -138,7 +138,7 @@ namespace Web_Api.online.Services
             {
                 var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
                 w.Value = w.Value + tr.Amount;
-                await _walletsRepository.UpdateWalletBalance(w);
+                await _walletsRepository.UpdateWalletBalanceAsync(w);
 
                 var _value = tr.Amount - tr.TransactionFee;
                 await _eventsRepository.CreateEvent(new EventTableModel()

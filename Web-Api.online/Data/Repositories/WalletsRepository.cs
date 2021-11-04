@@ -110,7 +110,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task UpdateWalletBalance(WalletTableModel wallet)
+        public async Task UpdateWalletBalanceAsync(WalletTableModel wallet)
         {
             try
             {
