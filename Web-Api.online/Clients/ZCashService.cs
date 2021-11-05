@@ -15,81 +15,26 @@ namespace Web_Api.online.Clients
 {
     public class ZCashService 
     {
-        private ZCashRequestClient client;
+        private ZCashRequestClient _client;
         private WalletsRepository _walletsRepository;
         private EventsRepository _eventsRepository;
+        private TransactionsRepository _transactionsRepository;
 
-        public ZCashService(IConfiguration config)
+
+        public ZCashService(IConfiguration config, WalletsRepository walletsRepository,
+            EventsRepository eventsRepository, TransactionsRepository transactionsRepository)
         {
-            this.client = new(config);
+            _client = new(config);
+            _walletsRepository = walletsRepository;
+            _eventsRepository = eventsRepository;
+            _transactionsRepository = transactionsRepository;
         }
 
-        #region get
+
         public string GetNewAddress()
         {
-            var resp = client.MakeRequest<string>(ZecRestMethods.getnewaddress);
+            var resp = _client.MakeRequest<string>(ZecRestMethods.getnewaddress);
 
-            return resp;
-        }
-
-        public object GetListAddresses()
-        {
-            var resp = client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
-
-            return resp;
-        }
-
-        public List<string> GetTransparentListAddresses()
-        {
-            var resp = client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
-            var list = resp.First().Transparent["addresses"];
-
-            return list;
-        }
-
-
-        public ZecBalance GetAddressBalance(List<string> addresses)
-        {
-            Dictionary<string, List<string>> addressList = new()
-            {
-                { "addresses", addresses }
-            };
-            var resp = client.MakeRequest<ZecBalance>(ZecRestMethods.getaddressbalance, addressList);
-
-            return resp;
-        }
-
-
-        public List<ZecDeltas> GetAddressDeltas(string address)
-        {
-            var resp = client.MakeRequest<List<ZecDeltas>>(ZecRestMethods.getaddressdeltas,
-                new Dictionary<string, List<string>>() { { "addresses", new List<string>() { address } } });
-
-            return resp;
-        }
-
-
-        public List<string> GetAddressIncomingTransactions(string address)
-        {
-            List<ZecDeltas> deltas = GetAddressDeltas(address);
-            List<string> incomingTxs = deltas.Where(x => x.Satoshis > 0).Select(x => x.TxId).ToList();
-
-            return incomingTxs;
-        }
-
-        #endregion
-
-
-        // not correct works?
-        public string SendFromToAddress(string fromAddress, string toAddress, float amount)
-        {
-            List<object> sendToAddressData = new List<object>()
-            {
-                fromAddress,
-                new List<ZecSendToAddressData>(){ new ZecSendToAddressData() { Address = toAddress, Amount = amount } }
-            };
-
-            var resp = client.MakeRequest<string>(ZecRestMethods.z_sendmany, fromAddress, new List<ZecSendToAddressData>() { new ZecSendToAddressData { Address = toAddress, Amount = amount } });
             return resp;
         }
 
@@ -105,7 +50,7 @@ namespace Web_Api.online.Clients
                     && wallet != null)
                 {
                     // check if need to convert Amount
-                    client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address,model.Amount);
+                    _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
 
                     wallet.Value -= _amount.Value;
 
@@ -119,7 +64,8 @@ namespace Web_Api.online.Clients
                         CurrencyAcronim = model.Currency
                     });
                     model.Status = "Success";
-                    await _walletsRepository.UpdateWalletBalance(wallet);
+                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+                    //await _walletsRepository.UpdateWalletBalance(wallet);
                 }
                 else
                 {
@@ -138,7 +84,117 @@ namespace Web_Api.online.Clients
 
 
 
+        public async Task<WalletTableModel> GetUpdatedWalletAsync(string userId)
+        {
+            WalletTableModel wallet = await _walletsRepository.GetUserWalletAsync(userId, "ZEC");
 
+
+            List<IncomeWalletTableModel> incomeZecWallets = (await _walletsRepository.GetUserIncomeWalletsAsync(userId))
+                .Where(x=>x.CurrencyAcronim == "ZEC").ToList();
+
+
+            List<IncomeTransactionTableModel> transactionModels = await _transactionsRepository.GetIncomeTransactions(userId, "ZEC");
+            List<string> savedTransactions = transactionModels.Select(x => x.TransactionId).ToList();
+
+            foreach (var incomeZecWallet in incomeZecWallets)
+            {
+                List<ZecDeltas> addressIncomeTransactions = GetAddressIncomingTransactions(incomeZecWallet.Address);
+                
+                foreach(var tx in addressIncomeTransactions)
+                {
+                    if (!savedTransactions.Contains(tx.TxId))
+                    {
+                        wallet.Value += tx.Satoshis;
+
+                        await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
+                        {
+                            CurrencyAcronim = "ZEC",
+                            TransactionId = tx.TxId,
+                            Amount = tx.Satoshis,
+                            UserId = userId,
+                            FromAddress = "",
+                            ToAddress = "",
+                            TransactionFee = 0,
+
+                        });
+                    }
+                }
+
+            }
+
+            await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+
+            return wallet;
+        }
+
+
+
+        
+
+
+
+
+
+        #region get
+
+
+        private object GetListAddresses()
+        {
+            var resp = _client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
+
+            return resp;
+        }
+
+        private List<string> GetTransparentListAddresses()
+        {
+            var resp = _client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
+            var list = resp.First().Transparent["addresses"];
+
+            return list;
+        }
+
+        private ZecBalance GetAddressBalance(List<string> addresses)
+        {
+            Dictionary<string, List<string>> addressList = new()
+            {
+                { "addresses", addresses }
+            };
+            var resp = _client.MakeRequest<ZecBalance>(ZecRestMethods.getaddressbalance, addressList);
+
+            return resp;
+        }
+
+        private List<ZecDeltas> GetAddressDeltas(string address)
+        {
+            var resp = _client.MakeRequest<List<ZecDeltas>>(ZecRestMethods.getaddressdeltas,
+                new Dictionary<string, List<string>>() { { "addresses", new List<string>() { address } } });
+
+            return resp;
+        }
+
+        private List<ZecDeltas> GetAddressIncomingTransactions(string address)
+        {
+            return GetAddressDeltas(address).Where(x => x.Satoshis > 0).ToList();
+        }
+
+
+        #endregion
+
+
+        // not correct works?
+        private string SendFromToAddress(string fromAddress, string toAddress, float amount)
+        {
+            List<object> sendToAddressData = new List<object>()
+            {
+                fromAddress,
+                new List<ZecSendToAddressData>(){ new ZecSendToAddressData() { Address = toAddress, Amount = amount } }
+            };
+
+            var resp = _client.MakeRequest<string>(ZecRestMethods.z_sendmany, fromAddress, new List<ZecSendToAddressData>() { new ZecSendToAddressData { Address = toAddress, Amount = amount } });
+            return resp;
+        }
+
+        
 
 
     }

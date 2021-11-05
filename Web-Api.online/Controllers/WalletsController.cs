@@ -66,10 +66,11 @@ namespace Web_Api.online.Controllers
             if (!string.IsNullOrEmpty(userId))
             {
                 model.UserWallets = await _transactionManager.GetUpdatedWallets(userId);
+                model.UserWallets.Add(await _zecService.GetUpdatedWalletAsync(userId));
                 model.UserIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
+
             
                 
-            
             }
 
             return View(model);

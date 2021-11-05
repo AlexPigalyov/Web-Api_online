@@ -28,8 +28,22 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 List<IncomeTransactionTableModel> result = (List<IncomeTransactionTableModel>)await _db.QueryAsync<IncomeTransactionTableModel>
-                    ("GetLastIncomeTransactionsByUserId",
+                    ("GetIncomeTransactionsByUserId",
                       new { userId = userId },
+                      commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex) { return null; }
+        }
+
+        public async Task<List<IncomeTransactionTableModel>> GetIncomeTransactions(string userId, string currencyAcronim)
+        {
+            try
+            {
+                List<IncomeTransactionTableModel> result = (List<IncomeTransactionTableModel>)await _db.QueryAsync<IncomeTransactionTableModel>
+                    ("GetIncomeTransactionsByUserIdAndCurrencyAcronim",
+                      new { userId = userId, currencyAcronim = currencyAcronim },
                       commandType: CommandType.StoredProcedure);
 
                 return result;
