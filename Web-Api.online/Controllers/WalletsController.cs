@@ -67,6 +67,9 @@ namespace Web_Api.online.Controllers
             {
                 model.UserWallets = await _transactionManager.GetUpdatedWallets(userId);
                 model.UserIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
+            
+                
+            
             }
 
             return View(model);

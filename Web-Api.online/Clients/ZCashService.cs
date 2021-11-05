@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
-using Web_Api.online.Clients.Models.ZecModels;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
@@ -87,10 +86,10 @@ namespace Web_Api.online.Clients
             List<object> sendToAddressData = new List<object>()
             {
                 fromAddress,
-                new List<ZecSendToAddressData>(){ new ZecSendToAddressData(toAddress, amount) }
+                new List<ZecSendToAddressData>(){ new ZecSendToAddressData() { Address = toAddress, Amount = amount } }
             };
 
-            var resp = client.MakeRequest<string>(ZecRestMethods.z_sendmany, fromAddress, new List<ZecSendToAddressData>() { new ZecSendToAddressData(toAddress, amount) });
+            var resp = client.MakeRequest<string>(ZecRestMethods.z_sendmany, fromAddress, new List<ZecSendToAddressData>() { new ZecSendToAddressData { Address = toAddress, Amount = amount } });
             return resp;
         }
 
@@ -135,6 +134,10 @@ namespace Web_Api.online.Clients
 
             return model;
         }
+
+
+
+
 
 
 
