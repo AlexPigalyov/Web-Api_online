@@ -126,20 +126,58 @@ namespace Web_Api.online.Controllers
             decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
-            var wallet = await _walletsRepository
-                .GetUserWalletAsync(
-                    userId,
-                    orderModel.IsBuy ? "USDT" : "BTC");
-
-            if (wallet == null)
+            //Buy - USDT
+            if (orderModel.IsBuy)
             {
-                return BadRequest("You dont have a wallets. Create them");
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, "USDT");
+
+                if (wallet == null)
+                {
+                    return BadRequest("You dont have a wallets. Create them");
+                }
+
+                if (wallet.Value < total)
+                {
+                    return BadRequest("You dont have wallet balance.");
+                }
+
+                var updatedWallet = wallet;
+
+                updatedWallet.Value -= total;
+
+                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
+
+
+            }
+            else //Sell - BTC
+            {
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, "BTC");
+
+                if (wallet == null)
+                {
+                    return BadRequest("You dont have a wallets. Create them");
+                }
+
+                if (wallet.Value < amountDecimal)
+                {
+                    return BadRequest("You dont have wallet balance.");
+                }
+
+                var updatedWallet = wallet;
+
+                updatedWallet.Value -= amountDecimal;
+
+                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
+
+
             }
 
-            if (wallet.Value < total)
-            {
-                return BadRequest("You dont have wallet balance.");
-            }
+
+
+
+
+
+
 
             BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
@@ -158,7 +196,7 @@ namespace Web_Api.online.Controllers
 
                 result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
 
-                if(result.ClosedOrderUserId != "-1")
+                if (result.ClosedOrderUserId != "-1")
                 {
                     await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
                 }
@@ -166,14 +204,14 @@ namespace Web_Api.online.Controllers
 
             order.Id = result.Id;
 
-            if(result.Id == -1)
+            if (result.Id == -1)
             {
                 await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
             }
             else
             {
                 await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
-            }            
+            }
 
             return Ok();
         }

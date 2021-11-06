@@ -75,7 +75,7 @@ namespace Web_Api.online.Services
                         CurrencyAcronim = model.Currency
                     });
                     model.Status = "Success";
-                    await _walletsRepository.UpdateWalletBalance(wallet);
+                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
                 }
                 else
                 {
