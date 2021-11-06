@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,7 @@ namespace Web_Api.online.Controllers
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
         private EventsRepository _eventsRepository;
+        private UserManager<IdentityUser> _userManager;
 
         public CoinsModel Model { get; set; }
         private decimal amountMin = 0.0000001M;
@@ -44,12 +46,14 @@ namespace Web_Api.online.Controllers
 
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
-            EventsRepository eventsRepository)
+            EventsRepository eventsRepository,
+            UserManager<IdentityUser> userManager )
         {
             Model = new CoinsModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
             _eventsRepository = eventsRepository;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -80,8 +84,10 @@ namespace Web_Api.online.Controllers
                 try
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var userToSendId = await _userManager.FindByNameAsync(coinsModel.UserId);
+
                     var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, coinsModel.Currency);
-                    var walletTo = await _walletsRepository.GetUserWalletAsync(coinsModel.UserId, coinsModel.Currency);
+                    var walletTo = await _walletsRepository.GetUserWalletAsync(userToSendId.Id, coinsModel.Currency);
 
                     decimal? _amount = coinsModel.Amount.ConvertToDecimal();
 

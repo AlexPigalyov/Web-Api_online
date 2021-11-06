@@ -86,6 +86,10 @@ namespace Web_Api.online.Clients
         {
             WalletTableModel wallet = await _walletsRepository.GetUserWalletAsync(userId, "ZEC");
 
+            if (wallet == null)
+            {
+                return null;
+            }
 
             List<IncomeWalletTableModel> incomeZecWallets = (await _walletsRepository.GetUserIncomeWalletsAsync(userId))
                 .Where(x=>x.CurrencyAcronim == "ZEC").ToList();
