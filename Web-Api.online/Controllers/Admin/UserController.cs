@@ -34,7 +34,7 @@ namespace Web_Api.online.Controllers.Admin
                         Users = users
                     };
 
-                    return View(viewModel);
+                    return View("Views/Admin/Users.cshtml", viewModel);
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace Web_Api.online.Controllers.Admin
                         Users = users
                     };
 
-                    return View(viewModel);
+                    return View("Views/Admin/Users.cshtml", viewModel);
                 }
             }
             else

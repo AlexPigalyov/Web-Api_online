@@ -196,6 +196,7 @@ namespace Web_Api.online
         private async Task UserSeed(IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+            var usersInfoRepository = serviceProvider.GetService<UsersInfoRepository>();
 
             #region AdminDefaultAccount
             var adminDefaultAcc = await userManager.FindByIdAsync(UserIdConstant.AdminDefaultAcc);
@@ -204,7 +205,7 @@ namespace Web_Api.online
                 var newAcc = new IdentityUser()
                 {
                     Id = UserIdConstant.AdminDefaultAcc,
-                    UserName = "admin",
+                    UserName = "admin@account.com",
                     Email = "admin@account.com"
                 };
 
@@ -213,6 +214,15 @@ namespace Web_Api.online
                 if (res.Succeeded)
                 {
                     await userManager.AddToRoleAsync(newAcc, RolesNameConstant.Admin);
+
+                    await usersInfoRepository.spCreateOrUpdateProfileUserInfo(new UserInfoTableModel()
+                    {
+                        FullName = "Admin",
+                        AboutMe = "Admin Account",
+                        Location = "Russia",
+                        RegistrationDate = DateTime.Now,
+                        UserId = UserIdConstant.AdminDefaultAcc
+                    });
                 }
             }
             #endregion
@@ -228,7 +238,19 @@ namespace Web_Api.online
                     Email = "BinanceBot@account.com"
                 };
 
-                await userManager.CreateAsync(newAcc, "binancebotaccountpassword");
+                var res = await userManager.CreateAsync(newAcc, "binancebotaccountpassword");
+
+                if (res.Succeeded)
+                {
+                    await usersInfoRepository.spCreateOrUpdateProfileUserInfo(new UserInfoTableModel()
+                    {
+                        FullName = "Binance Bot",
+                        AboutMe = "Binance Bot Account",
+                        Location = "Russia",
+                        RegistrationDate = DateTime.Now,
+                        UserId = UserIdConstant.BinanceBot
+                    });
+                }
             }
             #endregion
             #region BitFinexAcc
@@ -243,7 +265,19 @@ namespace Web_Api.online
                     Email = "BitFinexBot@account.com"
                 };
 
-                await userManager.CreateAsync(newAcc, "bitfinexbotaccountpassword");           
+                var res = await userManager.CreateAsync(newAcc, "bitfinexbotaccountpassword");
+
+                if (res.Succeeded)
+                {
+                    await usersInfoRepository.spCreateOrUpdateProfileUserInfo(new UserInfoTableModel()
+                    {
+                        FullName = "BitFinex Bot",
+                        AboutMe = "BitFinex Bot Account",
+                        Location = "Russia",
+                        RegistrationDate = DateTime.Now,
+                        UserId = UserIdConstant.BitFinexBot
+                    });
+                }
             }
             #endregion
             #region KucoinAcc
@@ -258,7 +292,19 @@ namespace Web_Api.online
                     Email = "KucoinBot@account.com"
                 };
 
-                await userManager.CreateAsync(newAcc, "kucoinbotaccountpassword");
+                var res = await userManager.CreateAsync(newAcc, "kucoinbotaccountpassword");
+
+                if (res.Succeeded)
+                {
+                    await usersInfoRepository.spCreateOrUpdateProfileUserInfo(new UserInfoTableModel()
+                    {
+                        FullName = "Kucoin Bot",
+                        AboutMe = "Kucoin Bot Account",
+                        Location = "Russia",
+                        RegistrationDate = DateTime.Now,
+                        UserId = UserIdConstant.KucoinBot
+                    });
+                }
             }
             #endregion
             #region PoloniexAcc
@@ -273,7 +319,19 @@ namespace Web_Api.online
                     Email = "PoloniexBot@account.com"
                 };
 
-                await userManager.CreateAsync(newAcc, "poloniexbotaccountpassword");
+                var res = await userManager.CreateAsync(newAcc, "poloniexbotaccountpassword");
+
+                if (res.Succeeded)
+                {
+                    await usersInfoRepository.spCreateOrUpdateProfileUserInfo(new UserInfoTableModel()
+                    {
+                        FullName = "Poliniex Bot",
+                        AboutMe = "Poliniex Bot Account",
+                        Location = "Russia",
+                        RegistrationDate = DateTime.Now,
+                        UserId = UserIdConstant.PoloniexBot
+                    });
+                }
             }
             #endregion
         }
