@@ -82,8 +82,6 @@ namespace Web_Api.online.Clients
         }
 
 
-
-
         public async Task<WalletTableModel> GetUpdatedWalletAsync(string userId)
         {
             WalletTableModel wallet = await _walletsRepository.GetUserWalletAsync(userId, "ZEC");
@@ -128,15 +126,7 @@ namespace Web_Api.online.Clients
         }
 
 
-
-        
-
-
-
-
-
         #region get
-
 
         private object GetListAddresses()
         {
@@ -177,25 +167,7 @@ namespace Web_Api.online.Clients
             return GetAddressDeltas(address).Where(x => x.Satoshis > 0).ToList();
         }
 
-
         #endregion
-
-
-        // not correct works?
-        private string SendFromToAddress(string fromAddress, string toAddress, float amount)
-        {
-            List<object> sendToAddressData = new List<object>()
-            {
-                fromAddress,
-                new List<ZecSendToAddressData>(){ new ZecSendToAddressData() { Address = toAddress, Amount = amount } }
-            };
-
-            var resp = _client.MakeRequest<string>(ZecRestMethods.z_sendmany, fromAddress, new List<ZecSendToAddressData>() { new ZecSendToAddressData { Address = toAddress, Amount = amount } });
-            return resp;
-        }
-
-        
-
 
     }
 }
