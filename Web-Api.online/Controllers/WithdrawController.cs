@@ -45,11 +45,11 @@ namespace Web_Api.online.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(GeneralWithdrawModel model)
         {
+            GeneralWithdrawModel m = new();
+
             if (ModelState.IsValid)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                GeneralWithdrawModel m;
 
                 if(model.Currency == "ZEC")
                 {
@@ -61,9 +61,9 @@ namespace Web_Api.online.Controllers
                 }
 
                 
-                return View(m.Currency, m);
+                return View("GeneralWithdrawPage", m);
             }
-            return View(model.Currency, model);
+            return View("GeneralWithdrawPage", m);
         }
     }
 }
