@@ -50,7 +50,7 @@ namespace Web_Api.online.Clients
                     && wallet != null)
                 {
                     // check if need to convert Amount
-                    _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
+                    var txId = _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
 
                     wallet.Value -= _amount.Value;
 
@@ -72,7 +72,7 @@ namespace Web_Api.online.Clients
                     model.Status = "Not enough coins";
                 }
             }
-            catch
+            catch(Exception e)
             {
                 model.Status = "Error";
                 return model;
@@ -106,13 +106,13 @@ namespace Web_Api.online.Clients
                 {
                     if (!savedTransactions.Contains(tx.TxId))
                     {
-                        wallet.Value += tx.Satoshis;
+                        wallet.Value += tx.Satoshis / 100000000;
 
                         await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = "ZEC",
                             TransactionId = tx.TxId,
-                            Amount = tx.Satoshis,
+                            Amount = tx.Satoshis / 100000000,
                             UserId = userId,
                             FromAddress = "",
                             ToAddress = "",

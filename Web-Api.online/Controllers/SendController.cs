@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Toolkit;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +13,7 @@ using Web_Api.online.Hash;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
+
 
 namespace Web_Api.online.Controllers
 {
@@ -35,7 +36,7 @@ namespace Web_Api.online.Controllers
 
 
             [Required]
-            public string UserId { get; set; }
+            public string InputTextIdentifier { get; set; }
             [Required]
             public string Currency { get; set; }
             public decimal Balance { get; set; }
@@ -79,15 +80,44 @@ namespace Web_Api.online.Controllers
         [HttpPost]
         public async Task<IActionResult> Coins(CoinsModel coinsModel)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var userToSendId = await _userManager.FindByNameAsync(coinsModel.UserId);
+                    
+
+                    string input = coinsModel.InputTextIdentifier;
+                    IdentityUser userToSend;
+
+                    if (input.IsEmail())
+                    {
+                        userToSend = await _userManager.FindByNameAsync(input);
+                    }
+                    else if (input.IsPhoneNumber())
+                    {
+                        coinsModel.Status = "not implementation";
+                        return View(coinsModel);
+                    }
+                    else if (input.IsWalletId())
+                    {
+                        coinsModel.Status = "not implementation";
+                        return View(coinsModel);
+                    }
+                    else if (input.IsName())
+                    {
+                        coinsModel.Status = "not implementation";
+                        return View(coinsModel);
+                    }
+                    else
+                    {
+                        coinsModel.Status = "Input exception";
+                        return View(coinsModel);
+                    }
 
                     var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, coinsModel.Currency);
-                    var walletTo = await _walletsRepository.GetUserWalletAsync(userToSendId.Id, coinsModel.Currency);
+                    var walletTo = await _walletsRepository.GetUserWalletAsync(userToSend.Id, coinsModel.Currency);
 
                     decimal? _amount = coinsModel.Amount.ConvertToDecimal();
 
@@ -118,7 +148,7 @@ namespace Web_Api.online.Controllers
                                 },
                                 EventReceiver = new EventTableModel()
                                 {
-                                    UserId = coinsModel.UserId,
+                                    UserId = userToSend.Id,
                                     Type = (int)EventTypeEnum.Recieve,
                                     Comment = coinsModel.Comment,
                                     Value = _amount.Value,

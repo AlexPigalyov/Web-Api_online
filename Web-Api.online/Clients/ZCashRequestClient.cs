@@ -41,7 +41,7 @@ namespace Web_Api.online.Clients
         {
             var jsonRpcRequest = new JsonRpcRequest(1, rpcMethod.ToString(), parameters);
             var webRequest = (HttpWebRequest)WebRequest.Create(daemonUrl);
-            SetBasicAuthHeader(webRequest, "1", "1");
+            SetBasicAuthHeader(webRequest, rpcUsername, rpcPassword);
             webRequest.Credentials = new NetworkCredential(rpcUsername, rpcPassword);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
