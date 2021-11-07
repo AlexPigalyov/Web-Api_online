@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Data.Repositories;
@@ -19,6 +19,7 @@ namespace Web_Api.online.Services
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
         private EventsRepository _eventsRepository;
+        private ZCashService _zecService;
 
 
         private string userId;
@@ -27,19 +28,25 @@ namespace Web_Api.online.Services
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
-            EventsRepository eventsRepository)
+            EventsRepository eventsRepository, 
+            ZCashService zecService)
         {
             _transactionsRepository = transactionsRepository;
             _coinManager = coinManager;
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
+            _zecService = zecService;
         }
 
         public async Task<List<WalletTableModel>> GetUpdatedWallets(string userId)
         {
             this.userId = userId;
+
+            await _zecService.GetUpdatedWalletAsync(userId);
+
             incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
             wallets = await _walletsRepository.GetUserWalletsAsync(userId);
+            
             await SearchNewIncomeTransactionsAsync();
             return wallets;
         }

@@ -11,6 +11,8 @@ using Web_Api.online.Services;
 using Web_Api.online.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Web_Api.online.Data.Repositories;
+using Nethereum.Web3;
+using Web_Api.online.Clients;
 using System.Net;
 using System.IO;
 using Web_Api.online.Requests;
@@ -25,18 +27,21 @@ namespace Web_Api.online.Controllers
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
         private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private ZCashService _zecService;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
             EventsRepository eventsRepository, 
-            OutcomeTransactionRepository outcomeTransactionRepository)
+            OutcomeTransactionRepository outcomeTransactionRepository,
+            ZCashService zecService)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
             _outcomeTransactionRepository = outcomeTransactionRepository;
+            _zecService = zecService;
         }
 
         public class IndexModel
@@ -79,6 +84,11 @@ namespace Web_Api.online.Controllers
                 if (selectCurrency == "ETH")
                 {
                     address = ETH.GetNewAddress(userId);
+                }
+                else if (selectCurrency == "ZEC")
+                {
+                    var zcashClient = _zecService;
+                    address = zcashClient.GetNewAddress();
                 }
                 else
                 {

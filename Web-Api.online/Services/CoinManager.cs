@@ -25,6 +25,7 @@ namespace Web_Api.online.Services
 
         public ILitecoinService Litecoin => litecoin;
 
+
         public CoinManager(IBitcoinCashService bitcoinCash,
             IBitcoinService bitcoin,
             IDashService dash,
@@ -34,6 +35,7 @@ namespace Web_Api.online.Services
             this.bitcoinCash = bitcoinCash;
             this.bitcoin = bitcoin;
             this.dash = dash;
+            //this.zcash = zcash;
             this.dogecoin = dogecoin;
             this.litecoin = litecoin;
 

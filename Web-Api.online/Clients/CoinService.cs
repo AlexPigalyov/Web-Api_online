@@ -567,6 +567,12 @@ namespace Web_Api.online.Clients
 
         public List<TransactionResponse> ListTransactions(string account, int count, int from, bool? includeWatchonly)
         {
+            if (this.CoinShortName == "ZEC")
+            {
+                var resp = _restRequestClient.MakeRequest<List<TransactionResponse>>(RestMethods.listtransactions, "*", count, from);
+                return resp;
+            }
+
             return includeWatchonly == null
                 ? _restRequestClient.MakeRequest<List<TransactionResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from)
                 : _restRequestClient.MakeRequest<List<TransactionResponse>>(RestMethods.listtransactions, (string.IsNullOrWhiteSpace(account) ? "*" : account), count, from, includeWatchonly);
