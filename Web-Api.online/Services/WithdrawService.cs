@@ -39,29 +39,21 @@ namespace Web_Api.online.Services
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
                 if (_amount.Value > 0 && _amount.Value <= wallet.Value
-                    && wallet !=null)
+                    && wallet != null)
                 {
-                    if (model.Currency == "ETH")
+
+                    var coinService = _coinManager
+                               .CoinServices
+                               .FirstOrDefault(x => x.CoinShortName == model.Currency);
+
+                    if (coinService == null)
                     {
-                        await web3.TransactionManager.SendTransactionAsync(
-                            wallet.Address, model.Address,
-                            new HexBigInteger(new BigInteger(_amount.Value)));
-
+                        model.Status = "Error";
+                        return model;
                     }
-                    else
-                    {
-                        var coinService = _coinManager
-                                   .CoinServices
-                                   .FirstOrDefault(x => x.CoinShortName == model.Currency);
 
-                        if (coinService == null)
-                        {
-                            model.Status = "Error";
-                            return model;
-                        }
+                    coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
 
-                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
-                    }
 
                     wallet.Value -= _amount.Value;
 
