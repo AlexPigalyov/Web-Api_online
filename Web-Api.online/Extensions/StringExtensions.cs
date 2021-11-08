@@ -4,6 +4,19 @@ namespace Web_Api.online.Extensions
 {
     public static class StringExtensions
     {
+
+        public static bool IsName(this string name)
+        {
+
+            return false;
+        }
+
+        public static bool IsWalletId(this string walletId)
+        {
+
+            return false;
+        }
+
         public static decimal? ConvertToDecimal(this string number)
         {
             decimal num;
