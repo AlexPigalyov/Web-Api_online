@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -64,6 +65,11 @@ namespace Web_Api.online
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_Api.online", Version = "v1" });
             });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/Identity/Account/Login");
+            });
+
             services.AddTransient<WalletsRepository>();
             services.AddTransient<CandleStickRepository>();
             services.AddTransient<UsersInfoRepository>();
@@ -84,7 +90,7 @@ namespace Web_Api.online
             services.AddCoinManager(Configuration);
 
             services.AddSingleton<ZCashService>();
-            services.AddTransient<IEmailSender,EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -257,7 +263,7 @@ namespace Web_Api.online
             #region BitFinexAcc
 
             var bitFinexAcc = await userManager.FindByIdAsync(UserIdConstant.BitFinexBot);
-            if(bitFinexAcc == null)
+            if (bitFinexAcc == null)
             {
                 var newAcc = new IdentityUser()
                 {
