@@ -119,7 +119,6 @@ namespace Web_Api.online.Data.Repositories
                         newWalletBalance = wallet.Value
                     },
                           commandType: CommandType.StoredProcedure);
-
             }
             catch (Exception ex) { return; }
         }
@@ -177,6 +176,24 @@ namespace Web_Api.online.Data.Repositories
                     return currencies;
                 }
                 catch (Exception ex) { return null; }
+            }
+        }
+
+        public async Task<string> GetUserIdByWalletAddress(string address)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("address", address);
+
+                return (await _db.QueryAsync<string>(
+                        "GetUserIdByWalletAddress",
+                        parameters,
+                        commandType: CommandType.StoredProcedure)).FirstOrDefault();
+            }
+            catch (Exception exc)
+            {
+                return null;
             }
         }
     }

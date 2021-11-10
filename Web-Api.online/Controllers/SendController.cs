@@ -82,7 +82,6 @@ namespace Web_Api.online.Controllers
         [HttpPost]
         public async Task<IActionResult> Coins(CoinsModel coinsModel)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -93,7 +92,12 @@ namespace Web_Api.online.Controllers
 
                     if (string.IsNullOrEmpty(sendToUserId))
                     {
-                        coinsModel.Status = "Error invalid address";
+                        sendToUserId = _walletsRepository.GetUserIdByWalletAddress(coinsModel.InputTextIdentifier).Result;
+                    }
+
+                    if (string.IsNullOrEmpty(sendToUserId))
+                    {
+                        coinsModel.Status = "Error. Invalid user send to.";
                         return View(coinsModel);
                     }
 
