@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Toolkit;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,6 +23,7 @@ namespace Web_Api.online.Controllers
         private ILitecoinService _litecoinService;
         private EventsRepository _eventsRepository;
         private UserManager<IdentityUser> _userManager;
+        private UserRepository _userRepository;
 
         public CoinsModel Model { get; set; }
         private decimal amountMin = 0.0000001M;
@@ -48,13 +48,15 @@ namespace Web_Api.online.Controllers
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
             EventsRepository eventsRepository,
-            UserManager<IdentityUser> userManager )
+            UserManager<IdentityUser> userManager,
+            UserRepository userRepository)
         {
             Model = new CoinsModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
             _eventsRepository = eventsRepository;
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -86,38 +88,42 @@ namespace Web_Api.online.Controllers
                 try
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    
 
-                    string input = coinsModel.InputTextIdentifier;
-                    IdentityUser userToSend;
+                    string sendToUserId = _userRepository.FindUserIdForSendPageAsync(coinsModel.InputTextIdentifier).Result;
 
-                    if (input.IsEmail())
+                    if (string.IsNullOrEmpty(sendToUserId))
                     {
-                        userToSend = await _userManager.FindByNameAsync(input);
-                    }
-                    else if (input.IsPhoneNumber())
-                    {
-                        coinsModel.Status = "not implementation";
+                        coinsModel.Status = "Error invalid address";
                         return View(coinsModel);
                     }
-                    else if (input.IsWalletId())
-                    {
-                        coinsModel.Status = "not implementation";
-                        return View(coinsModel);
-                    }
-                    else if (input.IsName())
-                    {
-                        coinsModel.Status = "not implementation";
-                        return View(coinsModel);
-                    }
-                    else
-                    {
-                        coinsModel.Status = "Input exception";
-                        return View(coinsModel);
-                    }
+
+                    //if (input.IsEmail())
+                    //{
+                    //    userToSend = await _userManager.FindByNameAsync(input);
+                    //}
+                    //else if (input.IsPhoneNumber())
+                    //{
+                    //    coinsModel.Status = "not implementation";
+                    //    return View(coinsModel);
+                    //}
+                    //else if (input.IsWalletId())
+                    //{
+                    //    coinsModel.Status = "not implementation";
+                    //    return View(coinsModel);
+                    //}
+                    //else if (input.IsName())
+                    //{
+                    //    coinsModel.Status = "not implementation";
+                    //    return View(coinsModel);
+                    //}
+                    //else
+                    //{
+                    //    coinsModel.Status = "Input exception";
+                    //    return View(coinsModel);
+                    //}
 
                     var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, coinsModel.Currency);
-                    var walletTo = await _walletsRepository.GetUserWalletAsync(userToSend.Id, coinsModel.Currency);
+                    var walletTo = await _walletsRepository.GetUserWalletAsync(sendToUserId, coinsModel.Currency);
 
                     decimal? _amount = coinsModel.Amount.ConvertToDecimal();
 
@@ -148,7 +154,7 @@ namespace Web_Api.online.Controllers
                                 },
                                 EventReceiver = new EventTableModel()
                                 {
-                                    UserId = userToSend.Id,
+                                    UserId = sendToUserId,
                                     Type = (int)EventTypeEnum.Recieve,
                                     Comment = coinsModel.Comment,
                                     Value = _amount.Value,

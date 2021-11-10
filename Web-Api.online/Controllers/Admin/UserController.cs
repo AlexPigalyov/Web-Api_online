@@ -54,10 +54,5 @@ namespace Web_Api.online.Controllers.Admin
                 return View("Views/Admin/Users.cshtml", viewModel);
             }
         }
-        else
-
-        {
-            return BadRequest("You're not admin");
-        }
     }
 }

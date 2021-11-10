@@ -32,14 +32,14 @@ namespace Web_Api.online.Data.Repositories
                         "GetUsers_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).ToList();
-            } 
-            catch(Exception exc)
+            }
+            catch (Exception exc)
             {
                 return null;
-            }            
+            }
         }
 
-        public async Task<List<spGetUsers_PagedSettings>> FindPagedUsersByUsername(string userName, int page, int pageSize) 
+        public async Task<List<spGetUsers_PagedSettings>> FindPagedUsersByUsername(string userName, int page, int pageSize)
         {
             try
             {
@@ -59,6 +59,24 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
+        public async Task<string> FindUserIdForSendPageAsync(string searchText)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("searchText", searchText);
+
+                return (await _db.QueryAsync<string>(
+                        "FindUserIdForSendPage",
+                        parameters,
+                        commandType: CommandType.StoredProcedure)).FirstOrDefault();
+            }
+            catch (Exception exc)
+            {
+                return null;
+            }
+        }
+
         public async Task<int> GetCountOfUsers()
         {
             try
@@ -67,7 +85,7 @@ namespace Web_Api.online.Data.Repositories
                     "GetCountOfUsers",
                     commandType: CommandType.StoredProcedure);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 return 0;
             }

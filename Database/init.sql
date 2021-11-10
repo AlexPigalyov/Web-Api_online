@@ -240,8 +240,6 @@ INSERT [dbo].[AspNetUsers] ([Id], [UserName], [NormalizedUserName], [Email], [No
 GO
 INSERT [dbo].[AspNetUsers] ([Id], [UserName], [NormalizedUserName], [Email], [NormalizedEmail], [EmailConfirmed], [PasswordHash], [SecurityStamp], [ConcurrencyStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount]) VALUES (N'f15ad39c-2e1d-492b-b3af-047fad496645', N'mathewsun@yandex.ru', N'MATHEWSUN@YANDEX.RU', N'mathewsun@yandex.ru', N'MATHEWSUN@YANDEX.RU', 0, N'AQAAAAEAACcQAAAAEMPUt3KyFehwjy1jMHZoDb7WhipReiu3wmudRusN2HJHtIM21y17Ox4FIZcpwZrpbQ==', N'TN3P74GZPZS7HBVQ62WK2NGCTBX4CBN4', N'c219af2d-ee55-4d3d-ba38-e3d8ccb5703d', NULL, 0, 0, NULL, 1, 0)
 GO
-INSERT [dbo].[UsersInfo] ([UserId], [ProfilePhotoPath], [FullName], [AboutMe], [FacebookLink], [InstagramLink], [SkypeLink], [TwitterLink], [LinkedinLink], [GithubLink], [Location]) VALUES (N'40ffde92-878c-4c09-ac6b-c86a769d1623', NULL, N'Alex Pigalyov Sergeevich', N'Developer this crypto-currency exchange!', NULL, NULL, NULL, NULL, NULL, N'https://github.com/AlexPigalyov', NULL)
-GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Date]  DEFAULT (getdate()) FOR [Date]
