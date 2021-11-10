@@ -814,6 +814,69 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCreatedOutcomeTransactionAndSetStateInWork]
+@currencyAcronim nvarchar(10)
+AS
+BEGIN
+
+--IF OBJECT_ID('tempdb..#Temp') IS NOT NULL
+--    DROP TABLE #Temp
+
+--create table #Temp
+--(
+--	[Id] [bigint],
+--	[WalletId] [int],
+--	[Value] [decimal](38, 20),
+--	[Date] [datetime],
+--	[OutcomingWallet] [nvarchar](max),
+--	[CurrencyAcronim] [nvarchar](10),
+--	[State] [int],
+--	[LastUpdateDate] [datetime],
+--	[ErrorText] [nvarchar](max)
+--)
+
+--Insert Into #Temp
+--Select [Id]
+--      ,[WalletId]
+--      ,[Value]
+--      ,[Date]
+--      ,[OutcomingWallet]
+--      ,[CurrencyAcronim]
+--      ,[State]
+--      ,[LastUpdateDate]
+--      ,[ErrorText] 
+--from OutcomeTransactions
+
+--UPDATE [OutcomeTransactions]
+--SET [State] = 2
+--FROM [OutcomeTransactions]
+--INNER JOIN ON #Temp.Id = [OutcomeTransactions].Id
+
+
+
+
+declare @transactionId int;
+
+set @transactionId = (select top(1) Id from OutcomeTransactions 
+						where [State] = 1 AND CurrencyAcronim = @currencyAcronim)
+
+UPDATE [OutcomeTransactions]
+SET [State] = 2,
+LastUpdateDate = GetDate()
+Where OutcomeTransactions.Id = @transactionId
+
+select top(1) * from OutcomeTransactions 
+Where OutcomeTransactions.Id = @transactionId
+
+
+END
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCurrent_BTC_USDT_CandleStick]
 AS
 BEGIN
@@ -898,6 +961,23 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetSettings]
+
+AS
+BEGIN
+
+SELECT [Id]
+      ,[Name]
+      ,[Value]
+      ,[LastUpdateDateTime]
+  FROM [Exchange].[dbo].[Settings]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetManagerConfirmedOutcomeTransactionAndSetStateInWork]
 @currencyAcronim nvarchar(10)
 AS
@@ -918,8 +998,6 @@ Where OutcomeTransactions.Id = @transactionId
 
 
 END
-
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -1589,7 +1667,23 @@ SET State = @state, LastUpdateDate = GETDATE(), ErrorText = @errorText
 WHERE Id = @id
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateSetting]
+@name nvarchar(MAX),
+@value nvarchar(MAX)
+AS
+BEGIN
 
+UPDATE [Exchange].[dbo].[Settings]
+SET    Value = @value,
+       LastUpdateDateTime = GETDATE()
+WHERE Name = @name 
+
+END
 GO
 SET ANSI_NULLS ON
 GO

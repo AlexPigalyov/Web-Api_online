@@ -18,13 +18,11 @@ namespace Web_Api.online.Data.Repositories
 {
     public class TradeRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
 
         public TradeRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection"));
+            _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
         public async Task<spGet_BTC_USDT_OpenOrder_ById> spGet_BTC_USDT_OpenOrder_ById(long openOrderId)

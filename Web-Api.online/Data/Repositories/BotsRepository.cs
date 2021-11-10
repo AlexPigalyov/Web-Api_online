@@ -14,12 +14,10 @@ namespace Web_Api.online.Data.Repositories
     public class BotsRepository
     {
         private readonly IDbConnection _db;
-        private readonly IConfiguration _configuration;
 
         public BotsRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection"));           
+            _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
         public async Task CreateBot(BotsTableModel model)

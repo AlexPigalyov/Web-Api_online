@@ -1,5 +1,4 @@
-ALTER PROCEDURE [dbo].[FindUsersByUsernameForAdminPanel]
-@userName int,
+ALTER PROCEDURE [dbo].[GetUsers_Paged]
 @page int,
 @pageSize int
 AS
@@ -14,9 +13,11 @@ Select
 FROM [web-api.online].[dbo].[AspNetUsers] as ANU
 inner join [web-api.online].[dbo].[UsersInfo] as UI
 ON ANU.Id = UI.UserId
-WHERE ANU.UserName LIKE '%' + @userName + '%'
 Order By ANU.Id
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
 END
+
+
+

@@ -14,13 +14,11 @@ namespace Web_Api.online.Data.Repositories
 {
     public class RatesRepository : IRatesRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
 
         public RatesRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));            
+            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
         public async Task<List<spGetLastRatesResult>> GetLastRatesAsync()

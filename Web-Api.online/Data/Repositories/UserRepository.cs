@@ -15,14 +15,12 @@ namespace Web_Api.online.Data.Repositories
 {
     public class UserRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
         public UserRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
-        public async Task<List<spGetUsersForAdminPanelResult>> GetUsersForAdminPanelAsync(int page, int pageSize)
+        public async Task<List<spGetUsers_PagedSettings>> GetPagedUsers(int page, int pageSize)
         {
             try
             {
@@ -30,8 +28,8 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                return (await _db.QueryAsync<spGetUsersForAdminPanelResult>(
-                        "GetUsersForAdminPanel",
+                return (await _db.QueryAsync<spGetUsers_PagedSettings>(
+                        "GetUsers_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).ToList();
             } 
@@ -41,7 +39,7 @@ namespace Web_Api.online.Data.Repositories
             }            
         }
 
-        public async Task<List<spGetUsersForAdminPanelResult>> FindUsersByUsernameForAdminPanel(string userName, int page, int pageSize) 
+        public async Task<List<spGetUsers_PagedSettings>> FindPagedUsersByUsername(string userName, int page, int pageSize) 
         {
             try
             {
@@ -50,8 +48,8 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                return (await _db.QueryAsync<spGetUsersForAdminPanelResult>(
-                        "FindUsersByUsernameForAdminPanel",
+                return (await _db.QueryAsync<spGetUsers_PagedSettings>(
+                        "FindUsersByUsername_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).AsList();
             }

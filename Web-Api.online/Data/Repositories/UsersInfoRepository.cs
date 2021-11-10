@@ -13,12 +13,10 @@ namespace Web_Api.online.Data.Repositories
 {
     public class UsersInfoRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
         public UsersInfoRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));            
+            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
         public async Task<UserInfoTableModel> spGetUserInfo_ByUserId(string userId)

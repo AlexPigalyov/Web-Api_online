@@ -220,7 +220,8 @@ CREATE TABLE [dbo].[UsersInfo](
 	[TwitterLink] [nvarchar](max) NULL,
 	[LinkedinLink] [nvarchar](max) NULL,
 	[GithubLink] [nvarchar](max) NULL,
-	[Location] [nvarchar](200) NULL
+	[Location] [nvarchar](200) NULL,
+	[RegistrationDate] [datetime] NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'00000000000000_CreateIdentitySchema', N'5.0.4')
@@ -258,6 +259,8 @@ GO
 ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_Date]  DEFAULT (getdate()) FOR [Date]
 GO
 ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_IsUp]  DEFAULT ((1)) FOR [IsUp]
+GO
+ALTER TABLE [dbo].[UsersInfo] ADD  CONSTRAINT [DF_UsersInfo_RegistrationDate]  DEFAULT (getdate()) FOR [RegistrationDate]
 GO
 ALTER TABLE [dbo].[AspNetRoleClaims]  WITH CHECK ADD  CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY([RoleId])
 REFERENCES [dbo].[AspNetRoles] ([Id])
@@ -400,6 +403,33 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[FindUsersByUsernameFor_Paged]
+@userName nvarchar(450),
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  ANU.UserName
+  ,ANU.Email
+  ,UI.FullName
+  ,UI.Location
+  ,UI.RegistrationDate
+FROM [web-api.online].[dbo].[AspNetUsers] as ANU
+inner join [web-api.online].[dbo].[UsersInfo] as UI
+ON ANU.Id = UI.UserId
+WHERE ANU.UserName LIKE '%' + @userName + '%'
+Order By ANU.Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 create PROCEDURE [dbo].[GetCoinRatesByAcronim]
 @acronim nvarchar(10)
 AS
@@ -425,6 +455,18 @@ SELECT *
 FROM [web-api.online].[dbo].[CoinsRates] 
 WHERE [Acronim] = @acronim 
 AND [Site] = @site
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCountOfUsers]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [web-api.online].[dbo].[AspNetUsers]
 
 END
 GO
@@ -487,6 +529,23 @@ inner join (SELECT [Acronim], [Site], Max([Date]) as dateres
 FROM [web-api.online].[dbo].[Rates]
 group by Acronim, [Site]) as se
 on se.[Acronim] = r.[Acronim] and se.[Site] = r.[Site] and se.dateres = r.Date
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetRoles_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+SELECT Id, Name FROM [web-api.online].[dbo].[AspNetRoles]
+Order By Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
 
 END
 GO
@@ -591,4 +650,32 @@ SELECT * FROM [Exchange].[dbo].[UsersInfo]
 WHERE UserId = @userId
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetUsers_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  ANU.UserName
+  ,ANU.Email
+  ,UI.FullName
+  ,UI.Location
+  ,UI.RegistrationDate
+FROM [web-api.online].[dbo].[AspNetUsers] as ANU
+inner join [web-api.online].[dbo].[UsersInfo] as UI
+ON ANU.Id = UI.UserId
+Order By ANU.Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
 GO

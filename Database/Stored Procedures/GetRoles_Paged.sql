@@ -1,4 +1,4 @@
-ALTER PROCEDURE [dbo].[GetRolesForAdminPanel]
+ALTER PROCEDURE [dbo].[GetRoles_Paged]
 @page int,
 @pageSize int
 AS

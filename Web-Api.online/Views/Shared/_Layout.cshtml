@@ -19,6 +19,7 @@
     <link href="~/css/icons.css?2" rel="stylesheet" type="text/css" />
     <link href="~/css/app.css?5" rel="stylesheet" type="text/css" id="light-style" />
     <link href="~/css/app-dark.css?4" rel="stylesheet" type="text/css" id="dark-style" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js?2"></script>
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
     <div class="wrapper">
@@ -209,8 +210,6 @@
             </div>
         </footer>
     </div>
-    <script src="~/lib/jquery/dist/jquery.js?2"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js?2"></script>
     <script src="~/js/site.js?2" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <!-- bundle -->

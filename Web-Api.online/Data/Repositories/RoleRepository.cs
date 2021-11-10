@@ -15,15 +15,13 @@ namespace Web_Api.online.Data.Repositories
     
     public class RoleRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
         public RoleRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public async Task<List<spGetRolesForAdminPanelResult>> GetRolesForAdminPanelAsync(int page, int pageSize)
+        public async Task<List<spGetRoles_Paged>> GetPagedRoles(int page, int pageSize)
         {
             try
             {
@@ -31,8 +29,8 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                return (await _db.QueryAsync<spGetRolesForAdminPanelResult>(
-                        "GetRolesForAdminPanel",
+                return (await _db.QueryAsync<spGetRoles_Paged>(
+                        "GetRoles_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).AsList();
             }

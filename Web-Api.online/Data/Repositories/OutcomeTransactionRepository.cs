@@ -12,11 +12,9 @@ namespace Web_Api.online.Data.Repositories
 {
     public class OutcomeTransactionRepository
     {
-        private readonly IConfiguration configuration;
         private readonly IDbConnection db;
         public OutcomeTransactionRepository(IConfiguration configuration)
         {
-            this.configuration = configuration;
             db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 

@@ -1,8 +1,8 @@
 ﻿namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spGetRolesForAdminPanelResult
+    public class spGetSettingsResult
     {
-        public string Id { get; set; }
         public string Name { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Models
 {
-    public class spGetUsersForAdminPanelResult
+    public class spGetUsers_PagedSettings
     {
         public string UserName { get; set; }
         public string FullName { get; set; }

@@ -14,13 +14,11 @@ namespace Web_Api.online.Data.Repositories
 {
     public class TransactionsRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
 
         public TransactionsRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _db = new SqlConnection(_configuration.GetConnectionString("ExchangeConnection"));            
+            _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
         public async Task<List<IncomeTransactionTableModel>> GetLastIncomeTransactionsByUserIdAsync(string userId)
