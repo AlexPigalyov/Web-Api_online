@@ -3,9 +3,9 @@ using System.Net;
 
 namespace Web_Api.online.Requests
 {
-    public static class ETH
+    public static class ETHRequestClient
     {
-        public static string Url { get; private set; } = "https://192.168.1.75:44345/ETH/";
+        public static string Url { get; private set; } = "https://192.168.1.75:777/ETH/";
 
         public static string GetNewAddress(string lable)
         {
@@ -16,6 +16,12 @@ namespace Web_Api.online.Requests
             string result = sr.ReadToEnd();
             sr.Close();
             return result;
+        }
+        
+        public static void ExecuteTransaction(long transactionId)
+        {
+            WebRequest req = WebRequest.Create($"{Url}ExecuteTransaction?transactionId={transactionId}");
+            req.GetResponse();
         }
     }
 }
