@@ -92,8 +92,7 @@ namespace Web_Api.online.Controllers
                 }
                 else if (selectCurrency == "ZEC")
                 {
-                    var zcashClient = _zecService;
-                    address = zcashClient.GetNewAddress();
+                    address = _zecService.GetNewAddress();
                 }
                 else
                 {
