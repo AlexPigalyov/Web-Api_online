@@ -88,12 +88,11 @@ namespace Web_Api.online.Controllers
                 }
                 else if (selectCurrency == "ETH")
                 {
-                    address = ETH.GetNewAddress(userId);
+                    address = ETHRequestClient.GetNewAddress(userId);
                 }
                 else if (selectCurrency == "ZEC")
                 {
-                    var zcashClient = _zecService;
-                    address = zcashClient.GetNewAddress();
+                    address = _zecService.GetNewAddress();
                 }
                 else
                 {
