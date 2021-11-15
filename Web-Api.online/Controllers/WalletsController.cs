@@ -16,6 +16,7 @@ using Web_Api.online.Clients;
 using System.Net;
 using System.IO;
 using Web_Api.online.Requests;
+using Web_Api.online.Hash;
 
 namespace Web_Api.online.Controllers
 {
@@ -32,7 +33,7 @@ namespace Web_Api.online.Controllers
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
-            EventsRepository eventsRepository, 
+            EventsRepository eventsRepository,
             OutcomeTransactionRepository outcomeTransactionRepository,
             ZCashService zecService)
         {
@@ -81,14 +82,17 @@ namespace Web_Api.online.Controllers
             {
                 string address = "";
 
-                if (selectCurrency == "ETH")
+                if (selectCurrency == "USDT")
                 {
-                    address = ETH.GetNewAddress(userId);
+                    address = GenerateHash.sha256(userId + "USDT" + DateTime.Now.ToString());
+                }
+                else if (selectCurrency == "ETH")
+                {
+                    address = ETHRequestClient.GetNewAddress(userId);
                 }
                 else if (selectCurrency == "ZEC")
                 {
-                    var zcashClient = _zecService;
-                    address = zcashClient.GetNewAddress();
+                    address = _zecService.GetNewAddress();
                 }
                 else
                 {
@@ -110,7 +114,7 @@ namespace Web_Api.online.Controllers
                 {
                     UserId = userId,
                     Type = (int)EventTypeEnum.CreateAddress,
-                    Comment = $"Create address {selectCurrency}",
+                    Comment = $"Create address {selectCurrency}: {address}",
                     WhenDate = DateTime.Now,
                     CurrencyAcronim = selectCurrency
                 });
@@ -120,7 +124,7 @@ namespace Web_Api.online.Controllers
                     UserId = userId,
                     CurrencyAcronim = selectCurrency,
                     Address = address,
-                    AddressLabel = userId //придумать что-нибудь
+                    AddressLabel = userId
                 };
 
                 await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
