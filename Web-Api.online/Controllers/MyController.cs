@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
@@ -42,6 +43,23 @@ namespace Web_Api.online.Controllers
 
             model.UserInfo.UserId = userId;
 
+            if (!string.IsNullOrEmpty(model.Username))
+            {
+                var normalizedUserName = model.Username.ToUpper();
+
+                if (! await _usersManager.Users.AnyAsync(x => x.NormalizedUserName == normalizedUserName))
+                {
+                    await _usersManager.SetUserNameAsync(
+                        await _usersManager.FindByIdAsync(userId),
+                        model.Username);
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+            
             await _usersInfoRepository.spCreateOrUpdateProfileUserInfo(model.UserInfo);
 
             return RedirectToAction("Profile");
@@ -66,6 +84,7 @@ namespace Web_Api.online.Controllers
             var model = new ProfileViewModel()
             {
                 Email = user.Email,
+                Username = user.UserName,
                 PhoneNumber = user.PhoneNumber,
                 UserInfo = userInfo,
                 LastThreeEvents = lastThreeEvents,
