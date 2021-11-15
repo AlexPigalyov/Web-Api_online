@@ -26,62 +26,70 @@
                                 <div class="col-sm-12">
                                     <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
                                         <thead class="thead-light">
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Value</th>
-                                            </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Value</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var item in Model)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <span id="name">@item.Name</span>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" id="value" placeholder="@item.Value">
-                                                    </td>
-                                                </tr>
-                                            }
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span id="name">@item.Name</span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="value" placeholder="@item.Value">
+                                                </td>
+                                            </tr>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div> <!-- end card-body-->
-            </div>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $("#save-settings").click(function() {
-                var values = $("input[id*='value']")
-                var names = $("span[id*='name']")
-
-                var data = []        
-                for(let i = 0; i < values.length; i++){
-                    if(values[i].value != "" && values[i].value != null){
-                        data.push({
-                            Name: names[i].innerText,
-                            Value: values[i].value
+    
+    @section ThirdPartyCss
+    {
+        <link href="~/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css"/>
+        <link href="~/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css"/>
+    }
+    
+    @section Scripts { 
+        <script>
+                $(document).ready(function() {
+                    $("#save-settings").click(function() {
+                        var values = $("input[id*='value']")
+                        var names = $("span[id*='name']")
+        
+                        var data = []        
+                        for(let i = 0; i < values.length; i++){
+                            if(values[i].value != "" && values[i].value != null){
+                                data.push({
+                                    Name: names[i].innerText,
+                                    Value: values[i].value
+                                });
+                            }                    
+                        }
+        
+                        $.ajax({
+                            type: "POST",
+                            url: "/admin/settings/update",
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=utf-8'
                         });
-                    }                    
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/settings/update",
-                    data: JSON.stringify(data),
-                    contentType: 'application/json; charset=utf-8'
+                    });
                 });
-            });
-        });
-    </script>
-    <script src="~/js/vendor/jquery.dataTables.min.js"></script>
-    <script src="~/js/vendor/dataTables.bootstrap5.js"></script>
-    <script src="~/js/vendor/dataTables.responsive.min.js"></script>
-    <script src="~/js/vendor/responsive.bootstrap5.min.js"></script>
-    <script src="~/js/vendor/dataTables.checkboxes.min.js"></script>
-
+            </script>
+            <script src="~/js/vendor/jquery.dataTables.min.js"></script>
+            <script src="~/js/vendor/dataTables.bootstrap5.js"></script>
+            <script src="~/js/vendor/dataTables.responsive.min.js"></script>
+            <script src="~/js/vendor/responsive.bootstrap5.min.js"></script>
+            <script src="~/js/vendor/dataTables.checkboxes.min.js"></script>
+    }
 }

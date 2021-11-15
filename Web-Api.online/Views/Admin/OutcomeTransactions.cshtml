@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
-            <h4 class="page-title">Users</h4>
+            <h4 class="page-title">Outcome transactions</h4>
         </div>
     </div>
 </div>
@@ -40,15 +40,17 @@
                                                     <label class="custom-control-label" for="customCheck1">&nbsp;</label>
                                                 </div>
                                             </th>
-                                            <th class="all">Username</th>
-                                            <th>FullName</th>
-                                            <th>Email</th>
-                                            <th>Registration Date</th>
-                                            <th>Location</th>
+                                            <th class="all">UserId</th>
+                                            <th>Currency acronim</th>
+                                            <th>Amount</th>
+                                            <th>TransactionFee</th>
+                                            <th>From Address</th>
+                                            <th>To Address</th>
+                                            <th>Date</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach (var item in Model.Users)
+                                        @foreach (var item in Model.IncomeTransactions)
                                         {
                                             <tr>
                                                 <td>
@@ -58,19 +60,25 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @item.UserName
+                                                    @item.UserId
                                                 </td>
                                                 <td>
-                                                    @item.FullName
+                                                    @item.CurrencyAcronim
                                                 </td>
                                                 <td>
-                                                    @item.Email
+                                                    @item.Amount
                                                 </td>
                                                 <td>
-                                                    @item.RegistrationDate
+                                                    @item.TransactionFee
                                                 </td>
                                                 <td>
-                                                    @item.Location
+                                                    @item.FromAddress
+                                                </td>
+                                                <td>
+                                                    @item.ToAddress
+                                                </td>
+                                                <td>
+                                                    @item.Date
                                                 </td>
                                             </tr>
                                         }
@@ -82,7 +90,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
                                 <div class="dataTables_info" id="products-datatable_info" role="status" aria-live="polite">
-                                    Showing users 1 to 15 of @Model.PageViewModel.TotalPages
+                                    Showing outcome transactions 1 to 15 of @Model.PageViewModel.TotalPages
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-7">

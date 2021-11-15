@@ -112,14 +112,13 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                await _db.QueryAsync<WalletTableModel>("UpdateWalletBalance",
+                await _db.ExecuteAsync("UpdateWalletBalance",
                     new
                     {
                         walletId = wallet.Id,
                         newWalletBalance = wallet.Value
                     },
-                          commandType: CommandType.StoredProcedure);
-
+                    commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex) { return; }
         }
@@ -144,7 +143,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                await _db.QueryAsync<WalletTableModel>("SendCoins",
+                await _db.ExecuteAsync("SendCoins",
                     new
                     {
                         senderUserId = sendCoinsModel.EventSender.UserId,
