@@ -13791,6 +13791,14 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) {
             background: linear-gradient(135deg, #8f75da 0%, #727cf5 60%);
         }
 
+        body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode-label {
+            visibility: hidden;
+        }
+
+        body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode {
+            padding-left: 2em;
+        }
+
     body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .help-box {
         display: none;
     }
