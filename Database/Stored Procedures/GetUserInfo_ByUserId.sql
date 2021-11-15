@@ -3,7 +3,7 @@ ALTER PROCEDURE [dbo].[GetUserInfo_ByUserId]
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[UsersInfo]
+SELECT * FROM [web-api.online].[dbo].[UsersInfo]
 WHERE UserId = @userId
 
 END
