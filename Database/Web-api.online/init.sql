@@ -385,6 +385,24 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+create PROCEDURE [dbo].[FindUserIdForSendPage]
+@searchText nvarchar(max)
+AS
+BEGIN
+
+Select ANU.Id
+FROM AspNetUsers as ANU
+WHERE 
+ANU.UserName = @searchText
+OR ANU.NormalizedUserName = @searchText
+OR ANU.Email = @searchText
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[FindUsersByUsernameFor_Paged]
 @userName nvarchar(450),
 @page int,
@@ -616,6 +634,21 @@ from (
     from [Rates]
 	Where [Acronim] = 'XAG'
     order by Id desc) xag
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create PROCEDURE [dbo].[GetUserIdByWalletAddress]
+@address nvarchar(max)
+AS
+BEGIN
+
+Select Id
+FROM Wallets
+WHERE Address = @address
 
 END
 GO
