@@ -19,6 +19,21 @@ namespace Web_Api.online.Data.Repositories
             _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
+        public async Task CreateEmptyUsersInfo(string userId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("userId", userId);
+
+                await _db.ExecuteAsync(
+                    "CreateEmptyUsersInfo",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            } 
+            catch (Exception exc) { }
+        }
+        
         public async Task<UserInfoTableModel> spGetUserInfo_ByUserId(string userId)
         {
             try
