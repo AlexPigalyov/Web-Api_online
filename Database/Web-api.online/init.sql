@@ -284,6 +284,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[CreateEmptyUsersInfo]
+@userId nvarchar(450)
+AS
+BEGIN
+
+INSERT INTO [web-api.online].[dbo].[UsersInfo](UserId)
+VALUES (@userId)
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 create PROCEDURE [dbo].[CreateOrUpdateProfileUserInfo]
 @userId nvarchar(450),
 @fullName nvarchar(450),
@@ -661,7 +676,7 @@ CREATE PROCEDURE [dbo].[GetUserInfo_ByUserId]
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[UsersInfo]
+SELECT * FROM [web-api.online].[dbo].[UsersInfo]
 WHERE UserId = @userId
 
 END

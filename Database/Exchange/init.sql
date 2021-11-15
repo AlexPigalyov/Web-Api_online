@@ -756,6 +756,30 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCountOfIncomeTransactions]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [Exchange].[dbo].[IncomeTransactions]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCountOfOutcomeTransactions]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [Exchange].[dbo].[OutcomeTransactions]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCreatedOutcomeTransactionAndSetStateInWork]
 @currencyAcronim nvarchar(10)
 AS
@@ -878,6 +902,34 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  CurrencyAcronim
+  ,Amount
+  ,TransactionFee
+  ,FromAddress
+  ,ToAddress
+  ,Date
+  ,UserId
+FROM [Exchange].[dbo].[IncomeTransactions]
+Order By Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetLastIncomeTransactionsByUserId]
 @userid nvarchar(450)
 AS
@@ -903,6 +955,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetLastThreeEvents_ByUserId]
+@userId nvarchar(450)
+AS
+BEGIN
+
+SELECT TOP(3) * FROM [Exchange].[dbo].[Events]
+WHERE UserId = @userId
+ORDER BY WhenDate DESC
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetManagerConfirmedOutcomeTransactionAndSetStateInWork]
 @currencyAcronim nvarchar(10)
 AS
@@ -923,6 +991,35 @@ Where OutcomeTransactions.Id = @transactionId
 
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetOutcomeTransactions_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  CurrencyAcronim
+  ,Value
+  ,CreateDate
+  ,FromAddress
+  ,ToAddress
+  ,State
+  ,LastUpdateDate
+  ,ErrorText
+FROM [Exchange].[dbo].[OutcomeTransactions]
+Order By Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
 GO
 SET ANSI_NULLS ON
 GO
