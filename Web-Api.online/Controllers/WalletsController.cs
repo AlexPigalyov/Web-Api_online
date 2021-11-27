@@ -29,13 +29,15 @@ namespace Web_Api.online.Controllers
         private EventsRepository _eventsRepository;
         private OutcomeTransactionRepository _outcomeTransactionRepository;
         private ZCashService _zecService;
+        private EtheriumService _etheriumService;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
             TransactionManager transactionManager,
             EventsRepository eventsRepository,
             OutcomeTransactionRepository outcomeTransactionRepository,
-            ZCashService zecService)
+            ZCashService zecService,
+            EtheriumService etheriumService)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
@@ -43,6 +45,7 @@ namespace Web_Api.online.Controllers
             _eventsRepository = eventsRepository;
             _outcomeTransactionRepository = outcomeTransactionRepository;
             _zecService = zecService;
+            _etheriumService = etheriumService;
         }
 
         public class IndexModel
@@ -88,7 +91,7 @@ namespace Web_Api.online.Controllers
                 }
                 else if (selectCurrency == "ETH")
                 {
-                    address = ETHRequestClient.GetNewAddress(userId);
+                    address = _etheriumService.GetNewAddress(userId);
                 }
                 else if (selectCurrency == "ZEC")
                 {
