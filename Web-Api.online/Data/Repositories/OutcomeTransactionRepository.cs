@@ -19,7 +19,7 @@ namespace Web_Api.online.Data.Repositories
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
-        public async Task CreateOutcomeTransaction(OutcomeTransactionTableModel outcomeTransaction)
+        public async Task<OutcomeTransactionTableModel> CreateOutcomeTransaction(OutcomeTransactionTableModel outcomeTransaction)
         {
             try
             {
@@ -31,9 +31,11 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("state", outcomeTransaction.Id);
                 p.Add("errorText", outcomeTransaction.State);
 
-                await _db.ExecuteAsync("CreateOutcomeTransaction", p, commandType: CommandType.StoredProcedure);
+                await _db.QueryFirstAsync("CreateOutcomeTransaction", p, commandType: CommandType.StoredProcedure);
+                outcomeTransaction.Id = p.Get<int>("new_identity");
+                return outcomeTransaction;  
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { return null; }
         }
         
         public async Task<List<spGetOutcomeTransactions_Paged>> GetPagedOutcomeTransactions(int page, int pageSize)
