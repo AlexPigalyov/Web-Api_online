@@ -16,14 +16,17 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private WithdrawService _withdrawService;
-        ZCashService _zecService;
+        private ZCashService _zecService;
+        private EtheriumService _etheriumService;
 
         public WithdrawController(WalletsRepository walletsRepository,
-            WithdrawService withdrawService, ZCashService zecService)
+            WithdrawService withdrawService, ZCashService zecService,
+            EtheriumService etheriumService)
         {
             _walletsRepository = walletsRepository;
             _withdrawService = withdrawService;
             _zecService = zecService;
+            _etheriumService = etheriumService;
         }
 
         [HttpGet]
@@ -54,6 +57,10 @@ namespace Web_Api.online.Controllers
                 if(model.Currency == "ZEC")
                 {
                     m = await _zecService.SendToAddress(model, userId);
+                }
+                else if(model.Currency == "ETH")
+                {
+                    await _etheriumService.SendToAddress(model, userId);
                 }
                 else
                 {

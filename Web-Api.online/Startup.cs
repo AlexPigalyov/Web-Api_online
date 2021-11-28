@@ -20,6 +20,7 @@ using Web_Api.online.Data.Repositories;
 using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Clients;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Web_Api.online.Clients.Requests;
 
 namespace Web_Api.online
 {
@@ -88,9 +89,11 @@ namespace Web_Api.online
             services.AddTransient<OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
+            services.AddTransient<ETHRequestClient>();
             services.AddCoinManager(Configuration);
 
-            services.AddSingleton<ZCashService>();
+            services.AddTransient<ZCashService>();
+            services.AddTransient<EtheriumService>();
             services.AddTransient<IEmailSender, EmailSender>();
         }
 
