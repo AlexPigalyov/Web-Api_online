@@ -15,7 +15,6 @@ using Nethereum.Web3;
 using Web_Api.online.Clients;
 using System.Net;
 using System.IO;
-using Web_Api.online.Requests;
 using Web_Api.online.Hash;
 
 namespace Web_Api.online.Controllers
