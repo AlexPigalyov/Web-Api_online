@@ -82,7 +82,8 @@ namespace Web_Api.online
             services.AddTransient<BotsRepository>();
             services.AddTransient<SettingRepository>();
             services.AddTransient<RoleRepository>();
-
+            services.AddTransient<TransferRepository>();
+            services.AddTransient<ExceptionsRepository>();
             services.AddTransient<TransactionsRepository>();
             services.AddTransient<OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();

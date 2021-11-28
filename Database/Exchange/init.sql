@@ -718,6 +718,38 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[Get_Top10000_Exceptions]
+
+AS
+BEGIN
+
+SELECT TOP(10000) * FROM [Exchange].[dbo].[Exceptions]
+	
+END
+
+
+
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[Get_Top10000_Transfers]
+
+AS
+BEGIN
+
+SELECT TOP(10000) * FROM [Exchange].[dbo].[Transfers]
+	
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetBots_ByBotAuthCode]
 @botAuthCode nvarchar(450)
 AS

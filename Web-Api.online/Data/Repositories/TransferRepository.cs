@@ -3,6 +3,7 @@
 using Microsoft.Extensions.Configuration;
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -20,7 +21,19 @@ namespace Web_Api.online.Data.Repositories
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
-        public async Task<TransferTableModel> CreateUserIncomeWalletAsync(TransferTableModel transfer)
+        public async Task<List<TransferTableModel>> GetTop10000Transfers()
+        {
+            try
+            {
+                return (await _db.QueryAsync<TransferTableModel>("Get_Top10000_Transfers", commandType: CommandType.StoredProcedure)).AsList();
+            }
+            catch (Exception exc)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<TransferTableModel> CreateTransferAsync(TransferTableModel transfer)
         {
             try
             {
