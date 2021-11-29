@@ -1245,7 +1245,7 @@ SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 WHERE  @price >= Price
-ORDER  BY Price DESC
+ORDER  BY Price
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
@@ -1276,9 +1276,17 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				Total, CreateDate,
-				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate,
+				ClosedDate, 
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
@@ -1303,9 +1311,17 @@ END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1362,9 +1378,17 @@ BEGIN
 		AND CurrencyAcronim = 'USDT' 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1473,7 +1497,7 @@ SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
 WHERE  @price <= Price 
-ORDER  BY Price
+ORDER  BY Price DESC
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
@@ -1504,9 +1528,17 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				Total, CreateDate, ClosedDate, 
-				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate, 
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
@@ -1531,9 +1563,17 @@ END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1590,9 +1630,17 @@ BEGIN
 		AND CurrencyAcronim = 'BTC'  			
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				ExposedPrice, 
+				TotalPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 
 		VALUES (@total,
 				@createDate,
