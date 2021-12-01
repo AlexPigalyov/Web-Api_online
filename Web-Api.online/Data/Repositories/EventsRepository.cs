@@ -28,7 +28,6 @@ namespace Web_Api.online.Data.Repositories
                     commandType: CommandType.StoredProcedure);
 
             return result;
-
         }
 
         public async Task CreateEvent(EventTableModel model)
