@@ -44,7 +44,7 @@ namespace Web_Api.online
                             .ForJob(jobKey) 
                             .WithIdentity("TradeJob-trigger") 
                             .WithSimpleSchedule(builder => builder
-                                .WithInterval(TimeSpan.FromMilliseconds(500))
+                                .WithInterval(TimeSpan.FromMilliseconds(100))
                                 .RepeatForever()
                             )); // run every 100 ms
                     });
