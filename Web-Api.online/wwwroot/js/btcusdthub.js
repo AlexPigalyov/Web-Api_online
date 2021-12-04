@@ -38,7 +38,9 @@ connection.on("OrderWasCreated", function (recieveModel) {
 
 
 connection.start().then(function () {
-    document.getElementById("buyButton").disabled = false;
+    if (document.getElementById("buyButton") != null) {
+        document.getElementById("buyButton").disabled = false;
+    }
 }).catch(function (err) {
     return console.error(err.toString());
 });
