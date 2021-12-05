@@ -1,27 +1,51 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Security;
 
 namespace Web_Api.online.Clients.Requests
 {
     public class ETHRequestClient
     {
-        public string Url { get; private set; } = "https://192.168.1.75:777/ETH/";
-
         public string GetNewAddress(string lable)
         {
-            WebRequest req = WebRequest.Create($"{Url}GetNewAddress?label={lable}");
-            WebResponse resp = req.GetResponse();
-            Stream stream = resp.GetResponseStream();
-            StreamReader sr = new StreamReader(stream);
-            string result = sr.ReadToEnd();
-            sr.Close();
-            return result;
+            using (var httpClientHandler = new HttpClientHandler())
+            {
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true;
+                try
+                {
+                    using (var httpClient = new HttpClient(httpClientHandler))
+                    {
+                        var result = httpClient.GetAsync($"https://192.168.1.75:443/ETH/GetNewAddress?label={lable}").Result;
+                        return  result.Content.ReadAsStringAsync().Result;
+                    }
+                }
+                catch(Exception e)
+                {
+                    return null;
+                }
+                
+            }
         }
         
         public void ExecuteTransaction(long transactionId)
         {
-            WebRequest req = WebRequest.Create($"{Url}ExecuteTransaction?transactionId={transactionId}");
-            req.GetResponse();
+            using (var httpClientHandler = new HttpClientHandler())
+            {
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true;
+                try
+                {
+                    using (var httpClient = new HttpClient(httpClientHandler))
+                    {
+                        var result = httpClient.GetAsync($"https://192.168.1.75:443/ETH/ExecuteTransaction?transactionId={transactionId}").Result;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return;
+                }
+            }
         }
     }
 }
