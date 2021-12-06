@@ -35,7 +35,7 @@
                         </div>
                         <div class="orderbook-ticker-markprice">$6.24</div>
                         <a href="#" target="_blank" class="orderbook-ticker-more">
-                            Больше
+                            More
                             <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect y="7" width="2.66667" height="5" fill="#00C582"></rect><rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect><rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect><rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect></svg>
                         </a>
                     </div>
@@ -256,61 +256,64 @@
                 var currentClose = data.currentCandleStick.close;
                 var currentCloseDate = new Date(Date.parse(data.currentCandleStick.closeTime));
 
-                $(".current-price").on('DOMSubtreeModified', function (changedNode) {
+                //$(".current-price").on('DOMSubtreeModified', function (changedNode) {
 
-                    if (changedNode.currentTarget.firstChild != null) {
-                        var price = changedNode.currentTarget.firstChild.data;
+                //    if (changedNode.currentTarget.firstChild != null) {
+                //        var price = changedNode.currentTarget.firstChild.data;
 
-                        var newSeries = []
+                //        var newSeries = []
 
-                        if (price != lastPrice) {
+                //        if (price != lastPrice) {
 
-                            var high = currentHigh < price ? price : currentHigh;
-                            var low = currentLow > price ? price : currentLow;
+                //            var high = currentHigh < price ? price : currentHigh;
+                //            var low = currentLow > price ? price : currentLow;
 
-                            var lastZoom = chart.zoom;
+                //            var lastZoom = chart.zoom;
 
-                            if (currentCloseDate > (new Date())) {
+                //            if (currentCloseDate > (new Date())) {
 
-                                seriesData.pop();
+                //                seriesData.pop();
 
-                                seriesData.push({
-                                    x: currentCloseDate,
-                                    y: [currentOpen, high, low, price]
-                                });
+                //                seriesData.push({
+                //                    x: currentCloseDate,
+                //                    y: [currentOpen, high, low, price]
+                //                });
 
-                                //chart.updateSeries([{
-                                //    data: seriesData
-                                //}]);
+                //                //chart.updateSeries([{
+                //                //    data: seriesData
+                //                //}]);
 
-                                currentHigh = high;
-                                currentLow = low;
-                                currentClose = price;
-                            } else {
-                                currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
-                                currentLow = price;
-                                currentHigh = price;
-                                currentClose = price;
-                                currentClose = price;
+                //                currentHigh = high;
+                //                currentLow = low;
+                //                currentClose = price;
+                //            } else {
+                //                currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
+                //                currentLow = price;
+                //                currentHigh = price;
+                //                currentClose = price;
+                //                currentClose = price;
 
-                                seriesData.push({
-                                    x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
-                                    y: [price, price, price, price]
-                                });
+                //                seriesData.push({
+                //                    x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
+                //                    y: [price, price, price, price]
+                //                });
 
-                                //chart.appendSeries({
-                                //    data: newSeries
-                                //});
+                //                //chart.appendSeries({
+                //                //    data: newSeries
+                //                //});
 
 
-                            }
+                //            }
 
-                            chart.zoomX(lastZoom);
+                //            chart.zoomX(lastZoom);
 
-                            lastPrice = price;
-                        }
-                    }
-                });
+                //            lastPrice = price;
+                //        }
+                //    }
+                //});
+
+
+
             }
 
         });
