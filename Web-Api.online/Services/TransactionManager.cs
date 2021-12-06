@@ -53,7 +53,8 @@ namespace Web_Api.online.Services
 
         private async Task SearchNewIncomeTransactionsAsync()
         {
-            var incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId);
+            List<IncomeTransactionTableModel> incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId)??
+                        new List<IncomeTransactionTableModel>();
             var coinServices = _coinManager
                                 .CoinServices
                                 .Where(x => incomeWallets
