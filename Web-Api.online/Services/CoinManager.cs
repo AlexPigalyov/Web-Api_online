@@ -35,7 +35,6 @@ namespace Web_Api.online.Services
             this.bitcoinCash = bitcoinCash;
             this.bitcoin = bitcoin;
             this.dash = dash;
-            //this.zcash = zcash;
             this.dogecoin = dogecoin;
             this.litecoin = litecoin;
 

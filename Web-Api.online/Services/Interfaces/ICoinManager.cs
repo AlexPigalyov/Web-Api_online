@@ -12,7 +12,5 @@ namespace Web_Api.online.Services.Interfaces
         public IDashService Dash { get; }
         public IDogecoinService Dogecoin { get; }
         public ILitecoinService Litecoin { get; }
-        //public IZCashService ZCash { get; }
-
     }
 }

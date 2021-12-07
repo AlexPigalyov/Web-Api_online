@@ -287,47 +287,6 @@ namespace Web_Api.online.Clients.Models
 
             #endregion
 
-
-
-            #region ZCash
-
-            else if (coinService is ZCashService)
-            {
-                if (!IgnoreConfigFiles)
-                {
-                    DaemonUrl = _configuration["ZCash_DaemonUrl"];
-                    DaemonUrlTestnet = _configuration["ZCash_DaemonUrl_Testnet"];
-                    RpcUsername = _configuration["ZCash_RpcUsername"];
-                    RpcPassword = _configuration["ZCash_RpcPassword"];
-                    WalletPassword = _configuration["ZCash_WalletPassword"];
-                }
-
-                CoinShortName = "ZEC";
-                CoinLongName = "ZCash";
-                IsoCurrencyCode = "ZEC";
-
-                TransactionSizeBytesContributedByEachInput = 148;
-                TransactionSizeBytesContributedByEachOutput = 34;
-                TransactionSizeFixedExtraSizeInBytes = 10;
-
-                FreeTransactionMaximumSizeInBytes = 1000;
-                FreeTransactionMinimumOutputAmountInCoins = 0.0001M;
-                FreeTransactionMinimumPriority = 57600000;
-                FeePerThousandBytesInCoins = 0.0001M;
-                MinimumTransactionFeeInCoins = 0.001M;
-                MinimumNonDustTransactionAmountInCoins = 0.0000543M;
-
-                TotalCoinSupplyInCoins = 18900000;
-                EstimatedBlockGenerationTimeInMinutes = 2.7;
-                BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
-
-                BaseUnitName = "Duff";
-                BaseUnitsPerCoin = 100000000;
-                CoinsPerBaseUnit = 0.00000001M;
-            }
-
-            #endregion
-
             //#region Mogwai
             //else if (coinService is MogwaicoinService)
             //{

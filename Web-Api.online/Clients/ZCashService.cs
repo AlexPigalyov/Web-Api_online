@@ -33,9 +33,7 @@ namespace Web_Api.online.Clients
 
         public string GetNewAddress()
         {
-            var resp = _client.MakeRequest<string>(ZecRestMethods.getnewaddress);
-
-            return resp;
+            return _client.MakeRequest<string>(ZecRestMethods.getnewaddress);
         }
 
         public async Task<GeneralWithdrawModel> SendToAddress(GeneralWithdrawModel model, string userId)
