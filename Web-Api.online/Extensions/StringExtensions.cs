@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Web_Api.online.Extensions
 {
@@ -17,27 +18,42 @@ namespace Web_Api.online.Extensions
             return false;
         }
 
+        //public static decimal? ConvertToDecimal(this string number)
+        //{
+        //    decimal num;
+        //    try
+        //    {
+        //        number = number.Replace(".", ",");
+        //        num = decimal.Parse(number);
+        //    }
+        //    catch
+        //    {
+        //        try
+        //        {
+        //            number = number.Replace(",", ".");
+        //            num = decimal.Parse(number);
+        //        }
+        //        catch
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    return num;
+        //}
+
         public static decimal? ConvertToDecimal(this string number)
         {
-            decimal num;
-            try
+            decimal result;
+
+            if (!decimal.TryParse(number, NumberStyles.Any, CultureInfo.GetCultureInfo("ru-RU"), out result) &&
+                // Then try in US english
+                !decimal.TryParse(number, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result) &&
+                // Then in neutral language
+                !decimal.TryParse(number, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
             {
-                number = number.Replace(".", ",");
-                num = Convert.ToDecimal(number);
+                result = 0;
             }
-            catch
-            {
-                try
-                {
-                    number = number.Replace(",", ".");
-                    num = Convert.ToDecimal(number);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            return num;
+            return result;
         }
     }
 }
