@@ -24,15 +24,17 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 var p = new DynamicParameters();
-                p.Add("fromAdress", outcomeTransaction.Id);
-                p.Add("toAdress", outcomeTransaction.Id);
-                p.Add("value", outcomeTransaction.Id);
-                p.Add("currencyAcronim", outcomeTransaction.Id);
-                p.Add("state", outcomeTransaction.Id);
-                p.Add("errorText", outcomeTransaction.State);
+                p.Add("id", outcomeTransaction.Id, dbType: DbType.Int64, direction: ParameterDirection.InputOutput);
+                p.Add("fromWalletId", outcomeTransaction.FromWalletId);
+                p.Add("fromAddress", outcomeTransaction.FromAddress);
+                p.Add("toAddress", outcomeTransaction.ToAddress);
+                p.Add("value", outcomeTransaction.Value);
+                p.Add("currencyAcronim", outcomeTransaction.CurrencyAcronim);
+                p.Add("state", outcomeTransaction.State);
 
-                await _db.QueryFirstAsync("CreateOutcomeTransaction", p, commandType: CommandType.StoredProcedure);
-                outcomeTransaction.Id = p.Get<int>("new_identity");
+                await _db.ExecuteAsync("CreateOutcomeTransaction", p, commandType: CommandType.StoredProcedure);
+                outcomeTransaction.Id = p.Get<long>("id");
+
                 return outcomeTransaction;  
             }
             catch (Exception ex) { return null; }
