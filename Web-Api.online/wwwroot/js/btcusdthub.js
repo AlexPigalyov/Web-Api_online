@@ -9,7 +9,11 @@ connection.on("ReceiveMessage", function (recieveModel) {
     let model = JSON.parse(recieveModel);
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-    currentMarketTradeDoc.children[0].innerHTML = model.MarketTrades[0].ExposedPrice;
+
+    $("#current-price").text(model.MarketTrades[0].ExposedPrice);
+
+    var value = model.MarketTrades[0].ExposedPrice * model.MarketTrades[0].Amount;
+    $("#orderbook-ticker-markprice").text(value);
 
     currentMarketTradeDoc.classList.remove('status-buy');
     currentMarketTradeDoc.classList.remove('status-sell');
