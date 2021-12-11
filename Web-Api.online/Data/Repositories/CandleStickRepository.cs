@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Data.Repositories
@@ -21,11 +22,18 @@ namespace Web_Api.online.Data.Repositories
         {
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
-        public async Task<List<CandleStickTableModel>> spGet_BTC_USDT_CandleStick()
+        public async Task<List<CandleStickTableModel>> spGet_BTC_USDT_CandleSticks(GetCandleStickModel model)
         {
             try
             {
-                return (await _db.QueryAsync<CandleStickTableModel>("Get_BTC_USDT_CandleStick", commandType: CommandType.StoredProcedure))
+                if (model.Interval == null) model.Interval = "1h";
+
+                var p = new DynamicParameters();
+                p.Add("datestart", model.DateStart);
+                p.Add("dateend", model.DateEnd);
+                p.Add("interval", model.Interval);
+
+                return (await _db.QueryAsync<CandleStickTableModel>("Get_BTC_USDT_CandleStick", p, commandType: CommandType.StoredProcedure))
                     .ToList();
             }
             catch (Exception ex)
