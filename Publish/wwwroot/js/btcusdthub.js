@@ -9,7 +9,12 @@ connection.on("ReceiveMessage", function (recieveModel) {
     let model = JSON.parse(recieveModel);
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-    currentMarketTradeDoc.children[0].innerHTML = model.MarketTrades[0].ExposedPrice;
+
+    $("#current-price").text(model.MarketTrades[0].ExposedPrice);
+
+    var orderValue = model.MarketTrades[0].ExposedPrice * model.MarketTrades[0].Amount;
+    orderValue = parseFloat(orderValue.toLocaleString('fullwide', { useGrouping: false })).toPrecision(5);
+    $("#orderbook-ticker-markprice").text(orderValue);
 
     currentMarketTradeDoc.classList.remove('status-buy');
     currentMarketTradeDoc.classList.remove('status-sell');
