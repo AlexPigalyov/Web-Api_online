@@ -21,6 +21,9 @@ using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Clients;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Web_Api.online.Clients.Requests;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Web_Api.online
 {
@@ -53,7 +56,22 @@ namespace Web_Api.online
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-            .AddEntityFrameworkStores<WebApiDbContext>();
+            .AddEntityFrameworkStores<WebApiDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            })
+                .AddCookie()
+                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+                 {
+                     options.ClientId = Configuration["Authentitcation:Google:ClientId"];
+                     options.ClientSecret = Configuration["Authentitcation:Google:ClientSecret"];
+                     options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+                 });
 
             services.AddControllersWithViews();
 
@@ -65,6 +83,8 @@ namespace Web_Api.online
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_Api.online", Version = "v1" });
             });
+
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -91,7 +111,6 @@ namespace Web_Api.online
             services.AddTransient<WithdrawService>();
             services.AddTransient<ETHRequestClient>();
             services.AddCoinManager(Configuration);
-
             services.AddTransient<ZCashService>();
             services.AddTransient<EtheriumService>();
             services.AddTransient<IEmailSender, EmailSender>();
@@ -121,10 +140,11 @@ namespace Web_Api.online
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
