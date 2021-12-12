@@ -18,9 +18,5 @@ namespace Web_Api.online.Controllers
         {
             return View();
         }
-
-
-
-
     }
 }
