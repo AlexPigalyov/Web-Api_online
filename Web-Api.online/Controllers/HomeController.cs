@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using System.Diagnostics;
-
 using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
@@ -15,7 +14,6 @@ namespace Web_Api.online.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
