@@ -24,6 +24,7 @@ using Web_Api.online.Clients.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace Web_Api.online
 {
@@ -71,7 +72,13 @@ namespace Web_Api.online
                      options.ClientId = Configuration["Authentitcation:Google:ClientId"];
                      options.ClientSecret = Configuration["Authentitcation:Google:ClientSecret"];
                      options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                 });
+                 })
+                .AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+                {
+                    options.AppId = Configuration["Authentitcation:Facebook:AppId"];
+                    options.AppSecret = Configuration["Authentitcation:Facebook:AppSecret"];
+                    options.ClaimActions.MapJsonKey("urn:facebook:picture", "picture", "url");
+                });
 
             services.AddControllersWithViews();
 
