@@ -197,7 +197,7 @@ GO
 CREATE TABLE [dbo].[OutcomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[FromWalletId] [int] NOT NULL,
-	[FromAddress] [nvarchar](max) NULL,
+	[FromAddress] [nvarchar](max) NOT NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Value] [decimal](38, 20) NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
@@ -481,22 +481,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
-@id int OUTPUT,
 @fromWalletId int,
-@fromAddress nvarchar(max),
-@toAddress nvarchar(max),
+@fromAdress nvarchar(max),
+@toAdress nvarchar(max),
 @value decimal(38,20),
 @currencyAcronim nvarchar(10),
-@state int
+@state int,
+@errorText nvarchar(max)
 AS
-
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, FromAddress, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate)
-VALUES (@fromWalletId, @fromAddress, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE())
+INSERT INTO [Exchange].[dbo].[OutcomeTransactions] (FromWalletId, FromAddress, ToAddress,
+			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, ErrorText)
+VALUES (@fromWalletId, @fromAdress, @toAdress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(), @errorText)
 
-SET @id = SCOPE_IDENTITY()
 END
 
 GO
@@ -573,86 +571,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_CandleStick]
-@datestart datetime,
-@dateend datetime,
-@interval nvarchar(50)
 AS
 BEGIN
 
-IF(@interval = '1h')
-BEGIN
-	
-	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
-	BEGIN
-	DROP TABLE #TempCandleSticksHoursTable
-	END
-
-	SELECT 
-	min(OpenTime) as OpenTime,
-	max([CloseTime]) as CloseTime,
-	min([Low]) Low,
-	max([High]) High,
-	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
-	INTO #TempCandleSticksHoursTable
-	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
-	group by dateadd(hour,0, datediff(hour,0, OpenTime))
-
-	select tt.*,
-	cso.[Open],
-	csc.[Close]
-	from #TempCandleSticksHoursTable tt
-	left join [BTC_USDT_CandleStick] cso on tt.OpenTime = cso.OpenTime
-	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
-	where (@datestart is null or tt.OpenTime >= @datestart)
-	and (@dateend is null or tt.CloseTime <= @dateend)
+SELECT * 
+FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
 
 END
-ELSE IF (@interval = '1d')
-BEGIN
-	
-	IF OBJECT_ID(N'tempdb..#TempCandleSticksDaysTable') IS NOT NULL
-	BEGIN
-	DROP TABLE #TempCandleSticksDaysTable
-	END
-
-	SELECT 
-	min(OpenTime) as OpenTime,
-	max([CloseTime]) as CloseTime,
-	min([Low]) Low,
-	max([High]) High,
-	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
-	INTO #TempCandleSticksDaysTable
-	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
-	group by dateadd(day,0, datediff(day,0, OpenTime))
-
-	select 
-	--tt.OpenTime,
-	tt.OpenTimeD as OpenTime, 
-	tt.CloseTime,
-	tt.[Low],
-	tt.[High],
-	cso.[Open],
-	csc.[Close]
-	from #TempCandleSticksDaysTable tt
-	left join [BTC_USDT_CandleStick] cso on tt.OpenTime = cso.OpenTime
-	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
-	where (@datestart is null or tt.OpenTime >= @datestart)
-	and (@dateend is null or tt.CloseTime <= @dateend)
-
-END
-ELSE
-BEGIN
-
-	SELECT * 
-	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
-	where (@datestart is null or OpenTime >= @datestart)
-	and (@dateend is null or CloseTime <= @dateend)
-
-END
-END
-
-
-
 
 
 GO
@@ -793,38 +718,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[Get_Top10000_Exceptions]
-
-AS
-BEGIN
-
-SELECT TOP(10000) * FROM [Exchange].[dbo].[Exceptions]
-	
-END
-
-
-
-
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Get_Top10000_Transfers]
-
-AS
-BEGIN
-
-SELECT TOP(10000) * FROM [Exchange].[dbo].[Transfers]
-	
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetBots_ByBotAuthCode]
 @botAuthCode nvarchar(450)
 AS
@@ -858,30 +751,6 @@ END
 
 
 
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCountOfIncomeTransactions]
-AS
-BEGIN
-
-SELECT COUNT(1) FROM [Exchange].[dbo].[IncomeTransactions]
-
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCountOfOutcomeTransactions]
-AS
-BEGIN
-
-SELECT COUNT(1) FROM [Exchange].[dbo].[OutcomeTransactions]
-
-END
 GO
 SET ANSI_NULLS ON
 GO
@@ -1009,34 +878,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
-@page int,
-@pageSize int
-AS
-BEGIN
-
-Select
-  CurrencyAcronim
-  ,Amount
-  ,TransactionFee
-  ,FromAddress
-  ,ToAddress
-  ,Date
-  ,UserId
-FROM [Exchange].[dbo].[IncomeTransactions]
-Order By Id
-OFFSET @pageSize * (@page - 1) ROWS
-FETCH  NEXT @pageSize ROWS ONLY
-
-END
-
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetLastIncomeTransactionsByUserId]
 @userid nvarchar(450)
 AS
@@ -1062,22 +903,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetLastThreeEvents_ByUserId]
-@userId nvarchar(450)
-AS
-BEGIN
-
-SELECT TOP(3) * FROM [Exchange].[dbo].[Events]
-WHERE UserId = @userId
-ORDER BY WhenDate DESC
-
-
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetManagerConfirmedOutcomeTransactionAndSetStateInWork]
 @currencyAcronim nvarchar(10)
 AS
@@ -1098,49 +923,6 @@ Where OutcomeTransactions.Id = @transactionId
 
 
 END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetOutcomeTransactionById]
-@id int
-AS
-BEGIN
-
-SELECT *  FROM OutcomeTransactions 
-WHERE id = @id
-
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetOutcomeTransactions_Paged]
-@page int,
-@pageSize int
-AS
-BEGIN
-
-Select
-  CurrencyAcronim
-  ,Value
-  ,CreateDate
-  ,FromAddress
-  ,ToAddress
-  ,State
-  ,LastUpdateDate
-  ,ErrorText
-FROM [Exchange].[dbo].[OutcomeTransactions]
-Order By Id
-OFFSET @pageSize * (@page - 1) ROWS
-FETCH  NEXT @pageSize ROWS ONLY
-
-END
-
-
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -1334,7 +1116,7 @@ SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 WHERE  @price >= Price
-ORDER  BY Price
+ORDER  BY Price DESC
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
@@ -1365,17 +1147,9 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				Total, 
-				CreateDate,
-				ClosedDate, 
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate,
+				ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
@@ -1400,17 +1174,9 @@ END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, 
-				CreateDate, 
-				ClosedDate,
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1467,17 +1233,9 @@ BEGIN
 		AND CurrencyAcronim = 'USDT' 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, 
-				CreateDate, 
-				ClosedDate,
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1586,7 +1344,7 @@ SELECT TOP 1 *
 INTO   #selectedOrder
 FROM   [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
 WHERE  @price <= Price 
-ORDER  BY Price DESC
+ORDER  BY Price
 
 DECLARE @selectOrderAmount DECIMAL(38, 20);
 SET @selectOrderAmount = 
@@ -1617,17 +1375,9 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (	
-				Total, 
-				CreateDate, 
-				ClosedDate, 
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate, ClosedDate, 
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
@@ -1652,17 +1402,9 @@ END
 ELSE IF (@amount < @selectOrderAmount)
 BEGIN
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, 
-				CreateDate, 
-				ClosedDate,
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@total,
 				@createDate,
@@ -1719,17 +1461,9 @@ BEGIN
 		AND CurrencyAcronim = 'BTC'  			
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, 
-				CreateDate, 
-				ClosedDate,
-				IsBuy, 
-				ExposedPrice, 
-				TotalPrice, 
-				Difference, 
-				Amount,
-				CreateUserId, 
-				BoughtUserId, 
-				Status)
+				Total, CreateDate, ClosedDate,
+				IsBuy, ExposedPrice, TotalPrice, Difference, Amount,
+				CreateUserId, BoughtUserId, Status)
 
 		VALUES (@total,
 				@createDate,
