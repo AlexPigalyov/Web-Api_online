@@ -281,5 +281,12 @@ namespace Web_Api.online.Controllers
 
             return View(model);
         }
+
+        public async Task<ActionResult> BTCUSDTVue()
+        {
+            BTC_USDTViewModel model = new BTC_USDTViewModel();
+
+            return View(model);
+        }
     }
 }
