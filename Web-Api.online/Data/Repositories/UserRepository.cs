@@ -69,14 +69,14 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("searchText", searchText);
 
                 var useId = await _dbWebApi.QueryFirstOrDefaultAsync<string>(
-                        "FindUserIdForSendPageWebApi",
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber",
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
                 if(useId == null)
                 {
                     useId = await _dbExchange.QueryFirstOrDefaultAsync<string>(
-                        "FindUserIdForSendPageExchange",
+                        "GetUserIdByWalletAddress",
                         parameters,
                         commandType: CommandType.StoredProcedure);
                 }
