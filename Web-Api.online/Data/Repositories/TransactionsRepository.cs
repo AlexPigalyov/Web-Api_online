@@ -27,7 +27,7 @@ namespace Web_Api.online.Data.Repositories
             {
                 List<IncomeTransactionTableModel> result =
                     (List<IncomeTransactionTableModel>) await _db.QueryAsync<IncomeTransactionTableModel>
-                    ("GetIncomeTransactionsByUserId",
+                    ("GetLastIncomeTransactionsByUserId",
                         new {userId = userId},
                         commandType: CommandType.StoredProcedure);
 
