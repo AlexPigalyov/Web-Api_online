@@ -197,7 +197,7 @@ GO
 CREATE TABLE [dbo].[OutcomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[FromWalletId] [int] NOT NULL,
-	[FromAddress] [nvarchar](max) NOT NULL,
+	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Value] [decimal](38, 20) NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
@@ -481,20 +481,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
+@id int OUTPUT,
 @fromWalletId int,
-@fromAdress nvarchar(max),
-@toAdress nvarchar(max),
+@fromAddress nvarchar(max),
+@toAddress nvarchar(max),
 @value decimal(38,20),
 @currencyAcronim nvarchar(10),
-@state int,
-@errorText nvarchar(max)
+@state int
 AS
+
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[OutcomeTransactions] (FromWalletId, FromAddress, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, ErrorText)
-VALUES (@fromWalletId, @fromAdress, @toAdress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(), @errorText)
+INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, FromAddress, ToAddress,
+			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate)
+VALUES (@fromWalletId, @fromAddress, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE())
 
+SET @id = SCOPE_IDENTITY()
 END
 
 GO
@@ -538,12 +540,13 @@ CREATE PROCEDURE [dbo].[CreateUserWallet]
 @userid nvarchar(450),
 @address nvarchar(max),
 @currencyAcronim nvarchar(10),
+@value decimal(38,20),
 @new_identity    INT    OUTPUT
 AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[Wallets] (UserId, Address, CurrencyAcronim, Value)
-VALUES (@userid, @address, @currencyAcronim, 0)
+VALUES (@userid, @address, @currencyAcronim, @value)
 
 SELECT @new_identity = SCOPE_IDENTITY()
 
@@ -571,13 +574,86 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_CandleStick]
+@datestart datetime,
+@dateend datetime,
+@interval nvarchar(50)
 AS
 BEGIN
 
-SELECT * 
-FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+IF(@interval = '1h')
+BEGIN
+	
+	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
+	BEGIN
+	DROP TABLE #TempCandleSticksHoursTable
+	END
+
+	SELECT 
+	min(OpenTime) as OpenTime,
+	max([CloseTime]) as CloseTime,
+	min([Low]) Low,
+	max([High]) High,
+	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
+	INTO #TempCandleSticksHoursTable
+	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	group by dateadd(hour,0, datediff(hour,0, OpenTime))
+
+	select tt.*,
+	cso.[Open],
+	csc.[Close]
+	from #TempCandleSticksHoursTable tt
+	left join [BTC_USDT_CandleStick] cso on tt.OpenTime = cso.OpenTime
+	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
+	where (@datestart is null or tt.OpenTime >= @datestart)
+	and (@dateend is null or tt.CloseTime <= @dateend)
 
 END
+ELSE IF (@interval = '1d')
+BEGIN
+	
+	IF OBJECT_ID(N'tempdb..#TempCandleSticksDaysTable') IS NOT NULL
+	BEGIN
+	DROP TABLE #TempCandleSticksDaysTable
+	END
+
+	SELECT 
+	min(OpenTime) as OpenTime,
+	max([CloseTime]) as CloseTime,
+	min([Low]) Low,
+	max([High]) High,
+	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
+	INTO #TempCandleSticksDaysTable
+	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	group by dateadd(day,0, datediff(day,0, OpenTime))
+
+	select 
+	--tt.OpenTime,
+	tt.OpenTimeD as OpenTime, 
+	tt.CloseTime,
+	tt.[Low],
+	tt.[High],
+	cso.[Open],
+	csc.[Close]
+	from #TempCandleSticksDaysTable tt
+	left join [BTC_USDT_CandleStick] cso on tt.OpenTime = cso.OpenTime
+	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
+	where (@datestart is null or tt.OpenTime >= @datestart)
+	and (@dateend is null or tt.CloseTime <= @dateend)
+
+END
+ELSE
+BEGIN
+
+	SELECT * 
+	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+
+END
+END
+
+
+
 
 
 GO
@@ -1021,6 +1097,20 @@ Where OutcomeTransactions.Id = @transactionId
 select top(1) * from OutcomeTransactions 
 Where OutcomeTransactions.Id = @transactionId
 
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetOutcomeTransactionById]
+@id int
+AS
+BEGIN
+
+SELECT *  FROM OutcomeTransactions 
+WHERE id = @id
 
 END
 GO
