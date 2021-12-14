@@ -120,6 +120,7 @@ namespace Web_Api.online
             services.AddCoinManager(Configuration);
             services.AddTransient<ZCashService>();
             services.AddTransient<EtheriumService>();
+            services.AddTransient<WalletService>();
             services.AddTransient<IEmailSender, EmailSender>();
         }
 
