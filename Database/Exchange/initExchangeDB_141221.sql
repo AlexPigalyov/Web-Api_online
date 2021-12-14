@@ -516,21 +516,9 @@ BEGIN
 INSERT INTO [Exchange].[dbo].[IncomeWallets] (UserId, Address, AddressLabel, CurrencyAcronim)
 VALUES (@userid, @address, @addressLabel, @currencyAcronim)
 
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity AS id
-
---Create inner wallet if not exist
---insert wallet if not exist
-IF NOT EXISTS(SELECT 1 FROM [Exchange].[dbo].[Wallets] WHERE UserId = @userid AND CurrencyAcronim = @currencyAcronim)
-BEGIN
-INSERT INTO [Exchange].[dbo].[Wallets] (UserId, CurrencyAcronim, Value)
-VALUES (@userid, @currencyAcronim, 0)
+SET @new_identity = SCOPE_IDENTITY()
 END
 
-RETURN
-
-END
 GO
 SET ANSI_NULLS ON
 GO

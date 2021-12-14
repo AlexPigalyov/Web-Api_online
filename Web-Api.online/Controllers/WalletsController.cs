@@ -29,6 +29,7 @@ namespace Web_Api.online.Controllers
         private OutcomeTransactionRepository _outcomeTransactionRepository;
         private ZCashService _zecService;
         private EtheriumService _etheriumService;
+        private WalletService _walletService;
 
         public WalletsController(WalletsRepository walletsRepository,
             ICoinManager coinManager,
@@ -36,7 +37,8 @@ namespace Web_Api.online.Controllers
             EventsRepository eventsRepository,
             OutcomeTransactionRepository outcomeTransactionRepository,
             ZCashService zecService,
-            EtheriumService etheriumService)
+            EtheriumService etheriumService, 
+            WalletService walletService)
         {
             _walletsRepository = walletsRepository;
             _coinManager = coinManager;
@@ -45,6 +47,7 @@ namespace Web_Api.online.Controllers
             _outcomeTransactionRepository = outcomeTransactionRepository;
             _zecService = zecService;
             _etheriumService = etheriumService;
+            _walletService = walletService;
         }
 
         public class IndexModel
@@ -82,32 +85,10 @@ namespace Web_Api.online.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!string.IsNullOrEmpty(userId))
             {
-                string address = "";
+                // create new income blockchain address(incomeWallet)
+                string address = _walletService.GetNewAddress(selectCurrency, userId);
 
-                if (selectCurrency == "USDT")
-                {
-                    address = GenerateHash.sha256(userId + "USDT" + DateTime.Now.ToString());
-                }
-                else if (selectCurrency == "ETH")
-                {
-                    address = _etheriumService.GetNewAddress(userId);
-                }
-                else if (selectCurrency == "ZEC")
-                {
-                    address = _zecService.GetNewAddress();
-                }
-                else
-                {
-                    foreach (var coin in _coinManager.CoinServices)
-                    {
-                        if (coin.CoinShortName == selectCurrency)
-                        {
-                            address = coin.GetNewAddress(userId);
-                            break;
-                        }
-                    }
-                }
-                if (address == "")
+                if (address == null)
                 {
                     return RedirectToAction("Index");
                 }
@@ -128,6 +109,29 @@ namespace Web_Api.online.Controllers
                     Address = address,
                     AddressLabel = userId
                 };
+
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, selectCurrency);
+
+                // create new inner platform wallet
+                if(wallet == null)
+                {
+                    wallet = await _walletsRepository.CreateUserWalletAsync(new WalletTableModel()
+                    {
+                        UserId = userId,
+                        CurrencyAcronim = selectCurrency,
+                        Value = 0,
+                        Address = _walletService.GetNewAddress(selectCurrency, userId)
+                    });
+
+                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    {
+                        UserId = wallet.UserId,
+                        Type = (int)EventTypeEnum.CreateWallet,
+                        Comment = $"Create wallet {wallet.CurrencyAcronim}",
+                        WhenDate = DateTime.Now,
+                        CurrencyAcronim = wallet.CurrencyAcronim
+                    });
+                }
 
                 await _walletsRepository.CreateUserIncomeWalletAsync(incomeWallet);
                 return RedirectToAction("Index");

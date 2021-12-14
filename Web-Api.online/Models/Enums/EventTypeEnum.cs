@@ -8,5 +8,6 @@
         Send = 4,
         Recieve = 5,
         CreateAddress = 6,
+        CreateWallet = 7,
     }
 }
