@@ -1,6 +1,7 @@
 ﻿using System;
 using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
+using Web_Api.online.Hash;
 
 namespace Web_Api.online.Services
 {
@@ -37,6 +38,7 @@ namespace Web_Api.online.Services
         {
             return acronim switch
             {
+                "USDT" => GenerateHash.sha256(lable + "USDT" + DateTime.Now.ToString()),
                 "ETH" => etheriumService.GetNewAddress(lable),
                 "ZEC" => zCashService.GetNewAddress(),
                 "LTC" => litecoinService.GetNewAddress(lable),
