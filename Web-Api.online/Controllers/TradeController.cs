@@ -236,7 +236,7 @@ namespace Web_Api.online.Controllers
 
                 if (btcWallet == null)
                 {
-                    btcWallet = new WalletTableModel
+                    var newbtcWallet = new WalletTableModel
                     {
                         UserId = userId,
                         CurrencyAcronim = "BTC",
@@ -244,7 +244,7 @@ namespace Web_Api.online.Controllers
                         Value = 0
                     };
 
-                    btcWallet = await _walletsRepository.CreateUserWalletAsync(btcWallet);
+                    btcWallet = await _walletsRepository.CreateUserWalletAsync(newbtcWallet);
                 }
 
                 model.UserWallets.Add(btcWallet);
