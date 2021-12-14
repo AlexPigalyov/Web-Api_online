@@ -260,9 +260,7 @@ namespace Web_Api.online.Controllers
                         UserId = userId,
                         CurrencyAcronim = "USDT",
                         Address = System.Guid.NewGuid().ToString().Replace("-", ""),
-                        Value = 0,
-                        Created = DateTime.Now,
-                        LastUpdate = DateTime.Now
+                        Value = 0
                     };
 
                     usdtWallet = await _walletsRepository.CreateUserWalletAsync(usdtWallet);
