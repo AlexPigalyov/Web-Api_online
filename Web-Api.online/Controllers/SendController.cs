@@ -125,7 +125,7 @@ namespace Web_Api.online.Controllers
                         {
                             WalletFromId = walletFrom.Id,
                             WalletToId = walletTo.Id,
-                            Value = _amount.Value,
+                            Value = 0,
                             CurrencyAcronim = coinsModel.Currency,
                             Comment = coinsModel.Comment
                         };
