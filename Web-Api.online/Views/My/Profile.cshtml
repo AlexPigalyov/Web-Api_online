@@ -34,12 +34,14 @@
                     </span>
                 </p>
 
-                <p class="text-muted mb-1 font-13">
-                    <strong>Mobile :</strong>
-                    <span class="ms-2">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "(123) 123 1234" : Model.PhoneNumber)</span>
-                </p>
-
-                <p class="text-muted mb-1 font-13">
+                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                    {
+                        <p class="text-muted mb-1 font-13">
+                            <strong>Mobile :</strong>
+                            <span class="ms-2">@Model.PhoneNumber</span>
+                        </p>
+                    }
+                    <p class="text-muted mb-1 font-13">
                     <strong>Email :</strong>
                     <span class="ms-2">@Model.Email</span>
                 </p>
