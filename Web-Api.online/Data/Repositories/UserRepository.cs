@@ -15,10 +15,12 @@ namespace Web_Api.online.Data.Repositories
 {
     public class UserRepository
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnection _dbWebApi;
+        private readonly IDbConnection _dbExchange;
         public UserRepository(IConfiguration configuration)
         {
-            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            _dbWebApi = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            _dbExchange = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
         public async Task<List<spGetUsers_PagedSettings>> GetPagedUsers(int page, int pageSize)
         {
@@ -28,7 +30,7 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                return (await _db.QueryAsync<spGetUsers_PagedSettings>(
+                return (await _dbWebApi.QueryAsync<spGetUsers_PagedSettings>(
                         "GetUsers_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).ToList();
@@ -48,7 +50,7 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                return (await _db.QueryAsync<spGetUsers_PagedSettings>(
+                return (await _dbWebApi.QueryAsync<spGetUsers_PagedSettings>(
                         "FindUsersByUsername_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure)).AsList();
@@ -66,10 +68,19 @@ namespace Web_Api.online.Data.Repositories
                 var parameters = new DynamicParameters();
                 parameters.Add("searchText", searchText);
 
-                return (await _db.QueryAsync<string>(
-                        "FindUserIdForSendPage",
+                var useId = await _dbWebApi.QueryFirstOrDefaultAsync<string>(
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber",
                         parameters,
-                        commandType: CommandType.StoredProcedure)).FirstOrDefault();
+                        commandType: CommandType.StoredProcedure);
+
+                if(useId == null)
+                {
+                    useId = await _dbExchange.QueryFirstOrDefaultAsync<string>(
+                        "GetUserIdByWalletAddress",
+                        parameters,
+                        commandType: CommandType.StoredProcedure);
+                }
+                return useId;
             }
             catch (Exception exc)
             {
@@ -81,7 +92,7 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                return await _db.QueryFirstAsync<int>(
+                return await _dbWebApi.QueryFirstAsync<int>(
                     "GetCountOfUsers",
                     commandType: CommandType.StoredProcedure);
             }

@@ -97,6 +97,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("userId", wallet.UserId);
                 p.Add("address", wallet.Address);
                 p.Add("currencyAcronim", wallet.CurrencyAcronim);
+                p.Add("value", wallet.Value);
                 p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 await _db.QueryAsync<int>("CreateUserWallet", p, commandType: CommandType.StoredProcedure);
