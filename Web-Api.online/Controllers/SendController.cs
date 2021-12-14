@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -118,6 +119,15 @@ namespace Web_Api.online.Controllers
                                 CurrencyAcronim = walletFrom.CurrencyAcronim,
                                 Value = _amount.Value,
                                 Address = walletService.GetNewAddress(walletFrom.CurrencyAcronim, sendToUserId)
+                            });
+
+                            await eventsRepository.CreateEvent(new EventTableModel()
+                            {
+                                UserId = userId,
+                                Type = (int)EventTypeEnum.CreateWallet,
+                                Comment = $"Create wallet {walletTo.CurrencyAcronim}",
+                                WhenDate = DateTime.Now,
+                                CurrencyAcronim = walletTo.CurrencyAcronim
                             });
                         }
 
