@@ -13,8 +13,7 @@ connection.on("ReceiveMessage", function (recieveModel) {
     $("#current-price").text(model.MarketTrades[0].ExposedPrice);
 
     var orderValue = model.MarketTrades[0].ExposedPrice * model.MarketTrades[0].Amount;
-    orderValue = parseFloat(orderValue.toLocaleString('fullwide', { useGrouping: false })).toPrecision(5);
-    $("#orderbook-ticker-markprice").text(orderValue);
+    $("#orderbook-ticker-markprice").text(parseFloat(orderValue.toFixed(4)));
 
     currentMarketTradeDoc.classList.remove('status-buy');
     currentMarketTradeDoc.classList.remove('status-sell');
