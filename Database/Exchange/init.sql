@@ -527,7 +527,7 @@ BEGIN
 INSERT INTO [Exchange].[dbo].[Wallets] (UserId, CurrencyAcronim, Value)
 VALUES (@userid, @currencyAcronim, 0)
 END
-
+END
 GO
 SET ANSI_NULLS ON
 GO
