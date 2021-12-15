@@ -528,9 +528,6 @@ INSERT INTO [Exchange].[dbo].[Wallets] (UserId, CurrencyAcronim, Value)
 VALUES (@userid, @currencyAcronim, 0)
 END
 
-RETURN
-
-END
 GO
 SET ANSI_NULLS ON
 GO
@@ -548,12 +545,7 @@ BEGIN
 INSERT INTO [Exchange].[dbo].[Wallets] (UserId, Address, CurrencyAcronim, Value)
 VALUES (@userid, @address, @currencyAcronim, @value)
 
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity AS id
-
-RETURN
-
+SET @new_identity = SCOPE_IDENTITY()
 END
 GO
 SET ANSI_NULLS ON
@@ -1157,6 +1149,21 @@ SELECT [Id]
       ,[Value]
       ,[LastUpdateDateTime]
   FROM [Exchange].[dbo].[Settings]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create PROCEDURE [dbo].[GetUserIdByWalletAddress]
+@address nvarchar(max)
+AS
+BEGIN
+
+Select UserId
+FROM Wallets
+WHERE Address = @address
 
 END
 GO
