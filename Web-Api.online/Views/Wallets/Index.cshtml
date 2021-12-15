@@ -63,6 +63,7 @@
         <tr>
             <th>Currency</th>
             <th>Balance</th>
+            <th>Address</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -76,6 +77,9 @@
                 </td>
                 <td>
                     @item.Value
+                </td>
+                <td>
+                    @item.Address
                 </td>
                 <td>
                     <p><a href="/Withdraw?currency=@item.CurrencyAcronim">Withdraw @item.CurrencyAcronim</a></p>
