@@ -117,7 +117,7 @@ namespace Web_Api.online.Controllers
                             {
                                 UserId = sendToUserId,
                                 CurrencyAcronim = walletFrom.CurrencyAcronim,
-                                Value = _amount.Value,
+                                Value = 0,
                                 Address = walletService.GetNewAddress(walletFrom.CurrencyAcronim, sendToUserId)
                             });
 

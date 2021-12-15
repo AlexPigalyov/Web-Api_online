@@ -45,7 +45,7 @@ namespace Web_Api.online.Services
                 "DOGE" => dogecoinService.GetNewAddress(lable),
                 "DASH" => dashService.GetNewAddress(lable),
                 "BTC" => bitcoinService.GetNewAddress(lable),
-                "BTH" => bitcoinCashService.GetNewAddress(lable),
+                "BCH" => bitcoinCashService.GetNewAddress(lable),
                 _ => null
             };
         }
