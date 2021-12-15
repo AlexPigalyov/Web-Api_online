@@ -19,7 +19,7 @@ namespace Web_Api.online.Data.Repositories
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
-        public async Task<List<EventTableModel>> spGetLastThreeEvents_ByUserId(string userId)
+        public async Task<List<EventTableModel>> GetLastThreeEvents_ByUserId(string userId)
         {
             List<EventTableModel> result = (List<EventTableModel>)
                 await _db.QueryAsync<EventTableModel>(

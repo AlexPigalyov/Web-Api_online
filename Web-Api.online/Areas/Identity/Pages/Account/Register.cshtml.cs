@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Areas.Identity.Pages.Account
 {
@@ -25,19 +27,22 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly UsersInfoRepository _usersInfoRepository;
+        private EventsRepository _eventsRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, 
-            UsersInfoRepository usersInfoRepository)
+            IEmailSender emailSender,
+            UsersInfoRepository usersInfoRepository,
+            EventsRepository eventsRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _usersInfoRepository = usersInfoRepository;
+            _eventsRepository = eventsRepository;
         }
 
         [BindProperty]
@@ -80,11 +85,21 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                
+
                 if (result.Succeeded)
                 {
                     await _usersInfoRepository.CreateEmptyUsersInfo(user.Id);
-                    
+
+                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    {
+                        UserId = user.Id,
+                        Type = (int)EventTypeEnum.Registration,
+                        Comment = "Platform registration.",
+                        Value = 0,
+                        WhenDate = DateTime.Now,
+                        CurrencyAcronim = ""
+                    });
+
                     _logger.LogInformation("User created a new account with password.");
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

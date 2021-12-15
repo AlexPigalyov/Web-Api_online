@@ -76,7 +76,7 @@ namespace Web_Api.online.Controllers
             }
 
             UserInfoTableModel userInfo = (await _usersInfoRepository.spGetUserInfo_ByUserId(userId)) ?? new UserInfoTableModel();
-            List<EventTableModel> lastThreeEvents = await _eventsRepository.spGetLastThreeEvents_ByUserId(userId);
+            List<EventTableModel> lastThreeEvents = await _eventsRepository.GetLastThreeEvents_ByUserId(userId);
             List<spGetNotEmptyValueWallet_ByUserIdResult> notEmptyWallets = await _walletsRepository.GetNotEmptyWalletsByUserId(userId);
 
             var user = await _usersManager.FindByIdAsync(userId);            
