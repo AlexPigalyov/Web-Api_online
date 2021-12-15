@@ -70,28 +70,13 @@
 
         </div>
     </div>
-</div>
-<div class="col-xl-8 col-lg-7">
     <div class="card">
         <div class="card-body">
-            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                <li class="nav-item">
-                    <a href="#events" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
-                        Events
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                        Profile-Settings
-                    </a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="events">
-
+            <div class="col-12">
+                <div class="row">
                     <h5 class="text-uppercase">
-                        <i class="mdi mdi-briefcase me-1"></i>
-                        Events <a href="/My/Events">(Check all events)</a>
+                    <i class="mdi mdi-briefcase me-1"></i>
+                    Events <a href="/My/Events">(Check all events)</a>
                     </h5>
                     @if (Model.LastThreeEvents != null)
                     {
@@ -113,8 +98,23 @@
                         </div>
                     }
                 </div>
-                <div class="tab-pane" id="settings">
-                    <form asp-controller="My" asp-action="UpdateProfileData" method="post">
+            </div>
+
+
+        </div>
+    </div>
+
+    
+
+
+
+
+</div>
+<div class="col-xl-8 col-lg-7">
+    <div class="card">
+        <div class="card-body">
+
+            <form asp-controller="My" asp-action="UpdateProfileData" method="post">
                         <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
 
                         <div class="row">
@@ -224,11 +224,12 @@
                             <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Save</button>
                         </div>
                     </form>
-                </div>
-                <!-- end settings content-->
-
-            </div> <!-- end tab-content -->
         </div> <!-- end card body -->
+        <div>
+
+            
+
+        </div>
     </div> <!-- end card -->
 </div>
 </div>
