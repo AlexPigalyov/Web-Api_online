@@ -71,10 +71,20 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null, string refid = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            int _refid = Convert.ToInt32(refid);
+
+            if (_refid == 0)
+            {
+                var cookie = Request.Cookies["refid"];
+
+                if (cookie != null)
+                { _refid = Convert.ToInt32(cookie); }
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
