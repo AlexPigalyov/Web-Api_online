@@ -49,7 +49,8 @@ namespace Web_Api.online.Clients
                 {
                     // check if need to convert Amount
                     var txId = _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
-
+                    
+                    var tempStartBalance = wallet.Value;
                     wallet.Value -= _amount.Value;
 
                     await _eventsRepository.CreateEvent(new EventTableModel()
@@ -58,12 +59,14 @@ namespace Web_Api.online.Clients
                         Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
+                        StartBalance = tempStartBalance,
+                        ResultBalance = wallet.Value,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = model.Currency
                     });
+
                     model.Status = "Success";
                     await _walletsRepository.UpdateWalletBalanceAsync(wallet);
-                    //await _walletsRepository.UpdateWalletBalance(wallet);
                 }
                 else
                 {

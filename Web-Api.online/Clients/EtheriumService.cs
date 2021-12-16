@@ -56,6 +56,7 @@ namespace Web_Api.online.Clients
 
                     ethRequestClient.ExecuteTransaction(tr.Id);
 
+                    var tempStartBalance= wallet.Value;
                     wallet.Value -= _amount.Value;
 
                     await eventsRepository.CreateEvent(new EventTableModel()
@@ -64,6 +65,8 @@ namespace Web_Api.online.Clients
                         Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
+                        StartBalance = tempStartBalance,
+                        ResultBalance = wallet.Value,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = model.Currency
                     });

@@ -95,7 +95,6 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
                         UserId = user.Id,
                         Type = (int)EventTypeEnum.Registration,
                         Comment = "Platform registration.",
-                        Value = 0,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = ""
                     });
