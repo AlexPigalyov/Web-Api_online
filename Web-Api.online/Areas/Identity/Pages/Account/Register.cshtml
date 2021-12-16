@@ -4,6 +4,20 @@
     ViewData["Title"] = "Register";
 }
 
+<script src="/js/helper.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var refid = getParameterByName("refid");
+
+        if (!!refid) {
+            var date = new Date(new Date().getTime() + 31536000000);
+            document.cookie = "refid=" + refid + "; path=/; expires=" + date.toUTCString();
+        }
+    });
+</script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
