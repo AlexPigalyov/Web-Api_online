@@ -39,6 +39,8 @@ namespace Web_Api.online.Data.Repositories
                     userid = model.UserId,
                     type = model.Type,
                     value = model.Value,
+                    startBalance = model.StartBalance,
+                    resultBalance = model.ResultBalance,
                     comment = model.Comment,
                     whenDate = model.WhenDate,
                     currencyAcronim = model.CurrencyAcronim,

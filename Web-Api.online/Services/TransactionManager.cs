@@ -145,6 +145,8 @@ namespace Web_Api.online.Services
             foreach (var tr in incomeTransactions)
             {
                 var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
+
+                var tempStartBalance = w.Value;
                 w.Value = w.Value + tr.Amount;
                 await _walletsRepository.UpdateWalletBalanceAsync(w);
 
@@ -155,6 +157,8 @@ namespace Web_Api.online.Services
                     Type = (int)EventTypeEnum.Income,
                     Comment = $"Income transaction {tr.CurrencyAcronim}",
                     Value = _value,
+                    StartBalance = tempStartBalance,
+                    ResultBalance = w.Value,
                     WhenDate = DateTime.Now,
                     CurrencyAcronim = tr.CurrencyAcronim
                 });
