@@ -22,7 +22,7 @@ namespace Web_Api.online.Controllers
         {
             if (!model.DateStart.HasValue)
             {
-                model.DateStart = System.DateTime.Now.AddDays(-1);
+                model.DateStart = System.DateTime.Now.AddDays(-2);
             }
 
             var candleStick = await _candleStickRepository.Get_BTC_USDT_CandleSticks(model);
