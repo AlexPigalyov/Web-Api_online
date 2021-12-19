@@ -22,7 +22,7 @@ namespace Web_Api.online.Data.Repositories
         {
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
-        public async Task<List<CandleStickTableModel>> spGet_BTC_USDT_CandleSticks(GetCandleStickModel model)
+        public async Task<List<CandleStickTableModel>> Get_BTC_USDT_CandleSticks(GetCandleStickModel model)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<CandleStickTableModel> spGetCurrent_BTC_USDT_CandleStick()
+        public async Task<CandleStickTableModel> GetCurrent_BTC_USDT_CandleStick()
         {
             try
             {

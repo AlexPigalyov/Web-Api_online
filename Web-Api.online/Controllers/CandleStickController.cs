@@ -20,9 +20,14 @@ namespace Web_Api.online.Controllers
         [HttpGet]
         public async Task<ActionResult> GetCandleStick(GetCandleStickModel model)
         {
-            var candleStick = await _candleStickRepository.spGet_BTC_USDT_CandleSticks(model);
+            if (!model.DateStart.HasValue)
+            {
+                model.DateStart = System.DateTime.Now.AddDays(-1);
+            }
 
-            var currentCandleStick = await _candleStickRepository.spGetCurrent_BTC_USDT_CandleStick();
+            var candleStick = await _candleStickRepository.Get_BTC_USDT_CandleSticks(model);
+
+            var currentCandleStick = await _candleStickRepository.GetCurrent_BTC_USDT_CandleStick();
 
             var resultModel = new CandleStickViewModel()
             {
