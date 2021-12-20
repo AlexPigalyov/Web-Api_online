@@ -194,6 +194,7 @@
                 <button class="button-menu-mobile open-left">
                     <i class="mdi mdi-menu"></i>
                 </button>
+                <div class="open-left" style="padding-top: 25px;" id="page-header"></div>
             </div>
             <div class="container-fluid">
                 <main role="main" class="pb-3">
@@ -215,6 +216,14 @@
 <script src="~/js/vendor.js" asp-append-version="true"></script>
 <script src="~/js/app.js" asp-append-version="true"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#page-header').text($(".display-4").text());
+        $(".display-4").remove();
+        });
+</script>
+
 
 <!-- third party js -->
 @await RenderSectionAsync("Scripts", required: false)
