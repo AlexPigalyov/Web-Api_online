@@ -56,3 +56,12 @@ INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
+
+
+INSERT INTO [dbo].[Settings]
+           ([Name]
+           ,[Value]
+           ,[LastUpdateDateTime])
+     VALUES
+           ('EthereumLastReadBlock', '13772971','2021-12-08 07:25:22.927')
+GO
