@@ -6,7 +6,6 @@ namespace Web_Api.online.Models.Tables
     {
         public long Id { get; set; }
         public int FromWalletId { get; set; }
-        public string FromAddress { get; set; }
         public string ToAddress { get; set; }
         public decimal Value { get; set; }
         public DateTime CreateDate { get; set; }
