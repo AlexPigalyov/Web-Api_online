@@ -47,7 +47,6 @@ namespace Web_Api.online.Clients
                                     new OutcomeTransactionTableModel()
                                     {
                                         FromWalletId = wallet.Id,
-                                        FromAddress = wallet.Address,
                                         ToAddress = model.Address,
                                         Value = _amount.Value,
                                         CurrencyAcronim = "ETH",
