@@ -98,7 +98,11 @@ CREATE TABLE [dbo].[Currencies](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Acronim] [nvarchar](10) NOT NULL,
 	[Name] [nvarchar](max) NOT NULL,
-	[Created] [datetime] NOT NULL
+	[Created] [datetime] NOT NULL,
+	[PercentCommissionForIncomeTransaction] [decimal](38, 20) NULL,
+	[PercentCommissionForTransfer] [decimal](38, 20) NULL,
+	[PercentCommissionForOutcomeTransaction] [decimal](38, 20) NULL,
+	[PercentCommissionForTrade] [decimal](38, 20) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -109,7 +113,9 @@ CREATE TABLE [dbo].[Events](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[UserId] [nvarchar](450) NOT NULL,
 	[Type] [int] NOT NULL,
-	[Value] [decimal](38, 20) NOT NULL,
+	[Value] [decimal](38, 20) NULL,
+	[StartBalance] [decimal](38, 20) NULL,
+	[ResultBalance] [decimal](38, 20) NULL,
 	[Comment] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
 	[CurrencyAcronim] [nvarchar](10) NOT NULL,
@@ -144,6 +150,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[TransactionId] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
+	[PlatformCommission] [decimal](38, 20) NULL,
 	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
@@ -197,7 +204,6 @@ GO
 CREATE TABLE [dbo].[OutcomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[FromWalletId] [int] NOT NULL,
-	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Value] [decimal](38, 20) NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
@@ -397,15 +403,17 @@ GO
 CREATE PROCEDURE [dbo].[CreateEvent]
 @userid nvarchar(450),
 @type int,
-@value decimal(38,20),
+@value decimal(38,20) NULL,
+@startBalance decimal (38, 20) NULL,
+@resultBalance decimal (38, 20) NULL,
 @comment nvarchar(450),
 @whenDate datetime,
 @currencyAcronim nvarchar(450)
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-VALUES (@userid, @type, @value, @comment, @whenDate, @currencyAcronim)
+INSERT INTO [Exchange].[dbo].[Events] (UserId, Type, Value, StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim)
+VALUES (@userid, @type, @value, @startBalance, @resultBalance, @comment, @whenDate, @currencyAcronim)
 
 END
 
@@ -483,7 +491,6 @@ GO
 CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
 @id int OUTPUT,
 @fromWalletId int,
-@fromAddress nvarchar(max),
 @toAddress nvarchar(max),
 @value decimal(38,20),
 @currencyAcronim nvarchar(10),
@@ -492,9 +499,9 @@ AS
 
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, FromAddress, ToAddress,
+INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, ToAddress,
 			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate)
-VALUES (@fromWalletId, @fromAddress, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE())
+VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE())
 
 SET @id = SCOPE_IDENTITY()
 END
@@ -1757,7 +1764,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[SendCoins]
+CREATE PROCEDURE [dbo].[SendCoins] 
 @senderUserId nvarchar(450),
 @receiverUserId nvarchar(450),
 @typeSend int,
@@ -1770,12 +1777,20 @@ CREATE PROCEDURE [dbo].[SendCoins]
 @senderWalletId int,
 @receiverWalletId int,
 @hash varchar(66)
+
 AS
+
+declare @senderValue decimal(38,20)
+declare @receiverValue decimal(38,20) 
+
 BEGIN
+
+SELECT @senderValue = Value From Wallets WHERE ID = @senderWalletId
+SELECT @receiverValue = Value From Wallets WHERE ID = @receiverWalletId
 
 UPDATE [Exchange].[dbo].[Wallets]
 SET Value -= @value, LastUpdate = GETDATE()
-WHERE ID = @senderWalletId
+WHERE Id = @senderWalletId
 
 UPDATE [Exchange].[dbo].[Wallets]
 SET Value += @value, LastUpdate = GETDATE()
@@ -1784,11 +1799,15 @@ WHERE Id = @receiverWalletId
 insert into [Exchange].[dbo].[Transfers] (WalletFromId, WalletToId, Value, Date, CurrencyAcronim, Hash, Comment)
 values (@senderWalletId, @receiverWalletId, @value, GETDATE(), @currencyAcronim, @hash, @Comment)
 
-insert into [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-values (@senderUserId, @typeSend, @value, @Comment, GETDATE(), @currencyAcronim)
+insert into [Exchange].[dbo].[Events] (UserId, Type, Value, 
+StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim)
+values (@senderUserId, @typeSend, @value, @senderValue, @senderValue - @value,
+@Comment, GETDATE(), @currencyAcronim)
 
-insert into [Exchange].[dbo].[Events] (UserId, Type, Value, Comment, WhenDate, CurrencyAcronim)
-values (@receiverUserId, @typeRecieve, @value, @Comment, GETDATE(), @currencyAcronim)
+insert into [Exchange].[dbo].[Events] (UserId, Type, Value,
+StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim)
+values (@receiverUserId, @typeRecieve, @value, @receiverValue, @receiverValue + @value,
+@Comment, GETDATE(), @currencyAcronim)
 
 END
 
