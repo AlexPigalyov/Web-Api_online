@@ -162,7 +162,7 @@ namespace Web_Api.online.Controllers
                             Transfer = transfer
                         };
 
-                        await walletsRepository.SendCoinsAync(sendRecieve);
+                        await walletsRepository.SendCoinsAsync(sendRecieve);
                         coinsModel.Status = "Success";
                     }
                     else
