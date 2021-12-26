@@ -141,7 +141,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task SendCoinsAync(SendCoinsModel sendCoinsModel)
+        public async Task SendCoinsAsync(SendCoinsModel sendCoinsModel)
         {
             try
             {
@@ -178,6 +178,24 @@ namespace Web_Api.online.Data.Repositories
                     return currencies;
                 }
                 catch (Exception ex) { return null; }
+            }
+        }
+        
+        public async Task<CurrencyTableModel> GetCurrencyByAcronimAsync(string acronim)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("acronim", acronim);
+
+                return (await _db.QueryFirstOrDefaultAsync<CurrencyTableModel>(
+                        "GetCurrencyByAcronim",
+                        parameters,
+                        commandType: CommandType.StoredProcedure));
+            }
+            catch (Exception exc)
+            {
+                return null;
             }
         }
 
