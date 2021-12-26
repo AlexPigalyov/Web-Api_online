@@ -7,6 +7,7 @@
         public string TransactionId { get; set; }
         public decimal Amount { get; set; }
         public decimal TransactionFee { get; set; }
+        public decimal? PlatformCommission { get; set; }
         public string FromAddress { get; set; }
         public string ToAddress { get; set; }
         public double Date { get; set; }

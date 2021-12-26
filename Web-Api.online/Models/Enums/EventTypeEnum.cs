@@ -9,5 +9,9 @@
         Recieve = 5,
         CreateAddress = 6,
         CreateWallet = 7,
+        CommissionForIncomeTransaction = 8,
+        CommissionForTransfer = 9,
+        CommissionForOutcomeTransaction = 9,
+        CommissionForTrade = 10,
     }
 }
