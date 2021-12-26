@@ -10,6 +10,7 @@ namespace Web_Api.online.Models.Tables
         public decimal? Value { get; set; }
         public decimal? StartBalance { get; set; }
         public decimal? ResultBalance { get; set; }
+        public decimal? PlatformCommission { get; set; }
         public string Comment { get; set; }
         public DateTime WhenDate { get; set; }
         public string CurrencyAcronim { get; set; }
