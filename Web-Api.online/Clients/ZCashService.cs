@@ -53,7 +53,7 @@ namespace Web_Api.online.Clients
                     var tempStartBalance = wallet.Value;
                     wallet.Value -= _amount.Value;
 
-                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = userId,
                         Type = (int)EventTypeEnum.Withdraw,
@@ -92,6 +92,7 @@ namespace Web_Api.online.Clients
                 return null;
             }
 
+            //TODO: get proc by user and acronim
             List<IncomeWalletTableModel> incomeZecWallets = (await _walletsRepository.GetUserIncomeWalletsAsync(userId))
                 .Where(x=>x.CurrencyAcronim == "ZEC").ToList();
 
@@ -107,6 +108,8 @@ namespace Web_Api.online.Clients
                 {
                     if (!savedTransactions.Contains(tx.TxId))
                     {
+
+                        //поправить 
                         wallet.Value += tx.Satoshis / 100000000;
 
                         await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
