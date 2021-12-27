@@ -100,7 +100,7 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
                 {
                     await _usersInfoRepository.CreateEmptyUsersInfo(user.Id);
 
-                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = user.Id,
                         Type = (int)EventTypeEnum.Registration,

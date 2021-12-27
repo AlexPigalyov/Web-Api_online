@@ -30,7 +30,7 @@ namespace Web_Api.online.Data.Repositories
             return result;
         }
 
-        public async Task CreateEvent(EventTableModel model)
+        public async Task CreateEventAsync(EventTableModel model)
         {
             await _db.ExecuteAsync(
                 "CreateEvent",

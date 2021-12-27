@@ -58,7 +58,7 @@ namespace Web_Api.online.Services
                     var tempStartBalance = wallet.Value;
                     wallet.Value -= _amount.Value;
 
-                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = userId,
                         Type = (int)EventTypeEnum.Withdraw,
