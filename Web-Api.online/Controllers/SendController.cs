@@ -121,7 +121,7 @@ namespace Web_Api.online.Controllers
                                 Address = walletService.GetNewAddress(walletFrom.CurrencyAcronim, sendToUserId)
                             });
 
-                            await eventsRepository.CreateEvent(new EventTableModel()
+                            await eventsRepository.CreateEventAsync(new EventTableModel()
                             {
                                 UserId = userId,
                                 Type = (int)EventTypeEnum.CreateWallet,
