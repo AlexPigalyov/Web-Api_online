@@ -20,41 +20,35 @@ namespace Web_Api.online.Services
         private ICoinManager _coinManager;
         private EventsRepository _eventsRepository;
         private ZCashService _zecService;
-
-
-        private string userId;
-        private List<IncomeWalletTableModel> incomeWallets;
-        private List<WalletTableModel> wallets;
+        private BalanceProvider _balanceProvider;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
-            EventsRepository eventsRepository, 
-            ZCashService zecService)
+            EventsRepository eventsRepository,
+            ZCashService zecService,
+            BalanceProvider balanceProvider)
         {
             _transactionsRepository = transactionsRepository;
             _coinManager = coinManager;
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
             _zecService = zecService;
+            _balanceProvider = balanceProvider;
         }
 
-        public async Task<List<WalletTableModel>> GetUpdatedWallets(string userId)
+        public async Task<List<WalletTableModel>> GetUpdatedWalletsAsync(string userId)
         {
-            this.userId = userId;
+            await _zecService.GetUpdatedWalletAsync(userId); // позже сам кешино подправлю
 
-            await _zecService.GetUpdatedWalletAsync(userId);
 
-            incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
-            wallets = await _walletsRepository.GetUserWalletsAsync(userId);
-            
-            await SearchNewIncomeTransactionsAsync();
-            return wallets;
-        }
 
-        private async Task SearchNewIncomeTransactionsAsync()
-        {
-            List<IncomeTransactionTableModel> incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId)??
+
+            var incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
+            var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
+
+            List<IncomeTransactionTableModel> incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId) ??
                         new List<IncomeTransactionTableModel>();
+
             var coinServices = _coinManager
                                 .CoinServices
                                 .Where(x => incomeWallets
@@ -62,70 +56,58 @@ namespace Web_Api.online.Services
                                                         x.CoinShortName == y.CurrencyAcronim))
                                 .ToList(); // убирает лишние сервисы, останутся только те у которых юзер имеет кошелёк
 
+
+            List<WalletTableModel> walletResult = new List<WalletTableModel>();
             foreach (var coin in coinServices)
             {
-                var listIncomeTransactionsToSave = new List<IncomeTransactionTableModel>();
+                var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(coin.CoinShortName);
+
+                var transactionsInBlockchain = coin.ListTransactions(userId);
 
                 var lastTr = incomeLastTransactions
                                  .FirstOrDefault(tr =>
                                     tr.CurrencyAcronim == coin.CoinShortName);
 
-                for (int i = 0; ; i++)
-                {
-                    SearchLastNoSaveTransaction(listIncomeTransactionsToSave, i, coin);
-                    if (listIncomeTransactionsToSave.Count() == 0)
-                    {
-                        break;
-                    }
-                    else if (lastTr == null && listIncomeTransactionsToSave.Count() != 0)
-                    {
-                        int countTr = listIncomeTransactionsToSave.Count();
-                        SearchLastNoSaveTransaction(listIncomeTransactionsToSave, ++i, coin);
+                var newTransactionsInBlockchain = transactionsInBlockchain.Where(x => x.BlockTime > lastTr.Date);//дата в секундах лежит,  я не переводил
+                                                                                                                 //можно как в блокчейне написать BlockTime
+                                                                                                                 //поменять
+                var wallet = wallets.FirstOrDefault(t => t.CurrencyAcronim == coin.CoinShortName);
 
-                        if(countTr == listIncomeTransactionsToSave.Count())
-                        {
-                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave
-                                .OrderBy(x=>x.Date)
-                                .ToList());
-                            await UpdateBalance(listIncomeTransactionsToSave);
-                            break;
-                        }
-                    }
-                    else if (listIncomeTransactionsToSave.Last().TransactionId == lastTr.TransactionId)
+                foreach (var blockchainTransaction in newTransactionsInBlockchain)
+                {
+                    var transaction = ConvertTransactionResponseToIncomeTransaction(blockchainTransaction, coin.CoinShortName, wallet.Id, userId);
+
+                    var ev = new EventTableModel()
                     {
-                        listIncomeTransactionsToSave.Remove(listIncomeTransactionsToSave.Last());
-                        if (listIncomeTransactionsToSave.Count() != 0)
-                        {
-                            await _transactionsRepository.CreateIncomeTransactionsAsync(listIncomeTransactionsToSave
-                                .OrderBy(x => x.Date)
-                                .ToList());
-                            await UpdateBalance(listIncomeTransactionsToSave);
-                        }
-                        break;
-                    }
+                        UserId = userId,
+                        Type = (int)EventTypeEnum.Income,
+                        Comment = $"Income transaction {transaction.CurrencyAcronim}",
+                        WhenDate = DateTime.Now,
+                        CurrencyAcronim = transaction.CurrencyAcronim,
+                    };
+
+                    var result = await _balanceProvider.Income(wallet, transaction);
+
+                    ev.StartBalance = result.StartBalance;
+                    ev.ResultBalance = result.ResultBalance;
+                    ev.PlatformCommission = result.Commission;
+
+                    wallet.Value = result.ResultBalance;
+                    
+                    transaction.PlatformCommission = result.Commission;
+
+                    await _transactionsRepository.CreateIncomeTransactionAsync(transaction);
+                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+                    await _eventsRepository.CreateEventAsync(ev);
+
+                    walletResult.Add(wallet);
                 }
             }
-        }
-
-        private void SearchLastNoSaveTransaction(List<IncomeTransactionTableModel> incomeTransactionsResult,
-            int from,
-            ICoinService coinService)
-        {
-            var newTransactionInBlockchain = coinService.ListTransactions(userId, 1, from).FirstOrDefault();
-
-            if (newTransactionInBlockchain != null)
-            {
-                var wallet = incomeWallets.FirstOrDefault(w => w.Address == newTransactionInBlockchain.Address);
-                incomeTransactionsResult.Add(
-                    ConvertTransactionResponseToIncomeTransaction(
-                        newTransactionInBlockchain,
-                        coinService.CoinShortName,
-                        wallet.Id));
-            }
+            return walletResult;
         }
 
         private IncomeTransactionTableModel ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
-            string shortNameCurrency, int walletId)
+            string shortNameCurrency, int walletId, string userId)
         {
             return new IncomeTransactionTableModel()
             {
@@ -138,31 +120,6 @@ namespace Web_Api.online.Services
                 UserId = userId,
                 WalletId = walletId
             };
-        }
-
-        private async Task UpdateBalance(List<IncomeTransactionTableModel> incomeTransactions)
-        {
-            foreach (var tr in incomeTransactions)
-            {
-                var w = wallets.FirstOrDefault(t => t.CurrencyAcronim == tr.CurrencyAcronim);
-
-                var tempStartBalance = w.Value;
-                w.Value = w.Value + tr.Amount;
-                await _walletsRepository.UpdateWalletBalanceAsync(w);
-
-                var _value = tr.Amount - tr.TransactionFee;
-                await _eventsRepository.CreateEvent(new EventTableModel()
-                {
-                    UserId = userId,
-                    Type = (int)EventTypeEnum.Income,
-                    Comment = $"Income transaction {tr.CurrencyAcronim}",
-                    Value = _value,
-                    StartBalance = tempStartBalance,
-                    ResultBalance = w.Value,
-                    WhenDate = DateTime.Now,
-                    CurrencyAcronim = tr.CurrencyAcronim
-                });
-            }
         }
     }
 }

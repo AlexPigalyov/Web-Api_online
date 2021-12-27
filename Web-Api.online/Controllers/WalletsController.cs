@@ -71,7 +71,7 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                model.UserWallets = await _transactionManager.GetUpdatedWallets(userId);
+                model.UserWallets = await _transactionManager.GetUpdatedWalletsAsync(userId);
                 model.UserIncomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
             }
 
@@ -93,7 +93,7 @@ namespace Web_Api.online.Controllers
                     return RedirectToAction("Index");
                 }
 
-                await _eventsRepository.CreateEvent(new EventTableModel()
+                await _eventsRepository.CreateEventAsync(new EventTableModel()
                 {
                     UserId = userId,
                     Type = (int)EventTypeEnum.CreateAddress,
@@ -123,7 +123,7 @@ namespace Web_Api.online.Controllers
                         Address = _walletService.GetNewAddress(selectCurrency, userId)
                     });
 
-                    await _eventsRepository.CreateEvent(new EventTableModel()
+                    await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = wallet.UserId,
                         Type = (int)EventTypeEnum.CreateWallet,
