@@ -69,6 +69,20 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
+        public async Task<List<IncomeWalletTableModel>> GetUserIncomeWalletsByAcronimAsync(string userId, string acronim)
+        {
+            try
+            {
+                List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await _db.QueryAsync<IncomeWalletTableModel>("GetUserIncomeWalletByAcronim",
+                new { userId = userId },
+                commandType: CommandType.StoredProcedure
+            ));
+
+                return result;
+            }
+            catch (Exception ex) { return null; }
+        }
+
         public async Task<IncomeWalletTableModel> CreateUserIncomeWalletAsync(IncomeWalletTableModel wallet)
         {
             try
@@ -180,7 +194,7 @@ namespace Web_Api.online.Data.Repositories
                 catch (Exception ex) { return null; }
             }
         }
-        
+
         public async Task<CurrencyTableModel> GetCurrencyByAcronimAsync(string acronim)
         {
             try
