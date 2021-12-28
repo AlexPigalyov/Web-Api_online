@@ -6,25 +6,24 @@ namespace Web_Api.online.Services
 {
     public class CoinManager : ICoinManager
     {
-        private List<ICoinService> coinServices;
-        private IBitcoinCashService bitcoinCash;
-        private IBitcoinService bitcoin;
-        private IDashService dash;
-        private IDogecoinService dogecoin;
-        private ILitecoinService litecoin;
+        private List<ICoinService> _coinServices;
+        private IBitcoinCashService _bitcoinCashService;
+        private IBitcoinService _bitcoinService;
+        private IDashService _dashService;
+        private IDogecoinService _dogecoinService;
+        private ILitecoinService _litecoinService;
 
-        public List<ICoinService> CoinServices => coinServices;
+        public List<ICoinService> CoinServices => _coinServices;
 
-        public IBitcoinCashService BitcoinCash => bitcoinCash;
+        public IBitcoinCashService BitcoinCash => _bitcoinCashService;
 
-        public IBitcoinService Bitcoin => bitcoin;
+        public IBitcoinService Bitcoin => _bitcoinService;
 
-        public IDashService Dash => dash;
+        public IDashService Dash => _dashService;
 
-        public IDogecoinService Dogecoin => dogecoin;
+        public IDogecoinService Dogecoin => _dogecoinService;
 
-        public ILitecoinService Litecoin => litecoin;
-
+        public ILitecoinService Litecoin => _litecoinService;
 
         public CoinManager(IBitcoinCashService bitcoinCash,
             IBitcoinService bitcoin,
@@ -32,19 +31,19 @@ namespace Web_Api.online.Services
             IDogecoinService dogecoin,
             ILitecoinService litecoin)
         {
-            this.bitcoinCash = bitcoinCash;
-            this.bitcoin = bitcoin;
-            this.dash = dash;
-            this.dogecoin = dogecoin;
-            this.litecoin = litecoin;
+            _bitcoinCashService = bitcoinCash;
+            _bitcoinService = bitcoin;
+            _dashService = dash;
+            _dogecoinService = dogecoin;
+            _litecoinService = litecoin;
 
-            coinServices = new List<ICoinService>();
+            _coinServices = new List<ICoinService>();
 
-            coinServices.Add(bitcoinCash);
-            coinServices.Add(bitcoin);
-            coinServices.Add(dash);
-            coinServices.Add(dogecoin);
-            coinServices.Add(litecoin);
+            _coinServices.Add(bitcoinCash);
+            _coinServices.Add(bitcoin);
+            _coinServices.Add(dash);
+            _coinServices.Add(dogecoin);
+            _coinServices.Add(litecoin);
         }
     }
 }

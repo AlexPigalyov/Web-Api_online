@@ -13,11 +13,11 @@ namespace Web_Api.online.Controllers
     {
         private readonly BotsRepository _botsRepository;
 
-        public BotsController(
-            BotsRepository botsRepository)
+        public BotsController(BotsRepository botsRepository)
         {
             _botsRepository = botsRepository;
         }
+
         public async Task<ActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
