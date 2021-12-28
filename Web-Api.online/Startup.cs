@@ -121,6 +121,7 @@ namespace Web_Api.online
             services.AddTransient<ZCashService>();
             services.AddTransient<EtheriumService>();
             services.AddTransient<WalletService>();
+            services.AddTransient<BalanceProvider>();
             services.AddTransient<IEmailSender, EmailSender>();
         }
 
