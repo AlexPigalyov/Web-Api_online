@@ -87,7 +87,6 @@ namespace Web_Api.online.Clients
                 return null;
             }
 
-            //TODO: get proc by user and acronim
             List<IncomeWalletTableModel> incomeZecWallets = await _walletsRepository.GetUserIncomeWalletsByAcronimAsync(userId, "ZEC");
 
             List<IncomeTransactionTableModel> transactionModels = await _transactionsRepository.GetIncomeTransactions(userId, "ZEC");
