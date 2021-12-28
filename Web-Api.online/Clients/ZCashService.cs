@@ -13,13 +13,12 @@ using Web_Api.online.Models.WithdrawModels;
 
 namespace Web_Api.online.Clients
 {
-    public class ZCashService 
+    public class ZCashService
     {
         private ZCashRequestClient _client;
         private WalletsRepository _walletsRepository;
         private EventsRepository _eventsRepository;
         private TransactionsRepository _transactionsRepository;
-
 
         public ZCashService(IConfiguration config, WalletsRepository walletsRepository,
             EventsRepository eventsRepository, TransactionsRepository transactionsRepository)
@@ -30,7 +29,6 @@ namespace Web_Api.online.Clients
             _transactionsRepository = transactionsRepository;
         }
 
-
         public string GetNewAddress()
         {
             return _client.MakeRequest<string>(ZecRestMethods.getnewaddress);
@@ -38,18 +36,16 @@ namespace Web_Api.online.Clients
 
         public async Task<GeneralWithdrawModel> SendToAddress(GeneralWithdrawModel model, string userId)
         {
-
             try
             {
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (_amount.Value > 0 && _amount.Value <= wallet.Value
-                    && wallet != null)
+                if (_amount.Value > 0 && _amount.Value <= wallet.Value && wallet != null)
                 {
                     // check if need to convert Amount
                     var txId = _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
-                    
+
                     var tempStartBalance = wallet.Value;
                     wallet.Value -= _amount.Value;
 
@@ -73,7 +69,7 @@ namespace Web_Api.online.Clients
                     model.Status = "Not enough coins";
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 model.Status = "Error";
                 return model;
@@ -81,7 +77,6 @@ namespace Web_Api.online.Clients
 
             return model;
         }
-
 
         public async Task<WalletTableModel> GetUpdatedWalletAsync(string userId)
         {
@@ -93,9 +88,7 @@ namespace Web_Api.online.Clients
             }
 
             //TODO: get proc by user and acronim
-            List<IncomeWalletTableModel> incomeZecWallets = (await _walletsRepository.GetUserIncomeWalletsAsync(userId))
-                .Where(x=>x.CurrencyAcronim == "ZEC").ToList();
-
+            List<IncomeWalletTableModel> incomeZecWallets = await _walletsRepository.GetUserIncomeWalletsByAcronimAsync(userId, "ZEC");
 
             List<IncomeTransactionTableModel> transactionModels = await _transactionsRepository.GetIncomeTransactions(userId, "ZEC");
             List<string> savedTransactions = transactionModels.Select(x => x.TransactionId).ToList();
@@ -103,8 +96,8 @@ namespace Web_Api.online.Clients
             foreach (var incomeZecWallet in incomeZecWallets)
             {
                 List<ZecDeltas> addressIncomeTransactions = GetAddressIncomingTransactions(incomeZecWallet.Address);
-                
-                foreach(var tx in addressIncomeTransactions)
+
+                foreach (var tx in addressIncomeTransactions)
                 {
                     if (!savedTransactions.Contains(tx.TxId))
                     {
