@@ -11,8 +11,8 @@ namespace Web_Api.online.Controllers
     public class CandleStickController : Controller
     {
         private readonly CandleStickRepository _candleStickRepository;
-        public CandleStickController(
-            CandleStickRepository candleStickRepository)
+
+        public CandleStickController(CandleStickRepository candleStickRepository)
         {
             _candleStickRepository = candleStickRepository;
         }
