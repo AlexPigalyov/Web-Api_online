@@ -116,6 +116,7 @@ CREATE TABLE [dbo].[Events](
 	[Value] [decimal](38, 20) NULL,
 	[StartBalance] [decimal](38, 20) NULL,
 	[ResultBalance] [decimal](38, 20) NULL,
+	[PlatformCommission] [decimal](38, 20) NULL,
 	[Comment] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
 	[CurrencyAcronim] [nvarchar](10) NOT NULL,
@@ -942,6 +943,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCurrencyByAcronim]
+@acronim int
+AS
+BEGIN
+
+Select * FROM Currencies WHERE Acronim = @acronim
+
+END
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCurrent_BTC_USDT_CandleStick]
 AS
 BEGIN
@@ -1170,6 +1187,30 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetUserIncomeWalletByAcronim]
+@userid nvarchar(450),
+@acronim nvarchar(10)
+AS
+BEGIN
+
+SELECT iw.[Id]
+      ,iw.[UserId]
+      ,iw.[Address]
+      ,iw.[AddressLabel]
+      ,iw.[CurrencyAcronim]
+      ,iw.[Created]
+      ,iw.[LastUpdate]
+  FROM [Exchange].[dbo].[IncomeWallets] iw
+  where 
+  iw.[UserId] = @userid
+  AND iw.CurrencyAcronim = @acronim
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetUserIncomeWallets]
 @userid nvarchar(450)
 AS
@@ -1196,7 +1237,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetUserWalletByAcronim]
 @userId nvarchar(450),
-@acronim nvarchar(450)
+@acronim nvarchar(10)
 AS
 BEGIN
 

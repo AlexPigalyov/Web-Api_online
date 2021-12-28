@@ -57,7 +57,6 @@ namespace Web_Api.online.Services
                                 .ToList(); // убирает лишние сервисы, останутся только те у которых юзер имеет кошелёк
 
 
-            List<WalletTableModel> walletResult = new List<WalletTableModel>();
             foreach (var coin in coinServices)
             {
                 var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(coin.CoinShortName);
@@ -68,9 +67,18 @@ namespace Web_Api.online.Services
                                  .FirstOrDefault(tr =>
                                     tr.CurrencyAcronim == coin.CoinShortName);
 
-                var newTransactionsInBlockchain = transactionsInBlockchain.Where(x => x.BlockTime > lastTr.Date);//дата в секундах лежит,  я не переводил
-                                                                                                                 //можно как в блокчейне написать BlockTime
-                                                                                                                 //поменять
+                List<TransactionResponse> newTransactionsInBlockchain;
+                if(lastTr == null)
+                {
+                    newTransactionsInBlockchain = transactionsInBlockchain;
+                }
+                else
+                {
+                    newTransactionsInBlockchain = transactionsInBlockchain.Where(x => x.Time > lastTr.Date).ToList();//дата в секундах лежит,  я не переводил
+                                                                                                                     //можно как в блокчейне написать BlockTime
+                                                                                                                     //поменять
+                }
+
                 var wallet = wallets.FirstOrDefault(t => t.CurrencyAcronim == coin.CoinShortName);
 
                 foreach (var blockchainTransaction in newTransactionsInBlockchain)
@@ -91,7 +99,9 @@ namespace Web_Api.online.Services
                     ev.StartBalance = result.StartBalance;
                     ev.ResultBalance = result.ResultBalance;
                     ev.PlatformCommission = result.Commission;
+                    ev.Value = transaction.Amount;
 
+                    transaction.PlatformCommission = result.Commission;
                     wallet.Value = result.ResultBalance;
                     
                     transaction.PlatformCommission = result.Commission;
@@ -99,11 +109,9 @@ namespace Web_Api.online.Services
                     await _transactionsRepository.CreateIncomeTransactionAsync(transaction);
                     await _walletsRepository.UpdateWalletBalanceAsync(wallet);
                     await _eventsRepository.CreateEventAsync(ev);
-
-                    walletResult.Add(wallet);
                 }
             }
-            return walletResult;
+            return wallets;
         }
 
         private IncomeTransactionTableModel ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,

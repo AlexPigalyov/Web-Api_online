@@ -8,18 +8,17 @@ namespace Web_Api.online.Services
 {
     public class BalanceProvider
     {
-        private WalletsRepository walletsRepository;
+        private WalletsRepository _walletsRepository;
 
         public BalanceProvider(WalletsRepository walletsRepository)
         {
-            this.walletsRepository = walletsRepository;
+            _walletsRepository = walletsRepository;
         }
-
 
         public async Task<BalanceProviderModel> Income(WalletTableModel walletTableModel,
             IncomeTransactionTableModel incomeTransaction)
         {
-            var currencyTableModel = await walletsRepository.GetCurrencyByAcronimAsync(incomeTransaction.CurrencyAcronim);
+            var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(incomeTransaction.CurrencyAcronim);
 
             var balanceProviderModel = new BalanceProviderModel();
             balanceProviderModel.PercentCommission = currencyTableModel.PercentCommissionForIncomeTransaction;

@@ -7,14 +7,14 @@ namespace Web_Api.online.Services
 {
     public class WalletService
     {
-        public IBitcoinCashService bitcoinCashService { get; }
-        public IBitcoinService bitcoinService { get; }
-        public IDashService dashService { get; }
-        public IDogecoinService dogecoinService { get; }
-        public ILitecoinService litecoinService { get; }
+        public IBitcoinCashService _bitcoinCashService { get; }
+        public IBitcoinService _bitcoinService { get; }
+        public IDashService _dashService { get; }
+        public IDogecoinService _dogecoinService { get; }
+        public ILitecoinService _litecoinService { get; }
 
-        private EtheriumService etheriumService { get; set; }
-        private ZCashService  zCashService { get; set; }
+        private EtheriumService _etheriumService { get; set; }
+        private ZCashService  _zCashService { get; set; }
 
 
         public WalletService(EtheriumService etheriumService,
@@ -25,13 +25,13 @@ namespace Web_Api.online.Services
             IBitcoinService bitcoinService,
             IBitcoinCashService bitcoinCashService)
         {
-            this.etheriumService = etheriumService;
-            this.zCashService = zCashService;
-            this.litecoinService = litecoinService;
-            this.dogecoinService = dogecoinService;
-            this.dashService = dashService;
-            this.bitcoinService = bitcoinService;
-            this.bitcoinCashService = bitcoinCashService;
+            _etheriumService = etheriumService;
+            _zCashService = zCashService;
+            _litecoinService = litecoinService;
+            _dogecoinService = dogecoinService;
+            _dashService = dashService;
+            _bitcoinService = bitcoinService;
+            _bitcoinCashService = bitcoinCashService;
         }
 
         public string GetNewAddress(string acronim, string lable)
@@ -39,13 +39,13 @@ namespace Web_Api.online.Services
             return acronim switch
             {
                 "USDT" => GenerateHash.sha256(lable + "USDT" + DateTime.Now.ToString()),
-                "ETH" => etheriumService.GetNewAddress(lable),
-                "ZEC" => zCashService.GetNewAddress(),
-                "LTC" => litecoinService.GetNewAddress(lable),
-                "DOGE" => dogecoinService.GetNewAddress(lable),
-                "DASH" => dashService.GetNewAddress(lable),
-                "BTC" => bitcoinService.GetNewAddress(lable),
-                "BCH" => bitcoinCashService.GetNewAddress(lable),
+                "ETH" => _etheriumService.GetNewAddress(lable),
+                "ZEC" => _zCashService.GetNewAddress(),
+                "LTC" => _litecoinService.GetNewAddress(lable),
+                "DOGE" => _dogecoinService.GetNewAddress(lable),
+                "DASH" => _dashService.GetNewAddress(lable),
+                "BTC" => _bitcoinService.GetNewAddress(lable),
+                "BCH" => _bitcoinCashService.GetNewAddress(lable),
                 _ => null
             };
         }
