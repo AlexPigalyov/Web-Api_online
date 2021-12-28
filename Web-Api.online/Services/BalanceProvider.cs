@@ -15,7 +15,6 @@ namespace Web_Api.online.Services
             _walletsRepository = walletsRepository;
         }
 
-
         public async Task<BalanceProviderModel> Income(WalletTableModel walletTableModel,
             IncomeTransactionTableModel incomeTransaction)
         {
