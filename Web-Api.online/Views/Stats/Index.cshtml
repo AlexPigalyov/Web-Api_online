@@ -1,0 +1,21 @@
+﻿@model List<WalletTableModel>
+@{
+    ViewData["Title"] = "Stats";
+}
+
+<div class="row">
+    <div id="external-events" class="m-t-20">
+        <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+            <a href="/stats/incomings"><i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Income Transactions</a>
+        </div>
+        <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+            <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Withdraw Transactions
+        </div>
+        <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+            <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Transfers
+        </div>
+        <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+            <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Orders
+        </div>
+    </div>
+</div>

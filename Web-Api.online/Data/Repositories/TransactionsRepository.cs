@@ -94,6 +94,23 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
+        public async Task<List<IncomeTransactionTableModel>> GetAllIncomeTransactions()
+        {
+            try
+            {
+                List<IncomeTransactionTableModel> result =
+                    (List<IncomeTransactionTableModel>)await _db.QueryAsync<IncomeTransactionTableModel>
+                    ("GetAllIncomeTransactions",
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<IncomeTransactionTableModel> CreateIncomeTransactionAsync(
             IncomeTransactionTableModel incomeTransaction)
         {
