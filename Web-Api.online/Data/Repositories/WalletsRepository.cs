@@ -139,6 +139,22 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return; }
         }
 
+        public async Task UpdateUserWalletBalanceAsync(int walletId, decimal addValue)
+        {
+            try
+            {
+                await _db.ExecuteAsync("UpdateUserWalletBalance",
+                    new
+                    {
+                        walletId = walletId,
+                        addWalletBalance = addValue
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex) { return; }
+        }
+
         public async Task<List<spGetNotEmptyValueWallet_ByUserIdResult>> GetNotEmptyWalletsByUserId(string userId)
         {
             try
