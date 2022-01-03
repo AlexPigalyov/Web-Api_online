@@ -818,6 +818,29 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE PROCEDURE [dbo].[GetAllIncomeTransactions]
+@id int
+AS
+BEGIN
+
+SELECT inct.[Id],
+       inct.[CurrencyAcronim],
+       inct.[Amount],
+       inct.[TransactionFee],
+       inct.[FromAddress],
+       inct.[ToAddress],
+       inct.[Date],
+       inct.[UserId]
+ FROM IncomeTransactions inct
+ where
+ inct.[Id]=@id
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetBots_ByBotAuthCode]
 @botAuthCode nvarchar(450)
 AS
@@ -857,10 +880,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCountOfIncomeTransactions]
+@id int
 AS
 BEGIN
 
-SELECT COUNT(1) FROM [Exchange].[dbo].[IncomeTransactions]
+SELECT inct.[Id],
+       inct.[CurrencyAcronim],
+       inct.[Amount],
+       inct.[TransactionFee],
+       inct.[FromAddress],
+       inct.[ToAddress],
+       inct.[Date],
+       inct.[UserId]
+ FROM IncomeTransactions inct
+ where
+ inct.[Id]=@id
 
 END
 GO
