@@ -4,7 +4,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE GetAllIncomeTransactions
-@id int
+
 AS
 BEGIN
 
@@ -17,7 +17,6 @@ SELECT inct.[Id],
        inct.[Date],
        inct.[UserId]
  FROM IncomeTransactions inct
- where
- inct.[Id]=@id
+
 END
 GO
