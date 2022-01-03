@@ -1,33 +1,48 @@
-﻿@model List<WalletTableModel>
+﻿@model List<IncomeTransactionTableModel>
 @{
     ViewData["Title"] = "Stats";
 }
 
 <div class="row">
     
-    <table id="balanceWalletsList" class="table table-striped table-centered mb-0">
+    <table id="IncomingsTransactions" class="table table-striped table-centered mb-0">
     <thead>
-        <tr>
-            <th>Currency</th>
-            <th>Balance</th>
-            <th>Action</th>
+        <tr class="table-primary">
+            <th>CurrencyAcronim</th>
+            <th>Amount</th>
+            <th>TransactionFee</th>
+            <th>FromAddress</th>
+            <th>ToAddress</th>
+            <th>Date</th>
+            <th>UserId</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-
                 <td>
                     @item.CurrencyAcronim
                 </td>
                 <td>
-                    @item.Value
+                    @item.Amount
                 </td>
                 <td>
-                    <p><a href="/Wallets">Create wallet</a></p>
-                    <p><a href="/Send/Coins?Currency=@item.CurrencyAcronim">Send @item.CurrencyAcronim</a></p>
+                    @item.TransactionFee
                 </td>
+                <td>
+                    @item.FromAddress
+                </td>
+                <td>
+                    @item.ToAddress
+                </td>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @item.UserId
+                </td>
+
             </tr>
         }
     </tbody>
