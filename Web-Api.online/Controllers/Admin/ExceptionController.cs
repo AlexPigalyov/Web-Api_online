@@ -20,7 +20,7 @@ namespace Web_Api.online.Controllers.Admin
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var viewModel = await _exceptionsRepository.GetTop10000Exceptions();
+            var viewModel = await _exceptionsRepository.GetTop10000ExceptionsAsync();
             
             return View("Views/Admin/Exceptions.cshtml", viewModel);
         }
