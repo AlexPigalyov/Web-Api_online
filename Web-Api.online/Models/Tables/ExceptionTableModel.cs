@@ -6,6 +6,7 @@ namespace Web_Api.online.Models.Tables
     {
         public int Id { get; set; }
         public string Value { get; set; }
+        public string StackTrace { get; set; }
         public DateTime WhenDate { get; set; }
         public string UserId { get; set; }
     }

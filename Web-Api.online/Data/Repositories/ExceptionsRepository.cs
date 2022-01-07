@@ -17,7 +17,7 @@ namespace Web_Api.online.Data.Repositories
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
 
-        public async Task<List<ExceptionTableModel>> GetTop10000Exceptions()
+        public async Task<List<ExceptionTableModel>> GetTop10000ExceptionsAsync()
         {
             try
             {
@@ -29,5 +29,20 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
+        
+        public async Task CreateExceptionAsync (ExceptionTableModel exception)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("value", exception.Value);
+                p.Add("stackTrace", exception.StackTrace);
+                p.Add("userId", exception.UserId);
+
+                await _db.QueryAsync<int>("CreateException", p, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex) { return; }
+        }
+
     }
 }
