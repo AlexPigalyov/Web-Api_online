@@ -18,19 +18,48 @@ namespace Web_Api.online.Services
         public async Task<BalanceProviderModel> Income(WalletTableModel walletTableModel,
             IncomeTransactionTableModel incomeTransaction)
         {
-            var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(incomeTransaction.CurrencyAcronim);
+            var currency = await _walletsRepository.GetCurrencyByAcronimAsync(incomeTransaction.CurrencyAcronim);
 
             var balanceProviderModel = new BalanceProviderModel();
-            balanceProviderModel.PercentCommission = currencyTableModel.PercentCommissionForIncomeTransaction;
-            balanceProviderModel.StartBalance = walletTableModel.Value;
+            balanceProviderModel.PercentCommission = currency.PercentCommissionForIncomeTransaction;
+            balanceProviderModel.StartBalanceSender = walletTableModel.Value;
 
-            if (currencyTableModel.PercentCommissionForIncomeTransaction != null)
+            if (currency.PercentCommissionForIncomeTransaction != null)
             {
-                balanceProviderModel.Commission = incomeTransaction.Amount * currencyTableModel.PercentCommissionForIncomeTransaction.Value;
+                balanceProviderModel.Commission = incomeTransaction.Amount * currency.PercentCommissionForIncomeTransaction.Value;
+
+                balanceProviderModel.ResultBalanceSender = walletTableModel.Value + (incomeTransaction.Amount - balanceProviderModel.Commission.Value);
+
             }
             else
             {
-                balanceProviderModel.ResultBalance = walletTableModel.Value + incomeTransaction.Amount;
+                balanceProviderModel.ResultBalanceSender = walletTableModel.Value + incomeTransaction.Amount;
+            }
+
+            return balanceProviderModel;
+        }
+
+        public async Task<BalanceProviderModel> Send(TransferTableModel transfer, WalletTableModel walletSender, WalletTableModel walletReceiver)
+        {
+            var currency = await _walletsRepository.GetCurrencyByAcronimAsync(transfer.CurrencyAcronim);
+
+
+            BalanceProviderModel balanceProviderModel = new();
+            balanceProviderModel.PercentCommission = currency.PercentCommissionForTransfer;
+            balanceProviderModel.StartBalanceSender = walletSender.Value;
+            balanceProviderModel.StartBalanceReceiver = walletReceiver.Value;
+
+            if (currency.PercentCommissionForTransfer != null)
+            {
+                balanceProviderModel.Commission = transfer.Value * currency.PercentCommissionForTransfer.Value;
+
+                balanceProviderModel.ResultBalanceSender = walletSender.Value - transfer.Value;
+                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + (transfer.Value - balanceProviderModel.Commission.Value);
+            }
+            else
+            {
+                balanceProviderModel.ResultBalanceSender = walletSender.Value - transfer.Value;
+                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + transfer.Value;
             }
 
             return balanceProviderModel;

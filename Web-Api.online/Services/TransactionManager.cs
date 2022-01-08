@@ -96,13 +96,13 @@ namespace Web_Api.online.Services
 
                     var result = await _balanceProvider.Income(wallet, transaction);
 
-                    ev.StartBalance = result.StartBalance;
-                    ev.ResultBalance = result.ResultBalance;
+                    ev.StartBalance = result.StartBalanceSender;
+                    ev.ResultBalance = result.ResultBalanceSender;
                     ev.PlatformCommission = result.Commission;
                     ev.Value = transaction.Amount;
 
                     transaction.PlatformCommission = result.Commission;
-                    wallet.Value = result.ResultBalance;
+                    wallet.Value = result.ResultBalanceSender;
                     
                     transaction.PlatformCommission = result.Commission;
 

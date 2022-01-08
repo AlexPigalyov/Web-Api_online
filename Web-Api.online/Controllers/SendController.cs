@@ -13,6 +13,7 @@ using Web_Api.online.Hash;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 using Web_Api.online.Services;
 
 namespace Web_Api.online.Controllers
@@ -26,41 +27,23 @@ namespace Web_Api.online.Controllers
         private UserManager<IdentityUser> _userManager;
         private UserRepository _userRepository;
         private WalletService _walletService;
-
-        public CoinsModel Model { get; set; }
-        private decimal amountMin = 0.0000001M;
-
-        public class CoinsModel
-        {
-            public string Status { get; set; }
-            public decimal AmountMin { get; set; }
-            public decimal Commission { get; set; }
-
-
-            [Required]
-            public string InputTextIdentifier { get; set; }
-            [Required]
-            public string Currency { get; set; }
-            public decimal Balance { get; set; }
-            [Required]
-            public string Amount { get; set; }
-            public string Comment { get; set; }
-        }
+        private BalanceProvider _balanceProvider;
 
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
             EventsRepository eventsRepository,
             UserManager<IdentityUser> userManager,
             UserRepository userRepository,
-            WalletService walletService)
+            WalletService walletService, 
+            BalanceProvider balanceProvider)
         {
-            Model = new CoinsModel();
             _walletsRepository = walletsRepository;
             _litecoinService = litecoinService;
             _eventsRepository = eventsRepository;
             _userManager = userManager;
             _userRepository = userRepository;
             _walletService = walletService;
+            _balanceProvider = balanceProvider;
         }
 
         [HttpGet]
@@ -72,19 +55,23 @@ namespace Web_Api.online.Controllers
         }
 
         [HttpGet]
-        public IActionResult Coins(string currency)
+        public async Task<IActionResult> Coins(string currency)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            Model.Currency = currency;
-            Model.AmountMin = amountMin;
-            Model.Balance = _walletsRepository.GetUserWalletAsync(userId, currency).Result.Value;
-            Model.Commission = 0;
-            return View(Model);
+            var cur = await _walletsRepository.GetCurrencyByAcronimAsync(currency);
+            if (cur != null)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                SendCoinsViewModel model = new();
+                model.Currency = currency;
+                model.Balance = _walletsRepository.GetUserWalletAsync(userId, currency).Result.Value;
+                model.Commission = 0;
+                return View(model);
+            }
+            return NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Coins(CoinsModel coinsModel)
+        public async Task<IActionResult> Coins(SendCoinsViewModel sendCoinsModel)
         {
             if (ModelState.IsValid)
             {
@@ -92,24 +79,23 @@ namespace Web_Api.online.Controllers
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    string sendToUserId = await _userRepository.FindUserIdForSendPageAsync(coinsModel.InputTextIdentifier);
+                    string sendToUserId = await _userRepository.FindUserIdForSendPageAsync(sendCoinsModel.InputTextIdentifier);
 
                     if (string.IsNullOrEmpty(sendToUserId))
                     {
-                        coinsModel.Status = "Error. User does not exist.";
-                        return View(coinsModel);
+                        sendCoinsModel.Status = "Error. User does not exist.";
+                        return View(sendCoinsModel);
                     }
 
-                    var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, coinsModel.Currency);
-                    var walletTo = await _walletsRepository.GetUserWalletAsync(sendToUserId, coinsModel.Currency);
+                    var walletFrom = await _walletsRepository.GetUserWalletAsync(userId, sendCoinsModel.Currency);
+                    var walletTo = await _walletsRepository.GetUserWalletAsync(sendToUserId, sendCoinsModel.Currency);
 
 
-                    decimal? _amount = coinsModel.Amount.ConvertToDecimal();
+                    decimal? _amount = sendCoinsModel.Amount.ConvertToDecimal();
 
                     if (walletFrom != null &&
                         _amount.Value > 0 &&
-                        _amount.Value <= walletFrom.Value &&
-                        amountMin < _amount.Value)
+                        _amount.Value <= walletFrom.Value)
                     {
                         if (walletTo == null)
                         {
@@ -135,11 +121,15 @@ namespace Web_Api.online.Controllers
                         {
                             WalletFromId = walletFrom.Id,
                             WalletToId = walletTo.Id,
-                            Value = 0,
-                            CurrencyAcronim = coinsModel.Currency,
-                            Comment = coinsModel.Comment
+                            Value = _amount.Value,
+                            CurrencyAcronim = sendCoinsModel.Currency,
+                            Comment = sendCoinsModel.Comment
                         };
-                        GenerateHash.ComputeHash(transfer);
+
+                        transfer.Hash = GenerateHash.ComputeHash(transfer);
+
+                        var resultBalance = await _balanceProvider.Send(transfer, walletFrom, walletTo);
+                        transfer.PlatformCommission = resultBalance.Commission;
 
                         SendCoinsModel sendRecieve = new()
                         {
@@ -147,39 +137,42 @@ namespace Web_Api.online.Controllers
                             {
                                 UserId = userId,
                                 Type = (int)EventTypeEnum.Send,
-                                Comment = coinsModel.Comment,
+                                Comment = sendCoinsModel.Comment,
                                 Value = _amount.Value,
-                                CurrencyAcronim = coinsModel.Currency,
+                                CurrencyAcronim = sendCoinsModel.Currency,
+                                PlatformCommission = resultBalance.Commission,
+                                StartBalance = resultBalance.StartBalanceSender,
+                                ResultBalance = resultBalance.ResultBalanceSender,
                             },
                             EventReceiver = new EventTableModel()
                             {
                                 UserId = sendToUserId,
                                 Type = (int)EventTypeEnum.Recieve,
-                                Comment = coinsModel.Comment,
+                                Comment = sendCoinsModel.Comment,
                                 Value = _amount.Value,
-                                CurrencyAcronim = coinsModel.Currency,
+                                CurrencyAcronim = sendCoinsModel.Currency,
+                                PlatformCommission = resultBalance.Commission,
+                                StartBalance = resultBalance.StartBalanceReceiver,
+                                ResultBalance = resultBalance.ResultBalanceReceiver,
                             },
                             Transfer = transfer
                         };
 
                         await _walletsRepository.SendCoinsAsync(sendRecieve);
-                        coinsModel.Status = "Success";
+                        sendCoinsModel.Status = "Success";
                     }
                     else
                     {
-                        coinsModel.Status = "Not enough coins";
+                        sendCoinsModel.Status = "Not enough coins";
                     }
-
                 }
                 catch
                 {
-                    coinsModel.Status = "Error";
-                    return View(coinsModel);
+                    sendCoinsModel.Status = "Error";
+                    return View(sendCoinsModel);
                 }
-
             }
-            return View(coinsModel);
+            return View(sendCoinsModel);
         }
-
     }
 }
