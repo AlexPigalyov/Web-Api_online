@@ -1,0 +1,60 @@
+﻿@model List<BTC_USDT_ClosedOrderTableModel>
+@{
+    ViewData["Title"] = "Stats";
+}
+
+<div class="row">
+
+    <table id="ClosedOrders" class="table table-striped table-centered mb-0">
+        <thead>
+            <tr class="table-primary">
+                <th>CreateDate</th>
+                <th>ClosedDate</th>
+                <th>ExposedPrice</th>
+                <th>Difference</th>
+                <th>TotalPrice</th>
+                <th>Amount</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>CreateUserId</th>
+                <th>BoughtUserId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.CreateDate
+                    </td>
+                    <td>
+                        @item.ClosedDate
+                    </td>
+                    <td>
+                        @item.ExposedPrice
+                    </td>
+                    <td>
+                        @item.TotalPrice
+                    </td>
+                    <td>
+                        @item.Amount
+                    </td>
+                    <td>
+                        @item.Total
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.CreateUserId
+                    </td>
+
+                    <td>
+                        @item.BoughtUserId
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
