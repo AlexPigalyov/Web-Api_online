@@ -840,6 +840,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetAllTransfers]
+
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[Transfers]
+	
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetBots_ByBotAuthCode]
 @botAuthCode nvarchar(450)
 AS
