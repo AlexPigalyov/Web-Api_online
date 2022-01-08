@@ -63,7 +63,7 @@ namespace Web_Api.online.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 SendCoinsViewModel model = new();
                 model.Currency = currency;
-                model.Balance = _walletsRepository.GetUserWalletAsync(userId, currency).Result.Value;
+                model.Balance = (await _walletsRepository.GetUserWalletAsync(userId, currency)).Value;
                 model.Commission = 0;
                 return View(model);
             }
@@ -117,46 +117,29 @@ namespace Web_Api.online.Controllers
                             });
                         }
 
-                        TransferTableModel transfer = new()
-                        {
-                            WalletFromId = walletFrom.Id,
-                            WalletToId = walletTo.Id,
-                            Value = _amount.Value,
-                            CurrencyAcronim = sendCoinsModel.Currency,
-                            Comment = sendCoinsModel.Comment
-                        };
-
-                        transfer.Hash = GenerateHash.ComputeHash(transfer);
-
-                        var resultBalance = await _balanceProvider.Send(transfer, walletFrom, walletTo);
-                        transfer.PlatformCommission = resultBalance.Commission;
+                        var resultBalance = await _balanceProvider.Send(_amount.Value, walletFrom, walletTo);
 
                         SendCoinsModel sendRecieve = new()
                         {
-                            EventSender = new EventTableModel()
-                            {
-                                UserId = userId,
-                                Type = (int)EventTypeEnum.Send,
-                                Comment = sendCoinsModel.Comment,
-                                Value = _amount.Value,
-                                CurrencyAcronim = sendCoinsModel.Currency,
-                                PlatformCommission = resultBalance.Commission,
-                                StartBalance = resultBalance.StartBalanceSender,
-                                ResultBalance = resultBalance.ResultBalanceSender,
-                            },
-                            EventReceiver = new EventTableModel()
-                            {
-                                UserId = sendToUserId,
-                                Type = (int)EventTypeEnum.Recieve,
-                                Comment = sendCoinsModel.Comment,
-                                Value = _amount.Value,
-                                CurrencyAcronim = sendCoinsModel.Currency,
-                                PlatformCommission = resultBalance.Commission,
-                                StartBalance = resultBalance.StartBalanceReceiver,
-                                ResultBalance = resultBalance.ResultBalanceReceiver,
-                            },
-                            Transfer = transfer
+                            SenderUserId = userId,
+                            ReceiverUserId = sendToUserId,
+                            TypeSender = (int)EventTypeEnum.Send,
+                            TypeRecieve = (int)EventTypeEnum.Recieve,
+                            Comment = sendCoinsModel.Comment,
+                            CurrencyAcronim = sendCoinsModel.Currency,
+                            Value = _amount.Value,
+                            PlatformCommission = resultBalance.Commission,
+                            StartBalanceSender = resultBalance.StartBalanceSender,
+                            ResultBalanceSender = resultBalance.ResultBalanceSender,
+                            StartBalanceReceiver = resultBalance.StartBalanceReceiver.Value,
+                            ResultBalanceReceiver = resultBalance.ResultBalanceReceiver.Value,
+                            SenderWalletId = walletFrom.Id,
+                            ReceiverWalletId= walletTo.Id,
                         };
+
+                        sendRecieve.Hash = GenerateHash.ComputeHash(sendCoinsModel.Currency, sendRecieve.SenderWalletId,
+                            sendRecieve.ReceiverWalletId, sendRecieve.Value, DateTime.Now, sendRecieve.Comment);
+
 
                         await _walletsRepository.SendCoinsAsync(sendRecieve);
                         sendCoinsModel.Status = "Success";

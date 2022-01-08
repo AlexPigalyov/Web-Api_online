@@ -171,31 +171,31 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task SendCoinsAsync(SendCoinsModel sendCoinsModel)
+        public async Task SendCoinsAsync(SendCoinsModel sendCoins)
         {
             try
             {
                 await _db.ExecuteAsync("SendCoins",
                     new
                     {
-                        senderUserId = sendCoinsModel.EventSender.UserId,
-                        receiverUserId = sendCoinsModel.EventReceiver.UserId,
-                        typeSend = sendCoinsModel.EventSender.Type,
-                        typeRecieve = sendCoinsModel.EventReceiver.Type,
+                        senderUserId = sendCoins.SenderUserId,
+                        receiverUserId = sendCoins.ReceiverUserId,
+                        typeSend = sendCoins.TypeSender,
+                        typeRecieve = sendCoins.TypeRecieve,
 
-                        comment = sendCoinsModel.EventSender.Comment,
-                        currencyAcronim = sendCoinsModel.EventSender.CurrencyAcronim,
-                        value = sendCoinsModel.EventSender.Value,
-                        platformCommission = sendCoinsModel.Transfer.PlatformCommission,
+                        comment = sendCoins.Comment,
+                        currencyAcronim = sendCoins.CurrencyAcronim,
+                        value = sendCoins.Value,
+                        platformCommission = sendCoins.PlatformCommission,
 
-                        startBalanceSender = sendCoinsModel.EventSender.StartBalance,
-                        resultBalanceSender = sendCoinsModel.EventSender.ResultBalance,
-                        startBalanceReceiver = sendCoinsModel.EventReceiver.StartBalance,
-                        resultBalanceReceiver = sendCoinsModel.EventReceiver.ResultBalance,
+                        startBalanceSender = sendCoins.StartBalanceSender,
+                        resultBalanceSender = sendCoins.ResultBalanceSender,
+                        startBalanceReceiver = sendCoins.StartBalanceReceiver,
+                        resultBalanceReceiver = sendCoins.ResultBalanceSender,
 
-                        senderWalletId = sendCoinsModel.Transfer.WalletFromId,
-                        receiverWalletId = sendCoinsModel.Transfer.WalletToId,
-                        hash = sendCoinsModel.Transfer.Hash
+                        senderWalletId = sendCoins.SenderWalletId,
+                        receiverWalletId = sendCoins.ReceiverWalletId,
+                        hash = sendCoins.Hash
                     },
                     commandType: CommandType.StoredProcedure);
             }

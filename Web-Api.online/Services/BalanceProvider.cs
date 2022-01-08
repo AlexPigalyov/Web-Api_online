@@ -39,9 +39,9 @@ namespace Web_Api.online.Services
             return balanceProviderModel;
         }
 
-        public async Task<BalanceProviderModel> Send(TransferTableModel transfer, WalletTableModel walletSender, WalletTableModel walletReceiver)
+        public async Task<BalanceProviderModel> Send(decimal value, WalletTableModel walletSender, WalletTableModel walletReceiver)
         {
-            var currency = await _walletsRepository.GetCurrencyByAcronimAsync(transfer.CurrencyAcronim);
+            var currency = await _walletsRepository.GetCurrencyByAcronimAsync(walletSender.CurrencyAcronim);
 
 
             BalanceProviderModel balanceProviderModel = new();
@@ -51,15 +51,15 @@ namespace Web_Api.online.Services
 
             if (currency.PercentCommissionForTransfer != null)
             {
-                balanceProviderModel.Commission = transfer.Value * currency.PercentCommissionForTransfer.Value;
+                balanceProviderModel.Commission = value * currency.PercentCommissionForTransfer.Value;
 
-                balanceProviderModel.ResultBalanceSender = walletSender.Value - transfer.Value;
-                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + (transfer.Value - balanceProviderModel.Commission.Value);
+                balanceProviderModel.ResultBalanceSender = walletSender.Value - value;
+                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + (value - balanceProviderModel.Commission.Value);
             }
             else
             {
-                balanceProviderModel.ResultBalanceSender = walletSender.Value - transfer.Value;
-                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + transfer.Value;
+                balanceProviderModel.ResultBalanceSender = walletSender.Value - value;
+                balanceProviderModel.ResultBalanceReceiver = walletReceiver.Value + value;
             }
 
             return balanceProviderModel;
