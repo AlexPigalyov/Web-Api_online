@@ -38,7 +38,24 @@ namespace Web_Api.online.Data.Repositories
             }
             catch (Exception ex) { return null; }
         }
-        
+
+        public async Task<List<OutcomeTransactionTableModel>> GetAllOutcomeTransactions()
+        {
+            try
+            {
+                List<OutcomeTransactionTableModel> result =
+                    (List<OutcomeTransactionTableModel>)await _db.QueryAsync<OutcomeTransactionTableModel>
+                    ("Get_All_BTC_USDT_ClosedOrders",
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<List<spGetOutcomeTransactions_Paged>> GetPagedOutcomeTransactions(int page, int pageSize)
         {
             try
