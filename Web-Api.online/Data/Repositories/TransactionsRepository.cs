@@ -120,6 +120,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("currencyAcronim", incomeTransaction.CurrencyAcronim);
                 p.Add("transactionId", incomeTransaction.TransactionId);
                 p.Add("amount", incomeTransaction.Amount);
+                p.Add("platformCommission", incomeTransaction.PlatformCommission);
                 p.Add("transactionFee", incomeTransaction.TransactionFee);
                 p.Add("toAddress", incomeTransaction.ToAddress);
                 p.Add("date", incomeTransaction.Date);

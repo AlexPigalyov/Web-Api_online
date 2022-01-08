@@ -28,6 +28,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("fromWalletId", outcomeTransaction.FromWalletId);
                 p.Add("toAddress", outcomeTransaction.ToAddress);
                 p.Add("value", outcomeTransaction.Value);
+                p.Add("platformCommission", outcomeTransaction.PlatformCommission);
                 p.Add("currencyAcronim", outcomeTransaction.CurrencyAcronim);
                 p.Add("state", outcomeTransaction.State);
 
