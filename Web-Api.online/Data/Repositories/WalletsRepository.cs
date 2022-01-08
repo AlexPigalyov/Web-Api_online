@@ -155,7 +155,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return; }
         }
 
-        public async Task<List<spGetNotEmptyValueWallet_ByUserIdResult>> GetNotEmptyWalletsByUserId(string userId)
+        public async Task<List<spGetNotEmptyValueWallet_ByUserIdResult>> GetNotEmptyWalletsByUserIdAsync(string userId)
         {
             try
             {
@@ -186,13 +186,18 @@ namespace Web_Api.online.Data.Repositories
                         comment = sendCoinsModel.EventSender.Comment,
                         currencyAcronim = sendCoinsModel.EventSender.CurrencyAcronim,
                         value = sendCoinsModel.EventSender.Value,
+                        platformCommission = sendCoinsModel.Transfer.PlatformCommission,
+
+                        startBalanceSender = sendCoinsModel.EventSender.StartBalance,
+                        resultBalanceSender = sendCoinsModel.EventSender.ResultBalance,
+                        startBalanceReceiver = sendCoinsModel.EventReceiver.StartBalance,
+                        resultBalanceReceiver = sendCoinsModel.EventReceiver.ResultBalance,
 
                         senderWalletId = sendCoinsModel.Transfer.WalletFromId,
                         receiverWalletId = sendCoinsModel.Transfer.WalletToId,
                         hash = sendCoinsModel.Transfer.Hash
                     },
-                          commandType: CommandType.StoredProcedure);
-
+                    commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex) { return; }
         }

@@ -15,7 +15,7 @@ namespace Web_Api.online.Hash
             salt = "qweg547SGxzckgfiBCXwqrszxcs12qwadfd";
         }
 
-        public static TransferTableModel ComputeHash(TransferTableModel transfer)
+        public static string ComputeHash(TransferTableModel transfer)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes($"{transfer.CurrencyAcronim} " +
                 $"{transfer.WalletFromId} " +
@@ -33,9 +33,7 @@ namespace Web_Api.online.Hash
             {
                 sBuilder.Append(hashedBytes[i].ToString("x2"));
             }
-            transfer.Hash = sBuilder.ToString();
-
-            return transfer;
+            return sBuilder.ToString();
         }
 
         public static string sha256(string inputString)
