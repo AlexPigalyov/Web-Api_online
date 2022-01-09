@@ -133,8 +133,9 @@ GO
 CREATE TABLE [dbo].[Exceptions](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Value] [nvarchar](max) NOT NULL,
+	[StackTrace] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
-	[UserId] [uniqueidentifier] NULL,
+	[UserId] [nvarchar](450) NULL,
  CONSTRAINT [PK_Exceptions] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -155,6 +156,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[FromAddress] [nvarchar](max) NULL,
 	[ToAddress] [nvarchar](max) NOT NULL,
 	[Date] [float] NULL,
+	[CreatedDate] [datetime] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
 	[IncomeWalletsId] [int] NOT NULL,
  CONSTRAINT [PK_IncomeTransactions] PRIMARY KEY CLUSTERED 
@@ -211,7 +213,8 @@ CREATE TABLE [dbo].[OutcomeTransactions](
 	[CurrencyAcronim] [nvarchar](10) NOT NULL,
 	[State] [int] NOT NULL,
 	[LastUpdateDate] [datetime] NOT NULL,
-	[ErrorText] [nvarchar](max) NULL
+	[ErrorText] [nvarchar](max) NULL,
+	[PlatformCommission] [decimal](38, 20) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -241,7 +244,8 @@ CREATE TABLE [dbo].[Transfers](
 	[Date] [datetime] NOT NULL,
 	[CurrencyAcronim] [nvarchar](10) NOT NULL,
 	[Hash] [varchar](66) NOT NULL,
-	[Comment] [nvarchar](max) NULL
+	[Comment] [nvarchar](max) NULL,
+	[PlatformCommission] [decimal](38, 20) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -293,6 +297,8 @@ GO
 ALTER TABLE [dbo].[Events] ADD  CONSTRAINT [DF_UsersEvents_WhenDate]  DEFAULT (getdate()) FOR [WhenDate]
 GO
 ALTER TABLE [dbo].[Exceptions] ADD  CONSTRAINT [DF_Exceptions_WhenDate]  DEFAULT (getdate()) FOR [WhenDate]
+GO
+ALTER TABLE [dbo].[IncomeTransactions] ADD  CONSTRAINT [DF_IncomeTransactions_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 GO
 ALTER TABLE [dbo].[IncomeWallets] ADD  CONSTRAINT [DF_IncomeWallets_Created]  DEFAULT (getdate()) FOR [Created]
 GO
@@ -423,11 +429,29 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[CreateException]
+@value nvarchar(max),
+@stackTrace nvarchar(max) NULL,
+@userId nvarchar(450) NULL
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[Exceptions] (Value, StackTrace, WhenDate, UserId)
+VALUES (@value, @stackTrace, GETDATE(), @userId)
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 @currencyAcronim nvarchar(10),
 @transactionId nvarchar(max),
 @amount decimal(38, 20),
 @transactionFee decimal(38, 20),
+@PlatformCommission decimal(38, 20),
 @toAddress nvarchar(max),
 @date decimal(38, 20),
 @userId nvarchar(450),
@@ -437,13 +461,11 @@ AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
-TransactionFee, ToAddress, Date, UserId, IncomeWalletsId)
+TransactionFee, ToAddress, Date, UserId, IncomeWalletsId, PlatformCommission)
 VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
-@toAddress, @date, @userId, @incomeWalletId)
+@toAddress, @date, @userId, @incomeWalletId, @PlatformCommission)
 
-SELECT @new_identity = SCOPE_IDENTITY()
-
-SELECT @new_identity AS id
+SET @new_identity = SCOPE_IDENTITY()
 
 RETURN
 
@@ -494,6 +516,7 @@ CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
 @fromWalletId int,
 @toAddress nvarchar(max),
 @value decimal(38,20),
+@platformCommission decimal(38,20),
 @currencyAcronim nvarchar(10),
 @state int
 AS
@@ -501,8 +524,8 @@ AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate)
-VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE())
+			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, PlatformCommission)
+VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(), @platformCommission)
 
 SET @id = SCOPE_IDENTITY()
 END
@@ -966,7 +989,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCurrencyByAcronim]
-@acronim int
+@acronim nvarchar (450)
 AS
 BEGIN
 
@@ -1175,6 +1198,7 @@ Select
   CurrencyAcronim
   ,Value
   ,CreateDate
+  ,FromAddress
   ,ToAddress
   ,State
   ,LastUpdateDate
@@ -1852,6 +1876,12 @@ CREATE PROCEDURE [dbo].[SendCoins]
 @Comment nvarchar(450),
 @currencyAcronim nvarchar(10),
 @value decimal(38,20),
+@platformCommission decimal(38,20),
+
+@startBalanceSender  decimal(38,20),
+@resultBalanceSender decimal(38,20),
+@startBalanceReceiver decimal(38,20),
+@resultBalanceReceiver decimal(38,20),
 
 @senderWalletId int,
 @receiverWalletId int,
@@ -1859,34 +1889,29 @@ CREATE PROCEDURE [dbo].[SendCoins]
 
 AS
 
-declare @senderValue decimal(38,20)
-declare @receiverValue decimal(38,20) 
-
 BEGIN
 
-SELECT @senderValue = Value From Wallets WHERE ID = @senderWalletId
-SELECT @receiverValue = Value From Wallets WHERE ID = @receiverWalletId
-
 UPDATE [Exchange].[dbo].[Wallets]
-SET Value -= @value, LastUpdate = GETDATE()
+SET Value = @resultBalanceSender, LastUpdate = GETDATE()
 WHERE Id = @senderWalletId
 
 UPDATE [Exchange].[dbo].[Wallets]
-SET Value += @value, LastUpdate = GETDATE()
+SET Value = @resultBalanceReceiver, LastUpdate = GETDATE()
 WHERE Id = @receiverWalletId
 
-insert into [Exchange].[dbo].[Transfers] (WalletFromId, WalletToId, Value, Date, CurrencyAcronim, Hash, Comment)
-values (@senderWalletId, @receiverWalletId, @value, GETDATE(), @currencyAcronim, @hash, @Comment)
+insert into [Exchange].[dbo].[Transfers] (WalletFromId, WalletToId, Value, Date, CurrencyAcronim, Hash, Comment,
+				PlatformCommission)
+values (@senderWalletId, @receiverWalletId, @value, GETDATE(), @currencyAcronim, @hash, @Comment, @platformCommission)
 
 insert into [Exchange].[dbo].[Events] (UserId, Type, Value, 
-StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim)
-values (@senderUserId, @typeSend, @value, @senderValue, @senderValue - @value,
-@Comment, GETDATE(), @currencyAcronim)
+StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim, PlatformCommission)
+values (@senderUserId, @typeSend, @value, @startBalanceSender, @resultBalanceSender,
+@Comment, GETDATE(), @currencyAcronim, @platformCommission)
 
 insert into [Exchange].[dbo].[Events] (UserId, Type, Value,
-StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim)
-values (@receiverUserId, @typeRecieve, @value, @receiverValue, @receiverValue + @value,
-@Comment, GETDATE(), @currencyAcronim)
+StartBalance, ResultBalance, Comment, WhenDate, CurrencyAcronim, PlatformCommission)
+values (@receiverUserId, @typeRecieve, @value, @startBalanceReceiver, @resultBalanceReceiver,
+@Comment, GETDATE(), @currencyAcronim, @platformCommission)
 
 END
 
