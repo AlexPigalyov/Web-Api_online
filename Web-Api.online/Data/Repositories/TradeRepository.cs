@@ -235,5 +235,22 @@ namespace Web_Api.online.Data.Repositories
             }
             catch { return null; }
         }
+
+        public async Task<List<BTC_USDT_ClosedOrderTableModel>> GetAllBTCUSDTClosedOrders()
+        {
+            try
+            {
+                List<BTC_USDT_ClosedOrderTableModel> result =
+                    (List<BTC_USDT_ClosedOrderTableModel>)await _db.QueryAsync<BTC_USDT_ClosedOrderTableModel>
+                    ("Get_All_BTC_USDT_ClosedOrders",
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

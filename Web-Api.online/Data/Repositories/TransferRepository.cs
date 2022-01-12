@@ -32,7 +32,26 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        
+
+
+        public async Task<List<TransferTableModel>> GetAllTransfers()
+        {
+            try
+            {
+                List<TransferTableModel> result =
+                    (List<TransferTableModel>)await _db.QueryAsync<TransferTableModel>
+                    ("GetAllTransfers",
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<TransferTableModel> CreateTransferAsync(TransferTableModel transfer)
         {
             try

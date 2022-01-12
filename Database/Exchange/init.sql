@@ -588,6 +588,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[Get_All_BTC_USDT_ClosedOrders]
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_CandleStick]
 @datestart datetime,
 @dateend datetime,
@@ -857,6 +870,32 @@ SELECT inct.[Id],
        inct.[UserId]
  FROM IncomeTransactions inct
 
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetAllOutcomeTransaction]
+AS
+BEGIN
+
+SELECT *  FROM OutcomeTransactions 
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetAllTransfers]
+
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[Transfers]
+	
 END
 GO
 SET ANSI_NULLS ON

@@ -1,0 +1,15 @@
+USE [Exchange]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Get_All_BTC_USDT_ClosedOrders]
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+
+
+END
