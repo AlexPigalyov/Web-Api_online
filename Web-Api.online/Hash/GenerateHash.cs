@@ -15,15 +15,16 @@ namespace Web_Api.online.Hash
             salt = "qweg547SGxzckgfiBCXwqrszxcs12qwadfd";
         }
 
-        public static string ComputeHash(TransferTableModel transfer)
+        public static string ComputeHash(string currency, int walletFromId, int walletToId,
+            decimal value, DateTime date, string comment)
         {
-            byte[] inputBytes = Encoding.UTF8.GetBytes($"{transfer.CurrencyAcronim} " +
-                $"{transfer.WalletFromId} " +
-                $"{transfer.WalletToId} " +
-                $"{transfer.CurrencyAcronim} " +
-                $"{transfer.Value} " +
-                $"{transfer.Date} " +
-                $"{transfer.Comment} " +
+            byte[] inputBytes = Encoding.UTF8.GetBytes($"{currency} " +
+                $"{walletFromId} " +
+                $"{walletToId} " +
+                $"{currency} " +
+                $"{value} " +
+                $"{date} " +
+                $"{comment} " +
                 $"{salt}");
 
             byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
