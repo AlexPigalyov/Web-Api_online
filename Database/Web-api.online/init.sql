@@ -427,6 +427,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+Create PROCEDURE [dbo].[GetAllRegistratedUsersByEmailFullNameDate]
+
+AS
+BEGIN
+
+Select AspNetUsers.Email, UsersInfo.FullName, UsersInfo.RegistrationDate FROM AspNetUsers Left Join UsersInfo
+ON AspNetUsers.Id = UsersInfo.UserId
+WHERE AspNetUsers.Id IS NOT NULL
+AND UsersInfo.UserId IS NOT NULL
+	
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 create PROCEDURE [dbo].[GetCoinRatesByAcronim]
 @acronim nvarchar(10)
 AS
