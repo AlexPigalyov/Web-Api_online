@@ -64,5 +64,24 @@ namespace Web_Api.online.Services
 
             return balanceProviderModel;
         }
+        
+        public async Task<BalanceProviderModel> Withdraw(decimal value, WalletTableModel wallet)
+        {
+            var currency = await _walletsRepository.GetCurrencyByAcronimAsync(wallet.CurrencyAcronim);
+
+
+            BalanceProviderModel balanceProviderModel = new();
+            balanceProviderModel.PercentCommission = currency.PercentCommissionForOutcomeTransaction;
+            balanceProviderModel.StartBalanceSender = wallet.Value;
+
+            if (currency.PercentCommissionForOutcomeTransaction != null)
+            {
+                balanceProviderModel.Commission = value * currency.PercentCommissionForOutcomeTransaction.Value;
+
+            }
+            balanceProviderModel.ResultBalanceSender = wallet.Value - value;
+
+            return balanceProviderModel;
+        }
     }
 }
