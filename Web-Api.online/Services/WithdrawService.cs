@@ -1,9 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
-using Nethereum.RPC.Eth.DTOs;
-using Nethereum.Web3;
-using System;
+﻿using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 using Web_Api.online.Data.Repositories;

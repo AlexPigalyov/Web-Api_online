@@ -6,71 +6,78 @@ using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.WithdrawModels;
+using Web_Api.online.Services;
 
 namespace Web_Api.online.Clients
 {
     public class EtheriumService
     {
-        private WalletsRepository walletsRepository;
-        private EventsRepository eventsRepository;
-        private OutcomeTransactionRepository outcomeTransactionRepository;
-        private ETHRequestClient ethRequestClient;
+        private WalletsRepository _walletsRepository;
+        private EventsRepository _eventsRepository;
+        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private ETHRequestClient _ethRequestClient;
+        private BalanceProvider _balanceProvider;
+
 
         public EtheriumService(WalletsRepository walletsRepository,
             EventsRepository eventsRepository,
             OutcomeTransactionRepository outcomeTransactionRepository,
-            ETHRequestClient ethRequestClient)
+            ETHRequestClient ethRequestClient,
+            BalanceProvider balanceProvider)
         {
-            this.walletsRepository = walletsRepository;
-            this.eventsRepository = eventsRepository;
-            this.outcomeTransactionRepository = outcomeTransactionRepository;
-            this.ethRequestClient = ethRequestClient;
+            _walletsRepository = walletsRepository;
+            _eventsRepository = eventsRepository;
+            _outcomeTransactionRepository = outcomeTransactionRepository;
+            _ethRequestClient = ethRequestClient;
+            _balanceProvider = balanceProvider;
         }
-
 
         public string GetNewAddress(string lable)
         {
-            return ethRequestClient.GetNewAddress(lable);
+            return _ethRequestClient.GetNewAddress(lable);
         }
 
         public async Task<GeneralWithdrawModel> SendToAddress(GeneralWithdrawModel model, string userId)
         {
             try
             {
-                var wallet = await walletsRepository.GetUserWalletAsync(userId, model.Currency);
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (_amount.Value > 0 && _amount.Value <= wallet.Value
-                    && wallet != null)
+                if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
                 {
-                    var tr = await outcomeTransactionRepository.CreateOutcomeTransaction(
+                    var result = await _balanceProvider.Withdraw(_amount.Value, wallet);
+                    wallet.Value = result.ResultBalanceSender;
+
+                    var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
                                     new OutcomeTransactionTableModel()
                                     {
                                         FromWalletId = wallet.Id,
                                         ToAddress = model.Address,
                                         Value = _amount.Value,
+                                        PlatformCommission =result.Commission,
                                         CurrencyAcronim = "ETH",
                                         State = (int)OutcomeTransactionStateEnum.Created
                                     });
 
-                    ethRequestClient.ExecuteTransaction(tr.Id);
+                    //TODO здесь отправляем запрос на внешний сервис который работает с блокчейном, там будет создана транзакция
+                    //закомчено, тк проблемы с эфиром
+                    //создаётся транзакция которую ручками выводим
+                    //_ethRequestClient.ExecuteTransaction(tr.Id);
 
-                    var tempStartBalance= wallet.Value;
-                    wallet.Value -= _amount.Value;
-
-                    await eventsRepository.CreateEventAsync(new EventTableModel()
+                    await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = userId,
                         Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
-                        StartBalance = tempStartBalance,
-                        ResultBalance = wallet.Value,
+                        StartBalance = result.StartBalanceSender,
+                        ResultBalance = result.ResultBalanceSender,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = model.Currency
                     });
                     model.Status = "Success";
-                    await walletsRepository.UpdateWalletBalanceAsync(wallet);
+                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
                 }
                 else
                 {
