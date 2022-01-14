@@ -32,8 +32,7 @@ namespace Web_Api.online.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string currency)
         {
-            var currencies = await _walletsRepository.GetCurrenciesAsync();
-            var _currency = currencies.FirstOrDefault(x => x.Acronim == currency);
+            var _currency = await _walletsRepository.GetCurrencyByAcronimAsync(currency);
 
             if (_currency != null)
             {
