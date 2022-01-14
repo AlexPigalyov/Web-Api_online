@@ -21,6 +21,8 @@ namespace Web_Api.online.Services
         private ICoinManager _coinManager;
         private EventsRepository _eventsRepository;
         private BalanceProvider _balanceProvider;
+        private OutcomeTransactionRepository _outcomeTransactionRepository;
+
 
         public WithdrawService(WalletsRepository walletsRepository,
            EventsRepository eventsRepository,
@@ -64,6 +66,16 @@ namespace Web_Api.online.Services
                     {
                         coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
                     }
+
+                    var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
+                                   new OutcomeTransactionTableModel()
+                                   {
+                                       FromWalletId = wallet.Id,
+                                       ToAddress = model.Address,
+                                       Value = _amount.Value,
+                                       CurrencyAcronim = model.Currency,
+                                       State = (int)OutcomeTransactionStateEnum.Finished
+                                   });
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
