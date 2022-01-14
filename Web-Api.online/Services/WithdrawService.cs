@@ -20,15 +20,17 @@ namespace Web_Api.online.Services
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
         private EventsRepository _eventsRepository;
-        private Web3 web3;
+        private BalanceProvider _balanceProvider;
 
         public WithdrawService(WalletsRepository walletsRepository,
            EventsRepository eventsRepository,
-           ICoinManager coinManager)
+           ICoinManager coinManager,
+           BalanceProvider balanceProvider)
         {
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
             _coinManager = coinManager;
+            _balanceProvider = balanceProvider;
         }
 
         public virtual async Task<GeneralWithdrawModel> Send(GeneralWithdrawModel model, string userId)
@@ -38,8 +40,7 @@ namespace Web_Api.online.Services
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (_amount.Value > 0 && _amount.Value <= wallet.Value
-                    && wallet != null)
+                if (wallet != null && _amount.Value > 0  && _amount.Value <= wallet.Value)
                 {
 
                     var coinService = _coinManager
@@ -52,11 +53,17 @@ namespace Web_Api.online.Services
                         return model;
                     }
 
-                    coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                    var result = await _balanceProvider.Withdraw(_amount.Value, wallet);
+                    wallet.Value = result.ResultBalanceSender;
 
-
-                    var tempStartBalance = wallet.Value;
-                    wallet.Value -= _amount.Value;
+                    if (result.Commission.HasValue)
+                    {
+                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                    }
+                    else
+                    {
+                        coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
+                    }
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
@@ -64,8 +71,8 @@ namespace Web_Api.online.Services
                         Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
-                        StartBalance = tempStartBalance,
-                        ResultBalance = wallet.Value,
+                        StartBalance = result.StartBalanceSender,
+                        ResultBalance = result.ResultBalanceSender,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = model.Currency
                     });
