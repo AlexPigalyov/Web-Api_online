@@ -10,6 +10,8 @@ using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.WithdrawModels;
+using Web_Api.online.Requests;
+using Web_Api.online.Services;
 
 namespace Web_Api.online.Clients
 {
@@ -19,14 +21,19 @@ namespace Web_Api.online.Clients
         private WalletsRepository _walletsRepository;
         private EventsRepository _eventsRepository;
         private TransactionsRepository _transactionsRepository;
+        private BalanceProvider _balanceProvider;
+        private OutcomeTransactionRepository _outcomeTransactionRepository;
 
         public ZCashService(IConfiguration config, WalletsRepository walletsRepository,
-            EventsRepository eventsRepository, TransactionsRepository transactionsRepository)
+            EventsRepository eventsRepository, TransactionsRepository transactionsRepository,
+            BalanceProvider balanceProvider, OutcomeTransactionRepository outcomeTransactionRepository)
         {
             _client = new(config);
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
             _transactionsRepository = transactionsRepository;
+            _balanceProvider = balanceProvider;
+            _outcomeTransactionRepository = outcomeTransactionRepository;
         }
 
         public string GetNewAddress()
@@ -41,13 +48,26 @@ namespace Web_Api.online.Clients
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (_amount.Value > 0 && _amount.Value <= wallet.Value && wallet != null)
+                if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
                 {
+                    var result = await _balanceProvider.Withdraw(_amount.Value, wallet);
+                    wallet.Value = result.ResultBalanceSender;
+
+
+                    var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
+                                    new OutcomeTransactionTableModel()
+                                    {
+                                        FromWalletId = wallet.Id,
+                                        ToAddress = model.Address,
+                                        Value = _amount.Value,
+                                        PlatformCommission = result.Commission,
+                                        CurrencyAcronim = "ZEC",
+                                        State = (int)OutcomeTransactionStateEnum.Finished
+                                    });
+
                     // check if need to convert Amount
                     var txId = _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
 
-                    var tempStartBalance = wallet.Value;
-                    wallet.Value -= _amount.Value;
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
@@ -55,8 +75,8 @@ namespace Web_Api.online.Clients
                         Type = (int)EventTypeEnum.Withdraw,
                         Comment = model.Comment,
                         Value = _amount.Value,
-                        StartBalance = tempStartBalance,
-                        ResultBalance = wallet.Value,
+                        StartBalance = result.StartBalanceSender,
+                        ResultBalance = result.ResultBalanceSender,
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = model.Currency
                     });
@@ -100,58 +120,47 @@ namespace Web_Api.online.Clients
                 {
                     if (!savedTransactions.Contains(tx.TxId))
                     {
-
-                        //поправить 
-                        wallet.Value += tx.Satoshis / 100000000;
-
-                        await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
+                        var transaction = await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = "ZEC",
                             TransactionId = tx.TxId,
                             Amount = tx.Satoshis / 100000000,
                             UserId = userId,
-                            FromAddress = "",
-                            ToAddress = "",
+                            FromAddress = null,
+                            ToAddress = tx.Address,
                             TransactionFee = 0,
 
                         });
+
+                       
+                        var result = await _balanceProvider.Income(wallet, transaction);
+
+                        await _eventsRepository.CreateEventAsync(new EventTableModel()
+                        {
+                            UserId = userId,
+                            Type = (int)EventTypeEnum.Income,
+                            Comment = $"Income transaction {transaction.CurrencyAcronim}",
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = transaction.CurrencyAcronim,
+                            StartBalance = result.StartBalanceReceiver,
+                            ResultBalance = result.ResultBalanceReceiver,
+                            PlatformCommission = result.Commission,
+                            Value = transaction.Amount
+                        });
+
+                        transaction.PlatformCommission = result.Commission;
+                        wallet.Value = result.ResultBalanceSender;
+
+                        transaction.PlatformCommission = result.Commission;
+
+                        await _transactionsRepository.CreateIncomeTransactionAsync(transaction);
                     }
                 }
-
             }
 
             await _walletsRepository.UpdateWalletBalanceAsync(wallet);
 
             return wallet;
-        }
-
-
-        #region get
-
-        private object GetListAddresses()
-        {
-            var resp = _client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
-
-            return resp;
-        }
-
-        private List<string> GetTransparentListAddresses()
-        {
-            var resp = _client.MakeRequest<List<ZecAddressListResult>>(ZecRestMethods.listaddresses);
-            var list = resp.First().Transparent["addresses"];
-
-            return list;
-        }
-
-        private ZecBalance GetAddressBalance(List<string> addresses)
-        {
-            Dictionary<string, List<string>> addressList = new()
-            {
-                { "addresses", addresses }
-            };
-            var resp = _client.MakeRequest<ZecBalance>(ZecRestMethods.getaddressbalance, addressList);
-
-            return resp;
         }
 
         private List<ZecDeltas> GetAddressDeltas(string address)
@@ -166,8 +175,5 @@ namespace Web_Api.online.Clients
         {
             return GetAddressDeltas(address).Where(x => x.Satoshis > 0).ToList();
         }
-
-        #endregion
-
     }
 }
