@@ -38,9 +38,7 @@ namespace Web_Api.online.Services
 
         public async Task<List<WalletTableModel>> GetUpdatedWalletsAsync(string userId)
         {
-            await _zecService.GetUpdatedWalletAsync(userId); // позже сам кешино подправлю
-
-
+            await _zecService.GetUpdatedWalletAsync(userId);
 
 
             var incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
@@ -85,6 +83,8 @@ namespace Web_Api.online.Services
                 {
                     var transaction = ConvertTransactionResponseToIncomeTransaction(blockchainTransaction, coin.CoinShortName, wallet.Id, userId);
 
+                    var result = await _balanceProvider.Income(wallet, transaction);
+
                     var ev = new EventTableModel()
                     {
                         UserId = userId,
@@ -92,14 +92,11 @@ namespace Web_Api.online.Services
                         Comment = $"Income transaction {transaction.CurrencyAcronim}",
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = transaction.CurrencyAcronim,
+                        StartBalance = result.StartBalanceReceiver,
+                        ResultBalance = result.ResultBalanceReceiver,
+                        PlatformCommission = result.Commission,
+                        Value = transaction.Amount
                     };
-
-                    var result = await _balanceProvider.Income(wallet, transaction);
-
-                    ev.StartBalance = result.StartBalanceSender;
-                    ev.ResultBalance = result.ResultBalanceSender;
-                    ev.PlatformCommission = result.Commission;
-                    ev.Value = transaction.Amount;
 
                     transaction.PlatformCommission = result.Commission;
                     wallet.Value = result.ResultBalanceSender;

@@ -22,18 +22,18 @@ namespace Web_Api.online.Services
 
             var balanceProviderModel = new BalanceProviderModel();
             balanceProviderModel.PercentCommission = currency.PercentCommissionForIncomeTransaction;
-            balanceProviderModel.StartBalanceSender = walletTableModel.Value;
+            balanceProviderModel.StartBalanceReceiver = walletTableModel.Value;
 
             if (currency.PercentCommissionForIncomeTransaction != null)
             {
                 balanceProviderModel.Commission = incomeTransaction.Amount * currency.PercentCommissionForIncomeTransaction.Value;
 
-                balanceProviderModel.ResultBalanceSender = walletTableModel.Value + (incomeTransaction.Amount - balanceProviderModel.Commission.Value);
+                balanceProviderModel.ResultBalanceReceiver = walletTableModel.Value + (incomeTransaction.Amount - balanceProviderModel.Commission.Value);
 
             }
             else
             {
-                balanceProviderModel.ResultBalanceSender = walletTableModel.Value + incomeTransaction.Amount;
+                balanceProviderModel.ResultBalanceReceiver = walletTableModel.Value + incomeTransaction.Amount;
             }
 
             return balanceProviderModel;

@@ -1,21 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Web_Api.online.Models;
-using Web_Api.online.Models.Tables;
 using System.Security.Claims;
-using Web_Api.online.Services.Interfaces;
-using Web_Api.online.Services;
-using Web_Api.online.Models.Enums;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
-using Nethereum.Web3;
-using Web_Api.online.Clients;
-using System.Net;
-using System.IO;
-using Web_Api.online.Hash;
+using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.Tables;
+using Web_Api.online.Services;
+using Web_Api.online.Services.Interfaces;
 
 namespace Web_Api.online.Controllers
 {
@@ -23,30 +16,18 @@ namespace Web_Api.online.Controllers
     public class WalletsController : Controller
     {
         private WalletsRepository _walletsRepository;
-        private ICoinManager _coinManager;
         private TransactionManager _transactionManager;
         private EventsRepository _eventsRepository;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
-        private ZCashService _zecService;
-        private EtheriumService _etheriumService;
         private WalletService _walletService;
 
         public WalletsController(WalletsRepository walletsRepository,
-            ICoinManager coinManager,
             TransactionManager transactionManager,
             EventsRepository eventsRepository,
-            OutcomeTransactionRepository outcomeTransactionRepository,
-            ZCashService zecService,
-            EtheriumService etheriumService, 
             WalletService walletService)
         {
             _walletsRepository = walletsRepository;
-            _coinManager = coinManager;
             _transactionManager = transactionManager;
             _eventsRepository = eventsRepository;
-            _outcomeTransactionRepository = outcomeTransactionRepository;
-            _zecService = zecService;
-            _etheriumService = etheriumService;
             _walletService = walletService;
         }
 
