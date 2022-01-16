@@ -1237,7 +1237,6 @@ Select
   CurrencyAcronim
   ,Value
   ,CreateDate
-  ,FromAddress
   ,ToAddress
   ,State
   ,LastUpdateDate
