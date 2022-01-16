@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Web_Api.online.Clients.Models;
 
-namespace Web_Api.online.Clients
+namespace Web_Api.online.Requests
 {
     public class ZCashRequestClient
     {
