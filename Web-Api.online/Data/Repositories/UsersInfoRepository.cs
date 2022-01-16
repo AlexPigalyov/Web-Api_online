@@ -3,11 +3,13 @@
 using Microsoft.Extensions.Configuration;
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Data.Repositories
 {
@@ -17,6 +19,24 @@ namespace Web_Api.online.Data.Repositories
         public UsersInfoRepository(IConfiguration configuration)
         {
             _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+        }
+
+
+        public async Task<List<RegistratedUsersViewModel>> GetAllRegistratedUsers()
+        {
+            try
+            {
+                List<RegistratedUsersViewModel> result =
+                    (List<RegistratedUsersViewModel>)await _db.QueryAsync<RegistratedUsersViewModel>
+                    ("GetAllRegistratedUser",
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task CreateEmptyUsersInfo(string userId)

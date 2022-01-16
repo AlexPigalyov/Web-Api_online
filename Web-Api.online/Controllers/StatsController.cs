@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
 {
@@ -13,14 +14,17 @@ namespace Web_Api.online.Controllers
         private TransferRepository _transferRepository;
         private OutcomeTransactionRepository _outcomeRepository;
         private TradeRepository _tradeRepository;
+        private UsersInfoRepository _usersInfoRepository;
+
 
         public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository, 
-            OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository)
+            OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository, UsersInfoRepository usersInfoRepository)
         {
             _transactionsRepository = transactionsRepository;
             _transferRepository = transferRepository;
             _outcomeRepository = outcomeRepository;
             _tradeRepository = tradeRepository;
+            _usersInfoRepository = usersInfoRepository;
         }
 
         public async Task<ActionResult> Incomings()
@@ -37,7 +41,7 @@ namespace Web_Api.online.Controllers
         }
 
 
-        public async Task<ActionResult> Outcome()
+        public async Task<ActionResult> Withdraw()
         {
             List<OutcomeTransactionTableModel> outcome = await _outcomeRepository.GetAllOutcomeTransactions();
 
@@ -50,7 +54,14 @@ namespace Web_Api.online.Controllers
 
             return View(closedorders);
         }
-        
+
+        public async Task<ActionResult> RegistratedUsers()
+        {
+            List<RegistratedUsersViewModel> users = await _usersInfoRepository.GetAllRegistratedUsers();
+
+            return View(users);
+        }
+
         public ActionResult Index()
         {
             return View();
