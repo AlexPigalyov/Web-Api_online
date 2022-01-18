@@ -9,7 +9,9 @@ Create PROCEDURE [dbo].[GetAllRegistratedUsersByEmailFullNameDate]
 AS
 BEGIN
 
-Select AspNetUsers.Email, UsersInfo.FullName, UsersInfo.RegistrationDate FROM AspNetUsers Left Join UsersInfo
+Select AspNetUsers.Email, UsersInfo.FullName, UsersInfo.RegistrationDate 
+From AspNetUsers 
+Left Join UsersInfo
 ON AspNetUsers.Id = UsersInfo.UserId
 WHERE AspNetUsers.Id IS NOT NULL
 AND UsersInfo.UserId IS NOT NULL
