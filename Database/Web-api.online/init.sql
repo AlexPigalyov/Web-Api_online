@@ -427,12 +427,14 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-Create PROCEDURE [dbo].[GetAllRegistratedUser]
+CREATE PROCEDURE [dbo].[GetAllRegistratedUser]
 
 AS
 BEGIN
 
-SELECT AspNetUsers.Email, UsersInfo.FullName, UsersInfo.RegistrationDate FROM AspNetUsers LEFT JOIN UsersInfo
+SELECT AspNetUsers.Email, UsersInfo.FullName, UsersInfo.RegistrationDate 
+FROM AspNetUsers 
+LEFT JOIN UsersInfo
 ON AspNetUsers.Id = UsersInfo.UserId
 WHERE AspNetUsers.Id IS NOT NULL
 AND UsersInfo.UserId IS NOT NULL
