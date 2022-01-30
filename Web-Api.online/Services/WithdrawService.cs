@@ -23,12 +23,14 @@ namespace Web_Api.online.Services
         public WithdrawService(WalletsRepository walletsRepository,
            EventsRepository eventsRepository,
            ICoinManager coinManager,
-           BalanceProvider balanceProvider)
+           BalanceProvider balanceProvider, 
+           OutcomeTransactionRepository outcomeTransactionRepository)
         {
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
             _coinManager = coinManager;
             _balanceProvider = balanceProvider;
+            _outcomeTransactionRepository = outcomeTransactionRepository;
         }
 
         public virtual async Task<GeneralWithdrawModel> Send(GeneralWithdrawModel model, string userId)
@@ -56,11 +58,11 @@ namespace Web_Api.online.Services
 
                     if (result.Commission.HasValue)
                     {
-                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                        coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
                     }
                     else
                     {
-                        coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
+                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
                     }
 
                     var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
