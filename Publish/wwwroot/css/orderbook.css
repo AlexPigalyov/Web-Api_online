@@ -28,7 +28,6 @@
     margin: 0px;
     min-width: 0px;
     width: 100%;
-    max-width: 305px;
     background-color: rgb(20, 21, 26);
     position: relative;
     padding-top: 8px;
@@ -93,7 +92,6 @@
     position: relative;
     display: flex;
     flex: 1;
-    width: 305px;
     overflow: auto;
     will-change: transform;
     direction: ltr;
