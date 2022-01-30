@@ -191,7 +191,7 @@ namespace Web_Api.online.Data.Repositories
                         startBalanceSender = sendCoins.StartBalanceSender,
                         resultBalanceSender = sendCoins.ResultBalanceSender,
                         startBalanceReceiver = sendCoins.StartBalanceReceiver,
-                        resultBalanceReceiver = sendCoins.ResultBalanceSender,
+                        resultBalanceReceiver = sendCoins.ResultBalanceReceiver,
 
                         senderWalletId = sendCoins.SenderWalletId,
                         receiverWalletId = sendCoins.ReceiverWalletId,
