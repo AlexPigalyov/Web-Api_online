@@ -18,16 +18,16 @@
     <meta name="facebook-domain-verification" content="j9poqqzha79jwuuua362k9oj5jcbvz" />
 
     <!-- third party css -->
-    <link href="~/css/vendor/jquery-jvectormap-1.2.2.css?2" rel="stylesheet" type="text/css"/>
+    <link href="~/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css"/>
     @await RenderSectionAsync("ThirdPartyCss", required: false)
     <!-- third party css end -->
     
     <!-- App css -->
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <link href="~/css/icons.css?2" rel="stylesheet" type="text/css"/>
-    <link href="~/css/app.css?5" rel="stylesheet" type="text/css" id="light-style"/>
-    <link href="~/css/app-dark.css?4" rel="stylesheet" type="text/css" id="dark-style"/>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js?2"></script>
+    <link href="~/css/icons.css" asp-append-version="true" rel="stylesheet" type="text/css"/>
+    <link href="~/css/app.css" asp-append-version="true" rel="stylesheet" type="text/css" id="light-style"/>
+    <link href="~/css/app-dark.css" asp-append-version="true" rel="stylesheet" type="text/css" id="dark-style"/>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js" asp-append-version="true"></script>
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
 <div class="wrapper">
@@ -204,7 +204,7 @@
                 </button>
                 <div class="open-left" style="padding-top: 25px;" id="page-header"></div>
             </div>
-            <div class="container-fluid">
+            <div class="container-fluid no-padding">
                 <main role="main" class="pb-3 pt-3">
                     @RenderBody()
                 </main>
