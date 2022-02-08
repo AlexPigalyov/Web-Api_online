@@ -48,7 +48,7 @@ namespace Web_Api.online.Controllers
 
             pagedResult.Action = "Withdraw";
 
-            return View(outcome);
+            return View(pagedResult);
         }
 
         public async Task<ActionResult> Orders(int pageIndex = 1)
