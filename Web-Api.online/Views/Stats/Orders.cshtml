@@ -1,4 +1,5 @@
-﻿@model List<BTC_USDT_ClosedOrderTableModel>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<BTC_USDT_ClosedOrderTableModel>
+
 @{
     ViewData["Title"] = "Stats";
 }
@@ -6,55 +7,59 @@
 <div class="table-responsive">
     <table class="table table-centered table-striped dt-responsive nowrap w-100" id="products-datatable">
         <thead>
-            <tr>
-                <th style="width: 20px;">
-                </th>
-                <th>Create Date</th>
-                <th>Closed Date</th>
-                <th>Exposed Price</th>
-                <th>Difference</th>
-                <th>Total Price</th>
-                <th>Amount</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Create User Id</th>
-                <th>Bought User Id</th>
-            </tr>
+        <tr>
+            <th style="width: 20px;">
+            </th>
+            <th>Create Date</th>
+            <th>Closed Date</th>
+            <th>Exposed Price</th>
+            <th>Difference</th>
+            <th>Total Price</th>
+            <th>Amount</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Create User Id</th>
+            <th>Bought User Id</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
-                        @item.CreateDate
-                    </td>
-                    <td>
-                        @item.ClosedDate
-                    </td>
-                    <td>
-                        @item.ExposedPrice
-                    </td>
-                    <td>
-                        @item.TotalPrice
-                    </td>
-                    <td>
-                        @item.Amount
-                    </td>
-                    <td>
-                        @item.Total
-                    </td>
-                    <td>
-                        @item.Status
-                    </td>
-                    <td>
-                        @item.CreateUserId
-                    </td>
+                    @item.CreateDate
+                </td>
+                <td>
+                    @item.ClosedDate
+                </td>
+                <td>
+                    @item.ExposedPrice
+                </td>
+                <td>
+                    @item.TotalPrice
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+                <td>
+                    @item.Total
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.CreateUserId
+                </td>
 
-                    <td>
-                        @item.BoughtUserId
-                    </td>
+                <td>
+                    @item.BoughtUserId
+                </td>
             </tr>
-            }
+        }
         </tbody>
     </table>
 </div>
+
+<nav aria-label="Suppliers navigation example">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>

@@ -47,9 +47,14 @@ namespace Web_Api.online.Controllers
             return View(outcome);
         }
 
-        public async Task<ActionResult> Orders()
+        public async Task<ActionResult> Orders(int pageIndex = 1)
         {
-            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
+            var closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
+
+            var pagedResult = PagingList.Create(closedorders, 100, pageIndex);
+
+            pagedResult.Action = "Orders";
+
 
             return View(closedorders);
         }
