@@ -32,11 +32,16 @@ namespace Web_Api.online.Controllers
 
             return View(incomes);
         }
-        public async Task<ActionResult> Transfers()
+        public async Task<ActionResult> Transfers(int pageIndex = 1)
         {
-            List<TransferTableModel> transfers = await _transferRepository.GetAllTransfers();
+            var transfers = await _transferRepository.GetAllTransfers();
 
-            return View(transfers);
+            var pagedResult = PagingList.Create(transfers, 100, pageIndex);
+
+            pagedResult.Action = "Transfers";
+
+
+            return View(pagedResult);
         }
 
 
