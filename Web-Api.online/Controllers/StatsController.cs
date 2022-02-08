@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ReflectionIT.Mvc.Paging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.Tables;
-using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
 {
@@ -17,7 +16,7 @@ namespace Web_Api.online.Controllers
         private UsersInfoRepository _usersInfoRepository;
 
 
-        public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository, 
+        public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository,
             OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository, UsersInfoRepository usersInfoRepository)
         {
             _transactionsRepository = transactionsRepository;
@@ -55,11 +54,15 @@ namespace Web_Api.online.Controllers
             return View(closedorders);
         }
 
-        public async Task<ActionResult> RegistratedUsers()
+        public async Task<ActionResult> RegistratedUsers(int pageIndex = 1)
         {
-            List<RegistratedUsersViewModel> users = await _usersInfoRepository.GetAllRegistratedUsers();
+            var users = await _usersInfoRepository.GetAllRegistratedUsers();
 
-            return View(users);
+            var pagedResult = PagingList.Create(users, 4, pageIndex);
+
+            pagedResult.Action = "RegistratedUsers";
+
+            return View(pagedResult);
         }
 
         public ActionResult Index()
