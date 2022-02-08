@@ -1,12 +1,12 @@
-﻿@model List<IncomeTransactionTableModel>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<IncomeTransactionTableModel>
 @{
     ViewData["Title"] = "Stats";
 }
 
 <div class="row">
-    
+
     <table id="IncomingsTransactions" class="table table-striped table-centered mb-0">
-    <thead>
+        <thead>
         <tr class="table-primary">
             <th>Currency Acronim</th>
             <th>Amount</th>
@@ -16,8 +16,8 @@
             <th>Date</th>
             <th>User Id</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -45,7 +45,10 @@
 
             </tr>
         }
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
 </div>
+
+<nav aria-label="Suppliers navigation example">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>

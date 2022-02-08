@@ -26,11 +26,15 @@ namespace Web_Api.online.Controllers
             _usersInfoRepository = usersInfoRepository;
         }
 
-        public async Task<ActionResult> Incomings()
+        public async Task<ActionResult> Incomings(int pageIndex = 1)
         {
-            List<IncomeTransactionTableModel> incomes = await _transactionsRepository.GetAllIncomeTransactions();
+            var incomes = await _transactionsRepository.GetAllIncomeTransactions();
 
-            return View(incomes);
+            var pagedResult = PagingList.Create(incomes, 100, pageIndex);
+
+            pagedResult.Action = "Incomings";
+
+            return View(pagedResult);
         }
         public async Task<ActionResult> Transfers(int pageIndex = 1)
         {
