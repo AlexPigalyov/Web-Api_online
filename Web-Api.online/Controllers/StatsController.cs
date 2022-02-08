@@ -40,9 +40,13 @@ namespace Web_Api.online.Controllers
         }
 
 
-        public async Task<ActionResult> Withdraw()
+        public async Task<ActionResult> Withdraw(int pageIndex = 1)
         {
-            List<OutcomeTransactionTableModel> outcome = await _outcomeRepository.GetAllOutcomeTransactions();
+            var outcome = await _outcomeRepository.GetAllOutcomeTransactions();
+
+            var pagedResult = PagingList.Create(outcome, 100, pageIndex);
+
+            pagedResult.Action = "Withdraw";
 
             return View(outcome);
         }
@@ -56,7 +60,7 @@ namespace Web_Api.online.Controllers
             pagedResult.Action = "Orders";
 
 
-            return View(closedorders);
+            return View(pagedResult);
         }
 
         public async Task<ActionResult> RegistratedUsers(int pageIndex = 1)
