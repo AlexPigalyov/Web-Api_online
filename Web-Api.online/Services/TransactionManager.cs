@@ -99,7 +99,7 @@ namespace Web_Api.online.Services
                     };
 
                     transaction.PlatformCommission = result.Commission;
-                    wallet.Value = result.ResultBalanceSender;
+                    wallet.Value = result.ResultBalanceReceiver.Value;
                     
                     transaction.PlatformCommission = result.Commission;
 

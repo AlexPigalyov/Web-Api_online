@@ -5247,7 +5247,7 @@ fieldset:disabled .btn {
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
-    padding: 1.5rem 1.5rem;
+    padding: 0;
 }
 
 .card-title {
@@ -13607,7 +13607,7 @@ body {
 .content-page {
     margin-left: 260px;
     overflow: hidden;
-    padding: 70px 12px 65px;
+    padding: 70px 12px 100px;
     min-height: 100vh;
 }
 
@@ -13978,7 +13978,7 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) {
 
     .content-page {
         margin-left: 0 !important;
-        padding: 65px 10px 65px;
+        padding: 65px 10px 100px;
     }
 
     body[data-leftbar-compact-mode="condensed"] .leftside-menu {
@@ -15652,7 +15652,6 @@ body[data-layout="topnav"] .container-fluid, body[data-layout="topnav"] .contain
     border: none;
     -webkit-box-shadow: 0px 0px 35px 0px rgba(154, 161, 171, 0.15);
     box-shadow: 0px 0px 35px 0px rgba(154, 161, 171, 0.15);
-    margin-bottom: 24px;
 }
 
     .card .header-title {
