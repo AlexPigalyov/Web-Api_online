@@ -74,6 +74,7 @@ namespace Web_Api.online.Controllers
         }
 
         [Authorize]
+        [Route("trade/openorders")]
         public async Task<ActionResult> OpenOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -146,7 +147,6 @@ namespace Web_Api.online.Controllers
                 updatedWallet.Value -= total;
 
                 await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
-
 
             }
             else //Sell - BTC
