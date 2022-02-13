@@ -60,12 +60,12 @@
                     {
                             <ul>
                                 <li class="nav-item">
-                                    BTC balance: @Model.BtcWallet.Value 
+                                    BTC balance: <span id="btcBalance">@Model.BtcWallet.Value</span>
                                     <br />
                                     Address: @Model.BtcWallet.Address
                                 </li>
                                 <li class="nav-item">
-                                    USDT balance: @Model.UsdtWallet.Value 
+                                    USDT balance: <span id="usdtBalance">@Model.UsdtWallet.Value</span>
                                     <br />
                                     Address: @Model.UsdtWallet.Address
                                 </li>
@@ -156,9 +156,11 @@
 
     $(document).ready(function () {
 
-        $( "#buyButton" ).click(function() {
+        $("#buyButton" ).click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
+
+            var updatedBalance = document.getElementById("usdtBalance").innerText;
 
             $.ajax({
                 url: '/trade/createorder',
@@ -168,13 +170,22 @@
                     Amount: amount,
                     IsBuy: true
                 }),
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    updatedBalance = data;
+                    $("#usdtBalance").text(updatedBalance);
+                },
+                error: function() {
+                    //alert('Error occured');
+                }
             });
         });
 
-        $( "#sellButton" ).click(function() {
+        $("#sellButton").click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
+            
+            var updatedBalance = document.getElementById("btcBalance").innerText;
 
             $.ajax({
                 url: '/trade/createorder',
@@ -184,7 +195,14 @@
                     Amount: amount,
                     IsBuy: false
                 }),
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    updatedBalance = data;
+                    $("#btcBalance").text(updatedBalance);
+                },
+                error: function() {
+                    //alert('Error occured');
+                }
             });
         });
 

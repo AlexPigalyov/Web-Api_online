@@ -127,6 +127,8 @@ namespace Web_Api.online.Controllers
             decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
+            decimal updatedWalletBalance;
+
             //Buy - USDT
             if (orderModel.IsBuy)
             {
@@ -145,6 +147,8 @@ namespace Web_Api.online.Controllers
                 var updatedWallet = wallet;
 
                 updatedWallet.Value -= total;
+
+                updatedWalletBalance = updatedWallet.Value;
 
                 await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
 
@@ -167,17 +171,10 @@ namespace Web_Api.online.Controllers
 
                 updatedWallet.Value -= amountDecimal;
 
+                updatedWalletBalance = updatedWallet.Value;
+
                 await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
-
-
             }
-
-
-
-
-
-
-
 
             BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
             {
@@ -213,7 +210,7 @@ namespace Web_Api.online.Controllers
                 await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
             }
 
-            return Ok();
+            return Ok(updatedWalletBalance.ToString());
         }
 
         public async Task<ActionResult> BTCUSDT()
