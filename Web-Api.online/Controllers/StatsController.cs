@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ReflectionIT.Mvc.Paging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers
 {
@@ -26,61 +27,39 @@ namespace Web_Api.online.Controllers
             _usersInfoRepository = usersInfoRepository;
         }
 
-        public async Task<ActionResult> Incomings(int pageIndex = 1)
+        public async Task<ActionResult> Incomings()
         {
-            var incomes = await _transactionsRepository.GetAllIncomeTransactions();
+            List<IncomeTransactionTableModel> incomes = await _transactionsRepository.GetAllIncomeTransactions();
 
-            var pagedResult = PagingList.Create(incomes, 100, pageIndex);
-
-            pagedResult.Action = "Incomings";
-
-            return View(pagedResult);
+            return View(incomes);
         }
-        public async Task<ActionResult> Transfers(int pageIndex = 1)
+        public async Task<ActionResult> Transfers()
         {
-            var transfers = await _transferRepository.GetAllTransfers();
+            List<TransferTableModel> transfers = await _transferRepository.GetAllTransfers();
 
-            var pagedResult = PagingList.Create(transfers, 100, pageIndex);
-
-            pagedResult.Action = "Transfers";
-
-
-            return View(pagedResult);
+            return View(transfers);
         }
 
 
-        public async Task<ActionResult> Withdraw(int pageIndex = 1)
+        public async Task<ActionResult> Withdraw()
         {
-            var outcome = await _outcomeRepository.GetAllOutcomeTransactions();
+            List<OutcomeTransactionTableModel> outcome = await _outcomeRepository.GetAllOutcomeTransactions();
 
-            var pagedResult = PagingList.Create(outcome, 100, pageIndex);
-
-            pagedResult.Action = "Withdraw";
-
-            return View(pagedResult);
+            return View(outcome);
         }
 
-        public async Task<ActionResult> Orders(int pageIndex = 1)
+        public async Task<ActionResult> Orders()
         {
-            var closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
+            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
 
-            var pagedResult = PagingList.Create(closedorders, 100, pageIndex);
-
-            pagedResult.Action = "Orders";
-
-
-            return View(pagedResult);
+            return View(closedorders);
         }
 
-        public async Task<ActionResult> RegistratedUsers(int pageIndex = 1)
+        public async Task<ActionResult> RegistratedUsers()
         {
-            var users = await _usersInfoRepository.GetAllRegistratedUsers();
+            List<RegistratedUsersViewModel> users = await _usersInfoRepository.GetAllRegistratedUsers();
 
-            var pagedResult = PagingList.Create(users, 4, pageIndex);
-
-            pagedResult.Action = "RegistratedUsers";
-
-            return View(pagedResult);
+            return View(users);
         }
 
         public ActionResult Index()
