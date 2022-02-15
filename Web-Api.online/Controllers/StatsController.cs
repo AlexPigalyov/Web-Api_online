@@ -30,12 +30,12 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Incomings()
         {
             var incomes = await _transactionsRepository.GetIncomeTransactionsPaged(1, 100);
-            
+
             return View(incomes);
         }
         public async Task<ActionResult> Transfers()
         {
-            var transfers = await _transferRepository.GetTransfersPaged(1,100);
+            var transfers = await _transferRepository.GetTransfersPaged(1, 100);
 
             return View(transfers);
         }
@@ -43,14 +43,14 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Withdraw()
         {
-            List<OutcomeTransactionTableModel> outcome = await _outcomeRepository.GetAllOutcomeTransactions();
+            var outcome = await _outcomeRepository.GetAllOutcomeTransactionsPaged(1, 100);
 
             return View(outcome);
         }
 
         public async Task<ActionResult> Orders()
         {
-            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
+            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
 
             return View(closedorders);
         }
