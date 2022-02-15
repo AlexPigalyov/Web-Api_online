@@ -29,8 +29,8 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Incomings()
         {
-            List<IncomeTransactionTableModel> incomes = await _transactionsRepository.GetAllIncomeTransactions();
-
+            var incomes = await _transactionsRepository.GetIncomeTransactionsPaged(1, 100);
+            
             return View(incomes);
         }
         public async Task<ActionResult> Transfers()
