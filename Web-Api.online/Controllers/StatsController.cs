@@ -35,7 +35,7 @@ namespace Web_Api.online.Controllers
         }
         public async Task<ActionResult> Transfers()
         {
-            List<TransferTableModel> transfers = await _transferRepository.GetAllTransfers();
+            var transfers = await _transferRepository.GetTransfersPaged(1,100);
 
             return View(transfers);
         }
