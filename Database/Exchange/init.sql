@@ -1,5 +1,9 @@
 USE [Exchange]
 GO
+CREATE USER [exchange] FOR LOGIN [exchange] WITH DEFAULT_SCHEMA=[dbo]
+GO
+ALTER ROLE [db_securityadmin] ADD MEMBER [exchange]
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1267,6 +1271,36 @@ SELECT [Id]
   FROM [Exchange].[dbo].[Settings]
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create PROCEDURE [dbo].[GetTransfers_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  WalletFromId,
+  WalletToId,
+  Value,
+  Date, 
+  CurrencyAcronim,
+  Hash,
+  Comment,
+  PlatformCommission
+
+FROM [Exchange].[dbo].[Transfers]
+Order By Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
 GO
 SET ANSI_NULLS ON
 GO
