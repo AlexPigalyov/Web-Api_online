@@ -332,6 +332,38 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+Create PROCEDURE [dbo].[ClosedOrders_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  CreateDate
+      ,ClosedDate
+      ,IsBuy
+      ,ExposedPrice
+      ,Difference
+      ,TotalPrice
+      ,Amount
+      ,Total
+      ,Status
+      ,CreateUserId
+      ,BoughtUserId
+FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+Order By Id
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[Create_BTC_USDT_OpenOrder]
 @userid nvarchar(450),
 @isBuy bit,
