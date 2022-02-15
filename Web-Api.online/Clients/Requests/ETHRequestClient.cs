@@ -17,7 +17,8 @@ namespace Web_Api.online.Clients.Requests
                 {
                     using (var httpClient = new HttpClient(httpClientHandler))
                     {
-                        var result = httpClient.GetAsync($"https://192.168.1.75:443/ETH/GetNewAddress?label={lable}").Result;
+                        var result = httpClient.GetAsync($"http://192.168.1.67:777/ETH/GetNewAddress?label={lable}").Result;
+
                         return  result.Content.ReadAsStringAsync().Result;
                     }
                 }
@@ -38,7 +39,7 @@ namespace Web_Api.online.Clients.Requests
                 {
                     using (var httpClient = new HttpClient(httpClientHandler))
                     {
-                        var result = httpClient.GetAsync($"https://192.168.1.75:443/ETH/ExecuteTransaction?transactionId={transactionId}").Result;
+                        var result = httpClient.GetAsync($"http://192.168.1.67:777/ETH/ExecuteTransaction?transactionId={transactionId}").Result;
                     }
                 }
                 catch (Exception e)

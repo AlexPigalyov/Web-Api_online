@@ -2,15 +2,15 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
-    ViewData["Title"] = "Web-Api.online";
+    ViewData["Title"] = "BTC - USDT";
 }
 
 <div class="text-center">
     <h1 class="display-4">BTC - USDT</h1>
 </div>
 
-<div class="row no-padding">
-    <div class="col-xl-4 col-lg-12">
+<div class="row card-row no-gutters">
+    <div class="col-xl-3 col-lg-12 card-container">
         <div class="card">
             <div class="card-body">
 
@@ -51,7 +51,7 @@
         </div>
         <!-- end col-->
 
-        <div class="col-xl-4 col-lg-6">
+        <div class="col-xl-6 col-lg-6">
         <div class="card">
             <div class="card-body">
 
@@ -60,28 +60,32 @@
                     {
                             <ul>
                                 <li class="nav-item">
-                                    BTC balance: @Model.BtcWallet.Value Address: @Model.BtcWallet.Address
+                                    BTC balance: <span id="btcBalance">@Model.BtcWallet.Value</span>
+                                    <br />
+                                    Address: @Model.BtcWallet.Address
                                 </li>
                                 <li class="nav-item">
-                                    USDT balance: @Model.UsdtWallet.Value Address: @Model.UsdtWallet.Address
+                                    USDT balance: <span id="usdtBalance">@Model.UsdtWallet.Value</span>
+                                    <br />
+                                    Address: @Model.UsdtWallet.Address
                                 </li>
                             </ul>
 
                             <div class="container">
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-3">Count&nbsp;BTC</div>
+                                    <div class="col-4">Count&nbsp;BTC</div>
                                     <div class="col-4"><input type="text" id="amountInput" /></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3">Price&nbsp;$</div>
+                                    <div class="col-4">Price&nbsp;$</div>
                                     <div class="col-4"><input type="text" id="priceInput" /></div>
                                 </div>
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-7">
-                                        <input type="button" id="buyButton" value="Buy" />
-                                        <input type="button" id="sellButton" value="Sell" />
+                                    <div class="col-8">
+                                        <input type="button" id="buyButton" value="Buy BTC" />
+                                        <input type="button" id="sellButton" value="Sell BTC" />
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +102,7 @@
         </div>
         <!-- end col -->  
 
-        <div class="col-xl-4 col-lg-6">
+        <div class="col-xl-3 col-lg-6">
         <div class="card">
             <div class="card-body">
 
@@ -152,9 +156,11 @@
 
     $(document).ready(function () {
 
-        $( "#buyButton" ).click(function() {
+        $("#buyButton" ).click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
+
+            var updatedBalance = document.getElementById("usdtBalance").innerText;
 
             $.ajax({
                 url: '/trade/createorder',
@@ -164,13 +170,22 @@
                     Amount: amount,
                     IsBuy: true
                 }),
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    updatedBalance = data;
+                    $("#usdtBalance").text(updatedBalance);
+                },
+                error: function() {
+                    //alert('Error occured');
+                }
             });
         });
 
-        $( "#sellButton" ).click(function() {
+        $("#sellButton").click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
+            
+            var updatedBalance = document.getElementById("btcBalance").innerText;
 
             $.ajax({
                 url: '/trade/createorder',
@@ -180,7 +195,14 @@
                     Amount: amount,
                     IsBuy: false
                 }),
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    updatedBalance = data;
+                    $("#btcBalance").text(updatedBalance);
+                },
+                error: function() {
+                    //alert('Error occured');
+                }
             });
         });
 

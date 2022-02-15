@@ -13607,7 +13607,7 @@ body {
 .content-page {
     margin-left: 260px;
     overflow: hidden;
-    padding: 70px 12px 65px;
+    padding: 70px 12px 100px;
     min-height: 100vh;
 }
 
@@ -13978,7 +13978,7 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) {
 
     .content-page {
         margin-left: 0 !important;
-        padding: 65px 10px 65px;
+        padding: 65px 10px 100px;
     }
 
     body[data-leftbar-compact-mode="condensed"] .leftside-menu {
