@@ -57,7 +57,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<OutcomeTransactionTableModel>> GetAllOutcomeTransactionsPaged(int page, int pageSize)
+        public async Task<List<OutcomeTransactionTableModel>> GetOutcomeTransactionsPaged(int page, int pageSize)
         {
             try
             {

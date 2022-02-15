@@ -43,7 +43,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Withdraw()
         {
-            var outcome = await _outcomeRepository.GetAllOutcomeTransactionsPaged(1, 100);
+            var outcome = await _outcomeRepository.GetOutcomeTransactionsPaged(1, 100);
 
             return View(outcome);
         }
