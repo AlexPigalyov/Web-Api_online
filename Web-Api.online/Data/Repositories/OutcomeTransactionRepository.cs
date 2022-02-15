@@ -57,6 +57,28 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
+        public async Task<List<OutcomeTransactionTableModel>> GetAllOutcomeTransactionsPaged(int page, int pageSize)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("page", page);
+                p.Add("pageSize", pageSize);
+
+                List<OutcomeTransactionTableModel> result =
+                    (List<OutcomeTransactionTableModel>)await _db.QueryAsync<OutcomeTransactionTableModel>
+                    ("GetOutcomeTransactions_Paged",
+                        p,
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<List<spGetOutcomeTransactions_Paged>> GetPagedOutcomeTransactions(int page, int pageSize)
         {
             try

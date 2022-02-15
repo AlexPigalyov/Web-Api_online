@@ -50,14 +50,14 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Orders()
         {
-            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
+            var closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
 
             return View(closedorders);
         }
 
         public async Task<ActionResult> RegistratedUsers()
         {
-            List<RegistratedUsersViewModel> users = await _usersInfoRepository.GetAllRegistratedUsers();
+            var users = await _usersInfoRepository.GetRegistratedUsersPaged(1, 100);
 
             return View(users);
         }
