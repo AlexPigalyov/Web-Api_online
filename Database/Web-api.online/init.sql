@@ -221,7 +221,8 @@ CREATE TABLE [dbo].[UsersInfo](
 	[LinkedinLink] [nvarchar](max) NULL,
 	[GithubLink] [nvarchar](max) NULL,
 	[Location] [nvarchar](200) NULL,
-	[RegistrationDate] [datetime] NOT NULL
+	[RegistrationDate] [datetime] NOT NULL,
+	[RefferalId] [nvarchar](450) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
