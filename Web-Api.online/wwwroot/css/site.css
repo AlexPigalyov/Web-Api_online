@@ -124,3 +124,21 @@ li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
         padding: 10px 15px !important;
     }
 }
+
+.carousel {
+    margin-top: 10px;
+    position: relative;
+}
+
+.stats-links {
+    cursor: pointer !important;
+}
+
+    .stats-links a:hover {
+        /*text-decoration: none !important;*/
+        color: black !important;
+    }
+
+    .stats-links div {
+        cursor: pointer !important;
+    }
