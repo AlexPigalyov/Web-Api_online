@@ -222,7 +222,7 @@ CREATE TABLE [dbo].[UsersInfo](
 	[GithubLink] [nvarchar](max) NULL,
 	[Location] [nvarchar](200) NULL,
 	[RegistrationDate] [datetime] NOT NULL,
-	[RefferalId] [nvarchar](450) NULL
+	[ReffererId] [nvarchar](450) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
@@ -730,13 +730,13 @@ SELECT
 anu.Email,
 anu.UserName,
 ui.FullName,
-ui.RefferalId
+ui.ReffererId
 
 
 FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
 ON anu.Id = ui.UserId
-WHERE ui.RefferalId = @userId
+WHERE ui.ReffererId = @userId
 
 END
 GO
