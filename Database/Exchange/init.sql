@@ -1,9 +1,5 @@
 USE [Exchange]
 GO
-CREATE USER [exchange] FOR LOGIN [exchange] WITH DEFAULT_SCHEMA=[dbo]
-GO
-ALTER ROLE [db_securityadmin] ADD MEMBER [exchange]
-GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
