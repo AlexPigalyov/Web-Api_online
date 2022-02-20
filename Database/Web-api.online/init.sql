@@ -436,8 +436,8 @@ SELECT
 anu.Email,
 anu.UserName,
 ui.FullName,
+ui.RegistrationDate,
 ui.ReffererId
-
 
 FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui

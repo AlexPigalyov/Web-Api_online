@@ -1,6 +1,5 @@
 USE [web-api.online]
 GO
-
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -13,8 +12,8 @@ SELECT
 anu.Email,
 anu.UserName,
 ui.FullName,
+ui.RegistrationDate,
 ui.ReffererId
-
 
 FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
