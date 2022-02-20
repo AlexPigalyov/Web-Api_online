@@ -53,30 +53,30 @@ namespace Web_Api.online.Data.Repositories
             if (isBuy)
             {
                 await _db.ExecuteAsync(
-                    "Update_BTC_USDT_OpenOrder_Buy",
-                    new
-                    {
-                        userid = model.CreateUserId,
-                        price = model.Price,
-                        amount = model.Amount,
-                        total = model.Total,
-                        id = model.Id
-                    },
-                    commandType: CommandType.StoredProcedure);
+                "Update_BTC_USDT_OpenOrder_Buy",
+                new
+                {
+                    userid = model.CreateUserId,
+                    price = model.Price,
+                    amount = model.Amount,
+                    total = model.Total,
+                    id = model.Id
+                },
+                commandType: CommandType.StoredProcedure);
             }
             else
             {
                 await _db.ExecuteAsync(
-                    "Update_BTC_USDT_OpenOrder_Sell",
-                    new
-                    {
-                        userid = model.CreateUserId,
-                        price = model.Price,
-                        amount = model.Amount,
-                        total = model.Total,
-                        id = model.Id
-                    },
-                    commandType: CommandType.StoredProcedure);
+                "Update_BTC_USDT_OpenOrder_Sell",
+                new
+                {
+                    userid = model.CreateUserId,
+                    price = model.Price,
+                    amount = model.Amount,
+                    total = model.Total,
+                    id = model.Id
+                },
+                commandType: CommandType.StoredProcedure);
             }
 
         }
@@ -136,36 +136,36 @@ namespace Web_Api.online.Data.Repositories
                 if (openOrder.IsBuy)
                 {
                     await _db.ExecuteAsync(
-                        "Move_BTC_USDT_FromOpenOrdersBuyToClosedOrders",
-                        new
-                        {
-                            createUserId = openOrder.CreateUserId,
-                            boughtUserId = boughtUserId,
-                            id = openOrder.Id,
-                            price = openOrder.Price,
-                            amount = openOrder.Amount,
-                            total = openOrder.Total,
-                            createDate = openOrder.CreateDate,
-                            status = (int)status
-                        },
-                        commandType: CommandType.StoredProcedure);
+                    "Move_BTC_USDT_FromOpenOrdersBuyToClosedOrders",
+                    new
+                    {
+                        createUserId = openOrder.CreateUserId,
+                        boughtUserId = boughtUserId,
+                        id = openOrder.Id,
+                        price = openOrder.Price,
+                        amount = openOrder.Amount,
+                        total = openOrder.Total,
+                        createDate = openOrder.CreateDate,
+                        status = (int)status
+                    },
+                    commandType: CommandType.StoredProcedure);
                 }
                 else
                 {
                     await _db.ExecuteAsync(
-                        "Move_BTC_USDT_FromOpenOrdersBuyToClosedOrders",
-                        new
-                        {
-                            createUserId = openOrder.CreateUserId,
-                            boughtUserId = boughtUserId,
-                            id = openOrder.Id,
-                            price = openOrder.Price,
-                            amount = openOrder.Amount,
-                            total = openOrder.Total,
-                            createDate = openOrder.CreateDate,
-                            status = (int)status
-                        },
-                        commandType: CommandType.StoredProcedure);
+                    "Move_BTC_USDT_FromOpenOrdersBuyToClosedOrders",
+                    new
+                    {
+                        createUserId = openOrder.CreateUserId,
+                        boughtUserId = boughtUserId,
+                        id = openOrder.Id,
+                        price = openOrder.Price,
+                        amount = openOrder.Amount,
+                        total = openOrder.Total,
+                        createDate = openOrder.CreateDate,
+                        status = (int)status
+                    },
+                    commandType: CommandType.StoredProcedure);
                 }
 
             }
@@ -199,9 +199,9 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 List<BTC_USDT_OpenOrderTableModel> result = (List<BTC_USDT_OpenOrderTableModel>)
-                    await _db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
-                        "Get_BTC_USDT_OpenOrders",
-                        commandType: CommandType.StoredProcedure);
+                await _db.QueryAsync<BTC_USDT_OpenOrderTableModel>(
+                    "Get_BTC_USDT_OpenOrders",
+                    commandType: CommandType.StoredProcedure);
 
                 return result;
             }
