@@ -17,7 +17,7 @@ namespace Web_Api.online.Controllers
         private UsersInfoRepository _usersInfoRepository;
 
 
-        public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository, 
+        public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository,
             OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository, UsersInfoRepository usersInfoRepository)
         {
             _transactionsRepository = transactionsRepository;
@@ -29,13 +29,13 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Incomings()
         {
-            List<IncomeTransactionTableModel> incomes = await _transactionsRepository.GetAllIncomeTransactions();
+            var incomes = await _transactionsRepository.GetIncomeTransactionsPaged(1, 100);
 
             return View(incomes);
         }
         public async Task<ActionResult> Transfers()
         {
-            List<TransferTableModel> transfers = await _transferRepository.GetAllTransfers();
+            var transfers = await _transferRepository.GetTransfersPaged(1, 100);
 
             return View(transfers);
         }
@@ -43,21 +43,21 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Withdraw()
         {
-            List<OutcomeTransactionTableModel> outcome = await _outcomeRepository.GetAllOutcomeTransactions();
+            var outcome = await _outcomeRepository.GetOutcomeTransactionsPaged(1, 100);
 
             return View(outcome);
         }
 
         public async Task<ActionResult> Orders()
         {
-            List<BTC_USDT_ClosedOrderTableModel> closedorders = await _tradeRepository.GetAllBTCUSDTClosedOrders();
+            var closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
 
             return View(closedorders);
         }
 
         public async Task<ActionResult> RegistratedUsers()
         {
-            List<RegistratedUsersViewModel> users = await _usersInfoRepository.GetAllRegistratedUsers();
+            var users = await _usersInfoRepository.GetRegistratedUsersPaged(1, 100);
 
             return View(users);
         }

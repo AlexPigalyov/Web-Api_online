@@ -110,6 +110,27 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
+        public async Task<List<IncomeTransactionTableModel>> GetIncomeTransactionsPaged(int page, int pageSize)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("page", page);
+                p.Add("pageSize", pageSize);
+
+                List<IncomeTransactionTableModel> result =
+                    (List<IncomeTransactionTableModel>)await _db.QueryAsync<IncomeTransactionTableModel>
+                    ("GetIncomeTransactions_Paged", 
+                        p,
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         public async Task<IncomeTransactionTableModel> CreateIncomeTransactionAsync(
             IncomeTransactionTableModel incomeTransaction)

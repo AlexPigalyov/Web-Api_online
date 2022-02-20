@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using ReflectionIT.Mvc.Paging;
 using Web_Api.online.Middlewares;
 
 namespace Web_Api.online
@@ -46,6 +47,12 @@ namespace Web_Api.online
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddMvc();
+            services.AddPaging(options =>
+            {
+                options.ViewName = "Bootstrap4";
+                options.PageParameterName = "pageindex";
+            });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -82,7 +89,7 @@ namespace Web_Api.online
                 });
 
             services.AddControllersWithViews();
-
+            
             services.AddSignalR();
 
             services.AddRazorPages();

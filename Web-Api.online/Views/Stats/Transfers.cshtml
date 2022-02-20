@@ -1,51 +1,51 @@
-﻿@model List<TransferTableModel>
+﻿@model List<OutcomeTransactionTableModel>
 @{
     ViewData["Title"] = "Stats";
 }
 
 <div class="row">
     
-    <table id="TransferRepository" class="table table-striped table-centered mb-0">
-    <thead>
+    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
+        <thead>
         <tr class="table-primary">
-            <th>Wallet From Id</th>
-            <th>Wallet To Id</th>
+            <th>From Wallet Id</th>
+            <th>To Address</th>
             <th>Value</th>
-            <th>Date</th>
+            <th>Create Date</th>
             <th>Currency Acronim</th>
-            <th>Hash</th>
-            <th>Comment</th>
+            <th>State</th>
+            <th>Last Update Date</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @item.WalletFromId
+                    @item.FromWalletId
                 </td>
                 <td>
-                    @item.WalletToId
+                    @item.ToAddress
                 </td>
                 <td>
                     @item.Value
                 </td>
                 <td>
-                    @item.Date
+                    @item.CreateDate
                 </td>
                 <td>
                     @item.CurrencyAcronim
                 </td>
                 <td>
-                    @item.Hash
+                    @item.State
                 </td>
                 <td>
-                    @item.Comment
+                    @item.LastUpdateDate
                 </td>
 
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
 </div>

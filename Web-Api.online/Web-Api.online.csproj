@@ -28,6 +28,7 @@
     <PackageReference Include="Nethereum.Web3" Version="4.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
+    <PackageReference Include="ReflectionIT.Mvc.Paging" Version="5.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />

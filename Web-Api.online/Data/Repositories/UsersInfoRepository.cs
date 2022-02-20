@@ -39,6 +39,29 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
+        public async Task<List<RegistratedUsersViewModel>> GetRegistratedUsersPaged(int page, int pageSize)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("page", page);
+                p.Add("pageSize", pageSize);
+
+                List<RegistratedUsersViewModel> result =
+                    (List<RegistratedUsersViewModel>)await _db.QueryAsync<RegistratedUsersViewModel>
+                    ("GetRegistratedUsers_Paged",
+                        p,
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+
+            }
+        }
+
         public async Task CreateEmptyUsersInfo(string userId)
         {
             try
