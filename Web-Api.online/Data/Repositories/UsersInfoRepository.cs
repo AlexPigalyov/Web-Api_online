@@ -39,7 +39,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<RegistratedUsersViewModel>> GetRegistratedUsersPaged(int page, int pageSize)
+        public async Task<List<RegistratedUsersViewModel>> GetRegistratedUsersPaged(int page, int pageSize, int currentPage=1)
         {
             try
             {
