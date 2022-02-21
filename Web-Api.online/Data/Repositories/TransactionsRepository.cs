@@ -39,7 +39,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<spGetIncomeTransactions_Paged>> GetPagedIncomeTransactions(int page, int pageSize)
+        public async Task<List<IncomeTransactionTableModel>> GetPagedIncomeTransactions(int page, int pageSize)
         {
             try
             {
@@ -47,8 +47,8 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("page", page);
                 parameters.Add("pageSize", pageSize);
 
-                List<spGetIncomeTransactions_Paged> result =
-                    (List<spGetIncomeTransactions_Paged>) await _db.QueryAsync<IncomeTransactionTableModel>
+                List<IncomeTransactionTableModel> result =
+                    (List<IncomeTransactionTableModel>) await _db.QueryAsync<IncomeTransactionTableModel>
                     ("GetIncomeTransactions_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure);
