@@ -60,6 +60,31 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
+        public async Task<List<UserRefferalTableModel>> GetAllRefferals()
+        {
+            List<UserRefferalTableModel> result =
+                (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
+                ("GetAllRefferals",
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+
+        }
+
+        public async Task<List<UserRefferalTableModel>> GetUserRefferalsListAsync(string userId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userId);
+
+            List<UserRefferalTableModel> result =
+                (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
+                ("GetUserRefferals",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+
+        }
 
         public async Task<string> FindUserIdForSendPageAsync(string searchText)
         {
@@ -73,7 +98,7 @@ namespace Web_Api.online.Data.Repositories
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
-                if(useId == null)
+                if (useId == null)
                 {
                     useId = await _dbExchange.QueryFirstOrDefaultAsync<string>(
                         "GetUserIdByWalletAddress",
