@@ -6,82 +6,105 @@
     ViewData["Title"] = "IncomeTransactions";
 }
 
-<div class="row">
 
-    <table id="IncomeTransactions" class="table table-striped table-centered mb-0">
-        <thead>
-            <tr class="table-primary">
-                <th>Currency Acronim</th>
-                <th>Amount</th>
-                <th>TransactionFee</th>
-                <th>From Address</th>
-                <th>To Address</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.IncomeTransactions)
-            {
-                <tr>
-                    <td>
-                        @item.CurrencyAcronim
-                    </td>
-                    <td>
-                        @item.Amount
-                    </td>
-                    <td>
-                        @item.TransactionFee
-                    </td>
-                    <td>
-                        @item.FromAddress
-                    </td>
-                    <td>
-                        @item.ToAddress
-                    </td>
-                    <td>
-                        @item.Date
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Income transactions</h4>
+        </div>
+    </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-7">
-        <div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate">
-            <ul class="pagination pagination-rounded">
-                @if (Model.PageViewModel.HasPreviousPage)
-                {
-                    <li class="paginate_button page-item next" id="products-datatable_next">
-                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link" tabindex="-1" aria-disabled="true">
-                            Previous
-                        </a>
-                    </li>
-                    <li class="paginate_button page-item previous">
-                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link">
-                            @(Model.PageViewModel.PageNumber - 1)
-                        </a>
-                    </li>
-                }
-                <li class="paginate_button page-item active">
-                    <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.PageNumber" class="page-link">
-                        @Model.PageViewModel.PageNumber
-                    </a>
-                </li>
-                @if (Model.PageViewModel.HasNextPage)
-                {
-                    <li class="paginate_button page-item">
-                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
-                            @(Model.PageViewModel.PageNumber + 1)
-                        </a>
-                    </li>
-                    <li class="paginate_button page-item next" id="products-datatable_next">
-                        <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.TotalPages" class="page-link">
-                            Last
-                        </a>
-                    </li>
-                }
-            </ul>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-centered w-100 nowrap">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Currency Acronim</th>
+                                <th>Amount</th>
+                                <th>TransactionFee</th>
+                                <th>From Address</th>
+                                <th>To Address</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.IncomeTransactions)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.CurrencyAcronim
+                                    </td>
+                                    <td>
+                                        @item.Amount
+                                    </td>
+                                    <td>
+                                        @item.TransactionFee
+                                    </td>
+                                    <td>
+                                        @item.FromAddress
+                                    </td>
+                                    <td>
+                                        @item.ToAddress
+                                    </td>
+                                    <td>
+                                        @item.Date
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate">
+                            <ul class="pagination pagination-rounded">
+                                @if (Model.PageViewModel.PageNumber == 1)
+                                {
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber)" class="page-link" tabindex="-1" aria-disabled="true">
+                                            Previous
+                                        </a>
+                                    </li>
+                                }
+                                @if (Model.PageViewModel.HasPreviousPage)
+                                {
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.TotalPages - 1)" class="page-link">
+                                            Previous
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item previous">
+                                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link">
+                                            @(Model.PageViewModel.PageNumber - 1)
+                                        </a>
+                                    </li>
+                                }
+                                <li class="paginate_button page-item active">
+                                    <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.PageNumber" class="page-link">
+                                        @Model.PageViewModel.PageNumber
+                                    </a>
+                                </li>
+                                @if (Model.PageViewModel.HasNextPage)
+                                {
+                                    <li class="paginate_button page-item">
+                                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                            @(Model.PageViewModel.PageNumber + 1)
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item next">
+                                        <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.TotalPages" class="page-link">
+                                            Last
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
