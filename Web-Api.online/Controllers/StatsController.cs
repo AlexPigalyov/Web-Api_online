@@ -58,7 +58,8 @@ namespace Web_Api.online.Controllers
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 Transfers = transfers ?? new List<TransferTableModel>()
             };
-            return View(transfers);
+
+            return View(viewModel);
         }
 
 
