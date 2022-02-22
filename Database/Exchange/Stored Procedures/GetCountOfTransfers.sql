@@ -1,6 +1,5 @@
 USE [Exchange]
 GO
-/****** Object:  StoredProcedure [dbo].[GetCountOfIncomeTransactions]    Script Date: 22.02.2022 11:38:48 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
