@@ -60,7 +60,38 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        public async Task<List<UserRefferalTableModel>> GetAllRefferals()
+        
+        public async Task<int> GetCountUserRefferer()
+        {
+            try
+            {
+                return await _dbWebApi.QueryFirstAsync<int>(
+                    "GetCountUserRefferer",
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception exc)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<List<UserRefferalTableModel>> GetRefferersPaged(int page, int pageSize, int currentPage = 1)
+        {
+           
+                var p = new DynamicParameters();
+                p.Add("page", page);
+                p.Add("pageSize", pageSize);
+
+                List<UserRefferalTableModel> result =
+                    (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
+                    ("GetRefferers_Paged",
+                        p,
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+
+        public async Task<List<UserRefferalTableModel>> GetAllRefferers()
         {
             List<UserRefferalTableModel> result =
                 (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>

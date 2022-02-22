@@ -109,12 +109,20 @@ namespace Web_Api.online.Controllers
 
             return View(viewModel);
         }
-        public async Task<ActionResult> RefferalsUsers()
+        public async Task<ActionResult> RefferalsUsers(SortModel model)
         {
-            var reffUsers = await _userRepository.GetAllRefferals();
+            int pageSize = 15;
 
-            return View(reffUsers);
+            var reffUsers = await _userRepository.GetRefferersPaged(model.Page, pageSize);
+            var itemsCount = await _userRepository.GetCountUserRefferer();
 
+            UserRefferalViewModel viewModel = new UserRefferalViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount, model.Page,pageSize),
+                UserRefferal = reffUsers ?? new List<UserRefferalTableModel>()
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult Index()
