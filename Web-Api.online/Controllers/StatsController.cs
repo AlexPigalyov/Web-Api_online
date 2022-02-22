@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models;
-using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
 
