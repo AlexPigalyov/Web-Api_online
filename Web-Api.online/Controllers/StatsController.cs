@@ -72,7 +72,7 @@ namespace Web_Api.online.Controllers
 
             OutcomeTransactionsViewModel viewModel = new OutcomeTransactionsViewModel()
             {
-                PageViewModel = new PageViewModel(itemsCount,model.Page,pageSize),
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 OutcomeTransactions = outcomes ?? new List<OutcomeTransactionTableModel>()
             };
             return View(viewModel);
@@ -82,23 +82,32 @@ namespace Web_Api.online.Controllers
         {
             int pageSize = 15;
 
-            var closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(model.Page, pageSize);
+            var closedOrders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(model.Page, pageSize);
             var itemsCount = await _tradeRepository.GetCountOfClosedOreders();
 
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
             {
-                PageViewModel = new PageViewModel(itemsCount,model.Page,pageSize),
-                ClosedOrders = closedorders ?? new List<BTC_USDT_ClosedOrderTableModel>()
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
+                ClosedOrders = closedOrders ?? new List<BTC_USDT_ClosedOrderTableModel>()
             };
 
             return View(viewModel);
         }
 
-        public async Task<ActionResult> RegistratedUsers(int pageIndex = 1)
+        public async Task<ActionResult> RegistratedUsers(SortModel model)
         {
-            var users = await _usersInfoRepository.GetRegistratedUsersPaged(1, 3);
+            int pageSize = 15;
 
-            return View(users);
+            var users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
+            var itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
+
+            RegistratedUsersViewModel viewModel = new RegistratedUsersViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
+                RegistratedUsers = users ?? new List<RegistratedUsersTableModel>()
+            };
+
+            return View(viewModel);
         }
         public async Task<ActionResult> RefferalsUsers()
         {
