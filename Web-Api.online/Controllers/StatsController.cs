@@ -78,11 +78,20 @@ namespace Web_Api.online.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Orders(int pageIndex = 1)
+        public async Task<ActionResult> Orders(SortModel model)
         {
-            var closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
+            int pageSize = 15;
 
-            return View(closedorders);
+            var closedorders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(model.Page, pageSize);
+            var itemsCount = await _tradeRepository.GetCountOfClosedOreders();
+
+            ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount,model.Page,pageSize),
+                ClosedOrders = closedorders ?? new List<BTC_USDT_ClosedOrderTableModel>()
+            };
+
+            return View(viewModel);
         }
 
         public async Task<ActionResult> RegistratedUsers(int pageIndex = 1)

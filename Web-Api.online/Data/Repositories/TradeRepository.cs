@@ -274,7 +274,19 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-
+        public async Task<int> GetCountOfClosedOreders()
+        {
+            try
+            {
+                return await _db.QueryFirstAsync<int>(
+                    "GetCountOfClosedOreders",
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception exc)
+            {
+                return 0;
+            }
+        }
         public async Task<List<BTC_USDT_ClosedOrderTableModel>> GetBTCUSDTClosedOrdersPaged(int page, int pageSize)
         {
             try
