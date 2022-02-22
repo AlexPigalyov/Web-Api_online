@@ -55,14 +55,14 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
-                var p = new DynamicParameters();
-                p.Add("page", page);
-                p.Add("pageSize", pageSize);
+                var parameters = new DynamicParameters();
+                parameters.Add("page", page);
+                parameters.Add("pageSize", pageSize);
 
                 List<TransferTableModel> result =
                     (List<TransferTableModel>)await _db.QueryAsync<TransferTableModel>
                     ("GetTransfers_Paged",
-                        p,
+                        parameters,
                         commandType: CommandType.StoredProcedure);
 
                 return result;
@@ -70,6 +70,20 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        public async Task<int> GetCountOfTransfers()
+        {
+            try
+            {
+                return await _db.QueryFirstAsync<int>(
+                    "GetCountOfTransfers",
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception exc)
+            {
+                return 0;
             }
         }
 
