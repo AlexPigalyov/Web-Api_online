@@ -63,11 +63,19 @@ namespace Web_Api.online.Controllers
         }
 
 
-        public async Task<ActionResult> Withdraw(int pageIndex = 1)
+        public async Task<ActionResult> Withdraw(SortModel model)
         {
-            var outcome = await _outcomeRepository.GetOutcomeTransactionsPaged(1, 100);
+            int pageSize = 15;
 
-            return View(outcome);
+            var outcomes = await _outcomeRepository.GetOutcomeTransactionsPaged(model.Page, pageSize);
+            var itemsCount = await _outcomeRepository.GetCountOfOutcomeTransactions();
+
+            OutcomeTransactionsViewModel viewModel = new OutcomeTransactionsViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount,model.Page,pageSize),
+                OutcomeTransactions = outcomes ?? new List<OutcomeTransactionTableModel>()
+            };
+            return View(viewModel);
         }
 
         public async Task<ActionResult> Orders(int pageIndex = 1)
