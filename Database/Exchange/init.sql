@@ -996,6 +996,18 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCountOfTransfers]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [Exchange].[dbo].[Transfers]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCreatedOutcomeTransactionAndSetStateInWork]
 @currencyAcronim nvarchar(10)
 AS
