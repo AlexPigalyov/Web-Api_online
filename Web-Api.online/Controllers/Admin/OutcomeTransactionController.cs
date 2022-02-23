@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
+using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers.Admin
@@ -23,13 +24,13 @@ namespace Web_Api.online.Controllers.Admin
         {
             int pageSize = 15;
 
-            var outcomeTransactions = await _outcomeTransactionsRepository.GetPagedOutcomeTransactions(model.Page, pageSize);
+            var outcomeTransactions = await _outcomeTransactionsRepository.GetOutcomeTransactionsPaged(model.Page, pageSize);
             var usersCount = await _outcomeTransactionsRepository.GetCountOfOutcomeTransactions();
 
             OutcomeTransactionsViewModel viewModel = new OutcomeTransactionsViewModel()
             {
                 PageViewModel = new PageViewModel(usersCount, model.Page, pageSize),
-                OutcomeTransactions = outcomeTransactions ?? new List<spGetOutcomeTransactions_Paged>()
+                OutcomeTransactions = outcomeTransactions ?? new List<OutcomeTransactionTableModel>()
             };
 
             return View("Views/Admin/OutcomeTransactions.cshtml", viewModel);
