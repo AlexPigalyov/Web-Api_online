@@ -1,7 +1,5 @@
-﻿@model List<UserRefferalTableModel>
-
-@{
-    ViewData["Title"] = "Stats";
+﻿@{
+    ViewData["Title"] = "RefferalsUsers";
 }
 
 <div class="row">
@@ -17,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.UserRefferal)
         {
             <tr>
                 <td>

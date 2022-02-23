@@ -1,5 +1,4 @@
-﻿@model List<TransferTableModel>
-@{
+﻿@{
     ViewData["Title"] = "Transfers";
 }
 
@@ -18,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Transfers)
         {
             <tr>
                 <td>
