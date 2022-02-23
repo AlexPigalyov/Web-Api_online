@@ -22,12 +22,12 @@ namespace Web_Api.online.Data.Repositories
         }
 
 
-        public async Task<List<RegistratedUsersViewModel>> GetAllRegistratedUsers()
+        public async Task<List<RegistratedUsersTableModel>> GetAllRegistratedUsers()
         {
             try
             {
-                List<RegistratedUsersViewModel> result =
-                    (List<RegistratedUsersViewModel>)await _db.QueryAsync<RegistratedUsersViewModel>
+                List<RegistratedUsersTableModel> result =
+                    (List<RegistratedUsersTableModel>)await _db.QueryAsync<RegistratedUsersTableModel>
                     ("GetAllRegistratedUser",
                         commandType: CommandType.StoredProcedure);
 
@@ -39,7 +39,21 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<RegistratedUsersViewModel>> GetRegistratedUsersPaged(int page, int pageSize)
+        public async Task<int> GetCountOfRegistratedUsers()
+        {
+            try
+            {
+                return await _db.QueryFirstAsync<int>(
+                    "GetCountOfRegistratedUsers",
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception exc)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<List<RegistratedUsersTableModel>> GetRegistratedUsersPaged(int page, int pageSize, int currentPage=1)
         {
             try
             {
@@ -47,8 +61,8 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("page", page);
                 p.Add("pageSize", pageSize);
 
-                List<RegistratedUsersViewModel> result =
-                    (List<RegistratedUsersViewModel>)await _db.QueryAsync<RegistratedUsersViewModel>
+                List<RegistratedUsersTableModel> result =
+                    (List<RegistratedUsersTableModel>)await _db.QueryAsync<RegistratedUsersTableModel>
                     ("GetRegistratedUsers_Paged",
                         p,
                         commandType: CommandType.StoredProcedure);

@@ -972,6 +972,18 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCountOfClosedOreders]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [Exchange].[dbo].[ClosedOrders_Paged]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCountOfIncomeTransactions]
 AS
 BEGIN
@@ -989,6 +1001,18 @@ AS
 BEGIN
 
 SELECT COUNT(1) FROM [Exchange].[dbo].[OutcomeTransactions]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCountOfTransfers]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM [Exchange].[dbo].[Transfers]
 
 END
 GO

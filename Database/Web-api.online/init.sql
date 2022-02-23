@@ -221,7 +221,8 @@ CREATE TABLE [dbo].[UsersInfo](
 	[LinkedinLink] [nvarchar](max) NULL,
 	[GithubLink] [nvarchar](max) NULL,
 	[Location] [nvarchar](200) NULL,
-	[RegistrationDate] [datetime] NOT NULL
+	[RegistrationDate] [datetime] NOT NULL,
+	[ReffererId] [nvarchar](450) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
@@ -427,6 +428,28 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetAllRefferals]
+AS
+BEGIN
+
+SELECT 
+anu.Email,
+anu.UserName,
+ui.FullName,
+ui.RegistrationDate,
+ui.ReffererId
+
+FROM AspNetUsers as anu
+LEFT JOIN UsersInfo as ui
+ON anu.Id = ui.UserId
+WHERE ui.ReffererId IS NOT NULL
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetAllRegistratedUser]
 
 AS
@@ -477,11 +500,60 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetCountOfRefferrersUser]
+@userId nvarchar(450)
+AS
+BEGIN
+--declare @userId nvarchar(450);
+--set @userId = '87aa46b6-f6b1-4d7b-9540-a575b76b706c'
+
+SELECT COUNT(1) FROM AspNetUsers 
+LEFT JOIN UsersInfo
+ON AspNetUsers.Id = UsersInfo.UserId
+WHERE UsersInfo.ReffererId = @userId
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCountOfRegistratedUsers]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM AspNetUsers 
+LEFT JOIN UsersInfo
+ON AspNetUsers.Id = UsersInfo.UserId
+WHERE AspNetUsers.Id IS NOT NULL
+AND UsersInfo.UserId IS NOT NULL
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetCountOfUsers]
 AS
 BEGIN
 
 SELECT COUNT(1) FROM [web-api.online].[dbo].[AspNetUsers]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCountUserRefferer]
+AS
+BEGIN
+
+SELECT COUNT(1) FROM AspNetUsers as anu
+LEFT JOIN UsersInfo as ui
+ON anu.Id = ui.UserId
+WHERE ui.ReffererId IS NOT NULL
 
 END
 GO
@@ -546,6 +618,37 @@ group by Acronim, [Site]) as se
 on se.[Acronim] = r.[Acronim] and se.[Site] = r.[Site] and se.dateres = r.Date
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetRefferers_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+SELECT 
+anu.Email,
+anu.UserName,
+ui.FullName,
+ui.ReffererId
+
+
+FROM AspNetUsers as anu
+LEFT JOIN UsersInfo as ui
+ON anu.Id = ui.UserId
+WHERE ui.ReffererId IS NOT NULL
+ORDER By anu.Id
+
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -710,6 +813,64 @@ BEGIN
 SELECT * FROM [web-api.online].[dbo].[UsersInfo]
 WHERE UserId = @userId
 
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetUserRefferals]
+@userId nvarchar(450)
+
+AS
+BEGIN
+--declare @userId nvarchar(450);
+--set @userId = '08d803ba-a9fb-430e-a0b9-d4a366aeaee7'
+
+
+SELECT 
+anu.Email,
+anu.UserName,
+ui.FullName,
+ui.ReffererId
+
+
+FROM AspNetUsers as anu
+LEFT JOIN UsersInfo as ui
+ON anu.Id = ui.UserId
+WHERE ui.ReffererId = @userId
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetUserRefferals_Paged]
+@userId nvarchar(450),
+@page int,
+@pageSize int
+AS
+BEGIN
+--declare @userId nvarchar(450);
+--set @userId = '08d803ba-a9fb-430e-a0b9-d4a366aeaee7'
+
+
+SELECT 
+anu.Email,
+anu.UserName,
+ui.FullName,
+ui.ReffererId
+
+
+FROM AspNetUsers as anu
+LEFT JOIN UsersInfo as ui
+ON anu.Id = ui.UserId
+WHERE ui.ReffererId = @userId
+ORDER By anu.Id
+
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
 END
 GO
 SET ANSI_NULLS ON

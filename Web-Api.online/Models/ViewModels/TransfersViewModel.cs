@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Models.ViewModels
 {
-    public class OutcomeTransactionsViewModel
+    public class TransfersViewModel
     {
-        public List<OutcomeTransactionTableModel> OutcomeTransactions { get; set; }
+        public List<TransferTableModel> Transfers { get; set; }
         public PageViewModel PageViewModel { get; set; }
+        public int ItemsCount { get; set; }
     }
 }
