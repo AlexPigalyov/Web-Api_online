@@ -94,6 +94,11 @@
                                             @(Model.PageViewModel.PageNumber + 1)
                                         </a>
                                     </li>
+                                    <li class="paginate_button page-item">
+                                        <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                            Next
+                                        </a>
+                                    </li>
                                     <li class="paginate_button page-item next">
                                         <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.TotalPages" class="page-link">
                                             Last

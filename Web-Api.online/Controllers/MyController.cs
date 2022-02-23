@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
@@ -19,16 +20,19 @@ namespace Web_Api.online.Controllers
         private readonly UsersInfoRepository _usersInfoRepository;
         private readonly UserManager<IdentityUser> _usersManager;
         private readonly WalletsRepository _walletsRepository;
+        private readonly UserRepository _userRepository;
         public MyController(
             EventsRepository eventsRepository,
             UsersInfoRepository usersInfoRepository,
             UserManager<IdentityUser> usersManager,
-            WalletsRepository walletsRepository)
+            WalletsRepository walletsRepository,
+            UserRepository userRepository)
         {
             _eventsRepository = eventsRepository;
             _usersInfoRepository = usersInfoRepository;
             _usersManager = usersManager;
             _walletsRepository = walletsRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -47,7 +51,7 @@ namespace Web_Api.online.Controllers
             {
                 var normalizedUserName = model.Username.ToUpper();
 
-                if (! await _usersManager.Users.AnyAsync(x => x.NormalizedUserName == normalizedUserName))
+                if (!await _usersManager.Users.AnyAsync(x => x.NormalizedUserName == normalizedUserName))
                 {
                     await _usersManager.SetUserNameAsync(
                         await _usersManager.FindByIdAsync(userId),
@@ -57,9 +61,9 @@ namespace Web_Api.online.Controllers
                 {
                     return null;
                 }
-                
+
             }
-            
+
             await _usersInfoRepository.spCreateOrUpdateProfileUserInfo(model.UserInfo);
 
             return RedirectToAction("Profile");
@@ -69,7 +73,7 @@ namespace Web_Api.online.Controllers
         public async Task<IActionResult> Profile()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
+
             if (string.IsNullOrEmpty(userId))
             {
                 return Redirect("/Identity/Account/Login%2FMy%2FProfile");
@@ -79,7 +83,7 @@ namespace Web_Api.online.Controllers
             List<EventTableModel> lastThreeEvents = await _eventsRepository.GetLastThreeEvents_ByUserId(userId);
             List<spGetNotEmptyValueWallet_ByUserIdResult> notEmptyWallets = await _walletsRepository.GetNotEmptyWalletsByUserIdAsync(userId);
 
-            var user = await _usersManager.FindByIdAsync(userId);            
+            var user = await _usersManager.FindByIdAsync(userId);
 
             var model = new ProfileViewModel()
             {
@@ -105,5 +109,31 @@ namespace Web_Api.online.Controllers
 
             return View(await _eventsRepository.GetByUserId(userId));
         }
+
+        
+        public async Task<IActionResult> MyRefferals(SortModel model)
+        {
+            int pageSize = 15;
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Redirect("/Identity/Account/Login%2FMy%2FEvents");
+            }
+
+            var reffUsers = await _userRepository.GetUserRefferals_Paged(userId, model.Page, pageSize);
+
+            var itemsCount = await _userRepository.GetCountOfRefferrersUser(userId);
+
+            UserRefferalViewModel viewModel = new UserRefferalViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
+                MyRefferals = reffUsers ?? new List<UserRefferalTableModel>()
+            };
+
+            return View(viewModel);
+        }
+
     }
 }

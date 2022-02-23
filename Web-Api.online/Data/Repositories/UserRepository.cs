@@ -60,7 +60,18 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        
+
+        public async Task<int> GetCountOfRefferrersUser(string userId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userId);
+
+            return await _dbWebApi.QueryFirstAsync<int>(
+                    "GetCountOfRefferrersUser",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+        }
+
         public async Task<int> GetCountUserRefferer()
         {
             try
@@ -75,21 +86,21 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<UserRefferalTableModel>> GetRefferersPaged(int page, int pageSize, int currentPage = 1)
+        public async Task<List<UserRefferalTableModel>> GetRefferersPaged(int page, int pageSize)
         {
-           
-                var p = new DynamicParameters();
-                p.Add("page", page);
-                p.Add("pageSize", pageSize);
 
-                List<UserRefferalTableModel> result =
-                    (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
-                    ("GetRefferers_Paged",
-                        p,
-                        commandType: CommandType.StoredProcedure);
+            var p = new DynamicParameters();
+            p.Add("page", page);
+            p.Add("pageSize", pageSize);
 
-                return result;
-            }
+            List<UserRefferalTableModel> result =
+                (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
+                ("GetRefferers_Paged",
+                    p,
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
 
         public async Task<List<UserRefferalTableModel>> GetAllRefferers()
         {
@@ -110,6 +121,23 @@ namespace Web_Api.online.Data.Repositories
             List<UserRefferalTableModel> result =
                 (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
                 ("GetUserRefferals",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+
+        }
+        public async Task<List<UserRefferalTableModel>> GetUserRefferals_Paged(string userId, int page, int pageSize)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userId);
+            parameters.Add("page", page);
+            parameters.Add("pageSize", pageSize);
+
+
+            List<UserRefferalTableModel> result =
+                (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
+                ("GetUserRefferals_Paged",
                     parameters,
                     commandType: CommandType.StoredProcedure);
 
