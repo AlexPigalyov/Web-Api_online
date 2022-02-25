@@ -630,11 +630,10 @@ AS
 BEGIN
 
 SELECT 
-anu.Email,
-anu.UserName,
-ui.FullName,
-ui.ReffererId
-
+LEFT(AspNetUsers.Email, 2) + '*****' + RIGHT(AspNetUsers.Email,2), 
+LEFT(UsersInfo.FullName, 2) + '*****' + RIGHT(UsersInfo.FullName,2), 
+UsersInfo.RegistrationDate,
+UsersInfo.ReffererId
 
 FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
