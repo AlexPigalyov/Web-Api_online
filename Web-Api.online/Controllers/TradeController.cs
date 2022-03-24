@@ -300,5 +300,35 @@ namespace Web_Api.online.Controllers
 
             return View(model);
         }
+
+        [Route("trade/crypto/{pair}")]
+        public async Task<ActionResult> Crypto(string pair)
+        {
+            CryptoModel model = new CryptoModel();
+
+            if (pair == "BTCUSDT")
+            {
+                model.Pair = "BTCUSDT";
+                model.PairHeader = "BTC - USDT";
+
+
+            }
+
+            if (pair == "ETHUSDT")
+            {
+                model.Pair = "ETHUSDT";
+                model.PairHeader = "ETH - USDT";
+
+
+            }
+
+            return View(model);
+        }
+
+        public class CryptoModel
+        {
+            public string Pair { get; set; }
+            public string PairHeader { get; set; }
+        }
     }
 }
