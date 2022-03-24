@@ -75,28 +75,42 @@ namespace Web_Api.online.Controllers
 
         [Authorize]
         [Route("trade/openorders")]
-        public async Task<ActionResult> OpenOrders()
+        public async Task<ActionResult> OpenOrders(string pair = "BTCUSDT")
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                return View(await _tradeRepository
-                    .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
+                if (pair == "BTCUSDT")
+                {
+                    return View(await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
+                }
+
+
+
+
+                return View(await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
             }
 
             return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
         }
 
         [Authorize]
-        public async Task<ActionResult> ClosedOrders()
+        public async Task<ActionResult> ClosedOrders(string pair = "BTCUSDT")
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                return View(await _tradeRepository
-                    .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                if (pair == "BTCUSDT")
+                {
+                    return View(await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                }
+
+
+
+
+                return View(await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
             }
 
             return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
@@ -127,87 +141,90 @@ namespace Web_Api.online.Controllers
             decimal amountDecimal = orderModel.Amount.ParseToDecimal();
             decimal total = priceDecimal * amountDecimal;
 
-            decimal updatedWalletBalance;
+            decimal updatedWalletBalance = 0;
 
-            //Buy - USDT
-            if (orderModel.IsBuy)
+            if (orderModel.Pair == "BTCUSDT")
             {
-                var wallet = await _walletsRepository.GetUserWalletAsync(userId, "USDT");
-
-                if (wallet == null)
+                //Buy - USDT
+                if (orderModel.IsBuy)
                 {
-                    return BadRequest("You dont have a wallets. Create them");
+                    var wallet = await _walletsRepository.GetUserWalletAsync(userId, "USDT");
+
+                    if (wallet == null)
+                    {
+                        return BadRequest("You dont have a wallets. Create them");
+                    }
+
+                    if (wallet.Value < total)
+                    {
+                        return BadRequest("You dont have wallet balance.");
+                    }
+
+                    var updatedWallet = wallet;
+
+                    updatedWallet.Value -= total;
+
+                    updatedWalletBalance = updatedWallet.Value;
+
+                    await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
+
+                }
+                else //Sell - BTC
+                {
+                    var wallet = await _walletsRepository.GetUserWalletAsync(userId, "BTC");
+
+                    if (wallet == null)
+                    {
+                        return BadRequest("You dont have a wallets. Create them");
+                    }
+
+                    if (wallet.Value < amountDecimal)
+                    {
+                        return BadRequest("You dont have wallet balance.");
+                    }
+
+                    var updatedWallet = wallet;
+
+                    updatedWallet.Value -= amountDecimal;
+
+                    updatedWalletBalance = updatedWallet.Value;
+
+                    await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
                 }
 
-                if (wallet.Value < total)
+                BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
                 {
-                    return BadRequest("You dont have wallet balance.");
+                    Price = priceDecimal,
+                    Amount = amountDecimal,
+                    Total = total,
+                    CreateUserId = userId,
+                    CreateDate = DateTime.Now,
+                };
+
+                var result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
+
+                while (result.Amount != order.Amount && result.Amount != 0)
+                {
+                    order.Amount = result.Amount;
+
+                    result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
+
+                    if (result.ClosedOrderUserId != "-1")
+                    {
+                        await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
+                    }
                 }
 
-                var updatedWallet = wallet;
+                order.Id = result.Id;
 
-                updatedWallet.Value -= total;
-
-                updatedWalletBalance = updatedWallet.Value;
-
-                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
-
-            }
-            else //Sell - BTC
-            {
-                var wallet = await _walletsRepository.GetUserWalletAsync(userId, "BTC");
-
-                if (wallet == null)
+                if (result.Id == -1)
                 {
-                    return BadRequest("You dont have a wallets. Create them");
+                    await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
                 }
-
-                if (wallet.Value < amountDecimal)
+                else
                 {
-                    return BadRequest("You dont have wallet balance.");
+                    await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
                 }
-
-                var updatedWallet = wallet;
-
-                updatedWallet.Value -= amountDecimal;
-
-                updatedWalletBalance = updatedWallet.Value;
-
-                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
-            }
-
-            BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
-            {
-                Price = priceDecimal,
-                Amount = amountDecimal,
-                Total = total,
-                CreateUserId = userId,
-                CreateDate = DateTime.Now,
-            };
-
-            var result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
-
-            while (result.Amount != order.Amount && result.Amount != 0)
-            {
-                order.Amount = result.Amount;
-
-                result = await _tradeRepository.spProcess_BTC_USDT_Order(order, orderModel.IsBuy);
-
-                if (result.ClosedOrderUserId != "-1")
-                {
-                    await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
-                }
-            }
-
-            order.Id = result.Id;
-
-            if (result.Id == -1)
-            {
-                await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
-            }
-            else
-            {
-                await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
             }
 
             return Ok(updatedWalletBalance.ToString());

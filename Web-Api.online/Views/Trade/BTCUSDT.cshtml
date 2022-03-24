@@ -168,7 +168,8 @@
                 data: JSON.stringify({
                     Price: price,
                     Amount: amount,
-                    IsBuy: true
+                    IsBuy: true,
+                    Pair: 'BTCUSDT'
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
@@ -193,7 +194,8 @@
                 data: JSON.stringify({
                     Price: price,
                     Amount: amount,
-                    IsBuy: false
+                    IsBuy: false,
+                    Pair: 'BTCUSDT'
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
