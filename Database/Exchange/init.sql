@@ -228,6 +228,7 @@ CREATE TABLE [dbo].[Pairs](
 	[Order] [int] NOT NULL,
 	[Created] [datetime] NOT NULL,
 	[Header] [nvarchar](128) NULL,
+	[Acronim] [nvarchar](20) NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -951,6 +952,7 @@ SELECT
 ,[Order]
 ,[Created]
 ,[Header]
+,[Acronim]
 FROM [Exchange].[dbo].[Pairs]
 
 
