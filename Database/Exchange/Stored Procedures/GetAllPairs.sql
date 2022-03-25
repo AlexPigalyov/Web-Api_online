@@ -16,6 +16,7 @@ SELECT
 ,[Order]
 ,[Created]
 ,[Header]
+,[Acronim]
 FROM [Exchange].[dbo].[Pairs]
 
 
