@@ -25,18 +25,21 @@ namespace Web_Api.online.Controllers
         private readonly IHubContext<btcusdtHub> _hubcontext;
         private readonly BotsRepository _botsRepository;
         private readonly CandleStickRepository _candleStickRepository;
+        private readonly PairsRepository _pairsRepository;
 
         public TradeController(
             WalletsRepository walletsRepository,
             TradeRepository tradeRepository,
             BotsRepository botsRepository,
             CandleStickRepository candleStickRepository,
+            PairsRepository pairsRepository,
             IHubContext<btcusdtHub> hubcontext)
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;
             _botsRepository = botsRepository;
             _candleStickRepository = candleStickRepository;
+            _pairsRepository = pairsRepository;
             _hubcontext = hubcontext;
         }
 
@@ -305,6 +308,8 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Crypto(string pair)
         {
             CryptoModel model = new CryptoModel();
+
+            List<PairsTableModel> pairs = await _pairsRepository.GetAllPairsAsync();
 
             if (pair == "BTCUSDT")
             {
