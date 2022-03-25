@@ -14,23 +14,37 @@ SET IDENTITY_INSERT [dbo].[Bots] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] ON 
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (1, N'BTC', N'Bitcoin', CAST(N'2021-04-22T04:17:22.167' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (1, N'BTC', N'Bitcoin', CAST(N'2021-04-22T04:17:22.167' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (2, N'USDT', N'Dollar', CAST(N'2021-04-22T04:18:16.937' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (2, N'USDT', N'Dollar', CAST(N'2021-04-22T04:18:16.937' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (3, N'ETH', N'Etherium', CAST(N'2021-04-22T04:18:32.010' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (3, N'ETH', N'Etherium', CAST(N'2021-04-22T04:18:32.010' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (4, N'LTC', N'LiteCoin', CAST(N'2021-04-24T03:22:55.287' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (4, N'LTC', N'LiteCoin', CAST(N'2021-04-24T03:22:55.287' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (5, N'XRP', N'Ripple', CAST(N'2021-04-24T03:23:23.307' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (5, N'XRP', N'Ripple', CAST(N'2021-04-24T03:23:23.307' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (6, N'DOGE', N'DogeCoin', CAST(N'2021-04-24T03:23:48.857' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (6, N'DOGE', N'DogeCoin', CAST(N'2021-04-24T03:23:48.857' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (7, N'BCH', N'BitcoinCash', CAST(N'2021-04-24T03:24:49.830' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (7, N'BCH', N'BitcoinCash', CAST(N'2021-04-24T03:24:49.830' AS DateTime), NULL, NULL, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created]) VALUES (8, N'DASH', N'DashCoin', CAST(N'2021-04-24T03:25:17.297' AS DateTime))
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade]) VALUES (8, N'DASH', N'DashCoin', CAST(N'2021-04-24T03:25:17.297' AS DateTime), NULL, NULL, NULL, NULL)
 GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Pairs] ON 
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header]) VALUES (1, N'BTC', N'USDT', 1, CAST(N'2022-03-26T01:23:27.010' AS DateTime), N'BTC - USDT')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header]) VALUES (2, N'ETH', N'USDT', 2, CAST(N'2022-03-26T01:23:44.073' AS DateTime), N'ETH - USDT')
+GO
+SET IDENTITY_INSERT [dbo].[Pairs] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Settings] ON 
+GO
+INSERT [dbo].[Settings] ([Id], [Name], [Value], [LastUpdateDateTime]) VALUES (1, N'EthereumLastReadBlock', N'13772971', CAST(N'2021-12-08T07:25:22.927' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[Settings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
@@ -55,13 +69,4 @@ GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (10, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(10.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:57.767' AS DateTime), CAST(N'2021-09-16T21:36:57.767' AS DateTime), N'59bdef4edf9e4a2bad9f6f521a184c96')
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
-GO
-
-
-INSERT INTO [dbo].[Settings]
-           ([Name]
-           ,[Value]
-           ,[LastUpdateDateTime])
-     VALUES
-           ('EthereumLastReadBlock', '13772971','2021-12-08 07:25:22.927')
 GO
