@@ -1,0 +1,10 @@
+CREATE PROCEDURE [dbo].[Get_{cryptocurrencypair}_OpenOrder_ById]
+@openOrderId bigint
+AS
+BEGIN
+
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[{cryptocurrencypair}_OpenOrders_Buy]
+UNION
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[{cryptocurrencypair}_OpenOrders_Sell]
+WHERE Id = @openOrderId
+END

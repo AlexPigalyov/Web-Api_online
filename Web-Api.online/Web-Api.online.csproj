@@ -44,4 +44,111 @@
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder_Buy.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder_Sell.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_All_ClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_All_ClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_ClosedOrders_Top100.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_ClosedOrders_Top100.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrder_ById.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrder_ById.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OrderBookBuy_OrderByDescPrice.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OrderBookBuy_OrderByDescPrice.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OrderBookSell_OrderByPrice.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OrderBookSell_OrderByPrice.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\GetCurrent_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\GetCurrent_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersBuyToClosedOders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersBuyToClosedOders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersSellToClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersSellToClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersToClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersToClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_BuyOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_BuyOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_SellOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_SellOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder_Buy.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder_Sell.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\CandleStick.txt" />
+    <Resource Include="Data\Templates\Tables\CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\ClosedOrders.txt" />
+    <Resource Include="Data\Templates\Tables\ClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\OpenOrders_Buy.txt" />
+    <Resource Include="Data\Templates\Tables\OpenOrders_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\OpenOrders_Sell.txt" />
+    <Resource Include="Data\Templates\Tables\OpenOrders_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

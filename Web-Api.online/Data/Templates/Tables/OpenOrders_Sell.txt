@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[{cryptocurrencypair}_OpenOrders_Sell](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Price] [decimal](38, 20) NOT NULL,
+	[Amount] [decimal](38, 20) NOT NULL,
+	[Total] [decimal](38, 20) NOT NULL,
+	[CreateUserId] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_{cryptocurrencypair}_OpenOrders_Sell] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+

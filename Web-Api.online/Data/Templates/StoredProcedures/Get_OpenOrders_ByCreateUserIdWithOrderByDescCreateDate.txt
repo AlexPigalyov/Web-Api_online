@@ -1,0 +1,12 @@
+CREATE PROCEDURE [dbo].[Get_{cryptocurrencypair}_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate]
+@createUserId nvarchar(450)
+AS
+BEGIN
+
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[{cryptocurrencypair}_OpenOrders_Buy]
+WHERE CreateUserId = @createUserId
+UNION
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[{cryptocurrencypair}_OpenOrders_Sell]
+WHERE CreateUserId = @createUserId
+ORDER BY CreateDate DESC
+END
