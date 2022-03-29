@@ -29,6 +29,14 @@ namespace Web_Api.online.Controllers.Admin
 
             return View("Views/Admin/Pairs.cshtml", viewModel);
         }
+        
+        [HttpPost]
+        [Route("Create")]
+        public async Task<IActionResult> Create([FromBody] CreatePairRequestModel model)
+        {
+            await _pairsRepository.Create(model.FirstCurrency, model.SecondCurrency);
 
+            return Ok();
+        }
     }
 }

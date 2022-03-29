@@ -582,6 +582,25 @@ VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDA
 SET @id = SCOPE_IDENTITY()
 END
 
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CreatePair]
+@currency1 nvarchar(10),
+@currency2 nvarchar(10),
+@created datetime,
+@header nvarchar(128),
+@acronim nvarchar(20)
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[Pairs] (Currency1, Currency2, "Order", Created, Header, Acronim)
+VALUES (@currency1, @currency2, 10, @created, @header, @acronim)
+
+END
 GO
 SET ANSI_NULLS ON
 GO
