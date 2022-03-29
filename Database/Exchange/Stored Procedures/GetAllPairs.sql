@@ -1,11 +1,11 @@
 USE [Exchange]
 GO
-
+/****** Object:  StoredProcedure [dbo].[GetAllPairs]    Script Date: 29.03.2022 19:31:59 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetAllPairs]
+ALTER PROCEDURE [dbo].[GetAllPairs]
 AS
 BEGIN
 
@@ -18,6 +18,6 @@ SELECT
 ,[Header]
 ,[Acronim]
 FROM [Exchange].[dbo].[Pairs]
-
+ORDER BY [Order]
 
 END

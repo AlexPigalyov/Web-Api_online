@@ -1,6 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
+@model List<PairsTableModel>
+
 @{
     ViewData["Title"] = "Markets";
 }
@@ -21,8 +24,11 @@
         <li>
             <a href="/trade/btcusdt">BTC - USDT</a>
         </li>
-        <li>
-            <a href="/trade/crypto/btcusdt">crypto BTC - USDT</a>
-        </li>
+        @foreach (var pair in Model)
+        {
+            <li>
+                <a href="/trade/crypto/@pair.Header.Replace(" ", string.Empty).ToLower()">crypto @pair.Header</a>
+            </li>
+        }
     </ul>
 </div>

@@ -88,7 +88,7 @@ namespace Web_Api.online.Controllers
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
-                ClosedOrders = closedOrders ?? new List<BTC_USDT_ClosedOrderTableModel>()
+                ClosedOrders = closedOrders ?? new List<ClosedOrderTableModel>()
             };
 
             return View(viewModel);

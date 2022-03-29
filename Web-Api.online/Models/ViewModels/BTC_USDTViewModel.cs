@@ -11,10 +11,10 @@ namespace Web_Api.online.Models.ViewModels
         public List<WalletTableModel> UserWallets { get; set; }
         public WalletTableModel BtcWallet { get; set; }
         public WalletTableModel UsdtWallet { get; set; }
-        public List<BTC_USDT_ClosedOrderTableModel> MarketTrades { get; set; }
-        public List<spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate> UserOpenOrders { get; set; }
-        public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> BuyOrderBook { get; set; }
-        public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> SellOrderBook { get; set; }
+        public List<ClosedOrderTableModel> MarketTrades { get; set; }
+        public List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate> UserOpenOrders { get; set; }
+        public List<spGetOrderByDescPriceOrderBookResult> BuyOrderBook { get; set; }
+        public List<spGetOrderByDescPriceOrderBookResult> SellOrderBook { get; set; }
         public List<CandleStickTableModel> CandleStick { get; set; }
     }
 }

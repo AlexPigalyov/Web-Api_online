@@ -7,8 +7,8 @@ namespace Web_Api.online.Models
 {
     public class RecieveMessageResultModel
     {
-        public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> OrderBookSell { get; set; }
-        public List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> OrderBookBuy { get; set; }
-        public List<BTC_USDT_ClosedOrderTableModel> MarketTrades { get; set; }
+        public List<spGetOrderByDescPriceOrderBookResult> OrderBookSell { get; set; }
+        public List<spGetOrderByDescPriceOrderBookResult> OrderBookBuy { get; set; }
+        public List<ClosedOrderTableModel> MarketTrades { get; set; }
     }
 }

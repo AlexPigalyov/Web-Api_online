@@ -973,9 +973,10 @@ SELECT
 ,[Header]
 ,[Acronim]
 FROM [Exchange].[dbo].[Pairs]
-
+ORDER BY [Order]
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO

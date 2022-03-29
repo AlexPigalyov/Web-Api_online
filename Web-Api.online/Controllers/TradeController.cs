@@ -44,9 +44,11 @@ namespace Web_Api.online.Controllers
         }
 
         // GET: TradeController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var model = await _pairsRepository.GetAllPairsAsync();
+            
+            return View(model);
         }
 
         [Authorize]
@@ -304,34 +306,81 @@ namespace Web_Api.online.Controllers
             return View(model);
         }
 
-        [Route("trade/crypto/{pair}")]
-        public async Task<ActionResult> Crypto(string pair)
+        [Route("trade/crypto/{firstCurrency}-{secondCurrency}")]
+        public async Task<ActionResult> Crypto(string firstCurrency, string secondCurrency)
         {
             CryptoModel model = new CryptoModel();
-
             List<PairsTableModel> pairs = await _pairsRepository.GetAllPairsAsync();
+            
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (pair == "BTCUSDT")
+            if (!string.IsNullOrEmpty(userId))
             {
-                model.Pair = "BTCUSDT";
-                model.PairHeader = "BTC - USDT";
+                model.UserId = userId;
+                
+                var userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
+                model.UserWallets = userWallets;
+                
+                WalletTableModel firstWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == firstCurrency.ToUpper());
+                
+                if (firstWallet == null)
+                {
+                    var newWallet = new WalletTableModel
+                    {
+                        UserId = userId,
+                        CurrencyAcronim = firstCurrency.ToUpper(),
+                        Address = System.Guid.NewGuid().ToString().Replace("-", ""),
+                        Value = 0
+                    };
 
+                    firstWallet = await _walletsRepository.CreateUserWalletAsync(newWallet);
+                }
+                
+                model.UserWallets.Add(firstWallet);
+                model.FirstWallet = firstWallet;
+                
+                WalletTableModel secondWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == secondCurrency.ToUpper());
 
+                if (secondWallet == null)
+                {
+                    var newWallet = new WalletTableModel
+                    {
+                        UserId = userId,
+                        CurrencyAcronim = secondCurrency.ToUpper(),
+                        Address = System.Guid.NewGuid().ToString().Replace("-", ""),
+                        Value = 0
+                    };
+
+                    secondWallet = await _walletsRepository.CreateUserWalletAsync(newWallet);
+                }
+
+                model.UserWallets.Add(secondWallet);
+                model.SecondWallet = secondWallet;
+                
+                model.UserOpenOrders = await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, firstCurrency, secondCurrency);
             }
 
-            if (pair == "ETHUSDT")
-            {
-                model.Pair = "ETHUSDT";
-                model.PairHeader = "ETH - USDT";
-
-
-            }
+            firstCurrency = firstCurrency.ToUpper();
+            secondCurrency = secondCurrency.ToUpper();
+            
+            model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(firstCurrency, secondCurrency);
+            model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(firstCurrency, secondCurrency);
+            model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(firstCurrency, secondCurrency);
 
             return View(model);
         }
 
         public class CryptoModel
         {
+            public string UserId { get; set; }
+            public List<WalletTableModel> UserWallets { get; set; }
+            public WalletTableModel FirstWallet { get; set; }
+            public WalletTableModel SecondWallet { get; set; }
+            public List<ClosedOrderTableModel> MarketTrades { get; set; }
+            public List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate> UserOpenOrders { get; set; }
+            public List<spGetOrderByDescPriceOrderBookResult> BuyOrderBook { get; set; }
+            public List<spGetOrderByDescPriceOrderBookResult> SellOrderBook { get; set; }
+            public List<CandleStickTableModel> CandleStick { get; set; }
             public string Pair { get; set; }
             public string PairHeader { get; set; }
         }

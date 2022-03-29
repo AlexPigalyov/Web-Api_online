@@ -5,7 +5,7 @@ using Web_Api.online.Models.Enums;
 
 namespace Web_Api.online.Models.Tables
 {
-    public class BTC_USDT_ClosedOrderTableModel
+    public class ClosedOrderTableModel
     {
         [Key]
         public long ClosedOrderId { get; set; }

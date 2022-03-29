@@ -155,7 +155,13 @@
 <script>
 
     $(document).ready(function () {
-
+        
+        var model = @Html.Raw(Json.Serialize(Model));
+        var userOpenOrders = model.userOpenOrders;
+        var buyOpenOrders = model.buyOrderBook
+        var sellOpenOrders = model.sellOrderBook
+        var marketTrades = model.marketTrades
+        
         $("#buyButton" ).click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
@@ -169,7 +175,7 @@
                     Price: price,
                     Amount: amount,
                     IsBuy: true,
-                    Pair: 'BTCUSDT'
+                    Pair: model.
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
@@ -208,11 +214,7 @@
             });
         });
 
-        var model = @Html.Raw(Json.Serialize(Model));
-        var userOpenOrders = model.userOpenOrders;
-        var buyOpenOrders = model.buyOrderBook
-        var sellOpenOrders = model.sellOrderBook
-        var marketTrades = model.marketTrades
+        
 
         var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
         if(marketTrades.length > 0){

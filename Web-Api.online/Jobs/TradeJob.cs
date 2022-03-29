@@ -28,9 +28,9 @@ namespace Web_Api.online.Jobs
         }
         public async Task Execute(IJobExecutionContext context)
         {
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
-            List<spGetOrderByDescPrice_BTC_USDT_OrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
-            List<BTC_USDT_ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
+            List<spGetOrderByDescPriceOrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
+            List<spGetOrderByDescPriceOrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
+            List<ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
 
             RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
             {

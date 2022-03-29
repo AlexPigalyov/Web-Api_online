@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spGetOrderByDescPrice_BTC_USDT_OrderBookResult
+    public class spGetOrderByDescPriceOrderBookResult
     {
         public int CountPrices { get; set; }
         public decimal Price { get; set; }
