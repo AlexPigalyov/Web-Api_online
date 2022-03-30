@@ -94,6 +94,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[AspNetUsers](
 	[Id] [nvarchar](450) NOT NULL,
+	[Number] [int] IDENTITY(1,1) NOT NULL,
 	[UserName] [nvarchar](256) NULL,
 	[NormalizedUserName] [nvarchar](256) NULL,
 	[Email] [nvarchar](256) NULL,
