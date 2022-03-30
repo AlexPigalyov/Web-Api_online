@@ -39,15 +39,16 @@ namespace Web_Api.online.Clients
 
         public async Task<GeneralWithdrawModel> SendToAddress(GeneralWithdrawModel model, string userId)
         {
+            // оставляем запас 0.001 на комисию блокчейна, можно вынесли в константы
+            decimal fixedCommicion = 0.001m;
             try
             {
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
-                decimal? _amount = model.Amount.ConvertToDecimal();
+                decimal? _amount = model.Amount.ConvertToDecimal() + fixedCommicion;
 
                 if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
                 {
-                    var result = await _balanceProvider.Withdraw(_amount.Value, wallet);
-                    wallet.Value = result.ResultBalanceSender;
+                    var resultBalance = await _balanceProvider.Withdraw(_amount.Value, wallet);
 
                     var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
                                     new OutcomeTransactionTableModel()
@@ -55,29 +56,58 @@ namespace Web_Api.online.Clients
                                         FromWalletId = wallet.Id,
                                         ToAddress = model.Address,
                                         Value = _amount.Value,
-                                        PlatformCommission =result.Commission,
+                                        PlatformCommission = resultBalance.Commission,
+                                        FixedCommission = fixedCommicion,
                                         CurrencyAcronim = "ETH",
-                                        State = (int)OutcomeTransactionStateEnum.Created
+                                        State = (int)OutcomeTransactionStateEnum.Created,
                                     });
 
-                    //TODO здесь отправляем запрос на внешний сервис который работает с блокчейном, там будет создана транзакция
-                    //закомчено, тк проблемы с эфиром
-                    //создаётся транзакция которую ручками выводим
-                    //_ethRequestClient.ExecuteTransaction(tr.Id);
+                    var resultTr = await _ethRequestClient.ExecuteTransactionAsync(tr.Id);
 
-                    await _eventsRepository.CreateEventAsync(new EventTableModel()
+                    if (resultTr.IsSuccess)
                     {
-                        UserId = userId,
-                        Type = (int)EventTypeEnum.Withdraw,
-                        Comment = model.Comment,
-                        Value = _amount.Value,
-                        StartBalance = result.StartBalanceSender,
-                        ResultBalance = result.ResultBalanceSender,
-                        WhenDate = DateTime.Now,
-                        CurrencyAcronim = model.Currency
-                    });
-                    model.Status = "Success";
-                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+                        wallet.Value = resultBalance.ResultBalanceSender;
+                        await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+
+                        tr.State = resultTr.OutcomeTransactionState;
+                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
+
+                        await _eventsRepository.CreateEventAsync(new EventTableModel()
+                        {
+                            UserId = userId,
+                            Type = (int)EventTypeEnum.Withdraw,
+                            Comment = model.Comment,
+                            Value = _amount.Value,
+                            StartBalance = resultBalance.StartBalanceSender,
+                            ResultBalance = resultBalance.ResultBalanceSender,
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = model.Currency
+                        });
+
+                        model.Status = "Success";
+                    }
+                    else
+                    {
+                        tr.State = resultTr.OutcomeTransactionState;
+                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
+                        tr.ErrorText = resultTr.ErrorText;
+
+                        await _eventsRepository.CreateEventAsync(new EventTableModel()
+                        {
+                            UserId = userId,
+                            Type = (int)EventTypeEnum.OutcomeTransactionError,
+                            //Comment = model.Comment, ?
+                            Comment = resultTr.ErrorText,
+                            Value = _amount.Value,
+                            StartBalance = resultBalance.StartBalanceSender,
+                            ResultBalance = resultBalance.ResultBalanceSender,
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = model.Currency
+                        });
+
+                        model.Status = "Error, your transaction will be processed manually";
+                    }
+                    await _outcomeTransactionRepository.UpdateTransactionAfterExecutioAsync(tr);
                 }
                 else
                 {

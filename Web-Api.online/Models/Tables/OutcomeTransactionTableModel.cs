@@ -8,6 +8,8 @@ namespace Web_Api.online.Models.Tables
         public int FromWalletId { get; set; }
         public string ToAddress { get; set; }
         public decimal Value { get; set; }
+        public decimal? FixedCommission { get; set; }
+        public decimal? BlockchainCommission { get; set; }
         public decimal? PlatformCommission { get; set; }
         public DateTime CreateDate { get; set; }
         public string CurrencyAcronim { get; set; }
