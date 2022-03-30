@@ -22,12 +22,12 @@
 <div>
     <ul>
         <li>
-            <a href="/trade/btcusdt">BTC - USDT</a>
+            <a href="/trade/btcusdt">old BTC - USDT</a>
         </li>
         @foreach (var pair in Model)
         {
             <li>
-                <a href="/trade/crypto/@pair.Header.Replace(" ", string.Empty).ToLower()">crypto @pair.Header</a>
+                <a href="/trade/crypto/@pair.Header.Replace(" ", string.Empty).ToLower()">@pair.Header</a>
             </li>
         }
     </ul>
