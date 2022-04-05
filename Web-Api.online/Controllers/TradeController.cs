@@ -47,7 +47,7 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Index()
         {
             var model = await _pairsRepository.GetAllPairsAsync();
-            
+
             return View(model);
         }
 
@@ -73,7 +73,8 @@ namespace Web_Api.online.Controllers
                 return BadRequest("This is not your order.");
             }
 
-            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId, ClosedOrderStatusEnum.Canceled);
+            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId,
+                ClosedOrderStatusEnum.Canceled);
 
             return Ok();
         }
@@ -88,13 +89,14 @@ namespace Web_Api.online.Controllers
             {
                 if (pair == "BTCUSDT")
                 {
-                    return View(await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
+                    return View(
+                        await _tradeRepository
+                            .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
                 }
 
 
-
-
-                return View(await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
+                return View(
+                    await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
             }
 
             return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
@@ -109,13 +111,13 @@ namespace Web_Api.online.Controllers
             {
                 if (pair == "BTCUSDT")
                 {
-                    return View(await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                    return View(await _tradeRepository
+                        .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
                 }
 
 
-
-
-                return View(await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                return View(
+                    await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
             }
 
             return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
@@ -172,7 +174,6 @@ namespace Web_Api.online.Controllers
                     updatedWalletBalance = updatedWallet.Value;
 
                     await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
-
                 }
                 else //Sell - BTC
                 {
@@ -197,7 +198,7 @@ namespace Web_Api.online.Controllers
                     await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
                 }
 
-                BTC_USDT_OpenOrderTableModel order = new BTC_USDT_OpenOrderTableModel
+                OpenOrderTableModel order = new OpenOrderTableModel
                 {
                     Price = priceDecimal,
                     Amount = amountDecimal,
@@ -216,7 +217,8 @@ namespace Web_Api.online.Controllers
 
                     if (result.ClosedOrderUserId != "-1")
                     {
-                        await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed", JsonConvert.SerializeObject(result.ClosedOrderId));
+                        await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed",
+                            JsonConvert.SerializeObject(result.ClosedOrderId));
                     }
                 }
 
@@ -228,9 +230,125 @@ namespace Web_Api.online.Controllers
                 }
                 else
                 {
-                    await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
+                    await _hubcontext.Clients.User(userId)
+                        .SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
                 }
             }
+
+            return Ok(updatedWalletBalance.ToString());
+        }
+
+        [HttpPost]
+        [Route("trade/crypto/createorder")]
+        public async Task<ActionResult> CryptoCreateOrder([FromBody] OrderModel orderModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
+            {
+                var botAuthCode = await _botsRepository.GetBotByBotAuthCode(orderModel.BotAuthCode);
+
+                if (botAuthCode != null)
+                {
+                    userId = botAuthCode.UserId;
+                }
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You're not authorized");
+            }
+
+            decimal priceDecimal = orderModel.Price.ParseToDecimal();
+            decimal amountDecimal = orderModel.Amount.ParseToDecimal();
+            decimal total = priceDecimal * amountDecimal;
+
+            decimal updatedWalletBalance = 0;
+
+            string firstCurrency = orderModel.Pair.Split("-")[0];
+            string secondCurrency = orderModel.Pair.Split("-")[1];
+            
+            if (orderModel.IsBuy)
+            {
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, secondCurrency);
+
+                if (wallet == null)
+                {
+                    return BadRequest("You dont have a wallets. Create them");
+                }
+
+                if (wallet.Value < total)
+                {
+                    return BadRequest("You dont have wallet balance.");
+                }
+
+                var updatedWallet = wallet;
+
+                updatedWallet.Value -= total;
+
+                updatedWalletBalance = updatedWallet.Value;
+
+                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
+            }
+            else //Sell - BTC
+            {
+                var wallet = await _walletsRepository.GetUserWalletAsync(userId, firstCurrency);
+
+                if (wallet == null)
+                {
+                    return BadRequest("You dont have a wallets. Create them");
+                }
+
+                if (wallet.Value < amountDecimal)
+                {
+                    return BadRequest("You dont have wallet balance.");
+                }
+
+                var updatedWallet = wallet;
+
+                updatedWallet.Value -= amountDecimal;
+
+                updatedWalletBalance = updatedWallet.Value;
+
+                await _walletsRepository.UpdateWalletBalanceAsync(updatedWallet);
+            }
+
+            OpenOrderTableModel order = new OpenOrderTableModel
+            {
+                Price = priceDecimal,
+                Amount = amountDecimal,
+                Total = total,
+                CreateUserId = userId,
+                CreateDate = DateTime.Now,
+                CryptExchangePair = orderModel.Pair.Replace("-", "_")
+            };
+
+            var result = await _tradeRepository.ProcessOrder(order, orderModel.IsBuy);
+
+            while (result.Amount != order.Amount && result.Amount != 0)
+            {
+                order.Amount = result.Amount;
+
+                result = await _tradeRepository.ProcessOrder(order, orderModel.IsBuy);
+
+                if (result.ClosedOrderUserId != "-1")
+                {
+                    await _hubcontext.Clients.User(result.ClosedOrderUserId).SendAsync("OrderWasClosed",
+                        JsonConvert.SerializeObject(result.ClosedOrderId));
+                }
+            }
+
+            order.Id = result.Id;
+
+            if (result.Id == -1)
+            {
+                await _hubcontext.Clients.User(userId).SendAsync("OrderWasClosed", result.Id);
+            }
+            else
+            {
+                await _hubcontext.Clients.User(userId).SendAsync("OrderWasCreated", JsonConvert.SerializeObject(order));
+            }
+
 
             return Ok(updatedWalletBalance.ToString());
         }
@@ -289,7 +407,8 @@ namespace Web_Api.online.Controllers
 
                 model.UsdtWallet = usdtWallet;
 
-                model.UserOpenOrders = await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
+                model.UserOpenOrders =
+                    await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId);
             }
 
             model.BuyOrderBook = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
@@ -310,19 +429,19 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Crypto(string firstCurrency, string secondCurrency)
         {
             CryptoModel model = new CryptoModel();
-            List<PairsTableModel> pairs = await _pairsRepository.GetAllPairsAsync();
-            
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
                 model.UserId = userId;
-                
+
                 var userWallets = await _walletsRepository.GetUserWalletsAsync(userId);
                 model.UserWallets = userWallets;
-                
-                WalletTableModel firstWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == firstCurrency.ToUpper());
-                
+
+                WalletTableModel firstWallet =
+                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == firstCurrency.ToUpper());
+
                 if (firstWallet == null)
                 {
                     var newWallet = new WalletTableModel
@@ -335,11 +454,12 @@ namespace Web_Api.online.Controllers
 
                     firstWallet = await _walletsRepository.CreateUserWalletAsync(newWallet);
                 }
-                
+
                 model.UserWallets.Add(firstWallet);
                 model.FirstWallet = firstWallet;
-                
-                WalletTableModel secondWallet = userWallets.FirstOrDefault(x => x.CurrencyAcronim == secondCurrency.ToUpper());
+
+                WalletTableModel secondWallet =
+                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == secondCurrency.ToUpper());
 
                 if (secondWallet == null)
                 {
@@ -356,13 +476,15 @@ namespace Web_Api.online.Controllers
 
                 model.UserWallets.Add(secondWallet);
                 model.SecondWallet = secondWallet;
-                
-                model.UserOpenOrders = await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, firstCurrency, secondCurrency);
+
+                model.UserOpenOrders =
+                    await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, firstCurrency,
+                        secondCurrency);
             }
 
             firstCurrency = firstCurrency.ToUpper();
             secondCurrency = secondCurrency.ToUpper();
-            
+
             model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(firstCurrency, secondCurrency);
             model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(firstCurrency, secondCurrency);
             model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(firstCurrency, secondCurrency);

@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[{cryptocurrencypair}_OpenOrders_Buy] ADD  CONSTRAINT [DF_{cryptocurrencypair}_OpenOrders_Buy_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]

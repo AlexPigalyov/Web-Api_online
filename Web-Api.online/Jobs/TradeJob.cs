@@ -19,27 +19,35 @@ namespace Web_Api.online.Jobs
     {
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<btcusdtHub> _hubcontext;
+        private readonly PairsRepository _pairsRepository;
         public TradeJob(
             TradeRepository tradeRepository,
-            IHubContext<btcusdtHub> hubcontext)
+            IHubContext<btcusdtHub> hubcontext, 
+            PairsRepository pairsRepository)
         {
             _tradeRepository = tradeRepository;
             _hubcontext = hubcontext;
+            _pairsRepository = pairsRepository;
         }
         public async Task Execute(IJobExecutionContext context)
         {
-            List<spGetOrderByDescPriceOrderBookResult> openOrdersBuy = await _tradeRepository.Get_BTC_USDT_BuyOrderBookAsync();
-            List<spGetOrderByDescPriceOrderBookResult> openOrdersSell = await _tradeRepository.Get_BTC_USDT_SellOrderBookAsync();
-            List<ClosedOrderTableModel> marketTrades = await _tradeRepository.spGet_BTC_USDT_ClosedOrders_Top100();
-
-            RecieveMessageResultModel recieveResult = new RecieveMessageResultModel()
+            var pairs = await _pairsRepository.GetAllPairsAsync();
+            
+            pairs.ForEach(async x =>
             {
-                OrderBookBuy = openOrdersBuy,
-                OrderBookSell = openOrdersSell,
-                MarketTrades = marketTrades
-            };
+                var openOrdersBuy = await _tradeRepository.GetBuyOrderBookAsync(x.Currency1, x.Currency2);
+                var openOrdersSell = await _tradeRepository.GetSellOrderBookAsync(x.Currency1, x.Currency2);
+                var marketTrades = await _tradeRepository.GetClosedOrders_Top100(x.Currency1, x.Currency2);
 
-            await _hubcontext.Clients.All.SendAsync("ReceiveMessage", JsonConvert.SerializeObject(recieveResult));
+                var recieveResult = new RecieveMessageResultModel()
+                {
+                    OrderBookBuy = openOrdersBuy,
+                    OrderBookSell = openOrdersSell,
+                    MarketTrades = marketTrades
+                };
+
+                await _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Currency1}_{x.Currency2}", JsonConvert.SerializeObject(recieveResult));
+            });
         }
     }
 }

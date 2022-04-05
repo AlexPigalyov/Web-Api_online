@@ -421,6 +421,20 @@ namespace Web_Api.online
 
                 await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
+            
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "ETH") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
+                {
+                    Address = "",
+                    CurrencyAcronim = "ETH",
+                    UserId = UserIdConstant.BinanceBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
+            }
             #endregion
             #region BitFinexWallet
 

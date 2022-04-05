@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spProcess_BTC_USDT_OrderResult
+    public class spProcessOrderResult
     {
         public decimal Amount { get; set; }
         public long Id { get; set; }

@@ -175,7 +175,7 @@
                     Price: price,
                     Amount: amount,
                     IsBuy: true,
-                    Pair: model.
+                    Pair: model.PairHeader.replace(" ", "")
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {

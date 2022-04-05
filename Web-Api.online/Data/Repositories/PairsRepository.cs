@@ -48,7 +48,7 @@ namespace Web_Api.online.Data.Repositories
             var x = Directory.GetDirectories("Data\\Templates");
             foreach (var fullname in Directory.GetDirectories("Data\\Templates").OrderByDescending(x => x))
             {
-                foreach (var file in Directory.GetFiles(fullname))
+                foreach (var file in Directory.GetFiles(fullname).OrderBy(x => x.Length))
                 {
                     await _db
                         .ExecuteAsync((await File.ReadAllTextAsync(file))
