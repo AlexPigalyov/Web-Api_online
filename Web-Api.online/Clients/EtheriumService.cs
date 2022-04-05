@@ -44,9 +44,9 @@ namespace Web_Api.online.Clients
             try
             {
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
-                decimal? _amount = model.Amount.ConvertToDecimal() + fixedCommicion;
+                decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
+                if (wallet != null && _amount.Value > 0 && _amount.Value + fixedCommicion <= wallet.Value)
                 {
                     var resultBalance = await _balanceProvider.Withdraw(_amount.Value, wallet);
 
@@ -66,7 +66,7 @@ namespace Web_Api.online.Clients
 
                     if (resultTr.IsSuccess)
                     {
-                        wallet.Value = resultBalance.ResultBalanceSender;
+                        wallet.Value = resultBalance.ResultBalanceSender - resultTr.CommissionBlockchain.Value;
                         await _walletsRepository.UpdateWalletBalanceAsync(wallet);
 
                         tr.State = resultTr.OutcomeTransactionState;
@@ -77,9 +77,9 @@ namespace Web_Api.online.Clients
                             UserId = userId,
                             Type = (int)EventTypeEnum.Withdraw,
                             Comment = model.Comment,
-                            Value = _amount.Value,
+                            Value = _amount.Value + resultTr.CommissionBlockchain.Value,
                             StartBalance = resultBalance.StartBalanceSender,
-                            ResultBalance = resultBalance.ResultBalanceSender,
+                            ResultBalance = resultBalance.ResultBalanceSender - resultTr.CommissionBlockchain.Value,
                             WhenDate = DateTime.Now,
                             CurrencyAcronim = model.Currency
                         });
@@ -96,8 +96,7 @@ namespace Web_Api.online.Clients
                         {
                             UserId = userId,
                             Type = (int)EventTypeEnum.OutcomeTransactionError,
-                            //Comment = model.Comment, ?
-                            Comment = resultTr.ErrorText,
+                            Comment = resultTr.ErrorText + " (commission not deducted)",
                             Value = _amount.Value,
                             StartBalance = resultBalance.StartBalanceSender,
                             ResultBalance = resultBalance.ResultBalanceSender,

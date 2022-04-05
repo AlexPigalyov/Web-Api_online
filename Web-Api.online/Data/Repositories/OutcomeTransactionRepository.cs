@@ -29,8 +29,8 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("toAddress", outcomeTransaction.ToAddress);
                 p.Add("value", outcomeTransaction.Value);
                 p.Add("platformCommission", outcomeTransaction.PlatformCommission);
-                p.Add("fixedCommission", outcomeTransaction.PlatformCommission);
-                p.Add("blockchainCommission", outcomeTransaction.PlatformCommission);
+                p.Add("fixedCommission", outcomeTransaction.FixedCommission);
+                p.Add("blockchainCommission", outcomeTransaction.BlockchainCommission);
                 p.Add("currencyAcronim", outcomeTransaction.CurrencyAcronim);
                 p.Add("state", outcomeTransaction.State);
 
@@ -52,7 +52,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("blockchainCommission", outcomeTransaction.State);
                 p.Add("errorText", outcomeTransaction.ErrorText);
 
-                await _db.QueryAsync("UpdateTransactionAfterExecutio", p, commandType: CommandType.StoredProcedure);
+                await _db.QueryAsync("UpdateTransactionAfterExecution", p, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("pageSize", pageSize);
 
                 List<spGetOutcomeTransactions_Paged> result =
-                    (List<spGetOutcomeTransactions_Paged>) await _db.QueryAsync<spGetOutcomeTransactions_Paged>
+                    (List<spGetOutcomeTransactions_Paged>)await _db.QueryAsync<spGetOutcomeTransactions_Paged>
                     ("GetOutcomeTransactions_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure);
