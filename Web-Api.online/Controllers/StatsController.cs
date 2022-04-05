@@ -98,8 +98,8 @@ namespace Web_Api.online.Controllers
         {
             int pageSize = 15;
 
-            var users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
-            var itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
+            List<RegistratedUsersTableModel> users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
+            int itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
 
             RegistratedUsersViewModel viewModel = new RegistratedUsersViewModel()
             {
