@@ -214,7 +214,9 @@ CREATE TABLE [dbo].[OutcomeTransactions](
 	[State] [int] NOT NULL,
 	[LastUpdateDate] [datetime] NOT NULL,
 	[ErrorText] [nvarchar](max) NULL,
-	[PlatformCommission] [decimal](38, 20) NULL
+	[PlatformCommission] [decimal](38, 20) NULL,
+	[BlockchainCommission] [decimal](38, 20) NULL,
+	[FixedCommission] [decimal](38, 20) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -569,6 +571,8 @@ CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
 @toAddress nvarchar(max),
 @value decimal(38,20),
 @platformCommission decimal(38,20),
+@fixedCommission decimal(38,20),
+@blockchainCommission decimal(38,20),
 @currencyAcronim nvarchar(10),
 @state int
 AS
@@ -576,12 +580,13 @@ AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, PlatformCommission)
-VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(), @platformCommission)
+			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, PlatformCommission,
+			BlockchainCommission, FixedCommission)
+VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(),
+@platformCommission, @blockchainCommission, @fixedCommission)
 
 SET @id = SCOPE_IDENTITY()
 END
-
 
 GO
 SET ANSI_NULLS ON
@@ -1364,9 +1369,6 @@ OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
 END
-
-
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -2197,6 +2199,25 @@ BEGIN
 
 UPDATE [Exchange].[dbo].[OutcomeTransactions]
 SET State = @state, LastUpdateDate = GETDATE(), ErrorText = @errorText
+WHERE Id = @id
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateTransactionAfterExecution]
+@id int,
+@state int,
+@blockchainCommission decimal (38, 20),
+@errorText nvarchar(max)
+AS
+BEGIN
+
+UPDATE [Exchange].[dbo].[OutcomeTransactions]
+SET State = @state, LastUpdateDate = GETDATE(),
+BlockchainCommission = @blockchainCommission, ErrorText = @errorText
 WHERE Id = @id
 
 END

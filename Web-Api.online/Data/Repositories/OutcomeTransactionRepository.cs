@@ -29,15 +29,34 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("toAddress", outcomeTransaction.ToAddress);
                 p.Add("value", outcomeTransaction.Value);
                 p.Add("platformCommission", outcomeTransaction.PlatformCommission);
+                p.Add("fixedCommission", outcomeTransaction.FixedCommission);
+                p.Add("blockchainCommission", outcomeTransaction.BlockchainCommission);
                 p.Add("currencyAcronim", outcomeTransaction.CurrencyAcronim);
                 p.Add("state", outcomeTransaction.State);
 
                 await _db.ExecuteAsync("CreateOutcomeTransaction", p, commandType: CommandType.StoredProcedure);
                 outcomeTransaction.Id = p.Get<long>("id");
 
-                return outcomeTransaction;  
+                return outcomeTransaction;
             }
             catch (Exception ex) { return null; }
+        }
+
+        public async Task UpdateTransactionAfterExecutioAsync(OutcomeTransactionTableModel outcomeTransaction)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("id", outcomeTransaction.Id);
+                p.Add("state", outcomeTransaction.State);
+                p.Add("blockchainCommission", outcomeTransaction.State);
+                p.Add("errorText", outcomeTransaction.ErrorText);
+
+                await _db.QueryAsync("UpdateTransactionAfterExecution", p, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public async Task<List<OutcomeTransactionTableModel>> GetAllOutcomeTransactions()
@@ -88,7 +107,7 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("pageSize", pageSize);
 
                 List<spGetOutcomeTransactions_Paged> result =
-                    (List<spGetOutcomeTransactions_Paged>) await _db.QueryAsync<spGetOutcomeTransactions_Paged>
+                    (List<spGetOutcomeTransactions_Paged>)await _db.QueryAsync<spGetOutcomeTransactions_Paged>
                     ("GetOutcomeTransactions_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure);

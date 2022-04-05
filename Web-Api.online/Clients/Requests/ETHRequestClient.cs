@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
+using System.Threading.Tasks;
+using Web_Api.online.Models.Response;
 
 namespace Web_Api.online.Clients.Requests
 {
@@ -19,18 +22,18 @@ namespace Web_Api.online.Clients.Requests
                     {
                         var result = httpClient.GetAsync($"http://192.168.1.67:777/ETH/GetNewAddress?label={lable}").Result;
 
-                        return  result.Content.ReadAsStringAsync().Result;
+                        return result.Content.ReadAsStringAsync().Result;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return null;
                 }
-                
+
             }
         }
-        
-        public void ExecuteTransaction(long transactionId)
+
+        public async Task<ExecuteTransactionResponse> ExecuteTransactionAsync(long transactionId)
         {
             using (var httpClientHandler = new HttpClientHandler())
             {
@@ -39,12 +42,15 @@ namespace Web_Api.online.Clients.Requests
                 {
                     using (var httpClient = new HttpClient(httpClientHandler))
                     {
-                        var result = httpClient.GetAsync($"http://192.168.1.67:777/ETH/ExecuteTransaction?transactionId={transactionId}").Result;
+
+                        var result = await httpClient.GetAsync($"http://192.168.1.67:777/ETH/ExecuteTransaction?transactionId={transactionId}");
+                        var jsonString = await result.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<ExecuteTransactionResponse>(jsonString);
                     }
                 }
                 catch (Exception e)
                 {
-                    return;
+                    return new ExecuteTransactionResponse() { IsSuccess = false };
                 }
             }
         }
