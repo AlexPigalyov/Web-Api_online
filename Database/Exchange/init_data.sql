@@ -36,8 +36,6 @@ SET IDENTITY_INSERT [dbo].[Pairs] ON
 GO
 INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (1, N'BTC', N'USDT', 1, CAST(N'2022-03-26T01:23:27.010' AS DateTime), N'BTC - USDT', N'BTCUSDT')
 GO
-INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (2, N'ETH', N'USDT', 2, CAST(N'2022-03-26T01:23:44.073' AS DateTime), N'ETH - USDT', N'ETHUSDT')
-GO
 SET IDENTITY_INSERT [dbo].[Pairs] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
