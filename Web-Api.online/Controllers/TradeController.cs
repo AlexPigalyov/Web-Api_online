@@ -482,9 +482,12 @@ namespace Web_Api.online.Controllers
                         secondCurrency);
             }
 
-            firstCurrency = firstCurrency.ToUpper();
-            secondCurrency = secondCurrency.ToUpper();
-
+            firstCurrency = model.FirstCurrency = firstCurrency.ToUpper();
+            secondCurrency = model.SecondCurrency = secondCurrency.ToUpper();
+            
+            model.PairHeader = firstCurrency + " - " + secondCurrency;
+            model.Pair = firstCurrency + secondCurrency;
+            
             model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(firstCurrency, secondCurrency);
             model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(firstCurrency, secondCurrency);
             model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(firstCurrency, secondCurrency);
@@ -505,6 +508,8 @@ namespace Web_Api.online.Controllers
             public List<CandleStickTableModel> CandleStick { get; set; }
             public string Pair { get; set; }
             public string PairHeader { get; set; }
+            public string FirstCurrency { get; set; }
+            public string SecondCurrency { get; set; }
         }
     }
 }

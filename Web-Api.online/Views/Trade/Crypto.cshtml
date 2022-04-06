@@ -1,12 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
+@model Web_Api.online.Controllers.TradeController.CryptoModel
+
 @{
     ViewData["Title"] = @Model.PairHeader;
 }
 
 <div class="text-center">
-    <h1 class="display-4">BTC - USDT</h1>
+    <h1 class="display-4">@Model.PairHeader</h1>
 </div>
 
 <div class="row card-row no-gutters">
@@ -18,9 +21,9 @@
                     <div class="orderbook">
                         <div class="orderbook-header"></div>
                         <div class="orderbook-tbheader">
-                            <div class="orderbook-tbheader-col">Price(USDT)</div>
-                            <div class="orderbook-tbheader-col">Amount(BTC)</div>
-                            <div class="orderbook-tbheader-col">Total(USDT)</div>
+                            <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                            <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                            <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
                         </div>
                         <div class="orderbook-container">
                             <div class="orderbook-list orderbook-list-asks orderbook-asks">
@@ -60,32 +63,32 @@
                     {
                             <ul>
                                 <li class="nav-item">
-                                    BTC balance: <span id="btcBalance">@Model.BtcWallet.Value</span>
+                                    @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance">@Model.FirstWallet.Value</span>
                                     <br />
-                                    Address: @Model.BtcWallet.Address
+                                    Address: @Model.FirstWallet.Address
                                 </li>
                                 <li class="nav-item">
-                                    USDT balance: <span id="usdtBalance">@Model.UsdtWallet.Value</span>
+                                    @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance">@Model.SecondWallet.Value</span>
                                     <br />
-                                    Address: @Model.UsdtWallet.Address
+                                    Address: @Model.SecondWallet.Address
                                 </li>
                             </ul>
 
                             <div class="container">
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-4">Count&nbsp;BTC</div>
+                                    <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
                                     <div class="col-4"><input type="text" id="amountInput" /></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4">Price&nbsp;$</div>
+                                    <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
                                     <div class="col-4"><input type="text" id="priceInput" /></div>
                                 </div>
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
                                     <div class="col-8">
-                                        <input type="button" id="buyButton" value="Buy BTC" />
-                                        <input type="button" id="sellButton" value="Sell BTC" />
+                                        <input type="button" id="buyButton" value="Buy @Model.FirstCurrency" />
+                                        <input type="button" id="sellButton" value="Sell @Model.FirstCurrency" />
                                     </div>
                                 </div>
                             </div>
@@ -112,8 +115,8 @@
                         <div class="orderbook-header-col">Market Trades</div>
                     </div>
                     <div class="orderbook-tbheader">
-                        <div class="orderbook-tbheader-col">Price(USDT)</div>
-                        <div class="orderbook-tbheader-col">Amount(BTC)</div>
+                        <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                        <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
                         <div class="orderbook-tbheader-col">Time</div>
                     </div>
                     <div class="orderbook-container">
@@ -126,8 +129,8 @@
                         <div class="orderbook-header-col">Open Trades</div>
                     </div>
                     <div class="orderbook-tbheader">
-                        <div class="orderbook-tbheader-col">Price(USDT)</div>
-                        <div class="orderbook-tbheader-col">Amount(BTC)</div>
+                        <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                        <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
                         <div class="orderbook-tbheader-col">Time</div>
                         <div class="orderbook-tbheader-col"></div>
                     </div>
