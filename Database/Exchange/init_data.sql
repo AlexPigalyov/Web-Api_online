@@ -38,6 +38,12 @@ INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Heade
 GO
 INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (2, N'ETH', N'USDT', 10, CAST(N'2022-04-06T19:25:23.480' AS DateTime), N'ETH - USDT', N'ETHUSDT')
 GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (3, N'DOGE', N'USDT', 10, CAST(N'2022-04-06T19:29:14.483' AS DateTime), N'DOGE - USDT', N'DOGEUSDT')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (4, N'LTC', N'USDT', 10, CAST(N'2022-04-06T19:29:33.643' AS DateTime), N'LTC - USDT', N'LTCUSDT')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (5, N'DASH', N'USDT', 10, CAST(N'2022-04-06T19:29:53.803' AS DateTime), N'DASH - USDT', N'DASHUSDT')
+GO
 SET IDENTITY_INSERT [dbo].[Pairs] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
