@@ -178,7 +178,7 @@
                     Price: price,
                     Amount: amount,
                     IsBuy: true,
-                    Pair: model.PairHeader.replace(" ", "")
+                    Pair: '@Model.Pair'
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
@@ -204,7 +204,7 @@
                     Price: price,
                     Amount: amount,
                     IsBuy: false,
-                    Pair: 'BTCUSDT'
+                    Pair: '@Model.Pair'
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
