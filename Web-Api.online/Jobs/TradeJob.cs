@@ -15,6 +15,7 @@ using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Jobs
 {
+    [DisallowConcurrentExecution]
     public class TradeJob : IJob
     {
         private readonly TradeRepository _tradeRepository;
