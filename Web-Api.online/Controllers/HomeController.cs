@@ -16,6 +16,10 @@ namespace Web_Api.online.Controllers
         }
         public IActionResult Index()
         {
+            // TODO: load Top Market (1h change) data from table TopMarket1hChange
+
+
+
             return View();
         }
 
