@@ -151,4 +151,8 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Requests\" />
+  </ItemGroup>
+
 </Project>
