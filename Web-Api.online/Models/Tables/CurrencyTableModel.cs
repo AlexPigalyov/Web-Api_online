@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Models.Tables
 {
-    public partial class CurrencyTableModel
+    public class CurrencyTableModel
     {
         public int Id { get; set; }
         public string Acronim { get; set; }

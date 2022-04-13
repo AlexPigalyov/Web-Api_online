@@ -41,8 +41,8 @@ namespace Web_Api.online
 
                         // Create a trigger for the job
                         q.AddTrigger(opts => opts
-                            .ForJob(jobKey) 
-                            .WithIdentity("TradeJob-trigger") 
+                            .ForJob(jobKey)
+                            .WithIdentity("TradeJob-trigger")
                             .WithSimpleSchedule(builder => builder
                                 .WithInterval(TimeSpan.FromMilliseconds(1000))
                                 .RepeatForever()

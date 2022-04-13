@@ -189,10 +189,10 @@ namespace Web_Api.online
                 }
             });
 
-            RolesSeed(serviceProvider).Wait();
-            UserSeed(serviceProvider).Wait();
-            WalletSeed(serviceProvider).Wait();
-            BotAuthCodesSeed(serviceProvider).Wait();
+            //RolesSeed(serviceProvider).Wait();
+            //UserSeed(serviceProvider).Wait();
+            //WalletSeed(serviceProvider).Wait();
+            //BotAuthCodesSeed(serviceProvider).Wait();
         }
 
         private async Task RolesSeed(IServiceProvider serviceProvider)

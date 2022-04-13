@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.Tables
 {
-    public partial class DpdCityTableModel
+    public class DpdCityTableModel
     {
         public long CityId { get; set; }
         public bool CityIdSpecified { get; set; }

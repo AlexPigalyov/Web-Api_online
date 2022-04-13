@@ -2,7 +2,7 @@
 
 namespace Web_Api.online.Models.Tables
 {
-    public partial class RateTableModel
+    public class RateTableModel
     {
         public long Id { get; set; }
         public string Acronim { get; set; }
