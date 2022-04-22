@@ -425,9 +425,11 @@ namespace Web_Api.online.Controllers
             return View(model);
         }
 
-        [Route("trade/crypto/{firstCurrency}-{secondCurrency}")]
-        public async Task<ActionResult> Crypto(string firstCurrency, string secondCurrency)
+        [Route("trade/crypto/{acronim}")]
+        public async Task<ActionResult> Crypto(string acronim)
         {
+            var pair = await _pairsRepository.GetPairByAcronimAsync(acronim.ToUpper());
+            
             CryptoModel model = new CryptoModel();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -440,14 +442,14 @@ namespace Web_Api.online.Controllers
                 model.UserWallets = userWallets;
 
                 WalletTableModel firstWallet =
-                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == firstCurrency.ToUpper());
+                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == pair.Currency1.ToUpper());
 
                 if (firstWallet == null)
                 {
                     var newWallet = new WalletTableModel
                     {
                         UserId = userId,
-                        CurrencyAcronim = firstCurrency.ToUpper(),
+                        CurrencyAcronim = pair.Currency1.ToUpper(),
                         Address = System.Guid.NewGuid().ToString().Replace("-", ""),
                         Value = 0
                     };
@@ -459,14 +461,14 @@ namespace Web_Api.online.Controllers
                 model.FirstWallet = firstWallet;
 
                 WalletTableModel secondWallet =
-                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == secondCurrency.ToUpper());
+                    userWallets.FirstOrDefault(x => x.CurrencyAcronim == pair.Currency2.ToUpper());
 
                 if (secondWallet == null)
                 {
                     var newWallet = new WalletTableModel
                     {
                         UserId = userId,
-                        CurrencyAcronim = secondCurrency.ToUpper(),
+                        CurrencyAcronim = pair.Currency2.ToUpper(),
                         Address = System.Guid.NewGuid().ToString().Replace("-", ""),
                         Value = 0
                     };
@@ -478,19 +480,19 @@ namespace Web_Api.online.Controllers
                 model.SecondWallet = secondWallet;
 
                 model.UserOpenOrders =
-                    await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, firstCurrency,
-                        secondCurrency);
+                    await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, pair.Currency1,
+                        pair.Currency2);
             }
 
-            firstCurrency = model.FirstCurrency = firstCurrency.ToUpper();
-            secondCurrency = model.SecondCurrency = secondCurrency.ToUpper();
+            model.FirstCurrency = pair.Currency1.ToUpper();
+            model.SecondCurrency = pair.Currency2.ToUpper();
             
-            model.PairHeader = firstCurrency + " - " + secondCurrency;
-            model.Pair = firstCurrency + secondCurrency;
+            model.PairHeader = model.FirstCurrency + " - " + model.SecondCurrency;
+            model.Pair = model.FirstCurrency + model.SecondCurrency;
             
-            model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(firstCurrency, secondCurrency);
-            model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(firstCurrency, secondCurrency);
-            model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(firstCurrency, secondCurrency);
+            model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
+            model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
+            model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(model.FirstCurrency, model.SecondCurrency);
 
             return View(model);
         }

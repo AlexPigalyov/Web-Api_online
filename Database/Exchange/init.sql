@@ -2905,6 +2905,27 @@ OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
 END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetPairByAcronim]
+@acronim nvarchar(450)
+AS
+BEGIN
+
+Select * From Pairs 
+Where Acronim = @acronim
+	
+END
+
+
+
+
+
+
 GO
 SET ANSI_NULLS ON
 GO

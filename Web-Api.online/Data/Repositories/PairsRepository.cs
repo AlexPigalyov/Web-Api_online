@@ -28,6 +28,19 @@ namespace Web_Api.online.Data.Repositories
 
             return result;
         }
+        
+        public async Task<PairsTableModel> GetPairByAcronimAsync(string acronim)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("acronim", acronim);
+            
+            PairsTableModel result =
+                await _db.QueryFirstAsync<PairsTableModel>("GetPairByAcronim",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
 
         private async Task CreatePairRow(string firstCurrency, string secondCurrency)
         {

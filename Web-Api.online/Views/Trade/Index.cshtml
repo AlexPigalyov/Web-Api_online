@@ -27,7 +27,7 @@
         @foreach (var pair in Model)
         {
             <li>
-                <a href="/trade/crypto/@pair.Header.Replace(" ", string.Empty).ToLower()">@pair.Header</a>
+                <a href="/trade/crypto/@pair.Acronim">@pair.Header</a>
             </li>
         }
     </ul>
