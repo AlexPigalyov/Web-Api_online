@@ -31,12 +31,16 @@
                             <div class="orderbook-ticker">
                                 <div class="orderbook-ticker-status status-buy">
                                     <span class="current-price" id="current-price">0</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);"><path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
+                                        <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
+                                    </svg>
                                 </div>
                                 <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
                                 <a href="#" target="_blank" class="orderbook-ticker-more">
                                     More
-                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect y="7" width="2.66667" height="5" fill="#00C582"></rect><rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect><rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect><rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect></svg>
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect y="7" width="2.66667" height="5" fill="#00C582"></rect><rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect><rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect><rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -51,47 +55,51 @@
 
             </div> <!-- end card-body-->
         </div> <!-- end card-->
-        </div>
-        <!-- end col-->
+    </div>
+    <!-- end col-->
 
-        <div class="col-xl-6 col-lg-6">
+    <div class="col-xl-6 col-lg-6">
         <div class="card">
             <div class="card-body">
 
                 <div class="text-wrap">
                     @if (SignInManager.IsSignedIn(User))
                     {
-                            <ul>
-                                <li class="nav-item">
-                                    @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance">@Model.FirstWallet.Value</span>
-                                    <br />
-                                    Address: @Model.FirstWallet.Address
-                                </li>
-                                <li class="nav-item">
-                                    @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance">@Model.SecondWallet.Value</span>
-                                    <br />
-                                    Address: @Model.SecondWallet.Address
-                                </li>
-                            </ul>
+                        <ul>
+                            <li class="nav-item">
+                                @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance">@Model.FirstWallet.Value</span>
+                                <br/>
+                                Address: @Model.FirstWallet.Address
+                            </li>
+                            <li class="nav-item">
+                                @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance">@Model.SecondWallet.Value</span>
+                                <br/>
+                                Address: @Model.SecondWallet.Address
+                            </li>
+                        </ul>
 
-                            <div class="container">
-                                <div class="row">&nbsp;</div>
-                                <div class="row">
-                                    <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
-                                    <div class="col-4"><input type="text" id="amountInput" /></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
-                                    <div class="col-4"><input type="text" id="priceInput" /></div>
-                                </div>
-                                <div class="row">&nbsp;</div>
-                                <div class="row">
-                                    <div class="col-8">
-                                        <input type="button" id="buyButton" value="Buy @Model.FirstCurrency" />
-                                        <input type="button" id="sellButton" value="Sell @Model.FirstCurrency" />
-                                    </div>
+                        <div class="container">
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
+                                <div class="col-4">
+                                    <input type="text" id="amountInput"/>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
+                                <div class="col-4">
+                                    <input type="text" id="priceInput"/>
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency"/>
+                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency"/>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
                 <div class="row">
@@ -102,10 +110,10 @@
             <!-- end card-body -->
         </div>
         <!-- end card-->
-        </div>
-        <!-- end col -->  
+    </div>
+    <!-- end col -->
 
-        <div class="col-xl-3 col-lg-6">
+    <div class="col-xl-3 col-lg-6">
         <div class="card">
             <div class="card-body">
 
@@ -147,17 +155,53 @@
         </div>
         <!-- end card-->
 
-        </div>
-        <!-- end col -->  
+    </div>
+    <!-- end col -->
 
 </div>
+
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ставка</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы делаете ставку отличающуюся на 30% от текущей цены, подтвердить?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal-success-btn" class="btn btn-primary">Да</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/btcusdthub.js" asp-append-version="true"></script>
 <script src="~/js/vendor/apexcharts.min.js"></script>
 <script>
-
+    
+    function sendTrade(tradeData, balanceId, updatedBalance) {
+        $.ajax({
+            url: '/trade/crypto/createorder',
+            type: 'POST',
+            data: JSON.stringify(tradeData),
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                updatedBalance = data;
+                $(balanceId).text(updatedBalance);
+            },
+            error: function() {
+                //alert('Error occured');
+            }
+        });
+    }
+    
     $(document).ready(function () {
+        const modal = new bootstrap.Modal(document.querySelector('#modal'));
         
         var model = @Html.Raw(Json.Serialize(Model));
         var userOpenOrders = model.userOpenOrders;
@@ -165,56 +209,65 @@
         var sellOpenOrders = model.sellOrderBook
         var marketTrades = model.marketTrades
         
-        $("#buyButton" ).click(function() {
-            var amount = document.getElementById("amountInput").value;
+        var selectedPrice = 0;
+        var selectedAmount = 0;
+        var selectedBuyOrSell = true;
+        var balanceId = "#usdtBalance";
+        var updatedBalance = "";
+        
+        var tradeData = { }
+        
+        $("#modal-success-btn").click(function() {
+            sendTrade(tradeData, balanceId, updatedBalance);
+            modal.hide();
+        });
+        
+        $("#buyButton").click(function() {
+            var amount = document.getElementById("amountInput").value;            
             var price = document.getElementById("priceInput").value;
-
-            var updatedBalance = document.getElementById("usdtBalance").innerText;
-
-            $.ajax({
-                url: '/trade/createorder',
-                type: 'POST',
-                data: JSON.stringify({
-                    Price: price,
-                    Amount: amount,
-                    IsBuy: true,
-                    Pair: '@Model.Pair'
-                }),
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    updatedBalance = data;
-                    $("#usdtBalance").text(updatedBalance);
-                },
-                error: function() {
-                    //alert('Error occured');
-                }
-            });
+            var currentPrice = parseInt(document.getElementById("current-price").innerText);
+            
+            var percent = (price / currentPrice * 100) - 100;
+            
+            updatedBalance = document.getElementById("usdtBalance").innerText;
+            balanceId = "#usdtBalance";
+            tradeData = {
+                Price: price,
+                Amount: amount,
+                IsBuy: true,
+                Pair: '@Model.PairHeader.Replace(" ", "")'
+            }
+            
+            if (percent >= 30) {
+                modal.show(); 
+                return;
+            }       
+            
+            sendTrade(tradeData, balanceId, updatedBalance);
         });
 
         $("#sellButton").click(function() {
             var amount = document.getElementById("amountInput").value;
             var price = document.getElementById("priceInput").value;
+            var currentPrice = parseInt(document.getElementById("current-price").innerText);
             
-            var updatedBalance = document.getElementById("btcBalance").innerText;
+            var percent = (currentPrice / price * 100) - 100;
 
-            $.ajax({
-                url: '/trade/createorder',
-                type: 'POST',
-                data: JSON.stringify({
-                    Price: price,
-                    Amount: amount,
-                    IsBuy: false,
-                    Pair: '@Model.Pair'
-                }),
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    updatedBalance = data;
-                    $("#btcBalance").text(updatedBalance);
-                },
-                error: function() {
-                    //alert('Error occured');
-                }
-            });
+            updatedBalance = document.getElementById("btcBalance").innerText;
+            balanceId = "#btcBalance";
+            tradeData = {
+                Price: price,
+                Amount: amount,
+                IsBuy: false,
+                Pair: '@Model.PairHeader.Replace(" ", "")'
+            }
+            
+            if (percent >= 30) {
+                modal.show(); 
+                return;
+            }
+                        
+            sendTrade(tradeData, balanceId, updatedBalance);
         });
 
         
@@ -876,4 +929,3 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
 <script>
 
 </script>
-
