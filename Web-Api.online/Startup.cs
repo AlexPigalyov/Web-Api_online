@@ -177,17 +177,17 @@ namespace Web_Api.online
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
 
-            _ = Task.Run(async () =>
-            {
-                var candleStickRepository = serviceProvider.GetService<CandleStickRepository>();
+            //_ = Task.Run(async () =>
+            //{
+            //    var candleStickRepository = serviceProvider.GetService<CandleStickRepository>();
 
-                while (true)
-                {
-                    await Task.Delay(1000 * 60);
+            //    while (true)
+            //    {
+            //        await Task.Delay(1000 * 60);
 
-                    _ = candleStickRepository.spProcess_BTC_USDT_CandleStick();
-                }
-            });
+            //        _ = candleStickRepository.spProcess_BTC_USDT_CandleStick();
+            //    }
+            //});
 
             //RolesSeed(serviceProvider).Wait();
             //UserSeed(serviceProvider).Wait();
@@ -428,6 +428,48 @@ namespace Web_Api.online
                 {
                     Address = "",
                     CurrencyAcronim = "ETH",
+                    UserId = UserIdConstant.BinanceBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
+            }
+
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "DOGE") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
+                {
+                    Address = "",
+                    CurrencyAcronim = "DOGE",
+                    UserId = UserIdConstant.BinanceBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
+            }
+
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "LTC") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
+                {
+                    Address = "",
+                    CurrencyAcronim = "LTC",
+                    UserId = UserIdConstant.BinanceBot
+                });
+
+                wallet.Value = 1000000;
+
+                await walletRepository.UpdateWalletBalanceAsync(wallet);
+            }
+
+            if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "DASH") == null)
+            {
+                var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
+                {
+                    Address = "",
+                    CurrencyAcronim = "DASH",
                     UserId = UserIdConstant.BinanceBot
                 });
 
