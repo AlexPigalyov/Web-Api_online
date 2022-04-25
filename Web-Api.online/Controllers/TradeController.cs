@@ -242,6 +242,8 @@ namespace Web_Api.online.Controllers
         [Route("trade/crypto/createorder")]
         public async Task<ActionResult> CryptoCreateOrder([FromBody] OrderModel orderModel)
         {
+            if (orderModel == null) return BadRequest("orderModel is null.");
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(orderModel.BotAuthCode))
@@ -265,9 +267,13 @@ namespace Web_Api.online.Controllers
 
             decimal updatedWalletBalance = 0;
 
-            string firstCurrency = orderModel.Pair.Split("-")[0];
-            string secondCurrency = orderModel.Pair.Split("-")[1];
-            
+            var pair = await _pairsRepository.GetPairByAcronimAsync(orderModel.Pair);
+
+            if (pair == null) return BadRequest("Wrong pair.");
+
+            string firstCurrency = pair.Currency1;
+            string secondCurrency = pair.Currency2;
+
             if (orderModel.IsBuy)
             {
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, secondCurrency);
@@ -320,7 +326,7 @@ namespace Web_Api.online.Controllers
                 Total = total,
                 CreateUserId = userId,
                 CreateDate = DateTime.Now,
-                CryptExchangePair = orderModel.Pair.Replace("-", "_")
+                CryptExchangePair = orderModel.Pair
             };
 
             var result = await _tradeRepository.ProcessOrder(order, orderModel.IsBuy);
@@ -429,7 +435,7 @@ namespace Web_Api.online.Controllers
         public async Task<ActionResult> Crypto(string acronim)
         {
             var pair = await _pairsRepository.GetPairByAcronimAsync(acronim.ToUpper());
-            
+
             CryptoModel model = new CryptoModel();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -486,10 +492,10 @@ namespace Web_Api.online.Controllers
 
             model.FirstCurrency = pair.Currency1.ToUpper();
             model.SecondCurrency = pair.Currency2.ToUpper();
-            
+
             model.PairHeader = model.FirstCurrency + " - " + model.SecondCurrency;
             model.Pair = model.FirstCurrency + model.SecondCurrency;
-            
+
             model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
             model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
             model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(model.FirstCurrency, model.SecondCurrency);
