@@ -47,7 +47,7 @@ namespace Web_Api.online.Jobs
                     MarketTrades = marketTrades
                 };
 
-                await _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Currency1}_{x.Currency2}", JsonConvert.SerializeObject(recieveResult));
+                await _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Acronim}", JsonConvert.SerializeObject(recieveResult));
             });
         }
     }

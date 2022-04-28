@@ -326,7 +326,7 @@ namespace Web_Api.online.Controllers
                 Total = total,
                 CreateUserId = userId,
                 CreateDate = DateTime.Now,
-                CryptExchangePair = orderModel.Pair
+                CryptExchangePair = pair.Currency1 + "_" + pair.Currency2
             };
 
             var result = await _tradeRepository.ProcessOrder(order, orderModel.IsBuy);
