@@ -34,11 +34,11 @@ namespace Web_Api.online.Jobs
         {
             var pairs = await _pairsRepository.GetAllPairsAsync();
             
-            pairs.ForEach(async x =>
+            pairs.ForEach(x =>
             {
-                var openOrdersBuy = await _tradeRepository.GetBuyOrderBookAsync(x.Currency1, x.Currency2);
-                var openOrdersSell = await _tradeRepository.GetSellOrderBookAsync(x.Currency1, x.Currency2);
-                var marketTrades = await _tradeRepository.GetClosedOrders_Top100(x.Currency1, x.Currency2);
+                var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.Currency1, x.Currency2).Result;
+                var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(x.Currency1, x.Currency2).Result;
+                var marketTrades = _tradeRepository.GetClosedOrders_Top100(x.Currency1, x.Currency2).Result;
 
                 var recieveResult = new RecieveMessageResultModel()
                 {
@@ -47,7 +47,7 @@ namespace Web_Api.online.Jobs
                     MarketTrades = marketTrades
                 };
 
-                await _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Acronim}", JsonConvert.SerializeObject(recieveResult));
+                _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Acronim}", JsonConvert.SerializeObject(recieveResult)).Wait();
             });
         }
     }
