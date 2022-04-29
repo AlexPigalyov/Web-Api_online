@@ -941,6 +941,30 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[CreateCandleStick]
+@pairName nvarchar(25),
+@baseVolume decimal(18,0),
+@close decimal(18,0),
+@closeTime datetime,
+@final bit,
+@high decimal(18,0),
+@low decimal(18,0),
+@open decimal(18,0),
+@openTime datetime
+AS
+BEGIN
+
+Declare @SQL nvarchar(200)
+
+SET @SQL = 'INSERT INTO [Exchange].[dbo].['+@pairName+'_CandleStick] (BaseVolume, [Close], CloseTime, Final, High, Low, [Open], OpenTime)
+VALUES ('+@baseVolume+', '+@close+', '+@closeTime+', '+@final+', '+@high+', '+@low+', '+@open+', '+@openTime+')'
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[CreateEvent]
 @userid nvarchar(450),
 @type int,
@@ -2805,6 +2829,23 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetLastCandleStick]
+@pairName nvarchar(450)
+AS
+BEGIN
+
+Declare @SQL nvarchar(100)
+
+SET @SQL = 'SELECT TOP 1 * FROM [Exchange].[dbo].[' + @pairName + '_CandleStick] ORDER BY Id DESC'
+
+EXEC(@SQL)
+	
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetLastIncomeTransactionsByUserId]
 @userid nvarchar(450)
 AS
@@ -2825,6 +2866,26 @@ END
 
 
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetLastOrdersBySeconds]
+@pairName nvarchar(20),
+@seconds int
+AS
+BEGIN
+
+Declare @SQL nvarchar(200)
+
+SET @SQL = 'SELECT * 
+FROM [Exchange].[dbo].['+ @pairName +'_ClosedOrders]
+WHERE DATEADD(second, '+ @seconds +', GETDATE()) < ClosedDate and ClosedDate < GETDATE()'
+
+EXEC(@SQL)
+
+END
 GO
 SET ANSI_NULLS ON
 GO

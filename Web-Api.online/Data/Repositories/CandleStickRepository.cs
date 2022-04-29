@@ -22,6 +22,40 @@ namespace Web_Api.online.Data.Repositories
         {
             _db = new SqlConnection(configuration.GetConnectionString("ExchangeConnection"));
         }
+
+        public async Task CreateCandleStick(string pairName, CandleStickTableModel candleStick)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("pairName", pairName);
+                p.Add("close", candleStick.Close);
+                p.Add("closeTime", candleStick.CloseTime);
+                p.Add("high", candleStick.High);
+                p.Add("low", candleStick.Low);
+                p.Add("open", candleStick.Open);
+                p.Add("openTime", candleStick.OpenTime);
+
+                await _db.ExecuteAsync("CreateCandleStick", p, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex) { }
+        }
+
+        public async Task<CandleStickTableModel> GetLastCandleStick(string pairName)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("pairName", pairName);
+
+                var candleStick = await _db
+                    .QueryFirstAsync<CandleStickTableModel>("GetLastCandleStick", p, commandType: CommandType.StoredProcedure);
+
+                return candleStick;
+            }
+            catch (Exception ex) { }
+        }
+
         public async Task<List<CandleStickTableModel>> Get_BTC_USDT_CandleSticks(GetCandleStickModel model)
         {
             try
