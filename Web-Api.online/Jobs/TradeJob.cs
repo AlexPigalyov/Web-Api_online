@@ -21,19 +21,21 @@ namespace Web_Api.online.Jobs
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<btcusdtHub> _hubcontext;
         private readonly PairsRepository _pairsRepository;
+
         public TradeJob(
             TradeRepository tradeRepository,
-            IHubContext<btcusdtHub> hubcontext, 
+            IHubContext<btcusdtHub> hubcontext,
             PairsRepository pairsRepository)
         {
             _tradeRepository = tradeRepository;
             _hubcontext = hubcontext;
             _pairsRepository = pairsRepository;
         }
+
         public async Task Execute(IJobExecutionContext context)
         {
             var pairs = await _pairsRepository.GetAllPairsAsync();
-            
+
             pairs.ForEach(x =>
             {
                 var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.Currency1, x.Currency2).Result;
