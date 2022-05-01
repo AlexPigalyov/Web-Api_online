@@ -34,19 +34,27 @@ namespace Web_Api.online
                         q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
                         // Create a "key" for the job
-                        var jobKey = new JobKey("TradeJob");
-
+                        var tradeJobKey = new JobKey("TradeJob");
+                        var candleStickJobKey = new JobKey("CandleStickJob");
                         // Register the job with the DI container
-                        q.AddJob<TradeJob>(opts => opts.WithIdentity(jobKey));
-
+                        q.AddJob<TradeJob>(opts => opts.WithIdentity(tradeJobKey));
+                        q.AddJob<CandleStickJob>(opts => opts.WithIdentity(candleStickJobKey));
                         // Create a trigger for the job
                         q.AddTrigger(opts => opts
-                            .ForJob(jobKey)
+                            .ForJob(tradeJobKey)
                             .WithIdentity("TradeJob-trigger")
                             .WithSimpleSchedule(builder => builder
                                 .WithInterval(TimeSpan.FromMilliseconds(1000))
                                 .RepeatForever()
-                            )); // run every 100 ms
+                            ));
+                        q.AddTrigger(opts => opts
+                            .ForJob(candleStickJobKey)
+                            .WithIdentity("CandleStickJob-trigger")
+                            .WithSimpleSchedule(builder => builder
+                                .WithInterval(TimeSpan.FromMilliseconds(1000 * 60))
+                                .RepeatForever()
+                            ));
+
                     });
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 });

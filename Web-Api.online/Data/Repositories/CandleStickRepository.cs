@@ -53,7 +53,23 @@ namespace Web_Api.online.Data.Repositories
 
                 return candleStick;
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { return null; }
+        }
+
+        public async Task<List<ClosedOrderTableModel>> GetLastOrdersBySeconds(string pairName, int seconds)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("pairName", pairName);
+                p.Add("seconds", seconds);
+
+                var orders = await _db
+                    .QueryAsync<ClosedOrderTableModel>("GetLastOrdersBySeconds", p, commandType: CommandType.StoredProcedure);
+
+                return orders.ToList();
+            }
+            catch (Exception ex) { return null; }
         }
 
         public async Task<List<CandleStickTableModel>> Get_BTC_USDT_CandleSticks(GetCandleStickModel model)

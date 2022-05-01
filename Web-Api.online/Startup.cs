@@ -177,18 +177,6 @@ namespace Web_Api.online
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
 
-            //_ = Task.Run(async () =>
-            //{
-            //    var candleStickRepository = serviceProvider.GetService<CandleStickRepository>();
-
-            //    while (true)
-            //    {
-            //        await Task.Delay(1000 * 60);
-
-            //        _ = candleStickRepository.spProcess_BTC_USDT_CandleStick();
-            //    }
-            //});
-
             //RolesSeed(serviceProvider).Wait();
             //UserSeed(serviceProvider).Wait();
             //WalletSeed(serviceProvider).Wait();
