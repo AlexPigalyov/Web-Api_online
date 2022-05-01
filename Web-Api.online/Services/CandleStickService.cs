@@ -16,39 +16,38 @@ namespace Web_Api.online.Services
         public async Task CreateCandleStick(string pairName)
         {
             var lastCandleStick = await _candleStickRepository.GetLastCandleStick(pairName);
-
-            if(lastCandleStick == null)
+            
+            var lastOrders = await _candleStickRepository.GetLastOrdersBySeconds(pairName, "60");
+                
+            if (lastOrders.Count > 0)
             {
-                var lastOrders = await _candleStickRepository.GetLastOrdersBySeconds(pairName, 60);
-
                 var firstOrder = lastOrders.FirstOrDefault();
                 var lastOrder = lastOrders.LastOrDefault();
-
-                await _candleStickRepository.CreateCandleStick(pairName, new Models.Tables.CandleStickTableModel()
+                
+                if(lastCandleStick == null)
                 {
-                    Open = firstOrder.ExposedPrice,
-                    OpenTime = firstOrder.ClosedDate,
-                    High = lastOrders.Max(x => x.ExposedPrice),
-                    Low = lastOrders.Min(x => x.ExposedPrice),
-                    Close = lastOrder.ExposedPrice,
-                    CloseTime = lastOrder.ClosedDate
-                });
-            }
-            else
-            {
-                var lastOrders = await _candleStickRepository.GetLastOrdersBySeconds(pairName, 60);
-
-                var lastOrder = lastOrders.LastOrDefault();
-
-                await _candleStickRepository.CreateCandleStick(pairName, new Models.Tables.CandleStickTableModel()
+                    await _candleStickRepository.CreateCandleStick(pairName, new Models.Tables.CandleStickTableModel()
+                    {
+                        Open = firstOrder.ExposedPrice,
+                        OpenTime = firstOrder.ClosedDate,
+                        High = lastOrders.Max(x => x.ExposedPrice),
+                        Low = lastOrders.Min(x => x.ExposedPrice),
+                        Close = lastOrder.ExposedPrice,
+                        CloseTime = lastOrder.ClosedDate
+                    });
+                }
+                else
                 {
-                    Open = lastCandleStick.Close,
-                    OpenTime = lastCandleStick.CloseTime,
-                    High = lastOrders.Max(x => x.ExposedPrice),
-                    Low = lastOrders.Min(x => x.ExposedPrice),
-                    Close = lastOrder.ExposedPrice,
-                    CloseTime = lastOrder.ClosedDate
-                });
+                    await _candleStickRepository.CreateCandleStick(pairName, new Models.Tables.CandleStickTableModel()
+                    {
+                        Open = lastCandleStick.Close,
+                        OpenTime = lastCandleStick.CloseTime,
+                        High = lastOrders.Max(x => x.ExposedPrice),
+                        Low = lastOrders.Min(x => x.ExposedPrice),
+                        Close = lastOrder.ExposedPrice,
+                        CloseTime = lastOrder.ClosedDate
+                    });
+                }    
             }
         }
     }

@@ -943,10 +943,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateCandleStick]
 @pairName nvarchar(25),
-@baseVolume decimal(18,0),
 @close decimal(18,0),
 @closeTime datetime,
-@final bit,
 @high decimal(18,0),
 @low decimal(18,0),
 @open decimal(18,0),
@@ -956,8 +954,8 @@ BEGIN
 
 Declare @SQL nvarchar(200)
 
-SET @SQL = 'INSERT INTO [Exchange].[dbo].['+@pairName+'_CandleStick] (BaseVolume, [Close], CloseTime, Final, High, Low, [Open], OpenTime)
-VALUES ('+@baseVolume+', '+@close+', '+@closeTime+', '+@final+', '+@high+', '+@low+', '+@open+', '+@openTime+')'
+SET @SQL = 'INSERT INTO [Exchange].[dbo].['+@pairName+'_CandleStick] ([Close], CloseTime, High, Low, [Open], OpenTime)
+VALUES ('+@close+', '+@closeTime+', '+@high+', '+@low+', '+@open+', '+@openTime+')'
 
 END
 GO
@@ -2871,9 +2869,11 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
 CREATE PROCEDURE [dbo].[GetLastOrdersBySeconds]
 @pairName nvarchar(20),
-@seconds int
+@seconds nvarchar(10)
 AS
 BEGIN
 
@@ -2881,7 +2881,7 @@ Declare @SQL nvarchar(200)
 
 SET @SQL = 'SELECT * 
 FROM [Exchange].[dbo].['+ @pairName +'_ClosedOrders]
-WHERE DATEADD(second, '+ @seconds +', GETDATE()) < ClosedDate and ClosedDate < GETDATE()'
+WHERE DATEADD(second, -'+ @seconds +', GETDATE()) < ClosedDate and ClosedDate < GETDATE()'
 
 EXEC(@SQL)
 

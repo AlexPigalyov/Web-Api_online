@@ -6,9 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Nethereum.Util;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 
@@ -27,16 +28,23 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
+                /*
                 var p = new DynamicParameters();
                 p.Add("pairName", pairName);
                 p.Add("close", candleStick.Close);
-                p.Add("closeTime", candleStick.CloseTime);
+                p.Add("closeTime", candleStick.CloseTime.ToString());
                 p.Add("high", candleStick.High);
                 p.Add("low", candleStick.Low);
                 p.Add("open", candleStick.Open);
-                p.Add("openTime", candleStick.OpenTime);
+                p.Add("openTime", candleStick.OpenTime.ToString());
 
-                await _db.ExecuteAsync("CreateCandleStick", p, commandType: CommandType.StoredProcedure);
+                await _db.ExecuteAsync("CreateCandleStick", p, commandType: CommandType.StoredProcedure);*/
+
+                var query =
+                    $"INSERT INTO [Exchange].[dbo].[{pairName}_CandleStick] ([Close], CloseTime, High, Low, [Open], OpenTime) " +
+                    $"VALUES ({candleStick.Close.ToStringInvariant()}, '{candleStick.CloseTime}', {candleStick.High.ToStringInvariant()}, {candleStick.Low.ToStringInvariant()}, {candleStick.Open.ToStringInvariant()}, '{candleStick.OpenTime.ToStringInvariant()}')";
+
+                await _db.ExecuteAsync(query);
             }
             catch (Exception ex) { }
         }
@@ -56,7 +64,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task<List<ClosedOrderTableModel>> GetLastOrdersBySeconds(string pairName, int seconds)
+        public async Task<List<ClosedOrderTableModel>> GetLastOrdersBySeconds(string pairName, string seconds)
         {
             try
             {

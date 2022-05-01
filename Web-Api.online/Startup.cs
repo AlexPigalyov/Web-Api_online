@@ -125,6 +125,7 @@ namespace Web_Api.online
             services.AddTransient<OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
+            services.AddTransient<CandleStickService>();
             services.AddTransient<ETHRequestClient>();
             services.AddCoinManager(Configuration);
             services.AddTransient<ZCashService>();
