@@ -2844,6 +2844,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetLastFiveEvents_ByUserId]
+@userId nvarchar(450)
+AS
+BEGIN
+
+SELECT TOP(5) * FROM [Exchange].[dbo].[Events]
+WHERE UserId = @userId
+ORDER BY WhenDate DESC
+
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetLastIncomeTransactionsByUserId]
 @userid nvarchar(450)
 AS
@@ -2884,22 +2900,6 @@ FROM [Exchange].[dbo].['+ @pairName +'_ClosedOrders]
 WHERE DATEADD(second, -'+ @seconds +', GETDATE()) < ClosedDate and ClosedDate < GETDATE()'
 
 EXEC(@SQL)
-
-END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetLastThreeEvents_ByUserId]
-@userId nvarchar(450)
-AS
-BEGIN
-
-SELECT TOP(3) * FROM [Exchange].[dbo].[Events]
-WHERE UserId = @userId
-ORDER BY WhenDate DESC
-
 
 END
 GO

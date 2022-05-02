@@ -82,10 +82,10 @@
                             <i class="mdi mdi-briefcase me-1"></i>
                             Refferals <a href="/My/MyRefferals">(Check all Refferals)</a>
                         </h5>
-                        @if (Model.LastThreeEvents != null)
+                        @if (Model.LastFiveEvents != null)
                         {
                             <div class="timeline-alt pb-0">
-                                @foreach (var eventModel in Model.LastThreeEvents)
+                                @foreach (var eventModel in Model.LastFiveEvents)
                                 {
                                     <div class="timeline-item">
                                         <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
