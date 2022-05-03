@@ -19,7 +19,6 @@
                 <div class="orderbook-tbheader-col">Price</div>
                 <div class="orderbook-tbheader-col">Amount</div>
                 <div class="orderbook-tbheader-col">Total</div>
-                <div class="orderbook-tbheader-col">Valute Pair</div>
                 <div class="orderbook-tbheader-col">Create date-time</div>
                 <div class="orderbook-tbheader-col">Closed date-time</div>
                 <div class="orderbook-tbheader-col">Status</div>
@@ -33,7 +32,6 @@
                             <div class="orderbook-col@(order.IsBuy ? string.Empty : " orderbook-bids")">@order.ExposedPrice</div>
                             <div class="orderbook-col">@order.Amount</div>
                             <div class="orderbook-col">@order.Total</div>
-                            <div class="orderbook-col">BTC-USDT</div>
                             <div class="orderbook-col">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">@(order.ClosedDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">@(order.Status.ToString())</div>
