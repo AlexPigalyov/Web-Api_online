@@ -1,6 +1,0 @@
-CREATE PROCEDURE [dbo].[Get_{cryptocurrencypair}_OpenOrders]
-AS
-BEGIN
-
-SELECT * FROM [{cryptocurrencypair}_OpenOrders]
-END

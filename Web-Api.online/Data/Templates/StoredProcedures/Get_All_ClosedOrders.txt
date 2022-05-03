@@ -1,6 +1,0 @@
-CREATE PROCEDURE [dbo].[Get_All_{cryptocurrencypair}_ClosedOrders]
-AS
-BEGIN
-
-SELECT * FROM [Exchange].[dbo].[{cryptocurrencypair}_ClosedOrders]
-END

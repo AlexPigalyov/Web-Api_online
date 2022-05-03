@@ -50,10 +50,13 @@ namespace Web_Api.online.Controllers
 
             return View(model);
         }
-
+        
+        //TODO: REWORK
         [Authorize]
-        public async Task<ActionResult> CancelOrder(long id)
+        public async Task<ActionResult> CancelOrder(string acronim, long id)
         {
+            var pair = await _pairsRepository.GetPairByAcronimAsync(acronim);
+            
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
@@ -61,7 +64,7 @@ namespace Web_Api.online.Controllers
                 return BadRequest("You are not authorized.");
             }
 
-            var order = await _tradeRepository.spGet_BTC_USDT_OpenOrder_ById(id);
+            var order = await _tradeRepository.GetOpenOrderById(pair.Currency1, pair.Currency2, id);
 
             if (order == null)
             {
@@ -72,9 +75,9 @@ namespace Web_Api.online.Controllers
             {
                 return BadRequest("This is not your order.");
             }
-
+            /* TODO: Rewrite this method to all pairs not only for BTC_USDT
             await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId,
-                ClosedOrderStatusEnum.Canceled);
+                ClosedOrderStatusEnum.Canceled);*/
 
             return Ok();
         }
