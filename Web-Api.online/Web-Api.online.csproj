@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-Web_Api.online-35BF76D5-5DD1-4641-BAC7-AD83DA495B5E</UserSecretsId>
     <RootNamespace>Web_Api.online</RootNamespace>
   </PropertyGroup>
