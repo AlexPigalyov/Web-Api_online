@@ -59,7 +59,7 @@ namespace Web_Api.online.Controllers
                 }
                 else
                 {
-                    return null;
+                    return BadRequest("A user with same username was found");
                 }
 
             }
@@ -92,7 +92,8 @@ namespace Web_Api.online.Controllers
                 PhoneNumber = user.PhoneNumber,
                 UserInfo = userInfo,
                 LastFiveEvents = lastFiveEvents,
-                NotEmptyWallets = notEmptyWallets
+                NotEmptyWallets = notEmptyWallets,
+                IsMyProfile = true
             };
 
             return View(model);

@@ -13,5 +13,6 @@ namespace Web_Api.online.Models.ViewModels
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public List<spGetNotEmptyValueWallet_ByUserIdResult> NotEmptyWallets { get; set; }
+        public bool IsMyProfile { get; set; }
     }
 }
