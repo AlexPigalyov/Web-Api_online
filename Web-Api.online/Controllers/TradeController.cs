@@ -50,13 +50,13 @@ namespace Web_Api.online.Controllers
 
             return View(model);
         }
-        
+
         //TODO: REWORK
         [Authorize]
         public async Task<ActionResult> CancelOrder(string acronim, long id)
         {
             var pair = await _pairsRepository.GetPairByAcronimAsync(acronim);
-            
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
@@ -106,21 +106,30 @@ namespace Web_Api.online.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> ClosedOrders(string pair = "BTCUSDT")
+        public async Task<ActionResult> ClosedOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                if (pair == "BTCUSDT")
+                var pairs = await _pairsRepository.GetAllPairsAsync();
+
+                List<ClosedOrderTableModel> closedOrders = new List<ClosedOrderTableModel>();
+
+                foreach (var pair in pairs)
                 {
-                    return View(await _tradeRepository
-                        .spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                    var pairClosedOrders = await _tradeRepository.spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId, pair.Currency1, pair.Currency2);
+
+                    pairClosedOrders.ForEach(p =>
+                    {
+                        p.Currency1 = pair.Currency1;
+                        p.Currency2 = pair.Currency2;
+                    });
+
+                    closedOrders.AddRange(pairClosedOrders);
                 }
 
-
-                return View(
-                    await _tradeRepository.spGet_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId));
+                return View(closedOrders.OrderByDescending(x => x.ClosedDate));
             }
 
             return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");

@@ -20,5 +20,7 @@ namespace Web_Api.online.Models.Tables
         public ClosedOrderStatusEnum Status { get; set; }
         public string CreateUserId { get; set; }
         public string BoughtUserId { get; set; }
+        public string Currency1 { get; set; }
+        public string Currency2 { get; set; }
     }
 }
