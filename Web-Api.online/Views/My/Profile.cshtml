@@ -24,7 +24,6 @@
     }
 </style>
 
-
 <div class="row">
     <div class="col-xl-4 col-lg-5">
         <div class="card text-center">
@@ -65,7 +64,6 @@
                         <span class="ms-2">@(string.IsNullOrEmpty(Model.UserInfo.Location) ? "Not selected" : Model.UserInfo.Location)</span>
                     </p>
                 </div>
-
             </div>
         </div>
         <div class="card">
@@ -80,8 +78,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <div class="card">
@@ -112,21 +108,12 @@
                                         </div>
                                     </div>
                                 }
-
                             </div>
                         }
                     </div>
                 </div>
-
-
             </div>
         </div>
-
-
-
-
-
-
     </div>
     <div class="col-xl-8 col-lg-7">
         <div class="card">
@@ -249,7 +236,6 @@
     </div>
 </div>
 
-
 @section scripts {
 <script src="~/js/vendor/britecharts.min.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
@@ -269,8 +255,6 @@
         var model = @Html.Raw(Json.Serialize(Model));
 
         var colors = []
-
-
 
         model.notEmptyWallets.forEach(item => {
             colors.push(makeRandomColor());
@@ -300,7 +284,6 @@
                 .height(legendHeight)
                 .colorSchema(colors)
                 .numberFormat("s");
-
 
             let radius = 0;
 
@@ -417,7 +400,6 @@
         }
 
         drawCharts();
-
 
     })(jQuery, briteChartApp);
 </script>
