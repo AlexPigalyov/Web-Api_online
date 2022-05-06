@@ -591,21 +591,6 @@ CREATE TABLE [dbo].[Wallets](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211014-094721] ON [dbo].[BTC_USDT_ClosedOrders]
-(
-	[ClosedDate] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055453] ON [dbo].[BTC_USDT_OpenOrders_Buy]
-(
-	[Price] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex-20211017-055512] ON [dbo].[BTC_USDT_OpenOrders_Sell]
-(
-	[Price] DESC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders_Buy] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_Buy_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders_Sell] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_Sell_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
@@ -982,10 +967,6 @@ BEGIN
 END
 END
 
-
-
-
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -999,7 +980,6 @@ BEGIN
 SELECT * FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 WHERE CreateUserId = @createUserId
 ORDER BY ClosedDate DESC
-
 END
 GO
 SET ANSI_NULLS ON
@@ -1013,23 +993,23 @@ BEGIN
 SELECT TOP 100 *
 FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 ORDER BY ClosedDate DESC
-
 END
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
 BEGIN
 
-SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
-UNION
-SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Buy]
 WHERE Id = @openOrderId
-
+UNION
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
+WHERE Id = @openOrderId
 END
 GO
 SET ANSI_NULLS ON
@@ -1047,7 +1027,6 @@ UNION
 SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[BTC_USDT_OpenOrders_Sell]
 WHERE CreateUserId = @createUserId
 ORDER BY CreateDate DESC
-
 END
 GO
 SET ANSI_NULLS ON
@@ -1076,8 +1055,8 @@ SELECT TOP 15
 FROM cte c
 	GROUP BY c.Price
 order by c.Price DESC
-
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1105,8 +1084,8 @@ SELECT TOP 15
     SUM(c.Price * c.Amount) Total  
 FROM cte c
 	GROUP BY c.Price
-
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1223,14 +1202,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_DASH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
 BEGIN
 
-SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[DASH_USDT_OpenOrders_Buy]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[DASH_USDT_OpenOrders_Buy]
+WHERE Id = @openOrderId
 UNION
-SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[DASH_USDT_OpenOrders_Sell]
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[DASH_USDT_OpenOrders_Sell]
 WHERE Id = @openOrderId
 END
 GO
@@ -1424,14 +1405,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_DOGE_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
 BEGIN
 
-SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[DOGE_USDT_OpenOrders_Buy]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[DOGE_USDT_OpenOrders_Buy]
+WHERE Id = @openOrderId
 UNION
-SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[DOGE_USDT_OpenOrders_Sell]
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[DOGE_USDT_OpenOrders_Sell]
 WHERE Id = @openOrderId
 END
 GO
@@ -1625,14 +1608,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_ETH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
 BEGIN
 
-SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[ETH_USDT_OpenOrders_Buy]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[ETH_USDT_OpenOrders_Buy]
+WHERE Id = @openOrderId
 UNION
-SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[ETH_USDT_OpenOrders_Sell]
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[ETH_USDT_OpenOrders_Sell]
 WHERE Id = @openOrderId
 END
 GO
@@ -1826,14 +1811,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_LTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
 BEGIN
 
-SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[LTC_USDT_OpenOrders_Buy]
+SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[LTC_USDT_OpenOrders_Buy]
+WHERE Id = @openOrderId
 UNION
-SELECT *, 1 as IsBuy FROM [Exchange].[dbo].[LTC_USDT_OpenOrders_Sell]
+SELECT *, 0 as IsBuy FROM [Exchange].[dbo].[LTC_USDT_OpenOrders_Sell]
 WHERE Id = @openOrderId
 END
 GO
@@ -2450,6 +2437,89 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+
+
+CREATE PROCEDURE [dbo].[MoveFromOpenToClosedOrders]
+@pair nvarchar(20),
+@buyOrSell nvarchar(4),
+@createUserId nvarchar(450),
+@boughtUserId nvarchar(450),
+@id bigint,
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@status int,
+@createDate datetime
+AS
+BEGIN
+
+declare @Sql nvarchar(max);
+
+set @sql = 'delete from [Exchange].[dbo].[' + @pair + '_OpenOrders_' + @buyOrSell + '] WHERE Id = ' + CAST(@id as nvarchar(MAX));
+
+exec sp_executesql @sql
+
+set @sql = 'insert into [Exchange].[dbo].[' + @pair + '_ClosedOrders] (Total, CreateDate, ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount, CreateUserId, BoughtUserId, Status)
+values (' + CAST(@total as nvarchar(MAX)) + ', ''' + CAST(@createDate as nvarchar(MAX)) + ''', ''' + CAST(getdate() as nvarchar(MAX)) + ''', 1, ' + CAST(@price as nvarchar(MAX)) + ', ' + CAST(@price as nvarchar(MAX)) + ', 0, ' + CAST(@amount as nvarchar(MAX)) + ', ''' + @createUserId + ''', ''' + @boughtUserId + ''', ' + CAST(@status as nvarchar(MAX)) + ')'
+
+exec sp_executesql @sql
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Pairs_Create_OpenOrder_Buy]
+@pair nvarchar(20),
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@new_identity bigint OUTPUT
+AS
+BEGIN
+
+declare @Sql nvarchar(max);
+
+set @Sql = 'INSERT INTO [Exchange].[dbo].[' + @pair + '_OpenOrders_Buy] (Price, Amount, Total, CreateUserId) VALUES (' + CAST(@price as nvarchar(MAX)) + ', ' + CAST(@amount as nvarchar(MAX)) + ', ' + CAST(@total as nvarchar(MAX)) + ',''' + @userid + ''') select SCOPE_IDENTITY()'
+exec sp_executesql @sql 
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[Pairs_Create_OpenOrder_Sell]
+@pair nvarchar(20),
+@userid nvarchar(450),
+@price decimal(38,20),
+@amount decimal(38,20),
+@total decimal(38,20),
+@new_identity bigint OUTPUT
+AS
+BEGIN
+
+declare @Sql nvarchar(max);
+
+set @Sql = 'INSERT INTO [Exchange].[dbo].[' + @pair + '_OpenOrders_Sell] (Price, Amount, Total, CreateUserId) VALUES (' + CAST(@price as nvarchar(MAX)) + ', ' + CAST(@amount as nvarchar(MAX)) + ', ' + CAST(@total as nvarchar(MAX)) + ',''' + @userid + ''') select SCOPE_IDENTITY()'
+exec sp_executesql @sql 
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -2495,7 +2565,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = 'BTC_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -2646,7 +2717,6 @@ BEGIN
 
 	SELECT 0 as Amount, -1 as Id, (SELECT CreateUserId FROM #selectedOrder) as ClosedOrderUserId, (SELECT Id FROM #selectedOrder) as ClosedOrderId;
 END
-
 END
 GO
 SET ANSI_NULLS ON
@@ -2696,7 +2766,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_BTC_USDT_OpenOrder_Sell]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Sell]
+		@pair = 'BTC_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -2899,7 +2970,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_DASH_USDT_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = 'DASH_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -3099,7 +3171,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_DASH_USDT_OpenOrder_Sell]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Sell]
+		@pair = 'DASH_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -3302,7 +3375,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_DOGE_USDT_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = 'DOGE_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -3502,7 +3576,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_DOGE_USDT_OpenOrder_Sell]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Sell]
+		@pair = 'DOGE_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -3705,7 +3780,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_ETH_USDT_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = 'ETH_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -3905,7 +3981,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_ETH_USDT_OpenOrder_Sell]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Sell]
+		@pair = 'ETH_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -4108,7 +4185,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_LTC_USDT_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = 'LTC_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,
@@ -4308,7 +4386,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_LTC_USDT_OpenOrder_Sell]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Sell]
+		@pair = 'LTC_USDT',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,

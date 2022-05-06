@@ -183,6 +183,12 @@
 <script src="~/js/btcusdthub.js" asp-append-version="true"></script>
 <script src="~/js/vendor/apexcharts.min.js"></script>
 <script>
+   $( "a" ).click(function( event ) {
+     event.preventDefault();
+   });
+   
+   var splittedUrl = document.URL.split('/');
+   var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
     
     function sendTrade(tradeData, balanceId, updatedBalance) {
         $.ajax({
@@ -289,7 +295,7 @@
         loadUserOpenOrders(userOpenOrders, true);
 
 
-        $.get("/candlestick/getcandlestick", function (data) {
+        $.get("/candlestick/getcandlestick?acronim=" + cryptExchangePair, function (data) {
 
             var seriesData = []
             if (data.lastCandleSticks != null) {
@@ -494,10 +500,10 @@ function createUserOpenOrder(order) {
     orderBookElem.appendChild(orderBookElemColThird);
 
     let orderBookElemButton = document.createElement('div');
-    orderBookElemButton.className = "orderbook-col";
-
+    orderBookElemButton.className = "orderbook-col";    
+    
     let orderBookElemButtonA = document.createElement('a');
-    orderBookElemButtonA.href = "/trade/cancelorder/" + order.id;
+    orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
     orderBookElemButtonA.innerHTML = "Cancel";
 
     orderBookElemButton.appendChild(orderBookElemButtonA);
@@ -751,7 +757,7 @@ function loadUserOpenOrders(openOrders, isLoad) {
         orderBookElemButton.className = "orderbook-col";
 
         let orderBookElemButtonA = document.createElement('a');
-        orderBookElemButtonA.href = "/trade/cancelorder/" + openOrderId;
+        orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
         orderBookElemButtonA.innerHTML = "Cancel";
 
         orderBookElemButton.appendChild(orderBookElemButtonA);
@@ -902,7 +908,7 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
             orderBookElemButton.className = "orderbook-col";
 
             let orderBookElemButtonA = document.createElement('a');
-            orderBookElemButtonA.href = "/trade/cancelorder/" + (isLoad ? order.createUserId : order.CreateUserId);
+            orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
             orderBookElemButtonA.innerHTML = "Cancel";
         }
 

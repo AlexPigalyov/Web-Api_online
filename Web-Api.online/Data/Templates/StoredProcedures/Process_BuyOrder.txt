@@ -43,7 +43,8 @@ IF NOT EXISTS(SELECT 1 FROM #selectedOrder)
 BEGIN	
 	DECLARE @newId bigint
 
-	EXEC [Exchange].[dbo].[Create_{cryptocurrencypair}_OpenOrder_Buy]
+	EXEC [Exchange].[dbo].[Pairs_Create_OpenOrder_Buy]
+		@pair = '{cryptocurrencypair}',
 		@userId = @createUserId,
 		@price = @price,
 		@amount = @amount,

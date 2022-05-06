@@ -22,7 +22,7 @@ namespace Web_Api.online.Jobs
 
             foreach(var pair in pairs)
             {
-                await _candleStickService.CreateCandleStick(pair.Currency1 + "_" + pair.Currency2);
+                await _candleStickService.CreateCandleStick(pair.SQLTableName);
             }
         }
     }

@@ -1,7 +1,5 @@
 ﻿using Dapper;
-
 using Microsoft.Extensions.Configuration;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -46,7 +44,46 @@ namespace Web_Api.online.Data.Repositories
 
                 await _db.ExecuteAsync(query);
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public async Task<List<CandleStickTableModel>> GetCandleStick(GetCandleStickModel model, string SQLPairName)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("dateStart", model.DateStart);
+                p.Add("dateend", model.DateEnd);
+                p.Add("interval", model.Interval);
+
+                var candleStick = await _db
+                    .QueryAsync<CandleStickTableModel>($"Get_{SQLPairName}_CandleStick",
+                        commandType: CommandType.StoredProcedure);
+
+                return candleStick.ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<CandleStickTableModel> GetCurrentCandleStick(string SQLPairName)
+        {
+            try
+            {
+                var candleStick = await _db
+                    .QueryFirstAsync<CandleStickTableModel>($"GetCurrent_{SQLPairName}_CandleStick",
+                        commandType: CommandType.StoredProcedure);
+
+                return candleStick;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<CandleStickTableModel> GetLastCandleStick(string pairName)
@@ -57,11 +94,15 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("pairName", pairName);
 
                 var candleStick = await _db
-                    .QueryFirstAsync<CandleStickTableModel>("GetLastCandleStick", p, commandType: CommandType.StoredProcedure);
+                    .QueryFirstAsync<CandleStickTableModel>("GetLastCandleStick", p,
+                        commandType: CommandType.StoredProcedure);
 
                 return candleStick;
             }
-            catch (Exception ex) { return null; }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<List<ClosedOrderTableModel>> GetLastOrdersBySeconds(string pairName, string seconds)
@@ -73,11 +114,15 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("seconds", seconds);
 
                 var orders = await _db
-                    .QueryAsync<ClosedOrderTableModel>("GetLastOrdersBySeconds", p, commandType: CommandType.StoredProcedure);
+                    .QueryAsync<ClosedOrderTableModel>("GetLastOrdersBySeconds", p,
+                        commandType: CommandType.StoredProcedure);
 
                 return orders.ToList();
             }
-            catch (Exception ex) { return null; }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

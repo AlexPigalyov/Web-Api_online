@@ -11,5 +11,6 @@ namespace Web_Api.online.Models.Tables
         public DateTime Created { get; set; }
         public string Header { get; set; }
         public string Acronim { get; set; }
+        public string SQLTableName => Currency1 + "_" + Currency2;
     }
 }

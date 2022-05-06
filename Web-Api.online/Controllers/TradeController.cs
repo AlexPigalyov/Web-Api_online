@@ -50,13 +50,14 @@ namespace Web_Api.online.Controllers
 
             return View(model);
         }
-        
-        //TODO: REWORK
+
         [Authorize]
-        public async Task<ActionResult> CancelOrder(string acronim, long id)
+        public async Task<ActionResult> CancelOrder(long id, string acronim)
         {
             var pair = await _pairsRepository.GetPairByAcronimAsync(acronim);
-            
+
+            if (pair == null) return BadRequest("This pair doesn't exist");
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
@@ -75,11 +76,17 @@ namespace Web_Api.online.Controllers
             {
                 return BadRequest("This is not your order.");
             }
-            /* TODO: Rewrite this method to all pairs not only for BTC_USDT
-            await _tradeRepository.spMove_BTC_USDT_FromOpenOrdersToClosedOrders(order, userId,
-                ClosedOrderStatusEnum.Canceled);*/
 
-            return Ok();
+            await _tradeRepository.MoveFromOpenToClosedOrders(order, userId,
+                ClosedOrderStatusEnum.Canceled, pair.SQLTableName);
+
+            var wallet = await _walletsRepository
+                .GetUserWalletAsync(userId, order.IsBuy ? pair.Currency2 : pair.Currency1);
+
+            await _walletsRepository
+                .UpdateUserWalletBalanceAsync(wallet.Id, order.IsBuy ? order.Total : order.Amount);
+            
+            return Redirect("crypto/" + acronim);
         }
 
         [Authorize]
@@ -329,7 +336,7 @@ namespace Web_Api.online.Controllers
                 Total = total,
                 CreateUserId = userId,
                 CreateDate = DateTime.Now,
-                CryptExchangePair = pair.Currency1 + "_" + pair.Currency2
+                CryptExchangePair = pair.SQLTableName
             };
 
             var result = await _tradeRepository.ProcessOrder(order, orderModel.IsBuy);
@@ -502,8 +509,10 @@ namespace Web_Api.online.Controllers
             model.Pair = model.FirstCurrency + model.SecondCurrency;
 
             model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
-            model.SellOrderBook = await _tradeRepository.GetSellOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
-            model.MarketTrades = await _tradeRepository.GetClosedOrders_Top100(model.FirstCurrency, model.SecondCurrency);
+            model.SellOrderBook =
+                await _tradeRepository.GetSellOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
+            model.MarketTrades =
+                await _tradeRepository.GetClosedOrders_Top100(model.FirstCurrency, model.SecondCurrency);
 
             return View(model);
         }

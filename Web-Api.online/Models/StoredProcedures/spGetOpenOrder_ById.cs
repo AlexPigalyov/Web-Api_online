@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spGet_BTC_USDT_OpenOrder_ById
+    public class spGetOpenOrder_ById
     {
         public long Id { get; set; }
         public System.DateTime CreateDate { get; set; }
