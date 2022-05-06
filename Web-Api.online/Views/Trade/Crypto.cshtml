@@ -178,15 +178,33 @@
     </div>
 </div>
 
+<style>
+    .orderbook-progress-bar {
+        pointer-events: none;    
+    }
+    
+    .orderbook-bids {
+        pointer-events: none;
+    }
+    
+    .orderbook-col {
+        pointer-events: all;
+        cursor: pointer;
+    }
+</style>
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/btcusdthub.js" asp-append-version="true"></script>
 <script src="~/js/vendor/apexcharts.min.js"></script>
 <script>
-   $( "a" ).click(function( event ) {
-     event.preventDefault();
-   });
-   
+
+    $(".orderbook-col").click(function () {
+        $("#priceInput").val((this).parentNode.children[0].innerText)
+    });
+
+</script>
+<script>
    var splittedUrl = document.URL.split('/');
    var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
     
@@ -207,6 +225,7 @@
     }
     
     $(document).ready(function () {
+         
         const modal = new bootstrap.Modal(document.querySelector('#modal'));
         
         var model = @Html.Raw(Json.Serialize(Model));
@@ -293,7 +312,6 @@
         loadOrderBook(sellOpenOrders, true, false);
         loadMarketTrades(marketTrades, true);
         loadUserOpenOrders(userOpenOrders, true);
-
 
         $.get("/candlestick/getcandlestick?acronim=" + cryptExchangePair, function (data) {
 
@@ -468,7 +486,11 @@ function createUserOpenOrder(order) {
     else {
         orderBookElem.classList.add("orderbook-bids", "orderbook-row");
     }
-
+    
+    orderBookElem.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+    
     let orderBookElemColFirst = document.createElement('div');
     if (!order.isBuy) {
         orderBookElemColFirst.className = "orderbook-col";
@@ -567,7 +589,11 @@ function loadOrderBook(openOrders, isLoad, isBuy = false) {
 
         let orderBookElem = document.createElement('div');
         orderBookElem.className = "orderbook-row";
-
+        
+        orderBookElem.onclick = (e) => {
+                        $("#priceInput").val((e.target).parentNode.children[0].innerText)
+                    }
+        
         let orderBookElemColFirst = document.createElement('div');
 
         if (!isBuyLocal) {
@@ -653,7 +679,10 @@ function loadMarketTrades(openOrders, isLoad) {
         else {
             orderBookElem.classList.add("orderbook-bids", "orderbook-row");
         }
-
+        
+        orderBookElem.onclick = (e) => {
+                        $("#priceInput").val((e.target).parentNode.children[0].innerText)
+                    }
 
         let orderBookElemColFirst = document.createElement('div');
         if (!isBuy) {
@@ -722,6 +751,9 @@ function loadUserOpenOrders(openOrders, isLoad) {
         else {
             orderBookElem.classList.add("orderbook-bids", "orderbook-row");
         }
+        orderBookElem.onclick = (e) => {
+                        $("#priceInput").val((e.target).parentNode.children[0].innerText)
+                    }
 
         let orderBookElemColFirst = document.createElement('div');
         if (!isBuy) {
@@ -869,6 +901,10 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
         else {
             orderBookElem.className = "orderbook-row";
         }
+        
+        orderBookElem.onclick = (e) => {
+                        $("#priceInput").val((e.target).parentNode.children[0].innerText)
+                    }
 
         let orderBookElemColFirst = document.createElement('div');
         if (!isBuy) {
@@ -929,9 +965,5 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
         list.appendChild(orderBookElem);
     });
 }
-
-</script>
-
-<script>
 
 </script>
