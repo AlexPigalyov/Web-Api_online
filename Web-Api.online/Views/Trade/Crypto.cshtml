@@ -512,11 +512,7 @@ function createUserOpenOrder(order) {
     let orderBookElemColThird = document.createElement('div');
     orderBookElemColThird.className = "orderbook-col";
 
-    let hour = order.time.getHours();
-    let minutes = order.time.getMinutes();
-    let seconds = order.time.getSeconds();
-
-    orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
+    orderBookElemColThird.innerHTML = order.time.toTimeString().split(' ')[0]
 
 
     orderBookElem.appendChild(orderBookElemColThird);
@@ -705,11 +701,7 @@ function loadMarketTrades(openOrders, isLoad) {
         let orderBookElemColThird = document.createElement('div');
         orderBookElemColThird.className = "orderbook-col";
 
-        let hour = time.getHours();
-        let minutes = time.getMinutes();
-        let seconds = time.getSeconds();
-
-        orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
+        orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
 
         orderBookElem.appendChild(orderBookElemColThird);
 
@@ -776,11 +768,7 @@ function loadUserOpenOrders(openOrders, isLoad) {
         let orderBookElemColThird = document.createElement('div');
         orderBookElemColThird.className = "orderbook-col";
 
-        let hour = time.getHours();
-        let minutes = time.getMinutes();
-        let seconds = time.getSeconds();
-
-        orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
+        orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
 
 
         orderBookElem.appendChild(orderBookElemColThird);
@@ -927,11 +915,8 @@ function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = fa
         let orderBookElemColThird = document.createElement('div');
         orderBookElemColThird.className = "orderbook-col";
         if (isMarketTrades || isUserOpenOrders) {
-            let hour = time.getHours();
-            let minutes = time.getMinutes();
-            let seconds = time.getSeconds();
 
-            orderBookElemColThird.innerHTML = hour + ':' + minutes + ':' + seconds;
+            orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
         }
         else {
             orderBookElemColThird.innerHTML = orderTotal;
