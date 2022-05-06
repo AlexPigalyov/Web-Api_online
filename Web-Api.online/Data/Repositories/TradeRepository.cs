@@ -23,15 +23,14 @@ namespace Web_Api.online.Data.Repositories
         }
 
         public async Task<List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>>
-            GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId, string firstCurrency,
-                string secondCurrency)
+            GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId, string sqlPairName)
         {
             try
             {
                 List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate> result =
                     (List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>)
                     await _db.QueryAsync<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>(
-                        $"Get_{firstCurrency + "_" + secondCurrency}_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
+                        $"Get_{sqlPairName}_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
                         new {createUserId = userId},
                         commandType: CommandType.StoredProcedure);
 
@@ -67,11 +66,11 @@ namespace Web_Api.online.Data.Repositories
             return result;
         }
 
-        public async Task<List<ClosedOrderTableModel>> spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(string userId, string firstCurrency, string secondCurrency)
+        public async Task<List<ClosedOrderTableModel>> spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(string userId, string sqlPairName)
         {
             List<ClosedOrderTableModel> result = (List<ClosedOrderTableModel>)
                 await _db.QueryAsync<ClosedOrderTableModel>(
-                    $"Get_{firstCurrency + "_" + secondCurrency}_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
+                    $"Get_{sqlPairName}_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
                     new { createUserId = userId },
                     commandType: CommandType.StoredProcedure);
 
@@ -149,14 +148,13 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<ClosedOrderTableModel>> GetClosedOrders_Top100(string firstCurrency,
-            string secondCurrency)
+        public async Task<List<ClosedOrderTableModel>> GetClosedOrders_Top100(string sqlPairName)
         {
             try
             {
                 var res = (List<ClosedOrderTableModel>)
                     await _db.QueryAsync<ClosedOrderTableModel>(
-                        $"Get_{firstCurrency + "_" + secondCurrency}_ClosedOrders_Top100",
+                        $"Get_{sqlPairName}_ClosedOrders_Top100",
                         commandType: CommandType.StoredProcedure);
 
                 return res;
@@ -182,12 +180,12 @@ namespace Web_Api.online.Data.Repositories
             }
         }
         
-        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetSellOrderBookAsync(string firstCurrency, string secondCurrency)
+        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetSellOrderBookAsync(string sqlPairName)
         {
             try
             {
                 return (await _db.QueryAsync<spGetOrderByDescPriceOrderBookResult>(
-                        $"Get_{firstCurrency + "_" + secondCurrency}_OrderBookSell_OrderByPrice",
+                        $"Get_{sqlPairName}_OrderBookSell_OrderByPrice",
                         commandType: CommandType.StoredProcedure))
                     .ToList();
             }
@@ -212,12 +210,12 @@ namespace Web_Api.online.Data.Repositories
             }
         }
         
-        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetBuyOrderBookAsync(string firstCurrency, string secondCurrency)
+        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetBuyOrderBookAsync(string sqlPairName)
         {
             try
             {
                 return (await _db.QueryAsync<spGetOrderByDescPriceOrderBookResult>(
-                        $"Get_{firstCurrency + "_" + secondCurrency}_OrderBookBuy_OrderByDescPrice",
+                        $"Get_{sqlPairName}_OrderBookBuy_OrderByDescPrice",
                         commandType: CommandType.StoredProcedure))
                     .ToList();
             }

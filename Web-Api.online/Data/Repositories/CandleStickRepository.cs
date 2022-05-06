@@ -49,7 +49,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<CandleStickTableModel>> GetCandleStick(GetCandleStickModel model, string SQLPairName)
+        public async Task<List<CandleStickTableModel>> GetCandleStick(GetCandleStickModel model, string sqlPairName)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("interval", model.Interval);
 
                 var candleStick = await _db
-                    .QueryAsync<CandleStickTableModel>($"Get_{SQLPairName}_CandleStick",
+                    .QueryAsync<CandleStickTableModel>($"Get_{sqlPairName}_CandleStick",
                         commandType: CommandType.StoredProcedure);
 
                 return candleStick.ToList();
@@ -70,12 +70,12 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<CandleStickTableModel> GetCurrentCandleStick(string SQLPairName)
+        public async Task<CandleStickTableModel> GetCurrentCandleStick(string sqlPairName)
         {
             try
             {
                 var candleStick = await _db
-                    .QueryFirstAsync<CandleStickTableModel>($"GetCurrent_{SQLPairName}_CandleStick",
+                    .QueryFirstAsync<CandleStickTableModel>($"GetCurrent_{sqlPairName}_CandleStick",
                         commandType: CommandType.StoredProcedure);
 
                 return candleStick;

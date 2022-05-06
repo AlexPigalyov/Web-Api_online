@@ -125,7 +125,7 @@ namespace Web_Api.online.Controllers
 
                 foreach (var pair in pairs)
                 {
-                    var pairClosedOrders = await _tradeRepository.spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId, pair.Currency1, pair.Currency2);
+                    var pairClosedOrders = await _tradeRepository.spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId, pair.SQLTableName);
 
                     pairClosedOrders.ForEach(p =>
                     {
@@ -507,8 +507,7 @@ namespace Web_Api.online.Controllers
                 model.SecondWallet = secondWallet;
 
                 model.UserOpenOrders =
-                    await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, pair.Currency1,
-                        pair.Currency2);
+                    await _tradeRepository.GetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId, pair.SQLTableName);
             }
 
             model.FirstCurrency = pair.Currency1.ToUpper();
@@ -517,11 +516,11 @@ namespace Web_Api.online.Controllers
             model.PairHeader = model.FirstCurrency + " - " + model.SecondCurrency;
             model.Pair = model.FirstCurrency + model.SecondCurrency;
 
-            model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
+            model.BuyOrderBook = await _tradeRepository.GetBuyOrderBookAsync(pair.SQLTableName);
             model.SellOrderBook =
-                await _tradeRepository.GetSellOrderBookAsync(model.FirstCurrency, model.SecondCurrency);
+                await _tradeRepository.GetSellOrderBookAsync(pair.SQLTableName);
             model.MarketTrades =
-                await _tradeRepository.GetClosedOrders_Top100(model.FirstCurrency, model.SecondCurrency);
+                await _tradeRepository.GetClosedOrders_Top100(pair.SQLTableName);
 
             return View(model);
         }

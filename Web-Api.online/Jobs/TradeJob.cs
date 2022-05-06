@@ -38,9 +38,9 @@ namespace Web_Api.online.Jobs
 
             pairs.ForEach(x =>
             {
-                var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.Currency1, x.Currency2).Result;
-                var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(x.Currency1, x.Currency2).Result;
-                var marketTrades = _tradeRepository.GetClosedOrders_Top100(x.Currency1, x.Currency2).Result;
+                var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.SQLTableName).Result;
+                var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(x.SQLTableName).Result;
+                var marketTrades = _tradeRepository.GetClosedOrders_Top100(x.SQLTableName).Result;
 
                 var recieveResult = new RecieveMessageResultModel()
                 {
