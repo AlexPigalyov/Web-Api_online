@@ -67,6 +67,17 @@ namespace Web_Api.online.Data.Repositories
             return result;
         }
 
+        public async Task<List<ClosedOrderTableModel>> spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(string userId, string firstCurrency, string secondCurrency)
+        {
+            List<ClosedOrderTableModel> result = (List<ClosedOrderTableModel>)
+                await _db.QueryAsync<ClosedOrderTableModel>(
+                    $"Get_{firstCurrency + "_" + secondCurrency}_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
+                    new { createUserId = userId },
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
         public async Task<spProcessOrderResult> ProcessOrder(
             OpenOrderTableModel openOrder, bool isBuy)
         {
@@ -89,7 +100,6 @@ namespace Web_Api.online.Data.Repositories
                 return await ProcessOrder(openOrder, isBuy);
             }
         }
-
 
         public async Task MoveFromOpenToClosedOrders(spGetOpenOrder_ById openOrder,
             string boughtUserId, ClosedOrderStatusEnum status, string pair)
@@ -171,9 +181,8 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-
-        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetSellOrderBookAsync(string firstCurrency,
-            string secondCurrency)
+        
+        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetSellOrderBookAsync(string firstCurrency, string secondCurrency)
         {
             try
             {
@@ -202,9 +211,8 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-
-        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetBuyOrderBookAsync(string firstCurrency,
-            string secondCurrency)
+        
+        public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetBuyOrderBookAsync(string firstCurrency, string secondCurrency)
         {
             try
             {

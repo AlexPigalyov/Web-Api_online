@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 var splittedUrl = document.URL.split('/');
-var cryptExchangePair = splittedUrl[splittedUrl.length - 1].replace('-', '_').toUpperCase()
+var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/btcusdthub").build();
 

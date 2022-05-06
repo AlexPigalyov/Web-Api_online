@@ -15,10 +15,10 @@
         <div class="orderbook" style="height: 1000px !important; width: 1540px !important; max-width: 1540px !important;">
             <div class="orderbook-header"></div>
             <div class="orderbook-tbheader">
-                <div class="orderbook-tbheader-col">Price(USDT)</div>
-                <div class="orderbook-tbheader-col">Amount(BTC)</div>
+                <div class="orderbook-tbheader-col">Pair</div>
+                <div class="orderbook-tbheader-col">Price</div>
+                <div class="orderbook-tbheader-col">Amount</div>
                 <div class="orderbook-tbheader-col">Total</div>
-                <div class="orderbook-tbheader-col">Valute Pair</div>
                 <div class="orderbook-tbheader-col">Create date-time</div>
                 <div class="orderbook-tbheader-col">Closed date-time</div>
                 <div class="orderbook-tbheader-col">Status</div>
@@ -28,10 +28,10 @@
                     @foreach (var order in Model)
                     {
                         <div class="orderbook-row@(order.IsBuy ? " orderbook-asks" : " orderbook-bids")">
-                            <div class="orderbook-col@(order.IsBuy ? string.Empty : " orderbook-bids")">@order.Price</div>
+                            <div class="orderbook-col">@order.Currency1 @order.Currency2</div>
+                            <div class="orderbook-col@(order.IsBuy ? string.Empty : " orderbook-bids")">@order.ExposedPrice</div>
                             <div class="orderbook-col">@order.Amount</div>
                             <div class="orderbook-col">@order.Total</div>
-                            <div class="orderbook-col">BTC-USDT</div>
                             <div class="orderbook-col">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">@(order.ClosedDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">@(order.Status.ToString())</div>

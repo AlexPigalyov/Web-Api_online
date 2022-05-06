@@ -10,6 +10,19 @@
     ViewData["Title"] = "Profile";
 }
 
+<style>
+    .card-body {
+        padding: 15px !important;
+    }
+
+    .col-lg-5 {
+        margin-top: 10px;
+    }
+
+    .col-lg-7 {
+        margin-top: 10px;
+    }
+</style>
 
 <div class="row">
     <div class="col-xl-4 col-lg-5">
@@ -51,7 +64,6 @@
                         <span class="ms-2">@(string.IsNullOrEmpty(Model.UserInfo.Location) ? "Not selected" : Model.UserInfo.Location)</span>
                     </p>
                 </div>
-
             </div>
         </div>
         <div class="card">
@@ -66,8 +78,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <div class="card">
@@ -76,11 +86,11 @@
                     <div class="row">
                         <h5 class="text-uppercase">
                             <i class="mdi mdi-briefcase me-1"></i>
-                            Events <a href="/My/Events">(Check all events)</a>
+                            <a href="/My/Events">Events</a>
                         </h5>
                         <h5 class="text-uppercase">
                             <i class="mdi mdi-briefcase me-1"></i>
-                            Refferals <a href="/My/MyRefferals">(Check all Refferals)</a>
+                            <a href="/My/MyRefferals">Refferals</a>
                         </h5>
                         @if (Model.LastFiveEvents != null)
                         {
@@ -98,21 +108,12 @@
                                         </div>
                                     </div>
                                 }
-
                             </div>
                         }
                     </div>
                 </div>
-
-
             </div>
         </div>
-
-
-
-
-
-
     </div>
     <div class="col-xl-8 col-lg-7">
         <div class="card">
@@ -235,7 +236,6 @@
     </div>
 </div>
 
-
 @section scripts {
 <script src="~/js/vendor/britecharts.min.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
@@ -255,8 +255,6 @@
         var model = @Html.Raw(Json.Serialize(Model));
 
         var colors = []
-
-
 
         model.notEmptyWallets.forEach(item => {
             colors.push(makeRandomColor());
@@ -286,7 +284,6 @@
                 .height(legendHeight)
                 .colorSchema(colors)
                 .numberFormat("s");
-
 
             let radius = 0;
 
@@ -403,7 +400,6 @@
         }
 
         drawCharts();
-
 
     })(jQuery, briteChartApp);
 </script>
