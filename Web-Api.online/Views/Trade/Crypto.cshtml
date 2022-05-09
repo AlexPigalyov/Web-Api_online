@@ -304,7 +304,11 @@
             currentMarketTradeDoc.classList.remove('status-buy');
             currentMarketTradeDoc.classList.remove('status-sell');
             currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
-
+            
+            currentMarketTradeDoc.onclick = (e) => {
+                                                 $("#priceInput").val((e.target).parentNode.children[0].innerText)
+                                             }
+            
             currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
         }
 
