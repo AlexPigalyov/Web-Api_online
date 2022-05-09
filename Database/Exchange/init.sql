@@ -2089,10 +2089,13 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCurrent_BTC_USDT_CandleStick]
+
+CREATE PROCEDURE [dbo].[GetCurrentCandleStick]
+@pairName nvarchar(20)
 AS
 BEGIN
 
+DECLARE @sql nvarchar(MAX) = '
 DECLARE @CandleStick TABLE
 (Id bigint, 
  [Close] decimal(18,0), 
@@ -2105,12 +2108,12 @@ DECLARE @CandleStick TABLE
 
 SELECT TOP(1) * 
 INTO #lastCandleStick
-FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+FROM [Exchange].[dbo].[' + @pairName + '_CandleStick]
 ORDER BY Id DESC
 
 SELECT *
 INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+FROM [Exchange].[dbo].[' + @pairName + '_ClosedOrders]
 WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
 
 SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
@@ -2122,180 +2125,11 @@ VALUES ((SELECT [Close] FROM #lastCandleStick),
 		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
 		(SELECT ExposedPrice FROM #lastOrder),
 		(SELECT ClosedDate FROM #lastOrder))
-		
-SELECT * FROM @CandleStick
-END
 
+SELECT * FROM @CandleStick'
 
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCurrent_DASH_USDT_CandleStick]
-AS
-BEGIN
+EXEC sp_executesql @sql
 
-DECLARE @CandleStick TABLE
-(Id bigint, 
- [Close] decimal(18,0), 
- CloseTime datetime,
- High decimal(18,0),
- Low decimal(18,0),
- [Open] decimal(18,0),
- OpenTime datetime
-)
-
-SELECT TOP(1) * 
-INTO #lastCandleStick
-FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
-ORDER BY Id DESC
-
-SELECT *
-INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[DASH_USDT_ClosedOrders]
-WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
-
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
-
-INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
-VALUES ((SELECT [Close] FROM #lastCandleStick),
-		(SELECT CloseTime FROM #lastCandleStick),
-		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT ExposedPrice FROM #lastOrder),
-		(SELECT ClosedDate FROM #lastOrder))
-		
-SELECT * FROM @CandleStick
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCurrent_DOGE_USDT_CandleStick]
-AS
-BEGIN
-
-DECLARE @CandleStick TABLE
-(Id bigint, 
- [Close] decimal(18,0), 
- CloseTime datetime,
- High decimal(18,0),
- Low decimal(18,0),
- [Open] decimal(18,0),
- OpenTime datetime
-)
-
-SELECT TOP(1) * 
-INTO #lastCandleStick
-FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
-ORDER BY Id DESC
-
-SELECT *
-INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[DOGE_USDT_ClosedOrders]
-WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
-
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
-
-INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
-VALUES ((SELECT [Close] FROM #lastCandleStick),
-		(SELECT CloseTime FROM #lastCandleStick),
-		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT ExposedPrice FROM #lastOrder),
-		(SELECT ClosedDate FROM #lastOrder))
-		
-SELECT * FROM @CandleStick
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCurrent_ETH_USDT_CandleStick]
-AS
-BEGIN
-
-DECLARE @CandleStick TABLE
-(Id bigint, 
- [Close] decimal(18,0), 
- CloseTime datetime,
- High decimal(18,0),
- Low decimal(18,0),
- [Open] decimal(18,0),
- OpenTime datetime
-)
-
-SELECT TOP(1) * 
-INTO #lastCandleStick
-FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
-ORDER BY Id DESC
-
-SELECT *
-INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[ETH_USDT_ClosedOrders]
-WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
-
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
-
-INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
-VALUES ((SELECT [Close] FROM #lastCandleStick),
-		(SELECT CloseTime FROM #lastCandleStick),
-		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT ExposedPrice FROM #lastOrder),
-		(SELECT ClosedDate FROM #lastOrder))
-		
-SELECT * FROM @CandleStick
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetCurrent_LTC_USDT_CandleStick]
-AS
-BEGIN
-
-DECLARE @CandleStick TABLE
-(Id bigint, 
- [Close] decimal(18,0), 
- CloseTime datetime,
- High decimal(18,0),
- Low decimal(18,0),
- [Open] decimal(18,0),
- OpenTime datetime
-)
-
-SELECT TOP(1) * 
-INTO #lastCandleStick
-FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
-ORDER BY Id DESC
-
-SELECT *
-INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[LTC_USDT_ClosedOrders]
-WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
-
-SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
-
-INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
-VALUES ((SELECT [Close] FROM #lastCandleStick),
-		(SELECT CloseTime FROM #lastCandleStick),
-		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
-		(SELECT ExposedPrice FROM #lastOrder),
-		(SELECT ClosedDate FROM #lastOrder))
-		
-SELECT * FROM @CandleStick
 END
 
 
@@ -2651,6 +2485,7 @@ GO
 
 
 
+
 CREATE PROCEDURE [dbo].[MoveFromOpenToClosedOrders]
 @pair nvarchar(20),
 @buyOrSell nvarchar(4),
@@ -2667,11 +2502,9 @@ BEGIN
 
 declare @Sql nvarchar(max);
 
-set @sql = 'delete from [Exchange].[dbo].[' + @pair + '_OpenOrders_' + @buyOrSell + '] WHERE Id = ' + CAST(@id as nvarchar(MAX));
+set @sql = 'delete from [Exchange].[dbo].[' + @pair + '_OpenOrders_' + @buyOrSell + '] WHERE Id = ' + CAST(@id as nvarchar(MAX)) + '
 
-exec sp_executesql @sql
-
-set @sql = 'insert into [Exchange].[dbo].[' + @pair + '_ClosedOrders] (Total, CreateDate, ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount, CreateUserId, BoughtUserId, Status)
+insert into [Exchange].[dbo].[' + @pair + '_ClosedOrders] (Total, CreateDate, ClosedDate, IsBuy, ExposedPrice, TotalPrice, Difference, Amount, CreateUserId, BoughtUserId, Status)
 values (' + CAST(@total as nvarchar(MAX)) + ', ''' + CAST(@createDate as nvarchar(MAX)) + ''', ''' + CAST(getdate() as nvarchar(MAX)) + ''', 1, ' + CAST(@price as nvarchar(MAX)) + ', ' + CAST(@price as nvarchar(MAX)) + ', 0, ' + CAST(@amount as nvarchar(MAX)) + ', ''' + @createUserId + ''', ''' + @boughtUserId + ''', ' + CAST(@status as nvarchar(MAX)) + ')'
 
 exec sp_executesql @sql

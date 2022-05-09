@@ -75,8 +75,12 @@ namespace Web_Api.online.Data.Repositories
         {
             try
             {
+                var p = new DynamicParameters();
+                p.Add("pairName", sqlPairName);
+                
                 var candleStick = await _db
-                    .QueryFirstAsync<CandleStickTableModel>($"GetCurrent_{sqlPairName}_CandleStick",
+                    .QueryFirstAsync<CandleStickTableModel>($"GetCurrentCandleStick",
+                        p,
                         commandType: CommandType.StoredProcedure);
 
                 return candleStick;
