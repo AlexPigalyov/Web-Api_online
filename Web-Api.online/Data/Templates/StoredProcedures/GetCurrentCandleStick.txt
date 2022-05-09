@@ -1,4 +1,4 @@
-ALTER PROCEDURE [dbo].[GetCurrent_cryptocurrencypair}_CandleStick]
+CREATE PROCEDURE [dbo].[GetCurrent_{cryptocurrencypair}_CandleStick]
 AS
 BEGIN
 
@@ -14,12 +14,12 @@ DECLARE @CandleStick TABLE
 
 SELECT TOP(1) * 
 INTO #lastCandleStick
-FROM [Exchange].[dbo].[cryptocurrencypair}_CandleStick]
+FROM [Exchange].[dbo].[{cryptocurrencypair}_CandleStick]
 ORDER BY Id DESC
 
 SELECT *
 INTO #closedOrdersByLastMinute 
-FROM [Exchange].[dbo].[cryptocurrencypair}_ClosedOrders]
+FROM [Exchange].[dbo].[{cryptocurrencypair}_ClosedOrders]
 WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
 
 SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC

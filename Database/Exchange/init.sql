@@ -999,7 +999,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -1202,7 +1201,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_DASH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -1405,7 +1403,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_DOGE_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -1608,7 +1605,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_ETH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -1811,7 +1807,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_LTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -2087,6 +2082,221 @@ Select * FROM Currencies WHERE Acronim = @acronim
 
 END
 
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCurrent_BTC_USDT_CandleStick]
+AS
+BEGIN
+
+DECLARE @CandleStick TABLE
+(Id bigint, 
+ [Close] decimal(18,0), 
+ CloseTime datetime,
+ High decimal(18,0),
+ Low decimal(18,0),
+ [Open] decimal(18,0),
+ OpenTime datetime
+)
+
+SELECT TOP(1) * 
+INTO #lastCandleStick
+FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+ORDER BY Id DESC
+
+SELECT *
+INTO #closedOrdersByLastMinute 
+FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
+
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
+
+INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
+VALUES ((SELECT [Close] FROM #lastCandleStick),
+		(SELECT CloseTime FROM #lastCandleStick),
+		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT ExposedPrice FROM #lastOrder),
+		(SELECT ClosedDate FROM #lastOrder))
+		
+SELECT * FROM @CandleStick
+END
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCurrent_DASH_USDT_CandleStick]
+AS
+BEGIN
+
+DECLARE @CandleStick TABLE
+(Id bigint, 
+ [Close] decimal(18,0), 
+ CloseTime datetime,
+ High decimal(18,0),
+ Low decimal(18,0),
+ [Open] decimal(18,0),
+ OpenTime datetime
+)
+
+SELECT TOP(1) * 
+INTO #lastCandleStick
+FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
+ORDER BY Id DESC
+
+SELECT *
+INTO #closedOrdersByLastMinute 
+FROM [Exchange].[dbo].[DASH_USDT_ClosedOrders]
+WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
+
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
+
+INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
+VALUES ((SELECT [Close] FROM #lastCandleStick),
+		(SELECT CloseTime FROM #lastCandleStick),
+		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT ExposedPrice FROM #lastOrder),
+		(SELECT ClosedDate FROM #lastOrder))
+		
+SELECT * FROM @CandleStick
+END
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCurrent_DOGE_USDT_CandleStick]
+AS
+BEGIN
+
+DECLARE @CandleStick TABLE
+(Id bigint, 
+ [Close] decimal(18,0), 
+ CloseTime datetime,
+ High decimal(18,0),
+ Low decimal(18,0),
+ [Open] decimal(18,0),
+ OpenTime datetime
+)
+
+SELECT TOP(1) * 
+INTO #lastCandleStick
+FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
+ORDER BY Id DESC
+
+SELECT *
+INTO #closedOrdersByLastMinute 
+FROM [Exchange].[dbo].[DOGE_USDT_ClosedOrders]
+WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
+
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
+
+INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
+VALUES ((SELECT [Close] FROM #lastCandleStick),
+		(SELECT CloseTime FROM #lastCandleStick),
+		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT ExposedPrice FROM #lastOrder),
+		(SELECT ClosedDate FROM #lastOrder))
+		
+SELECT * FROM @CandleStick
+END
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCurrent_ETH_USDT_CandleStick]
+AS
+BEGIN
+
+DECLARE @CandleStick TABLE
+(Id bigint, 
+ [Close] decimal(18,0), 
+ CloseTime datetime,
+ High decimal(18,0),
+ Low decimal(18,0),
+ [Open] decimal(18,0),
+ OpenTime datetime
+)
+
+SELECT TOP(1) * 
+INTO #lastCandleStick
+FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
+ORDER BY Id DESC
+
+SELECT *
+INTO #closedOrdersByLastMinute 
+FROM [Exchange].[dbo].[ETH_USDT_ClosedOrders]
+WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
+
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
+
+INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
+VALUES ((SELECT [Close] FROM #lastCandleStick),
+		(SELECT CloseTime FROM #lastCandleStick),
+		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT ExposedPrice FROM #lastOrder),
+		(SELECT ClosedDate FROM #lastOrder))
+		
+SELECT * FROM @CandleStick
+END
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCurrent_LTC_USDT_CandleStick]
+AS
+BEGIN
+
+DECLARE @CandleStick TABLE
+(Id bigint, 
+ [Close] decimal(18,0), 
+ CloseTime datetime,
+ High decimal(18,0),
+ Low decimal(18,0),
+ [Open] decimal(18,0),
+ OpenTime datetime
+)
+
+SELECT TOP(1) * 
+INTO #lastCandleStick
+FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
+ORDER BY Id DESC
+
+SELECT *
+INTO #closedOrdersByLastMinute 
+FROM [Exchange].[dbo].[LTC_USDT_ClosedOrders]
+WHERE (SELECT CloseTime FROM #lastCandleStick) < ClosedDate and ClosedDate < GETDATE()
+
+SELECT TOP (1) * INTO #lastOrder FROM #closedOrdersByLastMinute ORDER BY ClosedDate DESC
+
+INSERT INTO @CandleStick([Open], OpenTime, High, Low, [Close], CloseTime)
+VALUES ((SELECT [Close] FROM #lastCandleStick),
+		(SELECT CloseTime FROM #lastCandleStick),
+		(SELECT max(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT min(ExposedPrice) FROM #closedOrdersByLastMinute),
+		(SELECT ExposedPrice FROM #lastOrder),
+		(SELECT ClosedDate FROM #lastOrder))
+		
+SELECT * FROM @CandleStick
+END
 
 
 GO

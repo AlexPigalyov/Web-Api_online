@@ -54,12 +54,13 @@ namespace Web_Api.online.Data.Repositories
             try
             {
                 var p = new DynamicParameters();
-                p.Add("dateStart", model.DateStart);
+                p.Add("datestart", model.DateStart);
                 p.Add("dateend", model.DateEnd);
                 p.Add("interval", model.Interval);
 
                 var candleStick = await _db
                     .QueryAsync<CandleStickTableModel>($"Get_{sqlPairName}_CandleStick",
+                        p,
                         commandType: CommandType.StoredProcedure);
 
                 return candleStick.ToList();
