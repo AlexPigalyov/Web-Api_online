@@ -317,7 +317,7 @@
         loadMarketTrades(marketTrades, true);
         loadUserOpenOrders(userOpenOrders, true);
 
-        $.get("/candlestick/getcandlestick?acronim=" + cryptExchangePair, function (data) {
+        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
 
             var seriesData = []
             if (data.lastCandleSticks != null) {
