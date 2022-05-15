@@ -31,7 +31,7 @@ namespace Web_Api.online.Data.Repositories
                     (List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>)
                     await _db.QueryAsync<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>(
                         $"Get_{sqlPairName}_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
-                        new {createUserId = userId},
+                        new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
 
                 return result;
@@ -48,7 +48,7 @@ namespace Web_Api.online.Data.Repositories
             var result =
                 await _db.QueryFirstAsync<spGetOpenOrder_ById>(
                     $"Get_{firstCurrency}_{secondCurrency}_OpenOrder_ById",
-                    new {openOrderId = openOrderId},
+                    new { openOrderId = openOrderId },
                     commandType: CommandType.StoredProcedure);
 
             return result;
@@ -60,7 +60,7 @@ namespace Web_Api.online.Data.Repositories
             List<ClosedOrderTableModel> result = (List<ClosedOrderTableModel>)
                 await _db.QueryAsync<ClosedOrderTableModel>(
                     "Get_BTC_USDT_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate",
-                    new {createUserId = userId},
+                    new { createUserId = userId },
                     commandType: CommandType.StoredProcedure);
 
             return result;
@@ -118,7 +118,7 @@ namespace Web_Api.online.Data.Repositories
                         amount = openOrder.Amount,
                         total = openOrder.Total,
                         createDate = openOrder.CreateDate,
-                        status = (int) status
+                        status = (int)status
                     },
                     commandType: CommandType.StoredProcedure);
             }
@@ -137,7 +137,26 @@ namespace Web_Api.online.Data.Repositories
                     (List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>)
                     await _db.QueryAsync<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>(
                         "Get_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate",
-                        new {createUserId = userId},
+                        new { createUserId = userId },
+                        commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<spGetOpenOrdersByUser>> spGet_OpenOrders_ByUser(string userId)
+        {
+            try
+            {
+                List<spGetOpenOrdersByUser> result =
+                    (List<spGetOpenOrdersByUser>)
+                    await _db.QueryAsync<spGetOpenOrdersByUser>(
+                        "Get_OpenOrders_ByUserId",
+                        new { createUserId = userId },
                         commandType: CommandType.StoredProcedure);
 
                 return result;
@@ -179,7 +198,7 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        
+
         public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetSellOrderBookAsync(string sqlPairName)
         {
             try
@@ -209,7 +228,7 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        
+
         public async Task<List<spGetOrderByDescPriceOrderBookResult>> GetBuyOrderBookAsync(string sqlPairName)
         {
             try
@@ -248,7 +267,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("pageSize", pageSize);
 
                 List<ClosedOrderTableModel> result =
-                    (List<ClosedOrderTableModel>) await _db.QueryAsync<ClosedOrderTableModel>
+                    (List<ClosedOrderTableModel>)await _db.QueryAsync<ClosedOrderTableModel>
                     ("ClosedOrders_Paged",
                         p,
                         commandType: CommandType.StoredProcedure);

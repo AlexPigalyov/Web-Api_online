@@ -15,11 +15,11 @@
         <div class="orderbook" style="height: 1000px !important; width: 1540px !important; max-width: 1540px !important;">
             <div class="orderbook-header"></div>
             <div class="orderbook-tbheader">
+                <div class="orderbook-tbheader-col">Pair</div>
                 <div class="orderbook-tbheader-col">Price(USDT)</div>
                 <div class="orderbook-tbheader-col">Amount(BTC)</div>
                 <div class="orderbook-tbheader-col">Total</div>
-                <div class="orderbook-tbheader-col">Valute Pair</div>
-                <div class="orderbook-tbheader-col">Create date-time</div>
+                <div class="orderbook-tbheader-col">Created</div>
                 <div class="orderbook-tbheader-col"></div>
             </div>
             <div class="orderbook-container">
@@ -27,10 +27,10 @@
                     @foreach (var order in Model)
                     {
                         <div class="orderbook-row">
+                            <div class="orderbook-col">@order.Pair</div>
                             <div class="orderbook-col">@order.Price</div>
                             <div class="orderbook-col">@order.Amount</div>
                             <div class="orderbook-col">@order.Total</div>
-                            <div class="orderbook-col">BTC-USDT</div>
                             <div class="orderbook-col">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">
                                 <a href="/trade/cancelorder/@order.Id">Cancel</a>

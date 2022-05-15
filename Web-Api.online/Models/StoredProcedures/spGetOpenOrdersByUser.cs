@@ -1,6 +1,6 @@
 ﻿namespace Web_Api.online.Models.StoredProcedures
 {
-    public class spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate
+    public class spGetOpenOrdersByUser
     {
         public long Id { get; set; }
         public string Pair { get; set; }

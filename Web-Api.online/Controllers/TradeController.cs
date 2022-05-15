@@ -57,7 +57,7 @@ namespace Web_Api.online.Controllers
             var pair = await _pairsRepository.GetPairByAcronimAsync(acronim);
 
             if (pair == null) return BadRequest("Wrong pair");
-            
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
@@ -85,7 +85,7 @@ namespace Web_Api.online.Controllers
 
             await _walletsRepository
                 .UpdateUserWalletBalanceAsync(wallet.Id, order.IsBuy ? order.Total : order.Amount);
-            
+
             return Redirect("crypto/" + acronim);
         }
 
@@ -97,16 +97,7 @@ namespace Web_Api.online.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                if (pair == "BTCUSDT")
-                {
-                    return View(
-                        await _tradeRepository
-                            .spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
-                }
-
-
-                return View(
-                    await _tradeRepository.spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(userId));
+                return View(await _tradeRepository.spGet_OpenOrders_ByUser(userId));
             }
 
             return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
