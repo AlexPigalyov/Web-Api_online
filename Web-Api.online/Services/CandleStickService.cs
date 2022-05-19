@@ -19,7 +19,7 @@ namespace Web_Api.online.Services
             
             var lastOrders = await _candleStickRepository.GetLastOrdersBySeconds(pairName, "60");
                 
-            if (lastOrders.Count > 0)
+            if (lastOrders != null && lastOrders.Count > 0)
             {
                 var firstOrder = lastOrders.FirstOrDefault();
                 var lastOrder = lastOrders.LastOrDefault();
