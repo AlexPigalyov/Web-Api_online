@@ -572,6 +572,37 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE TABLE [dbo].[TrianglesData](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Date] [datetime] NOT NULL,
+	[Pairs] [nvarchar](max) NOT NULL,
+	[1PairPrice] [decimal](38, 20) NOT NULL,
+	[2PairPrice] [decimal](38, 20) NOT NULL,
+	[3PairPrice] [decimal](38, 20) NOT NULL,
+	[Profit] [decimal](38, 20) NOT NULL,
+	[ProfitPercent] [decimal](38, 20) NOT NULL,
+	[1PairPriceMin] [decimal](38, 20) NULL,
+	[1PairPriceMax] [decimal](38, 20) NULL,
+	[1PairPriceAverage] [decimal](38, 20) NULL,
+	[1PairPriceVolume] [decimal](38, 20) NULL,
+	[2PairPriceMin] [decimal](38, 20) NULL,
+	[2PairPriceMax] [decimal](38, 20) NULL,
+	[2PairPriceAverage] [decimal](38, 20) NULL,
+	[2PairPriceVolume] [decimal](38, 20) NULL,
+	[3PairPriceMin] [decimal](38, 20) NULL,
+	[3PairPriceMax] [decimal](38, 20) NULL,
+	[3PairPriceAverage] [decimal](38, 20) NULL,
+	[3PairPriceVolume] [decimal](38, 20) NULL,
+ CONSTRAINT [PK_TrianglesData] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Wallets](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[UserId] [nvarchar](450) NOT NULL,
@@ -641,11 +672,33 @@ ALTER TABLE [dbo].[Settings] ADD  CONSTRAINT [DF_Settings_LastUpdateDateTime]  D
 GO
 ALTER TABLE [dbo].[Transfers] ADD  CONSTRAINT [DF_Transfers_Date]  DEFAULT (getdate()) FOR [Date]
 GO
+ALTER TABLE [dbo].[TrianglesData] ADD  CONSTRAINT [DF_TrianglesData_Profit]  DEFAULT ((0)) FOR [Profit]
+GO
+ALTER TABLE [dbo].[TrianglesData] ADD  CONSTRAINT [DF_TrianglesData_ProfitPercent]  DEFAULT ((0)) FOR [ProfitPercent]
+GO
 ALTER TABLE [dbo].[Wallets] ADD  CONSTRAINT [DF_Wallets_Value]  DEFAULT ((0)) FOR [Value]
 GO
 ALTER TABLE [dbo].[Wallets] ADD  CONSTRAINT [DF_Wallets_Created]  DEFAULT (getdate()) FOR [Created]
 GO
 ALTER TABLE [dbo].[Wallets] ADD  CONSTRAINT [DF_Wallets_LastUpdate]  DEFAULT (getdate()) FOR [LastUpdate]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create PROCEDURE [dbo].[AddTriangleData]
+@pairs nvarchar(max),
+@pair1price decimal(38,20),
+@pair2price decimal(38,20),
+@pair3price decimal(38,20),
+@date datetime
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[TrianglesData] ([Date], Pairs, [1PairPrice], [2PairPrice], [3PairPrice], [Profit], [ProfitPercent])
+VALUES (@date, @pairs, @pair1price, @pair2price, @pair3price, (((1 / @pair3price) * @pair2price/ @pair1price) - 1), ((((1 / @pair3price) * @pair2price/ @pair1price) - 1) * 100))
+
+END
 GO
 SET ANSI_NULLS ON
 GO
