@@ -12,5 +12,6 @@ namespace Web_Api.online.Models.Tables
         public string Header { get; set; }
         public string Acronim { get; set; }
         public string SQLTableName => Currency1 + "_" + Currency2;
+        public string ImgUrl { get; set; }
     }
 }

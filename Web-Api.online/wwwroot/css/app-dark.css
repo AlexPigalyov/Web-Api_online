@@ -97,7 +97,14 @@ h4, .h4 {
   font-size: 1.125rem; }
 
 h5, .h5 {
-  font-size: 0.9375rem; }
+    display: block;
+    font-size: 0.83em;
+    margin-block-start: 1.67em;
+    margin-block-end: 1.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
 
 h6, .h6 {
   font-size: 0.75rem; }
@@ -171,9 +178,13 @@ sup {
 
 a {
   color: #727cf5;
-  text-decoration: none; }
-  a:hover {
-    color: #6169d0; }
+  text-decoration: none; 
+
+}
+a:hover {
+  color: #6169d0;
+  text-decoration: none;
+}
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
   color: inherit;

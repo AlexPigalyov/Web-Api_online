@@ -44,6 +44,18 @@ INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Heade
 GO
 INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (5, N'DASH', N'USDT', 40, CAST(N'2022-04-06T19:29:53.803' AS DateTime), N'DASH - USDT', N'DASHUSDT')
 GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (8, N'DASH', N'BTC', 10, CAST(N'2022-05-19T20:14:29.610' AS DateTime), N'DASH - BTC', N'DASHBTC')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (9, N'ETH', N'BTC', 10, CAST(N'2022-05-19T20:18:54.023' AS DateTime), N'ETH - BTC', N'ETHBTC')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (10, N'LTC', N'BTC', 10, CAST(N'2022-05-19T20:19:42.520' AS DateTime), N'LTC - BTC', N'LTCBTC')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (11, N'DOGE', N'BTC', 10, CAST(N'2022-05-20T06:59:04.987' AS DateTime), N'DOGE - BTC', N'DOGEBTC')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (12, N'BCH', N'USDT', 10, CAST(N'2022-05-20T07:00:43.477' AS DateTime), N'BCH - USDT', N'BCHUSDT')
+GO
+INSERT [dbo].[Pairs] ([Id], [Currency1], [Currency2], [Order], [Created], [Header], [Acronim]) VALUES (13, N'BCH', N'BTC', 10, CAST(N'2022-05-20T07:00:56.773' AS DateTime), N'BCH - BTC', N'BCHBTC')
+GO
 SET IDENTITY_INSERT [dbo].[Pairs] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
@@ -54,9 +66,9 @@ SET IDENTITY_INSERT [dbo].[Settings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] ON 
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(1000012.99879081916472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (1, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(999942.00501515950472321792 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.957' AS DateTime), CAST(N'2021-09-16T21:36:28.957' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(3204910.74750266055938921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (2, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(498219.73257400478938921790 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (3, N'1d6254fc-8f94-4229-b09f-a2b225c128b0', CAST(999999.96980768990051358754 AS Decimal(38, 20)), N'BTC', CAST(N'2021-09-16T21:36:28.983' AS DateTime), CAST(N'2021-09-16T21:36:28.983' AS DateTime), N'')
 GO
@@ -74,13 +86,13 @@ INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [
 GO
 INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (10, N'40ffde92-878c-4c09-ac6b-c86a769d1623', CAST(10.00000000000000000000 AS Decimal(38, 20)), N'USDT', CAST(N'2021-09-16T21:36:57.767' AS DateTime), CAST(N'2021-09-16T21:36:57.767' AS DateTime), N'59bdef4edf9e4a2bad9f6f521a184c96')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (11, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(10000 AS Decimal(38, 20)), N'ETH', CAST(N'2022-04-25T12:35:14.910' AS DateTime), CAST(N'2022-04-25T12:35:14.910' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (11, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(19743.73746000000000000000 AS Decimal(38, 20)), N'ETH', CAST(N'2022-04-25T12:35:14.910' AS DateTime), CAST(N'2022-04-25T12:35:14.910' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (13, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(10000 AS Decimal(38, 20)), N'DOGE', CAST(N'2022-04-25T12:36:13.210' AS DateTime), CAST(N'2022-04-25T12:36:13.210' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (13, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(19953.18976000000000000000 AS Decimal(38, 20)), N'DOGE', CAST(N'2022-04-25T12:36:13.210' AS DateTime), CAST(N'2022-04-25T12:36:13.210' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (14, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(10000 AS Decimal(38, 20)), N'LTC', CAST(N'2022-04-25T12:36:13.227' AS DateTime), CAST(N'2022-04-25T12:36:13.227' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (14, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(9973.72424000000000000000 AS Decimal(38, 20)), N'LTC', CAST(N'2022-04-25T12:36:13.227' AS DateTime), CAST(N'2022-04-25T12:36:13.227' AS DateTime), N'')
 GO
-INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (15, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(10000 AS Decimal(38, 20)), N'DASH', CAST(N'2022-04-25T12:36:13.230' AS DateTime), CAST(N'2022-04-25T12:36:13.230' AS DateTime), N'')
+INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [LastUpdate], [Address]) VALUES (15, N'0996e6bb-ea74-447b-9832-d1b5a02d4a70', CAST(19990.80616000000000000000 AS Decimal(38, 20)), N'DASH', CAST(N'2022-04-25T12:36:13.230' AS DateTime), CAST(N'2022-04-25T12:36:13.230' AS DateTime), N'')
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
