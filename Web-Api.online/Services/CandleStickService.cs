@@ -28,11 +28,11 @@ namespace Web_Api.online.Services
                 {
                     await _candleStickRepository.CreateCandleStick(pairName, new Models.Tables.CandleStickTableModel()
                     {
-                        Open = firstOrder.ExposedPrice,
+                        Open = firstOrder.StartPrice,
                         OpenTime = firstOrder.ClosedDate,
-                        High = lastOrders.Max(x => x.ExposedPrice),
-                        Low = lastOrders.Min(x => x.ExposedPrice),
-                        Close = lastOrder.ExposedPrice,
+                        High = lastOrders.Max(x => x.StartPrice),
+                        Low = lastOrders.Min(x => x.StartPrice),
+                        Close = lastOrder.StartPrice,
                         CloseTime = lastOrder.ClosedDate
                     });
                 }
@@ -42,9 +42,9 @@ namespace Web_Api.online.Services
                     {
                         Open = lastCandleStick.Close,
                         OpenTime = lastCandleStick.CloseTime,
-                        High = lastOrders.Max(x => x.ExposedPrice),
-                        Low = lastOrders.Min(x => x.ExposedPrice),
-                        Close = lastOrder.ExposedPrice,
+                        High = lastOrders.Max(x => x.StartPrice),
+                        Low = lastOrders.Min(x => x.StartPrice),
+                        Close = lastOrder.StartPrice,
                         CloseTime = lastOrder.ClosedDate
                     });
                 }    

@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 var splittedUrl = document.URL.split('/');
 var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
@@ -13,9 +13,9 @@ connection.on("ReceiveMessage-" + cryptExchangePair, function (recieveModel) {
 
     var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
 
-    $("#current-price").text(model.MarketTrades[0].ExposedPrice);
+    $("#current-price").text(model.MarketTrades[0].StartPrice);
 
-    var orderValue = model.MarketTrades[0].ExposedPrice * model.MarketTrades[0].Amount;
+    var orderValue = model.MarketTrades[0].StartPrice * model.MarketTrades[0].Amount;
     $("#orderbook-ticker-markprice").text(parseFloat(orderValue.toFixed(4)));
 
     currentMarketTradeDoc.classList.remove('status-buy');
