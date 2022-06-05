@@ -78,7 +78,7 @@
     .orderbook-tbheader-col:nth-child(5),
     .orderbook-tbheader-col:nth-child(6),
     .orderbook-tbheader-col:nth-child(7) {
-        text-align: right;
+        text-align: left;
     }
 
 .orderbook-container {
@@ -137,7 +137,7 @@
     .orderbook-col:nth-child(5),
     .orderbook-col:nth-child(6),
     .orderbook-col:nth-child(7) {
-        text-align: right;
+        text-align: left;
         padding-left: 4px;
     }
 
@@ -212,4 +212,15 @@
     color: rgb(234, 236, 239);
     font-size: 14px;
     text-decoration: none;
+}
+
+/*Добавить к первому столбцу(всем элементам)*/
+.orderbook-col-small {
+    flex: none;
+    width: 70px;
+}
+/*К столбцам с датами и все элементам*/
+.orderbook-col-date__small {
+    flex: none;
+    width: 192px;
 }
