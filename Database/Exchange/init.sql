@@ -1930,7 +1930,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_BTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -2335,7 +2334,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_DASH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -2740,7 +2738,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_DOGE_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -3145,7 +3142,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_ETH_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -3550,7 +3546,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[Get_LTC_USDT_OpenOrder_ById]
 @openOrderId bigint
 AS
@@ -3716,6 +3711,29 @@ BEGIN
 SELECT TOP(10000) * FROM [Exchange].[dbo].[Transfers]
 	
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Get_TrianglesData_Profit]
+AS
+BEGIN
+	
+SELECT TOP (1000) [Id]
+    ,[Date]
+    ,[Pairs]
+    ,[1PairPrice]
+    ,[2PairPrice]
+    ,[3PairPrice]
+    ,[Profit]
+    , ABS([ProfitPercent]) ProfitPercent
+FROM [Exchange].[dbo].[TrianglesData]
+order by ABS([ProfitPercent])  desc
+
+END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4487,6 +4505,11 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+
+
+
 CREATE PROCEDURE [dbo].[MoveFromOpenToClosedOrders]
 @pair nvarchar(20),
 @buyOrSell nvarchar(4),
