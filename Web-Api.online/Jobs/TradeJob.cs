@@ -19,12 +19,12 @@ namespace Web_Api.online.Jobs
     public class TradeJob : IJob
     {
         private readonly TradeRepository _tradeRepository;
-        private readonly IHubContext<btcusdtHub> _hubcontext;
+        private readonly IHubContext<Hub> _hubcontext;
         private readonly PairsRepository _pairsRepository;
 
         public TradeJob(
             TradeRepository tradeRepository,
-            IHubContext<btcusdtHub> hubcontext,
+            IHubContext<Hub> hubcontext,
             PairsRepository pairsRepository)
         {
             _tradeRepository = tradeRepository;

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -174,8 +175,8 @@ namespace Web_Api.online
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<btcusdtHub>("/btcusdthub");
-                endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<Hub>("/pairshub");
+                //endpoints.MapHub<ChatHub>("/chatHub");
             });
 
             //RolesSeed(serviceProvider).Wait();

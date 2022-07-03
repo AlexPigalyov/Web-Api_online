@@ -10,7 +10,6 @@ using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Web_Api.online.Hubs;
 using Newtonsoft.Json;
 using Web_Api.online.Models.ViewModels;
 using Web_Api.online.Data.Repositories;
@@ -22,7 +21,7 @@ namespace Web_Api.online.Controllers
     {
         private readonly WalletsRepository _walletsRepository;
         private readonly TradeRepository _tradeRepository;
-        private readonly IHubContext<btcusdtHub> _hubcontext;
+        private readonly IHubContext<Hub> _hubcontext;
         private readonly BotsRepository _botsRepository;
         private readonly CandleStickRepository _candleStickRepository;
         private readonly PairsRepository _pairsRepository;
@@ -33,7 +32,7 @@ namespace Web_Api.online.Controllers
             BotsRepository botsRepository,
             CandleStickRepository candleStickRepository,
             PairsRepository pairsRepository,
-            IHubContext<btcusdtHub> hubcontext)
+            IHubContext<Hub> hubcontext)
         {
             _walletsRepository = walletsRepository;
             _tradeRepository = tradeRepository;

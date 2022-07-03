@@ -3,7 +3,7 @@
 var splittedUrl = document.URL.split('/');
 var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/btcusdthub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/pairshub").build();
 
 connection.on("ReceiveMessage-" + cryptExchangePair, function (recieveModel) {
     //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
