@@ -985,6 +985,10 @@ CREATE TABLE [dbo].[Pairs](
 	[Change24h] [decimal](5, 2) NOT NULL,
 	[Change1h] [decimal](5, 2) NOT NULL,
 	[Volume24h] [decimal](38, 20) NOT NULL,
+	[PriceUpdateDate] [datetime] NOT NULL,
+	[Change24hUpdateDate] [datetime] NOT NULL,
+	[Change1hUpdateDate] [datetime] NOT NULL,
+	[Volume24hUpdateDate] [datetime] NOT NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1208,6 +1212,14 @@ GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1h]  DEFAULT ((0)) FOR [Change1h]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Volume24h]  DEFAULT ((0)) FOR [Volume24h]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_PriceUpdateDate]  DEFAULT (getdate()) FOR [PriceUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change24hUpdateDate]  DEFAULT (getdate()) FOR [Change24hUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1hUpdateDate]  DEFAULT (getdate()) FOR [Change1hUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Volume24hUpdateDate]  DEFAULT (getdate()) FOR [Volume24hUpdateDate]
 GO
 ALTER TABLE [dbo].[Settings] ADD  CONSTRAINT [DF_Settings_LastUpdateDateTime]  DEFAULT (getdate()) FOR [LastUpdateDateTime]
 GO
