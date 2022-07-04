@@ -3840,6 +3840,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[GetAllPairs]
 AS
 BEGIN
@@ -3852,6 +3853,14 @@ SELECT
 ,[Created]
 ,[Header]
 ,[Acronim]
+,[Price]
+,[Change24h]
+,[Change1h]
+,[Volume24h]
+,[PriceUpdateDate]
+,[Change24hUpdateDate]
+,[Change1hUpdateDate]
+,[Volume24hUpdateDate]
 FROM [Exchange].[dbo].[Pairs]
 ORDER BY [Order]
 
