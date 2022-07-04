@@ -9185,56 +9185,69 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
 CREATE PROCEDURE [dbo].[UpdatePairsStatistics]
 AS
 BEGIN
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'BCHBTC'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'BCHUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'BTCUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DASHBTC'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DASHUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEBTC'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'ETHBTC'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'ETHUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'LTCBTC'
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id desc)
+		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'LTCUSDT'
 
 END
