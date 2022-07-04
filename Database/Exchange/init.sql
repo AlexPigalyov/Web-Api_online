@@ -9183,6 +9183,66 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+CREATE PROCEDURE [dbo].[UpdatePairsStatistics]
+AS
+BEGIN
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'BCHBTC'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'BCHUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'BTCUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'DASHBTC'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'DASHUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'DOGEBTC'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'DOGEUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'ETHBTC'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'DOGEUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'ETHUSDT'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'LTCBTC'
+
+UPDATE [Exchange].[dbo].[Pairs]
+SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id desc)
+WHERE [Acronim] = 'LTCUSDT'
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[UpdateSetting]
 @name nvarchar(MAX),
 @value nvarchar(MAX)
