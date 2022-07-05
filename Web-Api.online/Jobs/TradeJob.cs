@@ -19,7 +19,7 @@ namespace Web_Api.online.Jobs
     public class TradeJob : IJob
     {
         private readonly TradeRepository _tradeRepository;
-        private readonly IHubContext<Hub> _hubcontext;
+        private readonly IHubContext<PairsHub> _hubcontext;
         private readonly PairsRepository _pairsRepository;
 
         public TradeJob(
@@ -38,18 +38,21 @@ namespace Web_Api.online.Jobs
 
             pairs.ForEach(x =>
             {
-                var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.SQLTableName).Result;
-                var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(x.SQLTableName).Result;
-                var marketTrades = _tradeRepository.GetClosedOrders_Top100(x.SQLTableName).Result;
-
-                var recieveResult = new RecieveMessageResultModel()
+                if (x.SQLTableName != "BTC_USDT")
                 {
-                    OrderBookBuy = openOrdersBuy,
-                    OrderBookSell = openOrdersSell,
-                    MarketTrades = marketTrades
-                };
+                    var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(x.SQLTableName).Result;
+                    var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(x.SQLTableName).Result;
+                    var marketTrades = _tradeRepository.GetClosedOrders_Top100(x.SQLTableName).Result;
 
-                _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Acronim}", JsonConvert.SerializeObject(recieveResult)).Wait();
+                    var recieveResult = new RecieveMessageResultModel()
+                    {
+                        OrderBookBuy = openOrdersBuy,
+                        OrderBookSell = openOrdersSell,
+                        MarketTrades = marketTrades
+                    };
+
+                    _hubcontext.Clients.All.SendAsync($"ReceiveMessage-{x.Acronim}", JsonConvert.SerializeObject(recieveResult)).Wait();
+                }
             });
         }
     }

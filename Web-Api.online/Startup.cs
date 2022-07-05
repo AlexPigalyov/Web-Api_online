@@ -176,6 +176,17 @@ namespace Web_Api.online
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHub<PairsHub>("/pairshub");
+                endpoints.MapHub<BtcUsdtHub>("/btcusdthub");
+                endpoints.MapHub<PairsHub>("/ethusdthub");
+                endpoints.MapHub<PairsHub>("/dogeusdthub");
+                endpoints.MapHub<PairsHub>("/ltcusdthub");
+                endpoints.MapHub<PairsHub>("/dashusdthub");
+                endpoints.MapHub<PairsHub>("/dashbtchub");
+                endpoints.MapHub<PairsHub>("/ethbtchub");
+                endpoints.MapHub<PairsHub>("/ltcbtchub");
+                endpoints.MapHub<PairsHub>("/dogebtchub");
+                endpoints.MapHub<PairsHub>("/bchusdthub");
+                endpoints.MapHub<PairsHub>("/bchbtchub");
                 //endpoints.MapHub<ChatHub>("/chatHub");
             });
 
