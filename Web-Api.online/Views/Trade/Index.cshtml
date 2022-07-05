@@ -41,7 +41,7 @@
                                         <a href="/trade/crypto/@pair.Acronim" class="font-14 my-1 fw-normal">@pair.Header</a>
                                     </td>
                                     <td>
-                                        <span class="font-14 my-1 fw-normal pair-data">@pair.Price</span>
+                                        <span class="font-14 my-1 fw-normal pair-data">@pair.Price</span>@pair.Currency2Postfix
                                     </td>
                                     <td>
                                         <span class="font-14 my-1 fw-normal pair-data">@pair.Change24h</span>%
@@ -86,8 +86,8 @@
     <br />
     @if (SignInManager.IsSignedIn(User))
     {
-        <a href="/Trade/OpenOrders">Open orders</a>
-        <a href="/Trade/ClosedOrders">Closed orders</a>
+            <a href="/Trade/OpenOrders">Open orders</a>
+            <a href="/Trade/ClosedOrders">Closed orders</a>
     }
 
 </div>
@@ -110,7 +110,7 @@
                 }
 
                 $(this).text(ggg);
-                
+
                 var ddd = 10;
             });
         });
