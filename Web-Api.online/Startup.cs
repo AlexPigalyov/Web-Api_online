@@ -175,7 +175,7 @@ namespace Web_Api.online
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<Hub>("/pairshub");
+                endpoints.MapHub<PairsHub>("/pairshub");
                 //endpoints.MapHub<ChatHub>("/chatHub");
             });
 

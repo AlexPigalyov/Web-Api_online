@@ -24,7 +24,7 @@ namespace Web_Api.online.Jobs
 
         public TradeJob(
             TradeRepository tradeRepository,
-            IHubContext<Hub> hubcontext,
+            IHubContext<PairsHub> hubcontext,
             PairsRepository pairsRepository)
         {
             _tradeRepository = tradeRepository;
