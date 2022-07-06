@@ -4,12 +4,14 @@ using Web_Api.online.Data.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Jobs.Abstract;
 
-namespace Web_Api.online.Jobs;
-
-public class LtcUsdtJob : PairJobBase<LtcUsdtHub>, IJob
+namespace Web_Api.online.Jobs
 {
-    public LtcUsdtJob(IHubContext<LtcUsdtHub> hubContext, TradeRepository tradeRepository, string sqlTableName) 
-        : base(hubContext, tradeRepository, sqlTableName)
+    [DisallowConcurrentExecution]
+    public class LtcUsdtJob : PairJobBase<LtcUsdtHub>, IJob
     {
+        public LtcUsdtJob(IHubContext<LtcUsdtHub> hubContext, TradeRepository tradeRepository, string sqlTableName)
+            : base(hubContext, tradeRepository, sqlTableName)
+        {
+        }
     }
 }

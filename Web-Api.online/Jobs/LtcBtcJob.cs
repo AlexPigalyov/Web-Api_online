@@ -4,12 +4,14 @@ using Web_Api.online.Data.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Jobs.Abstract;
 
-namespace Web_Api.online.Jobs;
-
-public class LtcBtcJob : PairJobBase<LtcBtcHub>, IJob
+namespace Web_Api.online.Jobs
 {
-    public LtcBtcJob(IHubContext<LtcBtcHub> hubContext, TradeRepository tradeRepository) 
-        : base(hubContext, tradeRepository, "LTC_BTC")
+    [DisallowConcurrentExecution]
+    public class LtcBtcJob : PairJobBase<LtcBtcHub>, IJob
     {
+        public LtcBtcJob(IHubContext<LtcBtcHub> hubContext, TradeRepository tradeRepository)
+            : base(hubContext, tradeRepository, "LTC_BTC")
+        {
+        }
     }
 }

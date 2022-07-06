@@ -4,12 +4,14 @@ using Web_Api.online.Data.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Jobs.Abstract;
 
-namespace Web_Api.online.Jobs;
-
-public class EthUsdtJob : PairJobBase<EthUsdtHub>, IJob
+namespace Web_Api.online.Jobs
 {
-    public EthUsdtJob(IHubContext<EthUsdtHub> hubContext, TradeRepository tradeRepository) 
-        : base(hubContext, tradeRepository, "ETH_USDT")
+    [DisallowConcurrentExecution]
+    public class EthUsdtJob : PairJobBase<EthUsdtHub>, IJob
     {
+        public EthUsdtJob(IHubContext<EthUsdtHub> hubContext, TradeRepository tradeRepository)
+            : base(hubContext, tradeRepository, "ETH_USDT")
+        {
+        }
     }
 }

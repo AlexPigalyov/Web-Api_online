@@ -4,12 +4,14 @@ using Web_Api.online.Data.Repositories;
 using Web_Api.online.Hubs;
 using Web_Api.online.Jobs.Abstract;
 
-namespace Web_Api.online.Jobs;
-
-public class DashBtcJob : PairJobBase<DashBtcHub>, IJob
+namespace Web_Api.online.Jobs
 {
-    public DashBtcJob(IHubContext<DashBtcHub> hubContext, TradeRepository tradeRepository) 
-        : base(hubContext, tradeRepository, "DASH_BTC")
+    [DisallowConcurrentExecution]
+    public class DashBtcJob : PairJobBase<DashBtcHub>, IJob
     {
+        public DashBtcJob(IHubContext<DashBtcHub> hubContext, TradeRepository tradeRepository)
+            : base(hubContext, tradeRepository, "DASH_BTC")
+        {
+        }
     }
 }
