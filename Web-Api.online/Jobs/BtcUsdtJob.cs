@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Hubs;
+using Web_Api.online.Jobs.Abstract;
 using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
@@ -16,36 +17,11 @@ using Web_Api.online.Models.Tables;
 namespace Web_Api.online.Jobs
 {
     [DisallowConcurrentExecution]
-    public class BtcUsdtJob : IJob
+    public class BtcUsdtJob : PairJobBase<BtcUsdtHub>, IJob
     {
-        private readonly TradeRepository _tradeRepository;
-        private readonly IHubContext<BtcUsdtHub> _hubcontext;
-
-        public BtcUsdtJob(
-            TradeRepository tradeRepository,
-            IHubContext<BtcUsdtHub> hubcontext)
+        public BtcUsdtJob(TradeRepository tradeRepository, IHubContext<BtcUsdtHub> hubcontext)
+            : base(hubcontext, tradeRepository, "BTC_USDT")
         {
-            _tradeRepository = tradeRepository;
-            _hubcontext = hubcontext;
-        }
-
-        public async Task Execute(IJobExecutionContext context)
-        {
-            var sQLTableName = "BTC_USDT";
-
-            var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync(sQLTableName).Result;
-            var openOrdersSell = _tradeRepository.GetSellOrderBookAsync(sQLTableName).Result;
-            var marketTrades = _tradeRepository.GetClosedOrders_Top100(sQLTableName).Result;
-
-            var recieveResult = new RecieveMessageResultModel()
-            {
-                OrderBookBuy = openOrdersBuy,
-                OrderBookSell = openOrdersSell,
-                MarketTrades = marketTrades
-            };
-
-            _hubcontext.Clients.All.SendAsync($"ReceiveMessage-BTCUSDT", JsonConvert.SerializeObject(recieveResult)).Wait();
-
         }
     }
 }

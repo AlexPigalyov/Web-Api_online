@@ -177,16 +177,16 @@ namespace Web_Api.online
                 endpoints.MapRazorPages();
                 endpoints.MapHub<PairsHub>("/pairshub");
                 endpoints.MapHub<BtcUsdtHub>("/btcusdthub");
-                endpoints.MapHub<PairsHub>("/ethusdthub");
-                endpoints.MapHub<PairsHub>("/dogeusdthub");
-                endpoints.MapHub<PairsHub>("/ltcusdthub");
-                endpoints.MapHub<PairsHub>("/dashusdthub");
-                endpoints.MapHub<PairsHub>("/dashbtchub");
-                endpoints.MapHub<PairsHub>("/ethbtchub");
-                endpoints.MapHub<PairsHub>("/ltcbtchub");
-                endpoints.MapHub<PairsHub>("/dogebtchub");
-                endpoints.MapHub<PairsHub>("/bchusdthub");
-                endpoints.MapHub<PairsHub>("/bchbtchub");
+                endpoints.MapHub<EthUsdtHub>("/ethusdthub");
+                endpoints.MapHub<DogeUsdtHub>("/dogeusdthub");
+                endpoints.MapHub<LtcUsdtHub>("/ltcusdthub");
+                endpoints.MapHub<DashUsdtHub>("/dashusdthub");
+                endpoints.MapHub<DashBtcHub>("/dashbtchub");
+                endpoints.MapHub<EthBtcHub>("/ethbtchub");
+                endpoints.MapHub<LtcBtcHub>("/ltcbtchub");
+                endpoints.MapHub<DogeBtcHub>("/dogebtchub");
+                endpoints.MapHub<BchUsdtHub>("/bchusdthub");
+                endpoints.MapHub<BchBtcHub>("/bchbtchub");
                 //endpoints.MapHub<ChatHub>("/chatHub");
             });
 
