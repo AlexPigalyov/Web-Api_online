@@ -9186,23 +9186,44 @@ GO
 
 
 
+
 CREATE PROCEDURE [dbo].[UpdatePairsStatistics]
 AS
 BEGIN
 
+declare @BCH_BTC_24_hour_ago_price DECIMAL(38, 20);
+declare @BCH_BTC_1_hour_ago_price DECIMAL(38, 20);
+set @BCH_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
+set @BCH_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+
+
+
+--select @BCH_BTC_24_hour_ago_price;
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
+		, Change24h = Price / (@BCH_BTC_24_hour_ago_price / 100) - 100
+		, Change1h = Price / (@BCH_BTC_1_hour_ago_price / 100) - 100
 WHERE [Acronim] = 'BCHBTC'
+
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'BCHUSDT'
 
+
+declare @BTC_USDT_24_hour_ago_price DECIMAL(38, 20);
+declare @BTC_USDT_1_hour_ago_price DECIMAL(38, 20);
+set @BTC_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
+set @BTC_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
+		, Change24h = Price / (@BTC_USDT_24_hour_ago_price / 100) - 100
+		, Change1h = Price / (@BTC_USDT_1_hour_ago_price / 100) - 100
 WHERE [Acronim] = 'BTCUSDT'
 
 UPDATE [Exchange].[dbo].[Pairs]
