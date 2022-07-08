@@ -9191,14 +9191,12 @@ CREATE PROCEDURE [dbo].[UpdatePairsStatistics]
 AS
 BEGIN
 
+----------------- BCH BTC
+
 declare @BCH_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @BCH_BTC_1_hour_ago_price DECIMAL(38, 20);
 set @BCH_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @BCH_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
-
-
-
---select @BCH_BTC_24_hour_ago_price;
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id desc)
@@ -9207,12 +9205,14 @@ SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id d
 		, Change1h = Price / (@BCH_BTC_1_hour_ago_price / 100) - 100
 WHERE [Acronim] = 'BCHBTC'
 
+----------------- BCH USDT
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'BCHUSDT'
 
+----------------- BTC USDT
 
 declare @BTC_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @BTC_USDT_1_hour_ago_price DECIMAL(38, 20);
@@ -9226,45 +9226,63 @@ SET    Price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders order by Id 
 		, Change1h = Price / (@BTC_USDT_1_hour_ago_price / 100) - 100
 WHERE [Acronim] = 'BTCUSDT'
 
+----------------- DASH BTC
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DASHBTC'
+
+----------------- DASH USDT
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DASHUSDT'
 
+----------------- DOGE BTC
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEBTC'
 
+----------------- DOGE USDT
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEUSDT'
+
+----------------- ETH BTC
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'ETHBTC'
 
+----------------- DOGE USDT
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'DOGEUSDT'
+
+----------------- ETH USDT
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'ETHUSDT'
 
+----------------- LTC BTC
+
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 WHERE [Acronim] = 'LTCBTC'
+
+----------------- LTC USDT
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id desc)
