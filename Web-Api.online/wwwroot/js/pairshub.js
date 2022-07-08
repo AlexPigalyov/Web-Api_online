@@ -7,7 +7,7 @@ var cryptExchangePairHub = "/" + cryptExchangePair + "hub";
 
 var connection = new signalR.HubConnectionBuilder().withUrl(cryptExchangePairHub).build();
 
-connection.on("ReceiveMessage-" + cryptExchangePair, function (recieveModel) {
+connection.on("ReceiveMessage", function (recieveModel) {
     //var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     //var encodedMsg = user + " says " + msg;
 

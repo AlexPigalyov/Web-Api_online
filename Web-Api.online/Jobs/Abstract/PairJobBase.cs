@@ -32,6 +32,6 @@ public abstract class PairJobBase<T> where T : Hub
             MarketTrades = marketTrades
         };
 
-        _hubContext.Clients.All.SendAsync($"ReceiveMessage-BTCUSDT", JsonConvert.SerializeObject(recieveResult)).Wait();
+        _hubContext.Clients.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
     }
 }
