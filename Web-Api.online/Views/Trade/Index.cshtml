@@ -41,7 +41,7 @@
                                         <a href="/trade/crypto/@pair.Acronim" class="font-14 my-1 fw-normal">@pair.Header</a>
                                     </td>
                                     <td>
-                                        <span class="font-14 my-1 fw-normal pair-data">@pair.Price</span> @pair.Currency2Postfix
+                                        <span class="font-14 my-1 fw-normal decimal-data">@pair.Price</span> @pair.Currency2Postfix
                                     </td>
                                     <td>
                                         <span class="font-14 my-1 fw-normal pair-data">@pair.Change24h</span> %
@@ -94,7 +94,7 @@
 
 <script>
     $(document).ready(function () {
-        $('.pair-data').each(function() {
+        $('.decimal-data').each(function() {
                 var ttt = $(this).text();
                 ttt = ttt.replace(",", ".");
                 var ggg = ttt.toString();

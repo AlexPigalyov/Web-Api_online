@@ -3,47 +3,74 @@
 }
 
 <div class="row">
-    
+
     <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
         <thead>
-        <tr class="table-primary">
-            <th>WalletFromId</th>
-            <th>WalletToId</th>
-            <th>Value</th>
-            <th>Platform Commission</th>
-            <th>Currency</th>
-            <th>Hash</th>
-            <th>Comment</th>
-        </tr>
+            <tr class="table-primary">
+                <th>WalletFromId</th>
+                <th>WalletToId</th>
+                <th>Value</th>
+                <th>Platform Commission</th>
+                <th>Currency</th>
+                <th>Hash</th>
+                <th>Comment</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.Transfers)
-        {
-            <tr>
-                <td>
-                    @item.WalletFromId
-                </td>
-                <td>
-                    @item.WalletToId
-                </td>
-                <td>
-                    @item.Value
-                </td>
-                <td>
-                    @item.PlatformCommission
-                </td>
-                <td>
-                    @item.CurrencyAcronim
-                </td>
-                <td>
-                    @item.Hash
-                </td>
-                <td>
-                    @item.Comment
-                </td>
+            @foreach (var item in Model.Transfers)
+            {
+                <tr>
+                    <td>
+                        @item.WalletFromId
+                    </td>
+                    <td>
+                        @item.WalletToId
+                    </td>
+                    <td>
+                        <span class="decimal-data">
+                            @item.Value
+                        </span>
+                    </td>
+                    <td>
+                        @item.PlatformCommission
+                    </td>
+                    <td>
+                        @item.CurrencyAcronim
+                    </td>
+                    <td>
+                        @item.Hash
+                    </td>
+                    <td>
+                        @item.Comment
+                    </td>
 
-            </tr>
-        }
+                </tr>
+            }
         </tbody>
     </table>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.decimal-data').each(function() {
+                var ttt = $(this).text();
+                ttt = ttt.replace(",", ".");
+                var ggg = ttt.toString();
+
+                for (var i = 1; ggg.length > 0; i++) {
+                    var lastChar = ggg.substr(ggg.length - 1);
+                    var last2xChar = ggg.substr(ggg.length - 3, ggg.length - 2);
+                    if(last2xChar.charAt(0) == '.' || last2xChar.charAt(0) == ',') break;
+                    if(lastChar == '0'){
+                        ggg = ggg.slice(0, -1);
+                    }
+                    else break;
+                }
+
+                $(this).text(ggg);
+
+                var ddd = 10;
+            });
+        });
+</script>
