@@ -22,7 +22,7 @@ namespace Web_Api.online.Controllers.Admin
         [HttpGet]
         public async Task<IActionResult> Index(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var incomeTransactions = await _transactionsRepository.GetPagedIncomeTransactions(model.Page, pageSize);
             var usersCount = await _transactionsRepository.GetCountOfIncomeTransactions();

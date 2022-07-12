@@ -1,4 +1,6 @@
-﻿namespace Web_Api.online.Models.Tables
+﻿using System;
+
+namespace Web_Api.online.Models.Tables
 {
     public class IncomeTransactionTableModel
     {
@@ -10,7 +12,7 @@
         public decimal? PlatformCommission { get; set; }
         public string FromAddress { get; set; }
         public string ToAddress { get; set; }
-        public double CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public double Date { get; set; }
         public string UserId { get; set; }
         public int WalletId { get; set; }
