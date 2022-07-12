@@ -57,56 +57,60 @@ namespace Web_Api.online.Services
 
             foreach (var coin in coinServices)
             {
-                var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(coin.CoinShortName);
-
-                var transactionsInBlockchain = coin.ListTransactions(userId);
-
-                var lastTr = incomeLastTransactions
-                                 .FirstOrDefault(tr =>
-                                    tr.CurrencyAcronim == coin.CoinShortName);
-
-                List<TransactionResponse> newTransactionsInBlockchain;
-                if(lastTr == null)
+                try
                 {
-                    newTransactionsInBlockchain = transactionsInBlockchain;
-                }
-                else
-                {
-                    newTransactionsInBlockchain = transactionsInBlockchain.Where(x => x.Time > lastTr.Date).ToList();//дата в секундах лежит,  я не переводил
-                                                                                                                     //можно как в блокчейне написать BlockTime
-                                                                                                                     //поменять
-                }
+                    var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(coin.CoinShortName);
 
-                var wallet = wallets.FirstOrDefault(t => t.CurrencyAcronim == coin.CoinShortName);
+                    var transactionsInBlockchain = coin.ListTransactions(userId);
 
-                foreach (var blockchainTransaction in newTransactionsInBlockchain)
-                {
-                    var transaction = ConvertTransactionResponseToIncomeTransaction(blockchainTransaction, coin.CoinShortName, wallet.Id, userId);
+                    var lastTr = incomeLastTransactions
+                                     .FirstOrDefault(tr =>
+                                        tr.CurrencyAcronim == coin.CoinShortName);
 
-                    var result = await _balanceProvider.Income(wallet, transaction);
-
-                    var ev = new EventTableModel()
+                    List<TransactionResponse> newTransactionsInBlockchain;
+                    if (lastTr == null)
                     {
-                        UserId = userId,
-                        Type = (int)EventTypeEnum.Income,
-                        Comment = $"Income transaction {transaction.CurrencyAcronim}",
-                        WhenDate = DateTime.Now,
-                        CurrencyAcronim = transaction.CurrencyAcronim,
-                        StartBalance = result.StartBalanceReceiver,
-                        ResultBalance = result.ResultBalanceReceiver,
-                        PlatformCommission = result.Commission,
-                        Value = transaction.Amount
-                    };
+                        newTransactionsInBlockchain = transactionsInBlockchain;
+                    }
+                    else
+                    {
+                        newTransactionsInBlockchain = transactionsInBlockchain.Where(x => x.Time > lastTr.Date).ToList();//дата в секундах лежит,  я не переводил
+                                                                                                                         //можно как в блокчейне написать BlockTime
+                                                                                                                         //поменять
+                    }
 
-                    transaction.PlatformCommission = result.Commission;
-                    wallet.Value = result.ResultBalanceReceiver.Value;
-                    
-                    transaction.PlatformCommission = result.Commission;
+                    var wallet = wallets.FirstOrDefault(t => t.CurrencyAcronim == coin.CoinShortName);
 
-                    await _transactionsRepository.CreateIncomeTransactionAsync(transaction);
-                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
-                    await _eventsRepository.CreateEventAsync(ev);
+                    foreach (var blockchainTransaction in newTransactionsInBlockchain)
+                    {
+                        var transaction = ConvertTransactionResponseToIncomeTransaction(blockchainTransaction, coin.CoinShortName, wallet.Id, userId);
+
+                        var result = await _balanceProvider.Income(wallet, transaction);
+
+                        var ev = new EventTableModel()
+                        {
+                            UserId = userId,
+                            Type = (int)EventTypeEnum.Income,
+                            Comment = $"Income transaction {transaction.CurrencyAcronim}",
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = transaction.CurrencyAcronim,
+                            StartBalance = result.StartBalanceReceiver,
+                            ResultBalance = result.ResultBalanceReceiver,
+                            PlatformCommission = result.Commission,
+                            Value = transaction.Amount
+                        };
+
+                        transaction.PlatformCommission = result.Commission;
+                        wallet.Value = result.ResultBalanceReceiver.Value;
+
+                        transaction.PlatformCommission = result.Commission;
+
+                        await _transactionsRepository.CreateIncomeTransactionAsync(transaction);
+                        await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+                        await _eventsRepository.CreateEventAsync(ev);
+                    }
                 }
+                catch { }
             }
             return wallets;
         }
