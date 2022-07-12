@@ -4316,6 +4316,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
 @page int,
 @pageSize int
@@ -4328,6 +4329,7 @@ Select
   ,TransactionFee
   ,FromAddress
   ,ToAddress
+  ,CreatedDate
   ,Date
   ,UserId
 FROM [Exchange].[dbo].[IncomeTransactions]
