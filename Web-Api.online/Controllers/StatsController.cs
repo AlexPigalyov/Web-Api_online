@@ -96,7 +96,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> RegistratedUsers(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             List<RegistratedUsersTableModel> users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
             int itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
