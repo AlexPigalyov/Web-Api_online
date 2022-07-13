@@ -1312,6 +1312,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[ClosedOrders_Paged]
 @page int,
 @pageSize int
@@ -1331,7 +1332,7 @@ Select
       ,CreateUserId
       ,BoughtUserId
 FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
-Order By Id
+Order By Id desc
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
