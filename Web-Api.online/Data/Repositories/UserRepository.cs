@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Web_Api.online.Models;
+using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Data.Repositories
 {
@@ -68,6 +69,17 @@ namespace Web_Api.online.Data.Repositories
 
             return await _dbWebApi.QueryFirstAsync<int>(
                     "GetCountOfRefferrersUser",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<AspNetUserTableModel> GetUser(string userId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userId);
+
+            return await _dbWebApi.QueryFirstAsync<AspNetUserTableModel>(
+                    "GetUser",
                     parameters,
                     commandType: CommandType.StoredProcedure);
         }
