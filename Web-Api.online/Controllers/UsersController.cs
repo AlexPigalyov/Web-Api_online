@@ -39,7 +39,7 @@ public class UsersController : Controller
         
         if (user != null)
         {
-            UserInfoTableModel userInfo = (await _usersInfoRepository.spGetUserInfo_ByUserId(user.Id)) ?? new UserInfoTableModel();
+            UserInfoTableModel userInfo = (await _usersInfoRepository.GetUserInfo(user.Id)) ?? new UserInfoTableModel();
             List<EventTableModel> lastFiveEvents = await _eventsRepository.GetLastFiveEvents_ByUserId(user.Id);
             List<spGetNotEmptyValueWallet_ByUserIdResult> notEmptyWallets = await _walletsRepository.GetNotEmptyWalletsByUserIdAsync(user.Id);
             

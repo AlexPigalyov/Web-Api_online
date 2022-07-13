@@ -91,7 +91,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception exc) { }
         }
         
-        public async Task<UserInfoTableModel> spGetUserInfo_ByUserId(string userId)
+        public async Task<UserInfoTableModel> GetUserInfo(string userId)
         {
             try
             {

@@ -79,7 +79,7 @@ namespace Web_Api.online.Controllers
                 return Redirect("/Identity/Account/Login%2FMy%2FProfile");
             }
 
-            UserInfoTableModel userInfo = (await _usersInfoRepository.spGetUserInfo_ByUserId(userId)) ?? new UserInfoTableModel();
+            UserInfoTableModel userInfo = (await _usersInfoRepository.GetUserInfo(userId)) ?? new UserInfoTableModel();
             List<EventTableModel> lastFiveEvents = await _eventsRepository.GetLastFiveEvents_ByUserId(userId);
             List<spGetNotEmptyValueWallet_ByUserIdResult> notEmptyWallets = await _walletsRepository.GetNotEmptyWalletsByUserIdAsync(userId);
 
@@ -111,7 +111,7 @@ namespace Web_Api.online.Controllers
             return View(await _eventsRepository.GetByUserId(userId));
         }
 
-        
+
         public async Task<IActionResult> MyRefferals(SortModel model)
         {
             int pageSize = 15;
@@ -127,10 +127,13 @@ namespace Web_Api.online.Controllers
 
             var itemsCount = await _userRepository.GetCountOfRefferrersUser(userId);
 
+            var userInfo = await _usersInfoRepository.GetUserInfo(userId);
+
             UserRefferalViewModel viewModel = new UserRefferalViewModel()
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
-                MyRefferals = reffUsers ?? new List<UserRefferalTableModel>()
+                MyRefferals = reffUsers ?? new List<UserRefferalTableModel>(),
+                UserInfo = userInfo
             };
 
             return View(viewModel);
