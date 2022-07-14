@@ -1023,7 +1023,11 @@ CREATE TABLE [dbo].[Transfers](
 	[CurrencyAcronim] [nvarchar](10) NOT NULL,
 	[Hash] [varchar](66) NOT NULL,
 	[Comment] [nvarchar](max) NULL,
-	[PlatformCommission] [decimal](38, 20) NULL
+	[PlatformCommission] [decimal](38, 20) NULL,
+ CONSTRAINT [PK_Transfers] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -4513,6 +4517,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[GetTransfers_Paged]
 @page int,
 @pageSize int
@@ -4530,7 +4535,7 @@ Select
   PlatformCommission
 
 FROM [Exchange].[dbo].[Transfers]
-Order By Id
+Order By Id desc
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
