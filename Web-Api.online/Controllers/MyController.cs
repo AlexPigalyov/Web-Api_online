@@ -127,13 +127,13 @@ namespace Web_Api.online.Controllers
 
             var itemsCount = await _userRepository.GetCountOfRefferrersUser(userId);
 
-            var userInfo = await _usersInfoRepository.GetUserInfo(userId);
+            var user = await _userRepository.GetUser(userId);
 
             UserRefferalViewModel viewModel = new UserRefferalViewModel()
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 MyRefferals = reffUsers ?? new List<UserRefferalTableModel>(),
-                UserInfo = userInfo
+                User = user
             };
 
             return View(viewModel);
