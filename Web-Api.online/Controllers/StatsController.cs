@@ -17,7 +17,6 @@ namespace Web_Api.online.Controllers
         private UsersInfoRepository _usersInfoRepository;
         private UserRepository _userRepository;
 
-
         public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository,
             OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository, UsersInfoRepository usersInfoRepository, UserRepository userRepository)
         {
@@ -36,8 +35,6 @@ namespace Web_Api.online.Controllers
             var incomeTransactions = await _transactionsRepository.GetPagedIncomeTransactions(model.Page, pageSize);
             var itemsCount = await _transactionsRepository.GetCountOfIncomeTransactions();
 
-
-
             IncomeTransactionsViewModel viewModel = new IncomeTransactionsViewModel()
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
@@ -46,6 +43,7 @@ namespace Web_Api.online.Controllers
 
             return View(viewModel);
         }
+
         public async Task<ActionResult> Transfers(SortModel model)
         {
             int pageSize = 15;
@@ -61,7 +59,6 @@ namespace Web_Api.online.Controllers
 
             return View(viewModel);
         }
-
 
         public async Task<ActionResult> Withdraw(SortModel model)
         {
@@ -109,6 +106,7 @@ namespace Web_Api.online.Controllers
 
             return View(viewModel);
         }
+
         public async Task<ActionResult> RefferalsUsers(SortModel model)
         {
             int pageSize = 15;
@@ -118,7 +116,7 @@ namespace Web_Api.online.Controllers
 
             UserRefferalViewModel viewModel = new UserRefferalViewModel()
             {
-                PageViewModel = new PageViewModel(itemsCount, model.Page,pageSize),
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 UserRefferal = reffUsers ?? new List<UserRefferalTableModel>()
             };
 
