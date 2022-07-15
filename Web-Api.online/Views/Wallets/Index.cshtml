@@ -19,7 +19,7 @@
                 <div class="table-responsive">
                     <table id="balanceWalletsList" class="table table-striped table-centered mb-0">
                         <thead>
-                            <tr>
+                            <tr class="table-primary">
                                 <th>Currency</th>
                                 <th>Balance</th>
                                 <th>Address</th>
@@ -70,7 +70,7 @@
                 <div class="table-responsive">
                     <table id="addressList" class="table table-striped table-centered mb-0">
                         <thead>
-                            <tr>
+                            <tr class="table-primary">
                                 <th>Id</th>
                                 <th>Currency</th>
                                 <th>Address</th>
@@ -126,28 +126,3 @@
         });
     }
 </script>
-<style>
-    .row {
-        width: 170px;
-    }
-
-    .column {
-        float: left;
-        width: 50%;
-    }
-
-    /* Clear floats after the columns */
-    .row:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    #balanceWalletsList ul > li {
-        display: inline-block;
-        /* You can also add some margins here to make it look prettier */
-        zoom: 1;
-        *display: inline;
-        /* this fix is needed for IE7- */
-    }
-</style>
