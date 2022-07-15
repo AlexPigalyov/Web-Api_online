@@ -30,7 +30,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> IncomeTransactions(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var incomeTransactions = await _transactionsRepository.GetPagedIncomeTransactions(model.Page, pageSize);
             var itemsCount = await _transactionsRepository.GetCountOfIncomeTransactions();
@@ -46,7 +46,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Transfers(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var transfers = await _transferRepository.GetTransfersPaged(model.Page, pageSize);
             var itemsCount = await _transferRepository.GetCountOfTransfers();
@@ -62,7 +62,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Withdraw(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var outcomes = await _outcomeRepository.GetOutcomeTransactionsPaged(model.Page, pageSize);
             var itemsCount = await _outcomeRepository.GetCountOfOutcomeTransactions();
@@ -109,7 +109,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> RefferalsUsers(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var reffUsers = await _userRepository.GetRefferersPaged(model.Page, pageSize);
             var itemsCount = await _userRepository.GetCountUserRefferer();
