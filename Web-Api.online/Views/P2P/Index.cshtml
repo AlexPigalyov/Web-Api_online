@@ -1,0 +1,81 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "P2P";
+}
+
+<div class="text-center">
+    <h1 class="display-4">P2P</h1>
+</div>
+
+<div class="container">
+    <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+        <div class="col-auto">
+            <label for="inputPassword2">Amount</label>
+            <input type="search" class="form-control" id="inputPassword2" placeholder="Enter amount...">
+        </div>
+        <div class="col-auto">
+            <div class="align-items-center">
+                <label for="status-select" class="me-2">Fiat</label>
+                <select class="form-select" id="status-select">
+                </select>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="align-items-center">
+                <label for="status-select" class="me-2">Payment</label>
+                <select class="form-select" id="status-select">
+                    <option selected="">All payments</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="align-items-right">
+                <label for="status-select" class="me-2">Payment</label>
+                <select class="form-select" id="status-select">
+                    <option selected="">All payments</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-hover table-centered mb-0">
+            <thead>
+            <tr>
+                <th>Advertisers</th>
+                <th>Price<span class="badge badge-warning-lighten">lowest to highest</span></th>
+                <th>Limit/Available</th>
+                <th>Payment</th>
+                <th>Trade<span class="badge badge-success-lighten">0 Fee</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var seller in Model.Sellers)
+            {
+                <tr>
+                    <td>@seller.Username</td>
+                    <td>@seller.Price @seller.Fiat</td>
+                    <td>
+                        <div class="row">
+                            <span>Available: @seller.Available</span>
+                        </div>
+                        <div class="row">
+                            <span>Limit: @seller.Available</span>
+                        </div>
+                    </td>
+                    <td>
+                        @foreach (var payment in seller.Payments)
+                        {
+                            <span class="badge badge-dark-lighten">payment.Name</span>
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success">Buy USDT</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

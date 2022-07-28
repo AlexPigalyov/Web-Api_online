@@ -158,4 +158,8 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\P2P\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
