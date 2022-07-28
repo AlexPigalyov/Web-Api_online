@@ -1,0 +1,14 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetCryptById]
+@id bigint
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[Crypts] 
+WHERE 
+Id = @id
+
+END
