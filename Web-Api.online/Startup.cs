@@ -107,6 +107,7 @@ namespace Web_Api.online
                 options.LoginPath = new PathString("/Identity/Account/Login");
             });
 
+            services.AddTransient<P2PRepository>();
             services.AddTransient<WalletsRepository>();
             services.AddTransient<CandleStickRepository>();
             services.AddTransient<UsersInfoRepository>();
