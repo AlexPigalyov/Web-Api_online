@@ -100,6 +100,11 @@
 
 .orderbook-list-asks {
     flex-direction: column-reverse;
+    margin-top: -35px;
+}
+
+.orderbook-gr {
+    margin-top: -45px;
 }
 
 .orderbook-list-bids {
