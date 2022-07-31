@@ -142,3 +142,23 @@ li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
     .stats-links div {
         cursor: pointer !important;
     }
+
+
+footer > .container {
+    display: flex;
+    align-items: center;
+}
+
+.div_telegram {
+    margin-left: 20px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    background-image: url("/img/telegram.png");
+    background-position: center;
+    background-size: cover;
+}
+
+    .div_telegram:hover {
+        background-image: url("/img/telegram_hover.png");
+    }
