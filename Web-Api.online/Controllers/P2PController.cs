@@ -13,7 +13,7 @@ public class P2PController : Controller
         _p2PRepository = p2PRepository;
     }
     
-    [Route("/{cryptName}/{id}")]
+    [Route("p2p/{cryptName}/{id}")]
     public async Task<IActionResult> Index(string cryptName = "USDT", int page = 1)
     {
         var crypt = await _p2PRepository.GetCryptByName(cryptName);
