@@ -1570,13 +1570,12 @@ CREATE PROCEDURE [dbo].[CreateP2PSeller]
 @limitFrom decimal(38,20),
 @limitTo decimal(38,20),
 @available decimal(38,20),
-@paymentId bigint,
 @cryptId bigint
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, FiatId, LimitFrom, LimitTo, Available, PaymentId, CryptId)
-VALUES (@userId, @price, @fiatId, @limitFrom, @limitTo, @available, @paymentId, @cryptId)
+INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, FiatId, LimitFrom, LimitTo, Available, CryptId)
+VALUES (@userId, @price, @fiatId, @limitFrom, @limitTo, @available,  @cryptId)
 
 END
 GO
