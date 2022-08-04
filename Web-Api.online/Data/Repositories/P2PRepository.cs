@@ -78,14 +78,14 @@ public class P2PRepository
         catch (Exception ex) { }
     }
 
-    public async Task<List<P2PSellerPaymentTableModel>> GetP2PSellerPaymentByP2PSellerId(long p2pSellerId)
+    public async Task<List<P2PSellerPaymentTableModel>> GetP2PPaymentByP2PUserId(long p2pSellerId)
     {
         try
         {
             var parameters = new DynamicParameters();
             parameters.Add("p2pSellerId", p2pSellerId);
 
-            return (await _dbExchange.QueryAsync<P2PSellerPaymentTableModel>("GetP2PSellerPaymentsByP2PSellerId",
+            return (await _dbExchange.QueryAsync<P2PSellerPaymentTableModel>("GetP2PPaymentsByP2PUserId",
                     parameters,
                     commandType: CommandType.StoredProcedure)).ToList();
         }
@@ -102,7 +102,7 @@ public class P2PRepository
             var parameters = new DynamicParameters();
             parameters.Add("fiatId", fiatId);
 
-            return await _dbExchange.QueryFirstAsync<FiatTableModel>("GetP2PSellersByCryptId",
+            return await _dbExchange.QueryFirstAsync<FiatTableModel>("GetFiatById",
                 parameters,
                 commandType: CommandType.StoredProcedure);
         }
@@ -145,8 +145,42 @@ public class P2PRepository
             return null;
         }
     }
+    
+    public async Task<List<CryptTableModel>> GetCrypts()
+    {
+        try
+        {
+            return (await _dbExchange.QueryAsync<CryptTableModel>("GetCrypts",
+                commandType: CommandType.StoredProcedure)).ToList();
+        }
+        catch (Exception exc)
+        {
+            return null;
+        }
+    }
 
-    public async Task<List<P2PSellerModel>> GetP2PSellersByCryptId(long cryptId, string cryptName, int page)
+    public async Task<List<string>> GetP2PUserPaymentsByP2PUserId(long p2pUserId)
+    {
+        try
+        {
+            return (await GetP2PPaymentByP2PUserId(p2pUserId)).Select(x =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("id", x.PaymentId);
+
+                return _dbWebApi.QueryFirstAsync<PaymentTableModel>(
+                    "GetPaymentById",
+                    parameters,
+                    commandType: CommandType.StoredProcedure).Result.Name;
+            }).ToList();
+        }
+        catch (Exception exc)
+        {
+            return null;
+        }
+    }
+    
+    public async Task<List<P2PSellerModel>> GetP2PUsersByCryptId(bool isBuyers, long cryptId, string cryptName, int page)
     {
         try
         {
@@ -154,14 +188,24 @@ public class P2PRepository
             parameters.Add("cryptId", cryptId);
             parameters.Add("page", page);
 
-            var p2pSellers =
-                await _dbExchange.QueryAsync<P2PSellerTableModel>("GetP2PSellersByCryptId",
+            var p2pUsers = new List<P2PUserTableModel>();
+
+            if (isBuyers)
+            {
+                p2pUsers = (await _dbExchange.QueryAsync<P2PUserTableModel>("GetP2PBuyersByCryptId",
+                        parameters,
+                        commandType: CommandType.StoredProcedure)).ToList();
+            }
+            else
+            {
+                p2pUsers = (await _dbExchange.QueryAsync<P2PUserTableModel>("GetP2PSellersByCryptId",
                     parameters,
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure)).ToList();
+            }
 
             var result = new List<P2PSellerModel>();
             
-            foreach (var p2pSeller in p2pSellers)
+            foreach (var p2pSeller in p2pUsers)
             {
                 var user = new P2PSellerModel()
                 {
@@ -181,17 +225,7 @@ public class P2PRepository
 
                 user.FiatName = (await GetFiatById(p2pSeller.FiatId)).Name;
                 user.CryptName = (await GetCryptById(p2pSeller.CryptId)).Name;
-
-                user.Payments = (await GetP2PSellerPaymentByP2PSellerId(p2pSeller.Id)).Select(x =>
-                {
-                    parameters = new DynamicParameters();
-                    parameters.Add("id", x.PaymentId);
-
-                    return _dbWebApi.QueryFirstAsync<PaymentTableModel>(
-                        "GetPaymentById",
-                        parameters,
-                        commandType: CommandType.StoredProcedure).Result.Name;
-                }).ToList();
+                user.Payments = await GetP2PUserPaymentsByP2PUserId(p2pSeller.Id);
             }
 
             return result.ToList();

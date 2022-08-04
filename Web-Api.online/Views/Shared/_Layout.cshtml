@@ -9,20 +9,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="/favicon.ico">
     <title>@ViewData["Title"] - eCats - Cryptocurrency Exchange</title>
-    
+
     <link rel="stylesheet" asp-append-version="true" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" asp-append-version="true" href="~/css/site.css"/>
     <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css"/>
-    
-    <meta name="google-site-verification" content="B2VIatlv421f2XH7oxKlRIfRQoQhMRZvrfuZ2ctehLE" />
-    <meta name="facebook-domain-verification" content="dwx9fqrjsclmrymn0gdm41lfeazmcv" />
-    <meta name="facebook-domain-verification" content="j9poqqzha79jwuuua362k9oj5jcbvz" />
+
+    <meta name="google-site-verification" content="B2VIatlv421f2XH7oxKlRIfRQoQhMRZvrfuZ2ctehLE"/>
+    <meta name="facebook-domain-verification" content="dwx9fqrjsclmrymn0gdm41lfeazmcv"/>
+    <meta name="facebook-domain-verification" content="j9poqqzha79jwuuua362k9oj5jcbvz"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!-- third party css -->
     <link href="~/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css"/>
     @await RenderSectionAsync("ThirdPartyCss", required: false)
     <!-- third party css end -->
-    
+
     <!-- App css -->
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <link href="~/css/icons.css" asp-append-version="true" rel="stylesheet" type="text/css"/>
@@ -87,6 +87,13 @@
                 </li>
 
                 <li class="side-nav-item">
+                    <a href="/p2p/sell/USDT/1" class="side-nav-link">
+                        <i class="uil-comments-alt"></i>
+                        <span> P2P </span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item">
                     <a href="Bots" class="side-nav-link">
                         <i class="uil-comments-alt"></i>
                         <span> Bots </span>
@@ -106,7 +113,7 @@
                         <span> Stats </span>
                     </a>
                 </li>
-                
+
                 <li class="side-nav-item">
                     <a href="https://t.me/eCats_Support" target="_blank" class="side-nav-link">
                         <i class="uil-comments-alt"></i>
@@ -206,7 +213,9 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Web_Api.online - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            <a href="https://t.me/ecats_exchange" target="_blank"><div class="div_telegram"></div></a>
+            <a href="https://t.me/ecats_exchange" target="_blank">
+                <div class="div_telegram"></div>
+            </a>
         </div>
     </footer>
 </div>

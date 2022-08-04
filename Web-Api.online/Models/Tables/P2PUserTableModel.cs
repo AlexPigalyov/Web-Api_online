@@ -1,6 +1,6 @@
 namespace Web_Api.online.Models.Tables;
 
-public class P2PSellerTableModel
+public class P2PUserTableModel
 {
     public long Id { get; set; }
     public string UserId { get; set; }
