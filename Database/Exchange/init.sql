@@ -1594,9 +1594,10 @@ AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, FiatId, LimitFrom, LimitTo, Available, CryptId)
-VALUES (@userId, @price, @fiatId, @limitFrom, @limitTo, @available,  @cryptId)
+VALUES (@userId, @price, @fiatId, @limitFrom, @limitTo, @available, @cryptId)
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1629,6 +1630,7 @@ INSERT INTO [Exchange].[dbo].[Payments] ([Name])
 VALUES (@name)
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1644,6 +1646,7 @@ INSERT INTO [Exchange].[dbo].[PaymentValutes] (PaymentId, ValuteId)
 VALUES (@paymentId, @valuteId)
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1698,6 +1701,7 @@ INSERT INTO [Exchange].[dbo].[Valutes] ([Name])
 VALUES (@name)
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4203,6 +4207,7 @@ Id = @id
 
 END
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4545,6 +4550,7 @@ Id = @fiatId
 
 END
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4756,6 +4762,7 @@ OFFSET 10 * (@page - 1) ROWS
 FETCH  NEXT 10 ROWS ONLY
 END
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4791,6 +4798,7 @@ WHERE
 Id = @id
 
 END
+
 
 GO
 SET ANSI_NULLS ON
