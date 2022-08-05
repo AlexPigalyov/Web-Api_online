@@ -7,9 +7,16 @@
     ViewData["Title"] = "MyRefferals";
 }
 
+<style>
+    .refferal-link {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+</style>
+
 <div class="row">
 
-    <div>
+    <div class="refferal-link">
         Refferal link: https://ecats.online?refid=@Model.User.Number
     </div>
 
@@ -17,7 +24,6 @@
         <thead>
             <tr class="table-primary">
                 <th>Email</th>
-                <th>FullName</th>
                 <th>RegistrationDate</th>
                 <th>UserName</th>
             </tr>
@@ -28,9 +34,6 @@
                 <tr>
                     <td>
                         @item.Email
-                    </td>
-                    <td>
-                        @item.FullName
                     </td>
                     <td>
                         @item.RegistrationDate
