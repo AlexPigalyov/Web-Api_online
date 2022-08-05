@@ -107,7 +107,7 @@ namespace Web_Api.online.Data.Repositories
 
             List<UserRefferalTableModel> result =
                 (List<UserRefferalTableModel>)await _dbWebApi.QueryAsync<UserRefferalTableModel>
-                ("GetRefferers_Paged",
+                ("GetRefferals_Paged",
                     p,
                     commandType: CommandType.StoredProcedure);
 

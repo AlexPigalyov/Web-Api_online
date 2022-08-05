@@ -100,6 +100,13 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
                 {
                     await _usersInfoRepository.CreateEmptyUsersInfo(user.Id);
 
+                    var cookieRefid = Request.Cookies["refid"];
+
+                    if (cookieRefid != null)
+                    {
+                        await _usersInfoRepository.SetUsersInfoRefid(user.Id, cookieRefid);
+                    }
+
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = user.Id,

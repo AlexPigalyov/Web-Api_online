@@ -162,5 +162,21 @@ namespace Web_Api.online.Data.Repositories
             }
             catch (Exception ex) { }
         }
+
+        public async Task SetUsersInfoRefid(string userId, string refid)
+        {
+            try
+            {
+                await _db.ExecuteAsync(
+                    "SetUserInfoRefid",
+                    new
+                    {
+                        userId = userId,
+                        refid = refid
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex) { }
+        }
     }
 }
