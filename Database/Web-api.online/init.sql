@@ -669,7 +669,7 @@ BEGIN
 
 Select
 	AspNetUsers.Number,
-	LEFT(AspNetUsers.Email, 2) + '*****' + RIGHT(AspNetUsers.Email,2) Email, 
+	LEFT(AspNetUsers.Email, 2) + '*****' + RIGHT(AspNetUsers.Email,4) Email, 
 	LEFT(UsersInfo.FullName, 1) + '*****' + RIGHT(UsersInfo.FullName,1) FullName, 
 	UsersInfo.RegistrationDate,
 	UsersInfo.ReffererId 
