@@ -661,6 +661,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[GetRegistratedUsers_Paged]
 @page int,
 @pageSize int
@@ -812,6 +813,7 @@ FROM AspNetUsers
 WHERE Id = @userId
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -931,4 +933,21 @@ END
 
 
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[SetUserInfoRefid]
+@userId nvarchar(450),
+@refid nvarchar(450)
+AS
+BEGIN
+
+UPDATE [web-api.online].[dbo].[UsersInfo]
+SET ReffererId = @refid
+WHERE UserId = @userId
+
+END
 GO
