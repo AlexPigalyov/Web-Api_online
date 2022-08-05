@@ -629,18 +629,17 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetRefferers_Paged]
+
+CREATE PROCEDURE [dbo].[GetRefferals_Paged]
 @page int,
 @pageSize int
 AS
 BEGIN
 
 SELECT 
-LEFT(anu.Email, 2) + '*****' + RIGHT(anu.Email,2) Email, 
-	LEFT(anu.UserName, 1) + '*****' + RIGHT(anu.UserName,1) UserName,
-	LEFT(ui.FullName, 1) + '*****' + RIGHT(ui.FullName,1) FullName,
-	ui.ReffererId
-
+LEFT(anu.Email, 2) + '*****' + RIGHT(anu.Email,4) Email, 
+	ui.ReffererId,
+	ui.RegistrationDate
 
 FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
@@ -879,6 +878,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[GetUserRefferals_Paged]
 @userId nvarchar(450),
 @page int,
@@ -890,10 +890,9 @@ BEGIN
 
 
 SELECT 
-anu.Email,
-anu.UserName,
-ui.FullName,
-ui.ReffererId
+LEFT(anu.Email, 2) + '*****' + RIGHT(anu.Email,4) Email,
+ui.ReffererId,
+ui.RegistrationDate
 
 
 FROM AspNetUsers as anu
