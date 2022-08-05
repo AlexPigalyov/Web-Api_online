@@ -85,6 +85,8 @@ namespace Web_Api.online.Controllers
 
             var user = await _usersManager.FindByIdAsync(userId);
 
+            var userItem = await _userRepository.GetUser(userId);
+
             var model = new ProfileViewModel()
             {
                 Email = user.Email,
@@ -93,7 +95,8 @@ namespace Web_Api.online.Controllers
                 UserInfo = userInfo,
                 LastFiveEvents = lastFiveEvents,
                 NotEmptyWallets = notEmptyWallets,
-                IsMyProfile = true
+                IsMyProfile = true,
+                UserNumber = userItem.Number.ToString()
             };
 
             return View(model);

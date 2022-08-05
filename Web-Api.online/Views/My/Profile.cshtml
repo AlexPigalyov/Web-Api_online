@@ -41,6 +41,13 @@
 
                 <div class="text-start mt-3">
                     <p class="text-muted mb-2 font-13">
+                        <strong>Refferal link :</strong>
+                        <span class="ms-2">
+                            https://ecats.online/Identity/Account/Register?refid=@Model.UserNumber
+                        </span>
+                    </p>
+                    
+                    <p class="text-muted mb-2 font-13">
                         <strong>Full Name :</strong>
                         <span class="ms-2">
                             @(string.IsNullOrEmpty(Model.UserInfo.FullName) ? "Undefined" : Model.UserInfo.FullName)

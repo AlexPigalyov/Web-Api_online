@@ -14,5 +14,6 @@ namespace Web_Api.online.Models.ViewModels
         public string PhoneNumber { get; set; }
         public List<spGetNotEmptyValueWallet_ByUserIdResult> NotEmptyWallets { get; set; }
         public bool IsMyProfile { get; set; }
+        public string UserNumber { get; set; }
     }
 }
