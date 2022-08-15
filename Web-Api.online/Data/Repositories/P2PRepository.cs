@@ -33,6 +33,32 @@ public class P2PRepository
         }
         catch (Exception ex) { }
     }
+
+    public async Task<List<FiatTableModel>> GetFiats()
+    {
+        try
+        {
+            return (await _dbExchange.QueryAsync<FiatTableModel>("GetFiats", commandType: CommandType.StoredProcedure))
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+    
+    public async Task<List<PaymentTableModel>> GetPayments()
+    {
+        try
+        {
+            return (await _dbExchange.QueryAsync<PaymentTableModel>("GetPayments", commandType: CommandType.StoredProcedure))
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
     
     public async Task CreatePayment(string name)
     {
