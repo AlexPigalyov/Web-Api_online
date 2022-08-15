@@ -20,7 +20,7 @@
             @foreach (var item in Model.Transfers)
             {
                 <tr>
-                    <td>@item.Date</td>
+                    <td><span style="white-space: nowrap;">@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span></td>
                     <td>
                         @item.WalletFromId
                     </td>
