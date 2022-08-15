@@ -135,12 +135,20 @@
                                 <div class="mb-1 d-flex">
                                     <div class="col-6">
                                         <label class="form-label">Asset</label>
+                                        @foreach (var crypt in Model.Crypts)
+                                        {
+                                            <option>@crypt.Name</option>
+                                        }
                                         <select class="form-select mb-3">
                                         </select>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">With Fiat</label>
                                         <select class="form-select mb-3">
+                                            @foreach (var fiat in Model.Fiats)
+                                            {
+                                                <option>@fiat.Name</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -155,13 +163,15 @@
                                         <span class="input-group-text" id="basic-addon1">USDT</span>
                                     </div>
                                 </div>
-                                <div class="mb-1 d-flex">
-                                    <div class="col-6">
-                                        <label class="form-label">Payment Method</label>
-                                        <label class="form-label" style="color: #b3b3b3">Select 5 methods</label>
-                                    </div>
-                                    <div class="col-6 text-sm-end mt-1">
-                                        <button type="button" class="btn btn-primary btn-modal-style">+ Add</button>
+                                <div class="mb-1 form-margins">
+                                    <label class="form-label">Payments (Select 5 methods)</label>
+                                    <div class="input-group flex-nowrap">
+                                        <select multiple data-placeholder="Add tools">
+                                            @foreach (var payment in Model.Payments)
+                                            {
+                                                <option>@payment.Name</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="mb-3 form-margins">
@@ -188,94 +198,113 @@
                     </div> <!-- end card-body -->
                 </div> <!-- end card-->
             </div>
-
         </div>
     </div>
 </div>
 
-<style>
-    .input-group-text {
-        background-color: white !important;
-    }
-
-    .form-margins {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
-    .bootstrap-touchspin-down, .bootstrap-touchspin-up, .btn-modal-style {
-        background: white;  
-        border-color: #dee2e6;
-        box-shadow: 0px 0px 0px 0px rgb(114 124 245 / 50%) !important;
-        color: #6c757d;
-    }
-    .middle {
-      width: 100%;
-      text-align: center;
-      /* Made by */
-    }
-    .box {
-        border-width: thin;
-        border-color: #dee2e6;
-        border-style: solid;
-        border-radius: 5px;
-    }
-    .middle h1 {
-      color: white;
-    }
-    .middle input[type=radio] {
-      display: none;
-    }
-    .middle input[type=radio]:checked + .box {
-      background-color: white;
-    }
-    .middle input[type=radio]:checked + .box span {
-      color: #6c747c;
-    }
-    .middle input[type=radio]:checked + .box span:before {
-      opacity: 1;
-    }
-    .middle .box {
-      width: 179px;
-      height: 37.5px;
-      background-color: #808080;
-      transition: all 250ms ease;
-      will-change: transition;
-      display: inline-block;
-      text-align: center;
-      cursor: pointer;
-      position: relative;
-      font-weight: 900;
-    }
-    .middle .box span {
-      position: absolute;
-      left: 0;
-      right: 0;
-      transition: all 300ms ease;
-      font-size: 14.4px;
-      user-select: none;
-      color: #4d4d4d;
-    }
-    .middle .front-end span {
-      margin-top: 7px;
-    }
-    .middle .back-end span {
-      margin-top: 7px;
-    }
-    .middle p {
-      color: white;
-      font-weight: 400;
-    }
-    .middle p a {
-      text-decoration: underline;
-      color: #fff;
-    }
-    .middle p span:after {
-      content: "\f0e7";
-      color: yellow;
-    }
-</style>
+<link rel="stylesheet" asp-append-version="true" href="~/css/pages/p2p.css"/>
 
 <script>
+    $(document).ready(function() {
+    
+        var select = $('select[multiple]');
+        var options = select.find('option');
+    
+        var div = $('<div />').addClass('selectMultiple');
+        var active = $('<div />');
+        var list = $('<ul />');
+        var placeholder = select.data('placeholder');
+    
+        var span = $('<span />').text(placeholder).appendTo(active);
+    
+        options.each(function() {
+            var text = $(this).text();
+            if($(this).is(':selected')) {
+                active.append($('<a />').html('<em>' + text + '</em><i></i>'));
+                span.addClass('hide');
+            } else {
+                list.append($('<li />').html(text));
+            }
+        });
+    
+        active.append($('<div />').addClass('arrow'));
+        div.append(active).append(list);
+    
+        select.wrap(div);
+    
+        $(document).on('click', '.selectMultiple ul li', function(e) {
+            var select = $(this).parent().parent();
+            var li = $(this);
+            if(!select.hasClass('clicked')) {
+                select.addClass('clicked');
+                li.prev().addClass('beforeRemove');
+                li.next().addClass('afterRemove');
+                li.addClass('remove');
+                var a = $('<a />').addClass('notShown').html('<em>' + li.text() + '</em><i></i>').hide().appendTo(select.children('div'));
+                a.slideDown(400, function() {
+                    setTimeout(function() {
+                        a.addClass('shown');
+                        select.children('div').children('span').addClass('hide');
+                        select.find('option:contains(' + li.text() + ')').prop('selected', true);
+                    }, 500);
+                });
+                setTimeout(function() {
+                    if(li.prev().is(':last-child')) {
+                        li.prev().removeClass('beforeRemove');
+                    }
+                    if(li.next().is(':first-child')) {
+                        li.next().removeClass('afterRemove');
+                    }
+                    setTimeout(function() {
+                        li.prev().removeClass('beforeRemove');
+                        li.next().removeClass('afterRemove');
+                    }, 200);
+    
+                    li.slideUp(400, function() {
+                        li.remove();
+                        select.removeClass('clicked');
+                    });
+                }, 600);
+            }
+        });
+    
+        $(document).on('click', '.selectMultiple > div a', function(e) {
+            var select = $(this).parent().parent();
+            var self = $(this);
+            self.removeClass().addClass('remove');
+            select.addClass('open');
+            setTimeout(function() {
+                self.addClass('disappear');
+                setTimeout(function() {
+                    self.animate({
+                        width: 0,
+                        height: 0,
+                        padding: 0,
+                        margin: 0
+                    }, 300, function() {
+                        var li = $('<li />').text(self.children('em').text()).addClass('notShown').appendTo(select.find('ul'));
+                        li.slideDown(400, function() {
+                            li.addClass('show');
+                            setTimeout(function() {
+                                select.find('option:contains(' + self.children('em').text() + ')').prop('selected', false);
+                                if(!select.find('option:selected').length) {
+                                    select.children('div').children('span').removeClass('hide');
+                                }
+                                li.removeClass();
+                            }, 400);
+                        });
+                        self.remove();
+                    })
+                }, 300);
+            }, 400);
+        });
+    
+        $(document).on('click', '.selectMultiple > div .arrow, .selectMultiple > div span', function(e) {
+            $(this).parent().parent().toggleClass('open');
+        });
+    
+    });
+
     $(document).ready(function() {       
         
         if (window.location.href.includes("sell")){
