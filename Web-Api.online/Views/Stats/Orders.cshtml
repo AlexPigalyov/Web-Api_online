@@ -24,10 +24,10 @@
             {
                 <tr>
                     <td>
-                        @item.CreateDate
+                        @item.CreateDate.ToString("dd-MM-yyyy HH:mm:ss")
                     </td>
                     <td>
-                        @item.ClosedDate
+                        @item.ClosedDate.ToString("dd-MM-yyyy HH:mm:ss")
                     </td>
                     <td>
                         <span class="decimal-data">@item.StartPrice</span>
