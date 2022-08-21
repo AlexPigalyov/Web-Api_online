@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
@@ -135,11 +136,11 @@
                                 <div class="mb-1 d-flex">
                                     <div class="col-6">
                                         <label class="form-label">Asset</label>
-                                        @foreach (var crypt in Model.Crypts)
-                                        {
-                                            <option>@crypt.Name</option>
-                                        }
                                         <select class="form-select mb-3">
+                                            @foreach (var crypt in Model.Crypts)
+                                            {
+                                                <option>@crypt.Name</option>
+                                            }
                                         </select>
                                     </div>
                                     <div class="col-6">
@@ -177,11 +178,10 @@
                                 <div class="mb-3 form-margins">
                                     <label class="form-label">Payment Time Limit</label>
                                     <select class="form-select mb-3">
-                                        <option selected>15 mins</option>
-                                        <option>30 mins</option>
-                                        <option>45 mins</option>
-                                        <option>1 hr</option>
-                                        <option>2 hrs</option>
+                                        @foreach (var timeFrame in Model.TimeFrames) 
+                                        {
+                                            <option>@timeFrame.ViewName</option>
+                                        }
                                     </select>
                                 </div>
                                 <hr>

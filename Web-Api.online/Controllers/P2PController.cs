@@ -24,16 +24,17 @@ public class P2PController : Controller
         var isBuyers = isBuy.Trim().ToLower() == "buy";
         
         var p2pUsers = await _p2PRepository.GetP2PUsersByCryptId(isBuyers, crypt.Id, crypt.Name, page);
-
         var fiats = await _p2PRepository.GetFiats();
         var payments = await _p2PRepository.GetPayments();
+        var timeFrames = await _p2PRepository.GetP2PTimeFrames();
         
         var model = new P2PViewModel()
         {
             Payments = payments,
             Fiats = fiats,
             Crypts = crypts,
-            P2PSellers = p2pUsers
+            P2PSellers = p2pUsers,
+            TimeFrames = timeFrames 
         };
         
         return View(model);

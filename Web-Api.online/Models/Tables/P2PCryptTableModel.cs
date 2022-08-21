@@ -1,7 +1,7 @@
 namespace Web_Api.online.Models.Tables;
 
-public class PaymentTableModel
+public class P2PCryptTableModel
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
 }
