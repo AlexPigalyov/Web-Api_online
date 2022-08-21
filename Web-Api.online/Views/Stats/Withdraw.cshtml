@@ -13,7 +13,6 @@
             <th>Create Date</th>
             <th>Currency Acronim</th>
             <th>State</th>
-            <th>Last Update Date</th>
         </tr>
         </thead>
         <tbody>
@@ -27,10 +26,10 @@
                     @item.ToAddress
                 </td>
                 <td>
-                    @item.Value
+                   <span class="decimal-data">@item.Value</span>
                 </td>
                 <td>
-                    @item.CreateDate
+                    @item.CreateDate.ToString("dd-MM-yyyy HH:mm:ss")
                 </td>
                 <td>
                     @item.CurrencyAcronim
@@ -38,10 +37,6 @@
                 <td>
                     @item.State
                 </td>
-                <td>
-                    @item.LastUpdateDate
-                </td>
-
             </tr>
         }
         </tbody>
