@@ -4900,6 +4900,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[GetTransfers_Paged]
 @page int,
 @pageSize int
@@ -4907,6 +4908,7 @@ AS
 BEGIN
 
 Select
+  Id,
   WalletFromId,
   WalletToId,
   Value,
