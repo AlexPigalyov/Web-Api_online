@@ -34,12 +34,18 @@ namespace Web_Api.online.Controllers
         {
             var _currency = await _walletsRepository.GetCurrencyByAcronimAsync(currency);
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (_currency != null)
             {
-                return View("GeneralWithdrawPage", new GeneralWithdrawModel(_currency.Name));
+                GeneralWithdrawModel model = new GeneralWithdrawModel();
+                model.Balance = (await _walletsRepository.GetUserWalletAsync(userId, currency)).Value;
+                model.Currency = currency;
+
+                return View("GeneralWithdrawPage", model);
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
             return View(wallets);
         }
@@ -53,7 +59,9 @@ namespace Web_Api.online.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if(model.Currency == "ZEC")
+                m.Balance = (await _walletsRepository.GetUserWalletAsync(userId, model.Currency)).Value;
+
+                if (model.Currency == "ZEC")
                 {
                     m = await _zecService.SendToAddress(model, userId);
                 }
