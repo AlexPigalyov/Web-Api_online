@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models;
@@ -9,6 +10,7 @@ using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers.Admin
 {
+    [Authorize(Roles = "Administrator")]
     [Route("/Admin/OutcomeTransactions")]
     public class OutcomeTransactionController : Controller
     {

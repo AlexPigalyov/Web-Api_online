@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.StoredProcedures;
@@ -7,6 +8,7 @@ using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Controllers.Admin
 {
+    [Authorize(Roles = "Administrator")]
     [Route("/Admin/Transfers")]
     public class TransferController : Controller
     {
