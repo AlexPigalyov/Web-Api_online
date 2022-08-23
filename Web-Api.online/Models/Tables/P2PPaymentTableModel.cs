@@ -1,7 +1,7 @@
 namespace Web_Api.online.Models.Tables;
 
-public class FiatTableModel
+public class P2PPaymentTableModel
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
 }

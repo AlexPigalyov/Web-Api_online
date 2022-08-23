@@ -5,8 +5,9 @@ namespace Web_Api.online.Models.ViewModels;
 
 public class P2PViewModel
 {
-    public List<CryptTableModel> Crypts { get; set; }
+    public List<P2PCryptTableModel> Crypts { get; set; }
     public List<P2PSellerModel> P2PSellers { get; set; }
-    public List<FiatTableModel> Fiats { get; set; }
-    public List<PaymentTableModel> Payments { get; set; }
+    public List<P2PFiatTableModel> Fiats { get; set; }
+    public List<P2PPaymentTableModel> Payments { get; set; }
+    public List<P2PTimeFramesTableModel> TimeFrames { get; set; }
 }

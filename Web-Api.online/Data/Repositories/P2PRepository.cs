@@ -29,16 +29,16 @@ public class P2PRepository
             var p = new DynamicParameters();
             p.Add("name", name);
 
-            await _dbExchange.QueryAsync("CreateValute", p, commandType: CommandType.StoredProcedure);
+            await _dbExchange.QueryAsync("CreateP2PValute", p, commandType: CommandType.StoredProcedure);
         }
         catch (Exception ex) { }
     }
 
-    public async Task<List<FiatTableModel>> GetFiats()
+    public async Task<List<P2PFiatTableModel>> GetFiats()
     {
         try
         {
-            return (await _dbExchange.QueryAsync<FiatTableModel>("GetFiats", commandType: CommandType.StoredProcedure))
+            return (await _dbExchange.QueryAsync<P2PFiatTableModel>("GetP2PFiats", commandType: CommandType.StoredProcedure))
                 .ToList();
         }
         catch (Exception ex)
@@ -47,11 +47,11 @@ public class P2PRepository
         }
     }
     
-    public async Task<List<PaymentTableModel>> GetPayments()
+    public async Task<List<P2PPaymentTableModel>> GetPayments()
     {
         try
         {
-            return (await _dbExchange.QueryAsync<PaymentTableModel>("GetPayments", commandType: CommandType.StoredProcedure))
+            return (await _dbExchange.QueryAsync<P2PPaymentTableModel>("GetP2PPayments", commandType: CommandType.StoredProcedure))
                 .ToList();
         }
         catch (Exception ex)
@@ -67,39 +67,28 @@ public class P2PRepository
             var p = new DynamicParameters();
             p.Add("name", name);
 
-            await _dbExchange.QueryAsync("CreatePayment", p, commandType: CommandType.StoredProcedure);
+            await _dbExchange.QueryAsync("CreateP2PPayment", p, commandType: CommandType.StoredProcedure);
         }
         catch (Exception ex) { }
     }
     
-    public async Task CreatePaymentValute(long paymentId, long valuteId)
-    {
-        try
-        {
-            var p = new DynamicParameters();
-            p.Add("paymentId", paymentId);
-            p.Add("valuteId", valuteId);
-
-            await _dbExchange.QueryAsync("CreatePaymentValute", p, commandType: CommandType.StoredProcedure);
-        }
-        catch (Exception ex) { }
-    }
     
-    public async Task CreateP2PSeller(string userId, decimal price, long fiatId, decimal limitFrom, decimal limitTo, decimal available, long paymentId, long cryptId)
+    public async Task CreateP2PSeller(bool isBuyer, string userId, decimal price, int fiatId, decimal limitFrom, decimal limitTo, decimal available, int paymentId, int cryptId, int timeFrameId)
     {
         try
         {
             var p = new DynamicParameters();
             p.Add("userId", userId);
             p.Add("price", price);
-            p.Add("fiatId", fiatId);
+            p.Add("p2pFiatId", fiatId);
             p.Add("limitFrom", limitFrom);
             p.Add("limitTo", limitTo);
             p.Add("available", available);
-            p.Add("paymentId", paymentId);
-            p.Add("cryptId", cryptId);
+            p.Add("p2pPaymentId", paymentId);
+            p.Add("p2pCryptId", cryptId);
+            p.Add("p2pTimeFrameId", timeFrameId);
             
-            await _dbExchange.QueryAsync("CreateP2PSeller", p, commandType: CommandType.StoredProcedure);
+            await _dbExchange.QueryAsync("CreateP2P" + (isBuyer ? "Buyer" : "Seller"), p, commandType: CommandType.StoredProcedure);
         }
         catch (Exception ex) { }
     }
@@ -121,14 +110,14 @@ public class P2PRepository
         }
     }
     
-    public async Task<FiatTableModel> GetFiatById(long fiatId)
+    public async Task<P2PFiatTableModel> GetFiatById(int fiatId)
     {
         try
         {
             var parameters = new DynamicParameters();
             parameters.Add("fiatId", fiatId);
 
-            return await _dbExchange.QueryFirstAsync<FiatTableModel>("GetFiatById",
+            return await _dbExchange.QueryFirstAsync<P2PFiatTableModel>("GetP2PFiatById",
                 parameters,
                 commandType: CommandType.StoredProcedure);
         }
@@ -138,14 +127,14 @@ public class P2PRepository
         }
     }
     
-    public async Task<CryptTableModel> GetCryptById(long id)
+    public async Task<P2PCryptTableModel> GetCryptById(int id)
     {
         try
         {
             var parameters = new DynamicParameters();
             parameters.Add("id", id);
 
-            return await _dbExchange.QueryFirstAsync<CryptTableModel>("GetCryptById",
+            return await _dbExchange.QueryFirstAsync<P2PCryptTableModel>("GetP2PCryptById",
                 parameters,
                 commandType: CommandType.StoredProcedure);
         }
@@ -155,14 +144,14 @@ public class P2PRepository
         }
     }
     
-    public async Task<CryptTableModel> GetCryptByName(string name)
+    public async Task<P2PCryptTableModel> GetCryptByName(string name)
     {
         try
         {
             var parameters = new DynamicParameters();
             parameters.Add("name", name);
 
-            return await _dbExchange.QueryFirstAsync<CryptTableModel>("GetCryptByName",
+            return await _dbExchange.QueryFirstAsync<P2PCryptTableModel>("GetP2PCryptByName",
                 parameters,
                 commandType: CommandType.StoredProcedure);
         }
@@ -172,11 +161,11 @@ public class P2PRepository
         }
     }
     
-    public async Task<List<CryptTableModel>> GetCrypts()
+    public async Task<List<P2PCryptTableModel>> GetCrypts()
     {
         try
         {
-            return (await _dbExchange.QueryAsync<CryptTableModel>("GetCrypts",
+            return (await _dbExchange.QueryAsync<P2PCryptTableModel>("GetP2PCrypts",
                 commandType: CommandType.StoredProcedure)).ToList();
         }
         catch (Exception exc)
@@ -194,8 +183,8 @@ public class P2PRepository
                 var parameters = new DynamicParameters();
                 parameters.Add("id", x.PaymentId);
 
-                return _dbWebApi.QueryFirstAsync<PaymentTableModel>(
-                    "GetPaymentById",
+                return _dbWebApi.QueryFirstAsync<P2PPaymentTableModel>(
+                    "GetP2PPaymentById",
                     parameters,
                     commandType: CommandType.StoredProcedure).Result.Name;
             }).ToList();
@@ -205,8 +194,22 @@ public class P2PRepository
             return null;
         }
     }
+
+    public async Task<List<P2PTimeFramesTableModel>> GetP2PTimeFrames()
+    {
+        try
+        {
+            return (await _dbExchange
+                    .QueryAsync<P2PTimeFramesTableModel>("GetP2PTimeFrames", commandType: CommandType.StoredProcedure))
+                    .ToList();
+        }
+        catch (Exception exc)
+        {
+            return null;
+        }
+    }
     
-    public async Task<List<P2PSellerModel>> GetP2PUsersByCryptId(bool isBuyers, long cryptId, string cryptName, int page)
+    public async Task<List<P2PSellerModel>> GetP2PUsersByCryptId(bool isBuyers, int cryptId, string cryptName, int page)
     {
         try
         {

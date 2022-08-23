@@ -244,19 +244,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Crypts](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_Crypts] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE TABLE [dbo].[Currencies](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Acronim] [nvarchar](10) NOT NULL,
@@ -759,19 +746,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Fiats](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_Fiats] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE TABLE [dbo].[IncomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[CurrencyAcronim] [nvarchar](50) NOT NULL,
@@ -1001,14 +975,41 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[P2PBuyers](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[UserId] [nvarchar](450) NOT NULL,
+	[UserId] [nvarchar](max) NOT NULL,
 	[Price] [decimal](38, 20) NOT NULL,
-	[FiatId] [bigint] NOT NULL,
+	[P2PFiatId] [int] NOT NULL,
 	[LimitFrom] [decimal](38, 20) NOT NULL,
 	[LimitTo] [decimal](38, 20) NOT NULL,
 	[Available] [decimal](38, 20) NOT NULL,
-	[CryptId] [bigint] NOT NULL,
+	[P2PCryptId] [int] NOT NULL,
+	[P2PTimeFrameId] [int] NOT NULL,
  CONSTRAINT [PK_P2PBuyers] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P2PCrypts](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_P2PCrypts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P2PFiats](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_P2PFiats] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -1019,8 +1020,12 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[P2PPayments](
-	[P2PSellerId] [bigint] NOT NULL,
-	[PaymentId] [bigint] NOT NULL
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_P2PPayments] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -1029,14 +1034,51 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[P2PSellers](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[UserId] [nvarchar](450) NOT NULL,
+	[UserId] [nvarchar](max) NOT NULL,
 	[Price] [decimal](38, 20) NOT NULL,
-	[FiatId] [bigint] NOT NULL,
+	[P2PFiatId] [int] NOT NULL,
 	[LimitFrom] [decimal](38, 20) NOT NULL,
 	[LimitTo] [decimal](38, 20) NOT NULL,
 	[Available] [decimal](38, 20) NOT NULL,
-	[CryptId] [bigint] NOT NULL,
+	[P2PCryptId] [int] NOT NULL,
+	[P2PTimeFrameId] [int] NOT NULL,
  CONSTRAINT [PK_P2PSellers] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P2PTimeFrames](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Mins] [int] NOT NULL,
+	[ViewName] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_P2PTimeFrames] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P2PUsersPayments](
+	[P2PUserId] [bigint] NOT NULL,
+	[P2PPaymentId] [int] NOT NULL
+) ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P2PValutes](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_Valutes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -1063,19 +1105,6 @@ CREATE TABLE [dbo].[Pairs](
 	[Change1hUpdateDate] [datetime] NOT NULL,
 	[Volume24hUpdateDate] [datetime] NOT NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Payments](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_Payments] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -1146,19 +1175,6 @@ CREATE TABLE [dbo].[TrianglesData](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Valutes](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_Valutes] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
 GO
@@ -1582,22 +1598,74 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[CreateP2PSeller]
+
+CREATE PROCEDURE [dbo].[CreateP2PBuyer]
 @userId nvarchar(450),
 @price decimal(38,20),
-@fiatId bigint,
+@p2pFiatId int,
 @limitFrom decimal(38,20),
 @limitTo decimal(38,20),
 @available decimal(38,20),
-@cryptId bigint
+@p2pCryptId int,
+@p2pTimeFrameId int
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, FiatId, LimitFrom, LimitTo, Available, CryptId)
-VALUES (@userId, @price, @fiatId, @limitFrom, @limitTo, @available, @cryptId)
+INSERT INTO [Exchange].[dbo].[P2PBuyers] (UserId, Price, P2PFiatId, LimitFrom, LimitTo, Available, P2PCryptId, P2PTimeFrameId)
+VALUES (@userId, @price, @p2pFiatId, @limitFrom, @limitTo, @available,  @p2pCryptId, @p2pTimeFrameId)
 
 END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
+CREATE PROCEDURE [dbo].[CreateP2PPayment]
+@name nvarchar(450)
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[P2PPayments] ([Name])
+VALUES (@name)
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CreateP2PSeller]
+@userId nvarchar(450),
+@price decimal(38,20),
+@p2pFiatId int,
+@limitFrom decimal(38,20),
+@limitTo decimal(38,20),
+@available decimal(38,20),
+@p2pCryptId int,
+@p2pTimeFrameId int
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, P2PFiatId, LimitFrom, LimitTo, Available, P2PCryptId, P2PTimeFrameId)
+VALUES (@userId, @price, @p2pFiatId, @limitFrom, @limitTo, @available,  @p2pCryptId, @p2pTimeFrameId)
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[CreateP2PValute]
+@name nvarchar(450)
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[P2PValutes] ([Name])
+VALUES (@name)
+
+END
 GO
 SET ANSI_NULLS ON
 GO
@@ -1616,37 +1684,6 @@ INSERT INTO [Exchange].[dbo].[Pairs] (Currency1, Currency2, "Order", Created, He
 VALUES (@currency1, @currency2, 10, @created, @header, @acronim)
 
 END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CreatePayment]
-@name nvarchar(450)
-AS
-BEGIN
-
-INSERT INTO [Exchange].[dbo].[Payments] ([Name])
-VALUES (@name)
-
-END
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CreatePaymentValute]
-@paymentId bigint,
-@valuteId bigint
-AS
-BEGIN
-
-INSERT INTO [Exchange].[dbo].[PaymentValutes] (PaymentId, ValuteId)
-VALUES (@paymentId, @valuteId)
-
-END
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -1687,21 +1724,6 @@ VALUES (@userid, @address, @currencyAcronim, @value)
 
 SET @new_identity = SCOPE_IDENTITY()
 END
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CreateValute]
-@name nvarchar(450)
-AS
-BEGIN
-
-INSERT INTO [Exchange].[dbo].[Valutes] ([Name])
-VALUES (@name)
-
-END
-
 GO
 SET ANSI_NULLS ON
 GO
@@ -4196,53 +4218,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCryptById]
-@id bigint
-AS
-BEGIN
-
-SELECT * FROM [Exchange].[dbo].[Crypts] 
-WHERE 
-Id = @id
-
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[GetCryptByName]
-@name nvarchar(450)
-AS
-BEGIN
-
-SELECT * FROM [Exchange].[dbo].[Crypts] 
-WHERE [Name] LIKE @name
-
-END
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[GetCrypts]
-AS
-BEGIN
-
-SELECT * FROM [Exchange].[dbo].[Crypts]
-
-END
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetCurrencyByAcronim]
 @acronim nvarchar (450)
 AS
@@ -4539,38 +4514,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetFiatById]
-@fiatId bigint
-AS
-BEGIN
-
-SELECT * FROM [Exchange].[dbo].[Fiats] 
-WHERE 
-Id = @fiatId
-
-END
-
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetFiats]
-
-AS
-BEGIN
-
-SELECT *
-  FROM [Exchange].[dbo].[Fiats]
-
-END
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 
 CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
@@ -4727,20 +4670,124 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[GetP2PBuyersByCryptId]
 @page int,
-@cryptId bigint
+@cryptId int
 AS
 BEGIN
 
 SELECT * FROM [Exchange].[dbo].[P2PBuyers] 
 WHERE 
-CryptId = @cryptId
+P2PCryptId = @cryptId
 ORDER BY Id
 OFFSET 10 * (@page - 1) ROWS
 FETCH  NEXT 10 ROWS ONLY
 END
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PCryptById]
+@id int
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PCrypts] 
+WHERE 
+Id = @id
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PCryptByName]
+@name nvarchar(100)
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PCrypts] 
+WHERE 
+[Name] = @name
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetP2PCrypts]
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PCrypts]
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PFiatById]
+@fiatId int
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PFiats] 
+WHERE 
+Id = @fiatId
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PFiats]
+
+AS
+BEGIN
+
+SELECT *
+  FROM [Exchange].[dbo].[P2PFiats]
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PPaymentById]
+@id int
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PPayments] 
+WHERE 
+Id = @id
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetP2PPayments]
+
+AS
+BEGIN
+
+SELECT *
+  FROM [Exchange].[dbo].[P2PPayments]
+
+END
 GO
 SET ANSI_NULLS ON
 GO
@@ -4749,13 +4796,13 @@ GO
 
 
 CREATE PROCEDURE [dbo].[GetP2PPaymentsByP2PUserId]
-@p2pSellerId bigint
+@p2pUserId bigint
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[P2PPayments] 
+SELECT * FROM [Exchange].[dbo].[P2PUsersPayments] 
 WHERE 
-P2PSellerId = @p2pSellerId
+P2PUserId = @p2pUserId
 
 END
 
@@ -4764,20 +4811,34 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[GetP2PSellersByCryptId]
 @page int,
-@cryptId bigint
+@cryptId int
 AS
 BEGIN
 
 SELECT * FROM [Exchange].[dbo].[P2PSellers] 
 WHERE 
-CryptId = @cryptId
+P2PCryptId = @cryptId
 ORDER BY Id
 OFFSET 10 * (@page - 1) ROWS
 FETCH  NEXT 10 ROWS ONLY
 END
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetP2PTimeFrames]
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PTimeFrames]
+
+END
 
 GO
 SET ANSI_NULLS ON
@@ -4821,21 +4882,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetPayments]
-
-AS
-BEGIN
-
-SELECT *
-  FROM [Exchange].[dbo].[Payments]
-
-END
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [dbo].[GetSettings]
 
 AS
@@ -4854,6 +4900,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[GetTransfers_Paged]
 @page int,
 @pageSize int
@@ -4861,6 +4908,7 @@ AS
 BEGIN
 
 Select
+  Id,
   WalletFromId,
   WalletToId,
   Value,

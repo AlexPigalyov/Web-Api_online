@@ -11,8 +11,8 @@ namespace Web_Api.online.Models.WithdrawModels
         public GeneralWithdrawModel(string currency)
         {
             Currency = currency;
-            AmountMin = 777;
-            Commission = 777;
+            AmountMin = 0.00000001m;
+            Commission = 0;
         }
 
         public string Status { get; set; }

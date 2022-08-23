@@ -9,11 +9,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[GetCrypts]
+CREATE PROCEDURE [dbo].[GetP2PTimeFrames]
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[Crypts]
+SELECT * FROM [Exchange].[dbo].[P2PTimeFrames]
 
 END
 

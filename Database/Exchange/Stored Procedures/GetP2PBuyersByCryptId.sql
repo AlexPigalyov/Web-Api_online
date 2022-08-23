@@ -1,10 +1,10 @@
-ALTER PROCEDURE [dbo].[GetP2PSellersByCryptId]
+ALTER PROCEDURE [dbo].[GetP2PBuyersByCryptId]
 @page int,
 @cryptId int
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[P2PSellers] 
+SELECT * FROM [Exchange].[dbo].[P2PBuyers] 
 WHERE 
 P2PCryptId = @cryptId
 ORDER BY Id
