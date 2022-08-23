@@ -112,7 +112,7 @@
                                             @if  (@eventModel.Value != null)
                                             {
                                                 <p class="text-muted mt-2 mb-0 pb-3">
-                                                    Amount: @eventModel.Value
+                                                    Amount: <span class="decimal-data">@eventModel.Value</span>
                                                     @(eventModel.Comment)
                                                 </p>
                                             }
