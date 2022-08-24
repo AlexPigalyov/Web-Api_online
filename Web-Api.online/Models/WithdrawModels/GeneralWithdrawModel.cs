@@ -21,6 +21,8 @@ namespace Web_Api.online.Models.WithdrawModels
 
         [Required]
         public string Currency { get; set; }
+
+        public decimal Balance { get; set; }    
         [Required]
         public string Address { get; set; }
         [Required]
