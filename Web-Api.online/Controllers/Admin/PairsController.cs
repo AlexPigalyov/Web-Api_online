@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models;
@@ -7,6 +8,7 @@ using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers.Admin
 {
+    [Authorize(Roles = "Administrator")]
     [Route("/Admin/Pairs")]
     public class PairsController : Controller
     {

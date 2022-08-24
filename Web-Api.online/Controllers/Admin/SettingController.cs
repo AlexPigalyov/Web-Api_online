@@ -9,6 +9,7 @@ using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Controllers.Admin
 {
+    [Authorize(Roles = "Administrator")]
     [Route("/Admin/Settings")]
     public class SettingController : Controller
     {

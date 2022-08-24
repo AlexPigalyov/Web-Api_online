@@ -731,7 +731,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Exceptions](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[Value] [nvarchar](max) NOT NULL,
 	[StackTrace] [nvarchar](max) NULL,
 	[WhenDate] [datetime] NOT NULL,
@@ -4011,12 +4011,15 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Get_Top10000_Exceptions]
 
 AS
 BEGIN
 
-SELECT TOP(10000) * FROM [Exchange].[dbo].[Exceptions]
+SELECT TOP(10000) * 
+FROM [Exchange].[dbo].[Exceptions]
+order by id desc
 	
 END
 
