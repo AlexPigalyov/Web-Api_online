@@ -1432,6 +1432,84 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[ClearAllBotsOrders]
+AS
+BEGIN
+
+delete from BCH_BTC_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_BTC_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Buy
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Sell
+where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[ClosedOrders_Paged]
 @page int,
 @pageSize int
