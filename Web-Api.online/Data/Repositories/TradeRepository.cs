@@ -279,5 +279,11 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
+
+        public async Task ClearAllBotsOrders()
+        {
+            var p = new DynamicParameters();
+            await _db.QueryAsync("ClearAllBotsOrders", commandType: CommandType.StoredProcedure);
+        }
     }
 }
