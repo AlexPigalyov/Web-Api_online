@@ -111,12 +111,12 @@
                                     <h4>Create P2P Ad</h4>
                                 </div>
                                 <hr>
-                                <div class="mb-3">
+                                <div style="margin-top: 2rem !important;">
                                     <div class="row">
                                         <div class="middle d-flex">
                                             <div class="col-6">
                                                 <label>
-                                                    <input type="radio" name="radio" checked/>
+                                                    <input id="buy-radio-btn" type="radio" name="radio" checked/>
                                                     <div class="front-end box">
                                                         <span>Buy</span>
                                                     </div>
@@ -124,7 +124,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <label>
-                                                    <input type="radio" name="radio"/>
+                                                    <input id="sell-radio-btn" type="radio" name="radio"/>
                                                     <div class="back-end box">
                                                         <span>Sell</span>
                                                     </div>
@@ -133,10 +133,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 d-flex">
+                                <hr>
+                                <div class="d-flex">
                                     <div class="col-6">
                                         <label class="form-label">Asset</label>
-                                        <select class="form-select mb-3">
+                                        <select id="crypts-select" class="form-select mb-3">
                                             @foreach (var crypt in Model.Crypts)
                                             {
                                                 <option>@crypt.Name</option>
@@ -145,7 +146,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">With Fiat</label>
-                                        <select class="form-select mb-3">
+                                        <select id="fiats-select" class="form-select mb-3">
                                             @foreach (var fiat in Model.Fiats)
                                             {
                                                 <option>@fiat.Name</option>
@@ -155,19 +156,34 @@
                                 </div>
                                 <div class="mb-3 form-margins">
                                     <label class="form-label">Price</label>
-                                    <input data-toggle="touchspin" class="form-control" type="text" value="0">
+                                    <input id="price-input" data-toggle="touchspin" class="form-control" type="text" value="0">
                                 </div>
-                                <div class="mb-4 form-margins">
+                                <div class="mb-3 form-margins">
                                     <label class="form-label">Total amount</label>
                                     <div class="input-group flex-nowrap">
-                                        <input type="text" class="form-control" placeholder="Enter total trading quantity">
-                                        <span class="input-group-text" id="basic-addon1">USDT</span>
+                                        <input id="total-amount-input" type="text" class="form-control" placeholder="Enter total trading quantity">
+                                        <span class="input-group-text">USDT</span>
                                     </div>
                                 </div>
-                                <div class="mb-1 form-margins">
+                                <div class="mb-3 d-flex">
+                                    <div class="col-6">
+                                        <label class="form-label">Limit Amount From</label>
+                                        <div class="input-group flex-nowrap">
+                                            <input id="limit-from-input" type="text" class="form-control" placeholder="Enter limit amount from">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Limit Amount To</label>
+                                        <div class="input-group flex-nowrap">
+                                            <input id="limit-to-input" type="text" class="form-control" placeholder="Enter limit amount to">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 form-margins">
                                     <label class="form-label">Payments (Select 5 methods)</label>
                                     <div class="input-group flex-nowrap">
-                                        <select multiple data-placeholder="Add tools">
+                                        <select id="payments-multiple-select" multiple data-placeholder="Add tools">
                                             @foreach (var payment in Model.Payments)
                                             {
                                                 <option>@payment.Name</option>
@@ -177,8 +193,8 @@
                                 </div>
                                 <div class="mb-3 form-margins">
                                     <label class="form-label">Payment Time Limit</label>
-                                    <select class="form-select mb-3">
-                                        @foreach (var timeFrame in Model.TimeFrames) 
+                                    <select id="timeframes-select" class="form-select mb-3">
+                                        @foreach (var timeFrame in Model.TimeFrames)
                                         {
                                             <option>@timeFrame.ViewName</option>
                                         }
@@ -190,7 +206,7 @@
                                         <button class="btn btn-light" data-dismiss="modal">Close</button>
                                     </div>
                                     <div class="col-6">
-                                        <button class="btn btn-primary" type="submit">Create</button>
+                                        <button id="create-btn" class="btn btn-primary" type="submit">Create</button>
                                     </div>
                                 </div>
                             </div> <!-- end col-->
@@ -203,6 +219,34 @@
 </div>
 
 <link rel="stylesheet" asp-append-version="true" href="~/css/pages/p2p.css"/>
+
+<script>
+    $(document).ready(function () {
+        $("#create-btn").click(function() {
+            var isBuy = $('#buy-radio-btn:checked').val() != null;
+            var crypt = $('#crypts-select').find(":selected").text();
+            var fiat = $('#fiats-select').find(":selected").text();
+            var price = $('#price-input').val();
+            var totalAmount = $('#total-amount-input').val();
+            var limitFrom = $('#limit-from-input').val();
+            var limitTo = $('#limit-to-input').val();
+            var payment = $('#payments-multiple-select').val();
+            
+            var ad = {
+                isBuy: isBuy,
+                crypt: crypt,
+                fiat: fiat,
+                price: price,
+                totalAmount: totalAmount,
+                limitFrom: limitFrom,
+                limitTo: limitTo,
+                payment: payment
+            };
+            
+            console.log(ad);
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
