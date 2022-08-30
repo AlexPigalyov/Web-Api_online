@@ -232,7 +232,7 @@
             var limitTo = $('#limit-to-input').val();
             var payment = $('#payments-multiple-select').val();
             
-            var ad = {
+            var data = {
                 isBuy: isBuy,
                 crypt: crypt,
                 fiat: fiat,
@@ -243,7 +243,15 @@
                 payment: payment
             };
             
-            console.log(ad);
+            console.log((document.domain + "/p2p/create-p2p-add"));
+            
+            $.ajax({
+              type: 'POST',
+              url: (document.URL.split('/')[0] + "/p2p/create-p2p-add"),
+              data: data
+            });
+            
+            console.log(data);
         });
     });
 </script>

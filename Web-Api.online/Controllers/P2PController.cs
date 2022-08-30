@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Models;
 using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Controllers;
@@ -39,8 +40,10 @@ public class P2PController : Controller
         
         return View(model);
     }
-
-    public async Task<IActionResult> CreateP2PAd()
+    
+    [Route("p2p/create-p2p-add")]
+    [HttpPost]
+    public async Task<IActionResult> CreateP2PAd([FromBody]P2PAddRequestModel model)
     {
         return null;
     }
