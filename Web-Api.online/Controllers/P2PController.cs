@@ -39,6 +39,9 @@ public class P2PController : Controller
         
         return View(model);
     }
-    
+
     public async Task<IActionResult> CreateP2PAd()
+    {
+        return null;
+    }
 }
