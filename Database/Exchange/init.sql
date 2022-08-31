@@ -5083,6 +5083,38 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+CREATE PROCEDURE [dbo].[GetTopMarkets]
+AS
+BEGIN
+
+SELECT TOP 10
+[Id]
+,[Currency1]
+,[Currency2]
+,[Order]
+,[Created]
+,[Header]
+,[Acronim]
+,[Price]
+,[Change24h]
+,[Change1h]
+,[Volume24h]
+,[PriceUpdateDate]
+,[Change24hUpdateDate]
+,[Change1hUpdateDate]
+,[Volume24hUpdateDate]
+FROM [Exchange].[dbo].[Pairs]
+ORDER BY [Change1h] desc
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
 CREATE PROCEDURE [dbo].[GetTransfers_Paged]
 @page int,
 @pageSize int
