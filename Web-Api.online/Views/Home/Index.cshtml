@@ -45,10 +45,13 @@
         <div class="card tilebox-one">
             <div class="card-body">
                 <a href="/Trade"><h6 class="text-uppercase mt-0" style="padding-top: 10px; padding-left: 10px;">Top markets (1h change)</h6></a>
-                <p class="mb-0 text-muted">
-                    <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span> 5.27%</span>
-                    <span class="text-nowrap"><a href="/trade/crypto/BTCUSDT">BTC - USDT</a></span>
-                </p>
+                @foreach (var pair in Model.TopMarkets1hChange)
+                {
+                    <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span> @pair.Change1h%</span>
+                        <span class="text-nowrap"><a href="/trade/crypto/BTCUSDT">@pair.Header</a></span>
+                    </p>
+                }
             </div> <!-- end card-body-->
         </div>
         <!--end card-->

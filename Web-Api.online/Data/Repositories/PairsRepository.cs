@@ -23,17 +23,17 @@ namespace Web_Api.online.Data.Repositories
         public async Task<List<PairsTableModel>> GetAllPairsAsync()
         {
             List<PairsTableModel> result =
-                (List<PairsTableModel>) await _db.QueryAsync<PairsTableModel>("GetAllPairs",
+                (List<PairsTableModel>)await _db.QueryAsync<PairsTableModel>("GetAllPairs",
                     commandType: CommandType.StoredProcedure);
 
             return result;
         }
-        
+
         public async Task<PairsTableModel> GetPairByAcronimAsync(string acronim)
         {
             var parameters = new DynamicParameters();
             parameters.Add("acronim", acronim);
-            
+
             PairsTableModel result =
                 await _db.QueryFirstAsync<PairsTableModel>("GetPairByAcronim",
                     parameters,
@@ -53,11 +53,11 @@ namespace Web_Api.online.Data.Repositories
 
             await _db.ExecuteAsync("CreatePair", parameters, commandType: CommandType.StoredProcedure);
         }
-        
+
         public async Task Create(string firstCurrency, string secondCurrency)
         {
             await CreatePairRow(firstCurrency, secondCurrency);
-            
+
             var x = Directory.GetDirectories("Data\\Templates");
             foreach (var fullname in Directory.GetDirectories("Data\\Templates").OrderByDescending(x => x))
             {
@@ -68,8 +68,15 @@ namespace Web_Api.online.Data.Repositories
                             .Replace("{cryptocurrencypair}", firstCurrency + "_" + secondCurrency));
                 }
             }
-                
         }
-    
+
+        public async Task<List<PairsTableModel>> GetTopMarketsAsync()
+        {
+            List<PairsTableModel> result =
+                (List<PairsTableModel>)await _db.QueryAsync<PairsTableModel>("GetTopMarkets",
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
     }
 }
