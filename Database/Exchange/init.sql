@@ -5104,6 +5104,7 @@ SELECT TOP 10
 ,[Change1hUpdateDate]
 ,[Volume24hUpdateDate]
 FROM [Exchange].[dbo].[Pairs]
+WHERE [Change1h] > 0
 ORDER BY [Change1h] desc
 
 END
