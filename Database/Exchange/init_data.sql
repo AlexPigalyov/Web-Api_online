@@ -96,3 +96,51 @@ INSERT [dbo].[Wallets] ([Id], [UserId], [Value], [CurrencyAcronim], [Created], [
 GO
 SET IDENTITY_INSERT [dbo].[Wallets] OFF
 GO
+SET IDENTITY_INSERT [dbo].[P2PCrypts] ON 
+GO
+INSERT [dbo].[P2PCrypts] ([Id], [Name]) VALUES (1, N'BTC')
+GO
+INSERT [dbo].[P2PCrypts] ([Id], [Name]) VALUES (2, N'USDT')
+GO
+INSERT [dbo].[P2PCrypts] ([Id], [Name]) VALUES (3, N'LTC')
+GO
+SET IDENTITY_INSERT [dbo].[P2PCrypts] OFF
+GO
+SET IDENTITY_INSERT [dbo].[P2PFiats] ON 
+GO
+INSERT [dbo].[P2PFiats] ([Id], [Name]) VALUES (1, N'USD')
+GO
+INSERT [dbo].[P2PFiats] ([Id], [Name]) VALUES (2, N'EUR')
+GO
+INSERT [dbo].[P2PFiats] ([Id], [Name]) VALUES (3, N'RUB')
+GO
+SET IDENTITY_INSERT [dbo].[P2PFiats] OFF
+GO
+SET IDENTITY_INSERT [dbo].[P2PPayments] ON 
+GO
+INSERT [dbo].[P2PPayments] ([Id], [Name]) VALUES (1, N'Sberbank')
+GO
+INSERT [dbo].[P2PPayments] ([Id], [Name]) VALUES (2, N'Tinkoff')
+GO
+SET IDENTITY_INSERT [dbo].[P2PPayments] OFF
+GO
+SET IDENTITY_INSERT [dbo].[P2PTimeFrames] ON 
+GO
+INSERT [dbo].[P2PTimeFrames] ([Id], [Mins], [ViewName]) VALUES (1, 15, N'15 mins')
+GO
+INSERT [dbo].[P2PTimeFrames] ([Id], [Mins], [ViewName]) VALUES (2, 30, N'30 mins')
+GO
+INSERT [dbo].[P2PTimeFrames] ([Id], [Mins], [ViewName]) VALUES (3, 60, N'1 hr')
+GO
+SET IDENTITY_INSERT [dbo].[P2PTimeFrames] OFF
+GO
+SET IDENTITY_INSERT [dbo].[P2PValutes] ON 
+GO
+INSERT [dbo].[P2PValutes] ([Id], [Name]) VALUES (1, N'EUR')
+GO
+INSERT [dbo].[P2PValutes] ([Id], [Name]) VALUES (2, N'RUB')
+GO
+INSERT [dbo].[P2PValutes] ([Id], [Name]) VALUES (3, N'USD')
+GO
+SET IDENTITY_INSERT [dbo].[P2PValutes] OFF
+GO
