@@ -116,7 +116,7 @@ namespace Web_Api.online
             services.AddTransient<TradeRepository>();
             services.AddTransient<PairsRepository>();
             services.AddTransient<IRatesRepository, RatesRepository>();
-            services.AddTransient<EventsRepository>();
+            services.AddTransient<IEventsRepository, EventsRepository>();
             services.AddTransient<UserRepository>();
             services.AddTransient<BotsRepository>();
             services.AddTransient<ISettingRepository, SettingRepository>();

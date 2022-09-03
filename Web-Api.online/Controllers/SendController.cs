@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Extensions;
 using Web_Api.online.Hash;
 using Web_Api.online.Models;
@@ -23,7 +24,7 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private ILitecoinService _litecoinService;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
         private UserManager<IdentityUser> _userManager;
         private UserRepository _userRepository;
         private WalletService _walletService;
@@ -31,7 +32,7 @@ namespace Web_Api.online.Controllers
 
         public SendController(WalletsRepository walletsRepository,
             ILitecoinService litecoinService,
-            EventsRepository eventsRepository,
+            IEventsRepository eventsRepository,
             UserManager<IdentityUser> userManager,
             UserRepository userRepository,
             WalletService walletService, 

@@ -6,6 +6,7 @@ using Web_Api.online.Clients;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
@@ -18,13 +19,13 @@ namespace Web_Api.online.Services
         private TransactionsRepository _transactionsRepository;
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
         private ZCashService _zecService;
         private BalanceProvider _balanceProvider;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
-            EventsRepository eventsRepository,
+            IEventsRepository eventsRepository,
             ZCashService zecService,
             BalanceProvider balanceProvider)
         {

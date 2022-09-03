@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models;
 using Web_Api.online.Models.StoredProcedures;
@@ -16,13 +17,13 @@ namespace Web_Api.online.Controllers
 {
     public class MyController : Controller
     {
-        private readonly EventsRepository _eventsRepository;
+        private readonly IEventsRepository _eventsRepository;
         private readonly UsersInfoRepository _usersInfoRepository;
         private readonly UserManager<IdentityUser> _usersManager;
         private readonly WalletsRepository _walletsRepository;
         private readonly UserRepository _userRepository;
         public MyController(
-            EventsRepository eventsRepository,
+            IEventsRepository eventsRepository,
             UsersInfoRepository usersInfoRepository,
             UserManager<IdentityUser> usersManager,
             WalletsRepository walletsRepository,
