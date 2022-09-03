@@ -6,11 +6,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BCH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NOT NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NOT NULL,
+	[Low] [decimal](38, 20) NOT NULL,
+	[Open] [decimal](38, 20) NOT NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BCH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -81,11 +81,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BCH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BCH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -171,11 +171,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BTC_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BTC_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -261,11 +261,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DASH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DASH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -336,11 +336,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DASH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DASH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -411,11 +411,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DOGE_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DOGE_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -486,11 +486,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DOGE_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DOGE_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -561,11 +561,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ETH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_ETH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -636,11 +636,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ETH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_ETH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -789,11 +789,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LTC_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_LTC_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -864,11 +864,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LTC_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_LTC_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
