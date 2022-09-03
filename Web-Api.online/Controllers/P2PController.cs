@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
@@ -45,6 +48,26 @@ public class P2PController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateP2PAd([FromBody]P2PAddRequestModel model)
     {
-        return null;
+        var cryptId = (await _p2PRepository.GetCryptByName(model.Crypt)).Id;
+        List<int> paymentIds = new List<int>();
+
+        foreach (var paymentName in model.Payments)
+        {
+            paymentIds.Add((await _p2PRepository.GetPaymentByName(paymentName)).Id);
+        }
+        
+        var fiatId = (await _p2PRepository.GetFiatByName(model.Fiat)).Id;
+        var timeFrameId = (await _p2PRepository.GetTimeFrameByViewName(model.TimeFrame)).Id;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return BadRequest("You are not authorized.");
+        }
+
+        await _p2PRepository.CreateP2PUser(model.IsBuy, userId, model.Price, fiatId, model.LimitFrom, model.LimitTo,
+            model.TotalAmount, paymentIds, cryptId, timeFrameId);
+
+        return Ok();
     }
 }

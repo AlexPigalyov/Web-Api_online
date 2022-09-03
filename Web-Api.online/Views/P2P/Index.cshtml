@@ -48,14 +48,6 @@
                 </select>
             </div>
         </div>
-        <div class="col-auto">
-            <div class="align-items-right">
-                <label for="status-select" class="me-2">Payment</label>
-                <select class="form-select" id="status-select">
-                    <option selected="">All payments</option>
-                </select>
-            </div>
-        </div>
     </form>
     <div class="row" style="margin-top:10px">
         <table class="table table-hover table-centered mb-0">
@@ -230,25 +222,28 @@
             var totalAmount = $('#total-amount-input').val();
             var limitFrom = $('#limit-from-input').val();
             var limitTo = $('#limit-to-input').val();
-            var payment = $('#payments-multiple-select').val();
+            var payments = $('#payments-multiple-select').val();
+            var timeFramesViewName = $('#timeframes-select').find(":selected").text();
             
             var data = {
                 isBuy: isBuy,
                 crypt: crypt,
                 fiat: fiat,
-                price: price,
-                totalAmount: totalAmount,
-                limitFrom: limitFrom,
-                limitTo: limitTo,
-                payment: payment
+                price: parseFloat(price),
+                totalAmount: parseFloat(totalAmount),
+                limitFrom: parseFloat(limitFrom),
+                limitTo: parseFloat(limitTo),
+                payments: payments,
+                timeFrame: timeFramesViewName
             };
             
             console.log((document.domain + "/p2p/create-p2p-add"));
             
             $.ajax({
               type: 'POST',
-              url: (document.URL.split('/')[0] + "/p2p/create-p2p-add"),
-              data: data
+              url: "/p2p/create-p2p-add",
+              data: JSON.stringify(data),
+              contentType: 'application/json; charset=utf-8'
             });
             
             console.log(data);

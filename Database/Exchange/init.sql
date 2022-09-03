@@ -1786,12 +1786,14 @@ CREATE PROCEDURE [dbo].[CreateP2PBuyer]
 @limitTo decimal(38,20),
 @available decimal(38,20),
 @p2pCryptId int,
-@p2pTimeFrameId int
+@p2pTimeFrameId int,
+@new_identity bigint = NULL OUTPUT
 AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[P2PBuyers] (UserId, Price, P2PFiatId, LimitFrom, LimitTo, Available, P2PCryptId, P2PTimeFrameId)
-VALUES (@userId, @price, @p2pFiatId, @limitFrom, @limitTo, @available,  @p2pCryptId, @p2pTimeFrameId)
+VALUES (@userId, @price, @p2pFiatId, @limitFrom, @limitTo, @available,  @p2pCryptId, @p2pTimeFrameId);
+SET @new_identity = SCOPE_IDENTITY();
 
 END
 GO
@@ -1814,6 +1816,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[CreateP2PSeller]
 @userId nvarchar(450),
 @price decimal(38,20),
@@ -1822,12 +1825,29 @@ CREATE PROCEDURE [dbo].[CreateP2PSeller]
 @limitTo decimal(38,20),
 @available decimal(38,20),
 @p2pCryptId int,
-@p2pTimeFrameId int
+@p2pTimeFrameId int,
+@new_identity bigint = NULL OUTPUT
 AS
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[P2PSellers] (UserId, Price, P2PFiatId, LimitFrom, LimitTo, Available, P2PCryptId, P2PTimeFrameId)
 VALUES (@userId, @price, @p2pFiatId, @limitFrom, @limitTo, @available,  @p2pCryptId, @p2pTimeFrameId)
+SET @new_identity = SCOPE_IDENTITY();
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CreateP2PUserPayment]
+@p2pUserId bigint,
+@p2pPaymentId int
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[P2PUsersPayments] (P2PPaymentId, P2PUserId)
+VALUES (@p2pPaymentId, @p2pUserId)
 
 END
 GO
@@ -4932,6 +4952,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE PROCEDURE [dbo].[GetP2PFiatByName]
+@name nvarchar(100)
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PFiats] 
+WHERE 
+[Name] = @name
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetP2PFiats]
 
 AS
@@ -4954,6 +4990,22 @@ BEGIN
 SELECT * FROM [Exchange].[dbo].[P2PPayments] 
 WHERE 
 Id = @id
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetP2PPaymentByName]
+@name nvarchar(100)
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PPayments] 
+WHERE 
+[Name] = @name
 
 END
 GO
@@ -5008,6 +5060,22 @@ OFFSET 10 * (@page - 1) ROWS
 FETCH  NEXT 10 ROWS ONLY
 END
 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetP2PTimeFrameByViewName]
+@viewName nvarchar(50)
+AS
+BEGIN
+
+SELECT * FROM [Exchange].[dbo].[P2PTimeFrames] 
+WHERE 
+[ViewName] = @viewName
+
+END
 GO
 SET ANSI_NULLS ON
 GO
