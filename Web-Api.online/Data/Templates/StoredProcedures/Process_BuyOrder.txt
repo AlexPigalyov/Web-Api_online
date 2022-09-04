@@ -142,9 +142,17 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[{cryptocurrencypair}_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, StartPrice, ClosedPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				StartPrice, 
+				ClosedPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
