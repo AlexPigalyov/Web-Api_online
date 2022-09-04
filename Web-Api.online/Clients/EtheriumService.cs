@@ -15,14 +15,14 @@ namespace Web_Api.online.Clients
     {
         private WalletsRepository _walletsRepository;
         private IEventsRepository _eventsRepository;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
         private ETHRequestClient _ethRequestClient;
         private BalanceProvider _balanceProvider;
 
 
         public EtheriumService(WalletsRepository walletsRepository,
             IEventsRepository eventsRepository,
-            OutcomeTransactionRepository outcomeTransactionRepository,
+            IOutcomeTransactionRepository outcomeTransactionRepository,
             ETHRequestClient ethRequestClient,
             BalanceProvider balanceProvider)
         {

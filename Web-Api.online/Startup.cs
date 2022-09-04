@@ -124,7 +124,7 @@ namespace Web_Api.online
             services.AddTransient<TransferRepository>();
             services.AddTransient<IExceptionsRepository, ExceptionsRepository>();
             services.AddTransient<TransactionsRepository>();
-            services.AddTransient<OutcomeTransactionRepository>();
+            services.AddTransient<IOutcomeTransactionRepository, OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();
             services.AddTransient<WithdrawService>();
             services.AddTransient<CandleStickService>();

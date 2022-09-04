@@ -23,11 +23,14 @@ namespace Web_Api.online.Clients
         private IEventsRepository _eventsRepository;
         private TransactionsRepository _transactionsRepository;
         private BalanceProvider _balanceProvider;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
 
-        public ZCashService(IConfiguration config, WalletsRepository walletsRepository,
-            IEventsRepository eventsRepository, TransactionsRepository transactionsRepository,
-            BalanceProvider balanceProvider, OutcomeTransactionRepository outcomeTransactionRepository)
+        public ZCashService(IConfiguration config,
+            WalletsRepository walletsRepository,
+            IEventsRepository eventsRepository,
+            TransactionsRepository transactionsRepository,
+            BalanceProvider balanceProvider,
+            IOutcomeTransactionRepository outcomeTransactionRepository)
         {
             _client = new(config);
             _walletsRepository = walletsRepository;
@@ -133,7 +136,7 @@ namespace Web_Api.online.Clients
 
                         });
 
-                       
+
                         var result = await _balanceProvider.Income(wallet, transaction);
 
                         await _eventsRepository.CreateEventAsync(new EventTableModel()

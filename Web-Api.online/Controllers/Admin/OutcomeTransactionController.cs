@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models;
-using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
 
@@ -14,9 +13,9 @@ namespace Web_Api.online.Controllers.Admin
     [Route("/Admin/OutcomeTransactions")]
     public class OutcomeTransactionController : Controller
     {
-        private readonly OutcomeTransactionRepository _outcomeTransactionsRepository;
+        private readonly IOutcomeTransactionRepository _outcomeTransactionsRepository;
 
-        public OutcomeTransactionController(OutcomeTransactionRepository outcomeTransactionsRepository)
+        public OutcomeTransactionController(IOutcomeTransactionRepository outcomeTransactionsRepository)
         {
             _outcomeTransactionsRepository = outcomeTransactionsRepository;
         }
