@@ -20,7 +20,6 @@ namespace Web_Api.online.Services
         private BalanceProvider _balanceProvider;
         private IOutcomeTransactionRepository _outcomeTransactionRepository;
 
-
         public WithdrawService(WalletsRepository walletsRepository,
            IEventsRepository eventsRepository,
            ICoinManager coinManager,
@@ -43,7 +42,6 @@ namespace Web_Api.online.Services
 
                 if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
                 {
-
                     var coinService = _coinManager
                                .CoinServices
                                .FirstOrDefault(x => x.CoinShortName == model.Currency);
