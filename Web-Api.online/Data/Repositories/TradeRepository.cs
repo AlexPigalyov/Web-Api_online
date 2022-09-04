@@ -6,7 +6,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Web_Api.online.Models;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
@@ -77,8 +76,7 @@ namespace Web_Api.online.Data.Repositories
             return result;
         }
 
-        public async Task<spProcessOrderResult> ProcessOrder(
-            OpenOrderTableModel openOrder, bool isBuy)
+        public async Task<spProcessOrderResult> ProcessOrder(OpenOrderTableModel openOrder, bool isBuy)
         {
             try
             {
@@ -100,8 +98,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task MoveFromOpenToClosedOrders(spGetOpenOrder_ById openOrder,
-            string boughtUserId, ClosedOrderStatusEnum status, string pair)
+        public async Task MoveFromOpenToClosedOrders(spGetOpenOrder_ById openOrder, string boughtUserId, ClosedOrderStatusEnum status, string pair)
         {
             try
             {
@@ -127,9 +124,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-
-        public async Task<List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>>
-            spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId)
+        public async Task<List<spGetOpenOrders_ByCreateUserIdWithOrderByDescCreateDate>> spGet_BTC_USDT_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate(string userId)
         {
             try
             {
