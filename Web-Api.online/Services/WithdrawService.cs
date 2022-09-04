@@ -18,14 +18,14 @@ namespace Web_Api.online.Services
         private ICoinManager _coinManager;
         private IEventsRepository _eventsRepository;
         private BalanceProvider _balanceProvider;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
 
 
         public WithdrawService(WalletsRepository walletsRepository,
            IEventsRepository eventsRepository,
            ICoinManager coinManager,
            BalanceProvider balanceProvider,
-           OutcomeTransactionRepository outcomeTransactionRepository)
+           IOutcomeTransactionRepository outcomeTransactionRepository)
         {
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
