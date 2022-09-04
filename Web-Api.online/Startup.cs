@@ -90,7 +90,7 @@ namespace Web_Api.online
                 });
 
             services.AddControllersWithViews();
-            
+
             services.AddSignalR();
 
             services.AddRazorPages();
@@ -122,7 +122,7 @@ namespace Web_Api.online
             services.AddTransient<ISettingRepository, SettingRepository>();
             services.AddTransient<RoleRepository>();
             services.AddTransient<TransferRepository>();
-            services.AddTransient<ExceptionsRepository>();
+            services.AddTransient<IExceptionsRepository, ExceptionsRepository>();
             services.AddTransient<TransactionsRepository>();
             services.AddTransient<OutcomeTransactionRepository>();
             services.AddTransient<TransactionManager>();
@@ -423,7 +423,7 @@ namespace Web_Api.online
 
                 await walletRepository.UpdateWalletBalanceAsync(wallet);
             }
-            
+
             if (binanceWallets?.FirstOrDefault(x => x.CurrencyAcronim == "ETH") == null)
             {
                 var wallet = await walletRepository.CreateUserWalletAsync(new WalletTableModel()
