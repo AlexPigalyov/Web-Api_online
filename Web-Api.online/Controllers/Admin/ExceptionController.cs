@@ -2,10 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web_Api.online.Data.Repositories;
-using Web_Api.online.Models;
-using Web_Api.online.Models.StoredProcedures;
-using Web_Api.online.Models.ViewModels;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers.Admin
 {
@@ -13,8 +10,8 @@ namespace Web_Api.online.Controllers.Admin
     [Route("/Admin/Exceptions")]
     public class ExceptionController : Controller
     {
-        private readonly ExceptionsRepository _exceptionsRepository;
-        public ExceptionController(ExceptionsRepository exceptionsRepository)
+        private readonly IExceptionsRepository _exceptionsRepository;
+        public ExceptionController(IExceptionsRepository exceptionsRepository)
         {
             _exceptionsRepository = exceptionsRepository;
         }
@@ -23,7 +20,7 @@ namespace Web_Api.online.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             var viewModel = await _exceptionsRepository.GetTop10000ExceptionsAsync();
-            
+
             return View("Views/Admin/Exceptions.cshtml", viewModel);
         }
     }

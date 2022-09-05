@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
@@ -15,16 +16,15 @@ namespace Web_Api.online.Services
     {
         private WalletsRepository _walletsRepository;
         private ICoinManager _coinManager;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
         private BalanceProvider _balanceProvider;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
-
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
 
         public WithdrawService(WalletsRepository walletsRepository,
-           EventsRepository eventsRepository,
+           IEventsRepository eventsRepository,
            ICoinManager coinManager,
-           BalanceProvider balanceProvider, 
-           OutcomeTransactionRepository outcomeTransactionRepository)
+           BalanceProvider balanceProvider,
+           IOutcomeTransactionRepository outcomeTransactionRepository)
         {
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
@@ -40,9 +40,8 @@ namespace Web_Api.online.Services
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
                 decimal? _amount = model.Amount.ConvertToDecimal();
 
-                if (wallet != null && _amount.Value > 0  && _amount.Value <= wallet.Value)
+                if (wallet != null && _amount.Value > 0 && _amount.Value <= wallet.Value)
                 {
-
                     var coinService = _coinManager
                                .CoinServices
                                .FirstOrDefault(x => x.CoinShortName == model.Currency);

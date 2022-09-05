@@ -9,12 +9,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Data.Repositories
 {
-    public class SettingRepository
+    public class SettingRepository : ISettingRepository
     {
         private readonly IDbConnection _db;
         public SettingRepository(IConfiguration configuration)

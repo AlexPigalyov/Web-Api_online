@@ -2,7 +2,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Middlewares
@@ -10,10 +10,10 @@ namespace Web_Api.online.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private RequestDelegate _next;
-        private ExceptionsRepository _exceptionsRepository;
+        private IExceptionsRepository _exceptionsRepository;
 
         public ExceptionHandlerMiddleware(RequestDelegate next,
-            ExceptionsRepository exceptionsRepository)
+            IExceptionsRepository exceptionsRepository)
         {
             _next = next;
             _exceptionsRepository = exceptionsRepository;

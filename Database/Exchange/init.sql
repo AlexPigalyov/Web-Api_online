@@ -6,11 +6,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BCH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NOT NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NOT NULL,
+	[Low] [decimal](38, 20) NOT NULL,
+	[Open] [decimal](38, 20) NOT NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BCH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -81,11 +81,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BCH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BCH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -171,11 +171,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BTC_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_BTC_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -261,11 +261,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DASH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DASH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -336,11 +336,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DASH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DASH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -411,11 +411,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DOGE_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DOGE_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -486,11 +486,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DOGE_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_DOGE_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -561,11 +561,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ETH_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_ETH_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -636,11 +636,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ETH_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_ETH_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -789,11 +789,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LTC_BTC_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_LTC_BTC_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -864,11 +864,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LTC_USDT_CandleStick](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Close] [decimal](18, 0) NOT NULL,
+	[Close] [decimal](38, 20) NULL,
 	[CloseTime] [datetime] NOT NULL,
-	[High] [decimal](18, 0) NOT NULL,
-	[Low] [decimal](18, 0) NOT NULL,
-	[Open] [decimal](18, 0) NOT NULL,
+	[High] [decimal](38, 20) NULL,
+	[Low] [decimal](38, 20) NULL,
+	[Open] [decimal](38, 20) NULL,
 	[OpenTime] [datetime] NOT NULL,
  CONSTRAINT [PK_LTC_USDT_CandleStick] PRIMARY KEY CLUSTERED 
 (
@@ -4291,6 +4291,35 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[GetAllNews]
+
+AS
+BEGIN
+
+SELECT n.[Id]
+      ,n.[Text]
+      ,n.[Date]
+      ,n.[AuthorId]
+      ,n.[CreateDate]
+      ,n.[Active] 
+	  ,u.[UserName]
+FROM [Exchange].[dbo].[News] AS n
+left join [web-api.online].[dbo].[AspNetUsers] AS u
+ON  n.AuthorId = u.Id
+	
+END
+
+
+
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[GetAllPairs]
 AS
 BEGIN
@@ -5406,6 +5435,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Process_BCH_BTC_BuyOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -5488,7 +5518,7 @@ BEGIN
 				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -5523,7 +5553,7 @@ BEGIN
 				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -5550,16 +5580,24 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BCH_BTC_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, StartPrice, ClosedPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				StartPrice, 
+				ClosedPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -5590,7 +5628,7 @@ BEGIN
 				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -5609,6 +5647,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Process_BCH_BTC_SellOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -5689,7 +5728,7 @@ BEGIN
 				 1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -5724,7 +5763,7 @@ BEGIN
 				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -5751,16 +5790,24 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BCH_BTC_ClosedOrders] (
-				Total, CreateDate,
-				ClosedDate, IsBuy, StartPrice, ClosedPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate,
+				ClosedDate, 
+				IsBuy, 
+				StartPrice, 
+				ClosedPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -5791,7 +5838,7 @@ BEGIN
 				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -6216,6 +6263,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Process_BTC_USDT_BuyOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -6298,7 +6346,7 @@ BEGIN
 				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -6333,7 +6381,7 @@ BEGIN
 				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -6360,16 +6408,24 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate, ClosedDate,
-				IsBuy, StartPrice, ClosedPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate, 
+				ClosedDate,
+				IsBuy, 
+				StartPrice, 
+				ClosedPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				0,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -6400,7 +6456,7 @@ BEGIN
 				1,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -6419,6 +6475,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE [dbo].[Process_BTC_USDT_SellOrder]
 @createUserId nvarchar(450),
 @price decimal(38,20),
@@ -6499,7 +6556,7 @@ BEGIN
 				 1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -6534,7 +6591,7 @@ BEGIN
 				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 
@@ -6561,16 +6618,24 @@ BEGIN
 		(SELECT Id FROM #selectedOrder) 
 
 	INSERT INTO [Exchange].[dbo].[BTC_USDT_ClosedOrders] (
-				Total, CreateDate,
-				ClosedDate, IsBuy, StartPrice, ClosedPrice, Difference, Amount,
-				CreateUserId, BoughtUserId, Status)
+				Total, 
+				CreateDate,
+				ClosedDate, 
+				IsBuy, 
+				StartPrice, 
+				ClosedPrice, 
+				Difference, 
+				Amount,
+				CreateUserId, 
+				BoughtUserId, 
+				Status)
 		VALUES ((SELECT Total FROM #selectedOrder),
 				(SELECT CreateDate FROM #selectedOrder),
 				 getdate(),
 				1,
 				(SELECT Price FROM #selectedOrder),
 				@price,
-				((SELECT Price FROM #selectedOrder) - @price),
+				((SELECT Price FROM #selectedOrder)*(SELECT Amount FROM #selectedOrder) - @price*(SELECT Amount FROM #selectedOrder)),
 				(SELECT Amount FROM #selectedOrder),
 				(SELECT CreateUserId FROM #selectedOrder),
 				@createUserId, 
@@ -6601,7 +6666,7 @@ BEGIN
 				0,
 				@price,
 				(SELECT Price FROM #selectedOrder),
-				(@price - (SELECT Price FROM #selectedOrder)),
+				(@price*@amount - (SELECT Price FROM #selectedOrder)*@amount),
 				@amount,
 				@createUserId,
 				(SELECT CreateUserId FROM #selectedOrder), 

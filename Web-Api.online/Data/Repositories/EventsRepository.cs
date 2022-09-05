@@ -1,17 +1,15 @@
 ﻿using Dapper;
-
 using Microsoft.Extensions.Configuration;
-
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models.Tables;
 
 namespace Web_Api.online.Data.Repositories
 {
-    public class EventsRepository
+    public class EventsRepository : IEventsRepository
     {
         private readonly IDbConnection _db;
         public EventsRepository(IConfiguration configuration)

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 
@@ -27,7 +28,7 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly UsersInfoRepository _usersInfoRepository;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -35,7 +36,7 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             UsersInfoRepository usersInfoRepository,
-            EventsRepository eventsRepository)
+            IEventsRepository eventsRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Web_Api.online.Clients.Interfaces;
 using Web_Api.online.Clients.Models;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
@@ -19,14 +20,17 @@ namespace Web_Api.online.Clients
     {
         private ZCashRequestClient _client;
         private WalletsRepository _walletsRepository;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
         private TransactionsRepository _transactionsRepository;
         private BalanceProvider _balanceProvider;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
 
-        public ZCashService(IConfiguration config, WalletsRepository walletsRepository,
-            EventsRepository eventsRepository, TransactionsRepository transactionsRepository,
-            BalanceProvider balanceProvider, OutcomeTransactionRepository outcomeTransactionRepository)
+        public ZCashService(IConfiguration config,
+            WalletsRepository walletsRepository,
+            IEventsRepository eventsRepository,
+            TransactionsRepository transactionsRepository,
+            BalanceProvider balanceProvider,
+            IOutcomeTransactionRepository outcomeTransactionRepository)
         {
             _client = new(config);
             _walletsRepository = walletsRepository;
@@ -132,7 +136,7 @@ namespace Web_Api.online.Clients
 
                         });
 
-                       
+
                         var result = await _balanceProvider.Income(wallet, transaction);
 
                         await _eventsRepository.CreateEventAsync(new EventTableModel()

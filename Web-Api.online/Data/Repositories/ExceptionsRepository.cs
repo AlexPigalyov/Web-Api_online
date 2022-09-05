@@ -6,10 +6,11 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online.Data.Repositories
 {
-    public class ExceptionsRepository
+    public class ExceptionsRepository : IExceptionsRepository
     {
         private readonly IDbConnection _db;
         public ExceptionsRepository(IConfiguration configuration)

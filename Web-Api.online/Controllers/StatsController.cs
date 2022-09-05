@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
@@ -12,13 +13,17 @@ namespace Web_Api.online.Controllers
     {
         private TransactionsRepository _transactionsRepository;
         private TransferRepository _transferRepository;
-        private OutcomeTransactionRepository _outcomeRepository;
+        private IOutcomeTransactionRepository _outcomeRepository;
         private TradeRepository _tradeRepository;
         private UsersInfoRepository _usersInfoRepository;
         private UserRepository _userRepository;
 
-        public StatsController(TransactionsRepository transactionsRepository, TransferRepository transferRepository,
-            OutcomeTransactionRepository outcomeRepository, TradeRepository tradeRepository, UsersInfoRepository usersInfoRepository, UserRepository userRepository)
+        public StatsController(TransactionsRepository transactionsRepository,
+            TransferRepository transferRepository,
+            IOutcomeTransactionRepository outcomeRepository,
+            TradeRepository tradeRepository,
+            UsersInfoRepository usersInfoRepository,
+            UserRepository userRepository)
         {
             _transactionsRepository = transactionsRepository;
             _transferRepository = transferRepository;

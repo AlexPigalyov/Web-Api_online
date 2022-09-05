@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Web_Api.online.Clients.Requests;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
@@ -13,15 +14,15 @@ namespace Web_Api.online.Clients
     public class EtheriumService
     {
         private WalletsRepository _walletsRepository;
-        private EventsRepository _eventsRepository;
-        private OutcomeTransactionRepository _outcomeTransactionRepository;
+        private IEventsRepository _eventsRepository;
+        private IOutcomeTransactionRepository _outcomeTransactionRepository;
         private ETHRequestClient _ethRequestClient;
         private BalanceProvider _balanceProvider;
 
 
         public EtheriumService(WalletsRepository walletsRepository,
-            EventsRepository eventsRepository,
-            OutcomeTransactionRepository outcomeTransactionRepository,
+            IEventsRepository eventsRepository,
+            IOutcomeTransactionRepository outcomeTransactionRepository,
             ETHRequestClient ethRequestClient,
             BalanceProvider balanceProvider)
         {

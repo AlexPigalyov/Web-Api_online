@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models.Enums;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Services;
@@ -17,12 +18,12 @@ namespace Web_Api.online.Controllers
     {
         private WalletsRepository _walletsRepository;
         private TransactionManager _transactionManager;
-        private EventsRepository _eventsRepository;
+        private IEventsRepository _eventsRepository;
         private WalletService _walletService;
 
         public WalletsController(WalletsRepository walletsRepository,
             TransactionManager transactionManager,
-            EventsRepository eventsRepository,
+            IEventsRepository eventsRepository,
             WalletService walletService)
         {
             _walletsRepository = walletsRepository;
@@ -94,7 +95,7 @@ namespace Web_Api.online.Controllers
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, selectCurrency);
 
                 // create new inner platform wallet
-                if(wallet == null)
+                if (wallet == null)
                 {
                     wallet = await _walletsRepository.CreateUserWalletAsync(new WalletTableModel()
                     {
