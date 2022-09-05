@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Quartz;
 using Web_Api.online.Data.Repositories;
+using Web_Api.online.Hubs;
 using Web_Api.online.Models;
 
 namespace Web_Api.online.Jobs
 {
     [DisallowConcurrentExecution]
-    public class DogeUsdtJob : Hub, IJob
+    public class DogeUsdtJob : IJob
     {
         private readonly TradeRepository _tradeRepository;
+        private readonly IHubContext<DogeUsdtHub> _hubContext;
         public DogeUsdtJob(TradeRepository tradeRepository)
         {
             _tradeRepository = tradeRepository;
@@ -29,7 +31,7 @@ namespace Web_Api.online.Jobs
                 MarketTrades = marketTrades
             };
 
-            this.Clients?.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
+            _hubContext.Clients?.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
         }
     }
 }

@@ -9,9 +9,10 @@ using Web_Api.online.Models;
 namespace Web_Api.online.Jobs
 {
     [DisallowConcurrentExecution]
-    public class EthUsdtJob : Hub, IJob
+    public class EthUsdtJob : IJob
     {
         private readonly TradeRepository _tradeRepository;
+        private readonly IHubContext<EthUsdtHub> _hubContext;
         public EthUsdtJob(TradeRepository tradeRepository)
         {
             _tradeRepository = tradeRepository;
@@ -30,7 +31,7 @@ namespace Web_Api.online.Jobs
                 MarketTrades = marketTrades
             };
 
-            this.Clients?.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
+            _hubContext.Clients?.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
         }
     }
 }
