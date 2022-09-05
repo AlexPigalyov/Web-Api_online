@@ -1,17 +1,35 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Quartz;
 using Web_Api.online.Data.Repositories;
-using Web_Api.online.Hubs;
-using Web_Api.online.Jobs.Abstract;
+using Web_Api.online.Models;
 
 namespace Web_Api.online.Jobs
 {
     [DisallowConcurrentExecution]
-    public class DogeUsdtJob : PairJobBase<DogeUsdtHub>, IJob
+    public class DogeUsdtJob : Hub, IJob
     {
-        public DogeUsdtJob(IHubContext<DogeUsdtHub> hubContext, TradeRepository tradeRepository)
-            : base(hubContext, tradeRepository, "DOGE_USDT")
+        private readonly TradeRepository _tradeRepository;
+        public DogeUsdtJob(TradeRepository tradeRepository)
         {
+            _tradeRepository = tradeRepository;
+        }
+        
+        public async Task Execute(IJobExecutionContext context)
+        {
+            var openOrdersBuy = _tradeRepository.GetBuyOrderBookAsync("DOGE_USDT").Result;
+            var openOrdersSell = _tradeRepository.GetSellOrderBookAsync("DOGE_USDT").Result;
+            var marketTrades = _tradeRepository.GetClosedOrders_Top100("DOGE_USDT").Result;
+
+            var recieveResult = new RecieveMessageResultModel()
+            {
+                OrderBookBuy = openOrdersBuy,
+                OrderBookSell = openOrdersSell,
+                MarketTrades = marketTrades
+            };
+
+            this.Clients.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
         }
     }
 }

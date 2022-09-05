@@ -34,7 +34,6 @@ namespace Web_Api.online
                         q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
                         // Create a "key" for the job
-                        var tradeJobKey = new JobKey("TradeJob");
                         var btcUsdtJobKey = new JobKey("BtcUsdtJob");
                         var bchBtcJobKey = new JobKey("BchBtcJobKey");
                         var bchUsdtJobKey = new JobKey("BchUsdtJobKey");
@@ -49,7 +48,6 @@ namespace Web_Api.online
                         var candleStickJobKey = new JobKey("CandleStickJob");
 
                         // Register the job with the DI container
-                        q.AddJob<TradeJob>(opts => opts.WithIdentity(tradeJobKey));
                         q.AddJob<BtcUsdtJob>(opts => opts.WithIdentity(btcUsdtJobKey));
                         q.AddJob<BchUsdtJob>(opts => opts.WithIdentity(bchUsdtJobKey));
                         q.AddJob<BchBtcJob>(opts => opts.WithIdentity(bchBtcJobKey));
@@ -65,13 +63,6 @@ namespace Web_Api.online
 
                         // Create a trigger for the job
                         q.AddTrigger(opts => opts
-                            .ForJob(tradeJobKey)
-                            .WithIdentity("TradeJob-trigger")
-                            .WithSimpleSchedule(builder => builder
-                                .WithInterval(TimeSpan.FromMilliseconds(1000))
-                                .RepeatForever()
-                            ));
-                        q.AddTrigger(opts => opts
                             .ForJob(btcUsdtJobKey)
                             .WithIdentity("BtcUsdtJob-trigger")
                             .WithSimpleSchedule(builder => builder
@@ -86,7 +77,7 @@ namespace Web_Api.online
                                 .RepeatForever()
                             ));
                         q.AddTrigger(opts => opts
-                            .ForJob(bchUsdtJobKey)
+                            .ForJob(bchUsdtJobKey)  
                             .WithIdentity("BchUsdtJob-trigger")
                             .WithSimpleSchedule(builder => builder
                                 .WithInterval(TimeSpan.FromMilliseconds(1000))
