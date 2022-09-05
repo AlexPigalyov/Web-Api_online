@@ -32,7 +32,7 @@ namespace Web_Api.online.Jobs
                 MarketTrades = marketTrades
             };
 
-            _hubContext.Clients?.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
+            _hubContext.Clients.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(recieveResult)).Wait();
         }
     }
 }
