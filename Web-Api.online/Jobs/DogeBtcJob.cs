@@ -13,9 +13,10 @@ namespace Web_Api.online.Jobs
     {
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<DogeBtcHub> _hubContext;
-        public DogeBtcJob(TradeRepository tradeRepository)
+        public DogeBtcJob(TradeRepository tradeRepository, IHubContext<DogeBtcHub> hubContext)
         {
             _tradeRepository = tradeRepository;
+            _hubContext = hubContext;
         }
         
         public async Task Execute(IJobExecutionContext context)

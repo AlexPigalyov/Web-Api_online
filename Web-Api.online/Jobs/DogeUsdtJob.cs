@@ -13,9 +13,10 @@ namespace Web_Api.online.Jobs
     {
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<DogeUsdtHub> _hubContext;
-        public DogeUsdtJob(TradeRepository tradeRepository)
+        public DogeUsdtJob(TradeRepository tradeRepository, IHubContext<DogeUsdtHub> hubContext)
         {
             _tradeRepository = tradeRepository;
+            _hubContext = hubContext;
         }
         
         public async Task Execute(IJobExecutionContext context)

@@ -13,9 +13,10 @@ namespace Web_Api.online.Jobs
     {
         private readonly TradeRepository _tradeRepository;
         private readonly IHubContext<LtcBtcHub> _hubContext;
-        public LtcBtcJob(TradeRepository tradeRepository)
+        public LtcBtcJob(TradeRepository tradeRepository, IHubContext<LtcBtcHub> hubContext)
         {
             _tradeRepository = tradeRepository;
+            _hubContext = hubContext;
         }
         
         public async Task Execute(IJobExecutionContext context)
