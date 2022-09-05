@@ -8,8 +8,7 @@
     ViewData["Title"] = "Markets";
 }
 
-<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
-
+<link href="/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
 
 <div class="row">
     <div class="col-xl-12 col-lg-12 order-lg-2 order-xl-1">
@@ -77,10 +76,20 @@
 
 </div>
 
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="/js/vendor/jquery.dataTables.min.js"></script>
+<script src="/js/vendor/dataTables.bootstrap5.js"></script>
+<script src="/js/vendor/dataTables.responsive.min.js"></script>
+<script src="/js/vendor/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {
-        $('#markets-table').DataTable();
+        $('#markets-table').DataTable({
+            "pageLength" : 500,
+            "paging": false,
+            "language": {
+              "info": "Showing _START_ to _END_ of _TOTAL_ pairs"
+            },
+            "dom": "frtip"
+        });
     });
 </script>
