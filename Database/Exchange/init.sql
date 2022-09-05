@@ -4296,7 +4296,16 @@ CREATE PROCEDURE [dbo].[GetAllNews]
 AS
 BEGIN
 
-SELECT * FROM [Exchange].[dbo].[News]
+SELECT n.[Id]
+      ,n.[Text]
+      ,n.[Date]
+      ,n.[AuthorId]
+      ,n.[CreateDate]
+      ,n.[Active] 
+	  ,u.[UserName]
+FROM [Exchange].[dbo].[News] AS n
+left join [web-api.online].[dbo].[AspNetUsers] AS u
+ON  n.AuthorId = u.Id
 	
 END
 
