@@ -1,4 +1,6 @@
-﻿namespace Web_Api.online.Extensions
+﻿using System.Text;
+
+namespace Web_Api.online.Extensions
 {
     public static class DecimalExtensions
     {
@@ -6,19 +8,31 @@
         private const int Precision = 2;
 
         /// <summary>
-        /// Converts decimal like 10000,00000000 to 10000,00 or 10000 to 10000
+        /// Converts decimal like 10000,123000 to 10000,123 or 10000,0000 to 10000,00
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns>Converted decimal to formatted string</returns>
+        /// <param name="value">decimal</param>
+        /// <returns>Converted decimal to formatted string. If exception - returns this.ToString()</returns>
         public static string ShowAsCurrency(this decimal value)
         {
-            var stringValue = value.ToString();
+            try
+            {
+                var splitted = value.ToString().Split(',');
 
-            var commaIndex = stringValue.IndexOf(',');
+                if (splitted.Length == 0) return splitted[0];
 
-            if (commaIndex < 0) return stringValue;
+                var sbAfterComma = new StringBuilder(splitted[1]);
 
-            return stringValue.Remove(commaIndex + 1 + Precision);
+                while (sbAfterComma.Length > Precision && sbAfterComma[^1] == '0')
+                {
+                    sbAfterComma = sbAfterComma.Remove(sbAfterComma.Length - 1, 1);
+                }
+
+                return string.Concat(splitted[0], ",", sbAfterComma);
+            }
+            catch
+            {
+                return value.ToString();
+            }
         }
     }
 }
