@@ -1,4 +1,5 @@
-﻿@model List<WalletTableModel>
+﻿@using Web_Api.online.Extensions
+@model List<WalletTableModel>
 @{
     ViewData["Title"] = "Withdraw";
 }
@@ -21,7 +22,7 @@
                     @item.CurrencyAcronim
                 </td>
                 <td>
-                    <span class="decimal-data">@item.Value</span>
+                        <span class="decimal-data">@item.Value.ShowAsCurrency()</span>
                 </td>
                 <td>
                     <p><a href="/Wallets">Create wallet</a></p>

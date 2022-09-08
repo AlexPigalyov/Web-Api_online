@@ -1,4 +1,5 @@
-﻿@model List<WalletTableModel>
+﻿@using Web_Api.online.Extensions
+@model List<WalletTableModel>
 @{
     ViewData["Title"] = "Send";
 }
@@ -21,7 +22,7 @@
                     @item.CurrencyAcronim
                 </td>
                 <td>
-                    @item.Value
+                    @item.Value.ShowAsCurrency()
                 </td>
                 <td>
                     <p><a href="/Send/Coins?Currency=@item.CurrencyAcronim">Send @item.CurrencyAcronim</a></p>
