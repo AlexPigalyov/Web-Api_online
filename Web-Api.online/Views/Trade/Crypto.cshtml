@@ -666,7 +666,7 @@
 
             if (!isLoad) {
                 orderPrice = order.Price;
-                orderAmount = order.Amount;
+                orderAmount = order.Amount.toFixed(20);
                 orderTotal = order.Total;
                 isBuy = order.IsBuy;
                 orderPrice = order.StartPrice;
@@ -674,7 +674,7 @@
             }
             else {
                 orderPrice = order.price;
-                orderAmount = order.amount;
+                orderAmount = order.amount.toFixed(20);
                 orderTotal = order.total;
                 isBuy = order.isBuy;
                 orderPrice = order.startPrice;
@@ -708,6 +708,7 @@
 
             let orderBookElemColSecond = document.createElement('div');
             orderBookElemColSecond.className = "orderbook-col";
+            orderBookElemColSecond.classList.add("decimal-data");
             orderBookElemColSecond.innerHTML = orderAmount;
 
             orderBookElem.appendChild(orderBookElemColSecond);
@@ -721,6 +722,8 @@
 
             list.appendChild(orderBookElem);
         });
+
+        removeZeroes();
     }
 
     function loadUserOpenOrders(openOrders, isLoad) {
@@ -736,14 +739,14 @@
 
             if (!isLoad) {
                 orderPrice = order.Price;
-                orderAmount = order.Amount;
+                orderAmount = order.Amount.toFixed(20);
                 isBuy = order.IsBuy;
                 time = new Date(order.CreateDate);
                 openOrderId = order.Id;
             }
             else {
                 orderPrice = order.price;
-                orderAmount = order.amount;
+                orderAmount = order.amount.toFixed(20);
                 isBuy = order.isBuy;
                 time = new Date(order.createDate);
                 openOrderId = order.id;
@@ -816,9 +819,7 @@
             loadUserOpenOrder(openOrders);
         }
 
-
-
-
+        removeZeroes();
     }
 
     function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = false, isUserOpenOrders = false) {
