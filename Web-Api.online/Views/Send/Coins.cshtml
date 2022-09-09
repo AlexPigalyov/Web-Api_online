@@ -1,4 +1,5 @@
-﻿@model SendCoinsViewModel
+﻿@using Web_Api.online.Extensions
+@model SendCoinsViewModel
 @{
     ViewData["Title"] = $"Send {Model.Currency}";
 }
@@ -18,7 +19,7 @@
                     <input asp-for="Currency" type="hidden" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Balance" class="control-label">Balance @Model.Balance</label>
+                            <label asp-for="Balance" class="control-label">Balance <span class="decimal-data">@Model.Balance</span></label>
                     <input asp-for="Balance" type="hidden" />
                 </div>
                 <div class="form-group">
@@ -37,7 +38,7 @@
                     <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Commission" class="control-label">Commission: @Model.Commission</label>
+                    <label asp-for="Commission" class="control-label">Commission: <span class="decimal-data">@Model.Commission</span></label>
                     <input asp-for="Commission" type="hidden" />
                 </div>
                 <div class="form-group">

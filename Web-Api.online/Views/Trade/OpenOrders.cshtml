@@ -28,9 +28,9 @@
                     {
                         <div class="orderbook-row">
                             <div class="orderbook-col orderbook-col-small">@order.Pair</div>
-                            <div class="orderbook-col">@order.Price</div>
-                            <div class="orderbook-col">@order.Amount</div>
-                            <div class="orderbook-col">@order.Total</div>
+                            <div class="orderbook-col decimal-data">@order.Price</div>
+                            <div class="orderbook-col decimal-data">@order.Amount</div>
+                            <div class="orderbook-col decimal-data">@order.Total</div>
                             <div class="orderbook-col orderbook-col-date__small">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">
                                 <a href="/trade/cancelorder/@order.Id">Cancel</a>
