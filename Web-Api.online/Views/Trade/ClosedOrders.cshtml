@@ -29,9 +29,9 @@
                     {
                         <div class="orderbook-row@(order.IsBuy ? " orderbook-asks" : " orderbook-bids")">
                             <div class="orderbook-col orderbook-col-small">@order.Currency1 @order.Currency2</div>
-                            <div class="orderbook-col@(order.IsBuy ? string.Empty : " orderbook-bids")">@order.StartPrice</div>
-                            <div class="orderbook-col">@order.Amount</div>
-                            <div class="orderbook-col">@order.Total</div>
+                            <div class="orderbook-col@(order.IsBuy ? string.Empty : " orderbook-bids") decimal-data">@order.StartPrice</div>
+                            <div class="orderbook-col decimal-data">@order.Amount</div>
+                            <div class="orderbook-col decimal-data">@order.Total</div>
                             <div class="orderbook-col orderbook-col-date__small">@(order.CreateDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col orderbook-col-date__small">@(order.ClosedDate.ToString("hh:mm:ss"))</div>
                             <div class="orderbook-col">@(order.Status.ToString())</div>

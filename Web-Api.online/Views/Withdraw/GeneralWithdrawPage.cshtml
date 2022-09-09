@@ -32,11 +32,11 @@
                     <span asp-validation-for="Amount" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="AmountMin" class="control-label">Minimum amount: @Model.AmountMin</label>
+                    <label asp-for="AmountMin" class="control-label">Minimum amount: <span class="decimal-data">@Model.AmountMin</span></label>
                     <input asp-for="AmountMin" type="hidden" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Commission" class="control-label">Commission: @Model.Commission</label>
+                    <label asp-for="Commission" class="control-label">Commission: <span class="decimal-data">@Model.Commission</span></label>
                     <input asp-for="Commission" type="hidden" />
                 </div>
                 <div class="form-group">

@@ -17,13 +17,14 @@
         @foreach (var item in Model)
         {
             <tr>
-
                 <td>
                     @item.CurrencyAcronim
                 </td>
-                <td>
-                    @item.Value.ShowAsCurrency()
+
+                <td> 
+                    <span class="decimal-data">@item.Value</span>                    
                 </td>
+
                 <td>
                     <p><a href="/Send/Coins?Currency=@item.CurrencyAcronim">Send @item.CurrencyAcronim</a></p>
                 </td>
