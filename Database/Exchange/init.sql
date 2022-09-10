@@ -4746,10 +4746,34 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-/****** Object:  StoredProcedure [dbo].[GetIncomeTransactionsByUser_Paged]    Script Date: 09.09.2022 22:38:52 ******/
+
+CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+  CurrencyAcronim
+  ,Amount
+  ,TransactionFee
+  ,FromAddress
+  ,ToAddress
+  ,CreatedDate
+  ,Date
+  ,UserId
+FROM [Exchange].[dbo].[IncomeTransactions]
+Order By CreatedDate desc
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
+GO
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -4776,31 +4800,6 @@ BEGIN
 	FETCH  NEXT @pageSize ROWS ONLY
 
 END
-
-GO
-
-CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
-@page int,
-@pageSize int
-AS
-BEGIN
-
-Select
-  CurrencyAcronim
-  ,Amount
-  ,TransactionFee
-  ,FromAddress
-  ,ToAddress
-  ,CreatedDate
-  ,Date
-  ,UserId
-FROM [Exchange].[dbo].[IncomeTransactions]
-Order By CreatedDate desc
-OFFSET @pageSize * (@page - 1) ROWS
-FETCH  NEXT @pageSize ROWS ONLY
-
-END
-
 
 
 GO
