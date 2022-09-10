@@ -4746,6 +4746,38 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+/****** Object:  StoredProcedure [dbo].[GetIncomeTransactionsByUser_Paged]    Script Date: 09.09.2022 22:38:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetIncomeTransactionsByUser_Paged]
+@userId nvarchar(450),
+@page int,
+@pageSize int
+AS
+BEGIN
+
+	SELECT
+	   CurrencyAcronim
+	  ,Amount
+	  ,TransactionFee
+	  ,FromAddress
+	  ,ToAddress
+	  ,CreatedDate
+	  ,Date
+	  ,UserId
+	FROM [Exchange].[dbo].[IncomeTransactions]
+	WHERE UserId = @userId
+	ORDER BY CreatedDate DESC
+	OFFSET @pageSize * (@page - 1) ROWS
+	FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+GO
 
 CREATE PROCEDURE [dbo].[GetIncomeTransactions_Paged]
 @page int,
