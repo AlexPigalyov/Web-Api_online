@@ -72,7 +72,7 @@ namespace Web_Api.online.Data.Repositories
 
                 List<IncomeTransactionTableModel> result =
                     (List<IncomeTransactionTableModel>)await _db.QueryAsync<IncomeTransactionTableModel>
-                    ("GetIncomeTransactionsByUserId_Paged",
+                    ("GetIncomeTransactionsByUser_Paged",
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
