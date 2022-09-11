@@ -19,6 +19,12 @@ namespace Web_Api.online.Models.Tables
         public decimal Price { get; set; }
         public DateTime PriceUpdateDate { get; set; }
 
+        public decimal Change1m { get; set; }
+        public DateTime Change1mUpdateDate { get; set; }
+
+        public decimal Change15m { get; set; }
+        public DateTime Change15mUpdateDate { get; set; }
+
         public decimal Change24h { get; set; }
         public DateTime Change24hUpdateDate { get; set; }
 
