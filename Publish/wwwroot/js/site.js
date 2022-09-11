@@ -1,4 +1,8 @@
 ﻿$(document).ready(function () {
+    removeZeroes();
+});
+
+function removeZeroes() {
     $('.decimal-data').each(function () {
         var ttt = $(this).text();
         ttt = ttt.replace(",", ".");
@@ -18,4 +22,4 @@
 
         var ddd = 10;
     });
-});
+}
