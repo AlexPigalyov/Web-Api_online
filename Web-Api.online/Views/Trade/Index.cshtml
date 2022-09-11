@@ -31,11 +31,11 @@
                                     <h5 class="font-14 my-1 fw-normal">Change 15m</h5>
                                 </th>
                                 <th>
-                                    <h5 class="font-14 my-1 fw-normal">Change 24h</h5>
-                                </th>
-                                <th>
                                     <h5 class="font-14 my-1 fw-normal">Change 1h</h5>
                                 </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Change 24h</h5>
+                                </th>                                
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Volume 24h</h5>
                                 </th>
@@ -80,20 +80,6 @@
                                         }
                                     </td>
                                     <td>
-                                        @if (@pair.Change24h < 0)
-                                        {
-                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change24h</span> %</span>
-                                        }
-                                        else if (@pair.Change24h > 0)
-                                        {
-                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change24h</span> %</span>
-                                        }
-                                        else
-                                        {
-                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %</span>
-                                        }
-                                    </td>
-                                    <td>
                                         @if (@pair.Change1h < 0)
                                         {
                                             <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1h</span> %</span>
@@ -107,6 +93,20 @@
                                             <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1h</span> %</span>
                                         }                                       
                                     </td>
+                                    <td>
+                                        @if (@pair.Change24h < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else if (@pair.Change24h > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                    </td>                                    
                                     <td>
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Volume24h</span> $
                                     </td>
