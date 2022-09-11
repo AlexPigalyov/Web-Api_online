@@ -46,10 +46,32 @@
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Price</span> @pair.Currency2Postfix
                                     </td>
                                     <td>
-                                        <span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %
+                                        @if (@pair.Change24h < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else if (@pair.Change24h > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %</span>
+                                        }
                                     </td>
                                     <td>
-                                        <span class="font-14 my-1 fw-normal decimal-data">@pair.Change1h</span> %
+                                        @if (@pair.Change1h < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1h</span> %</span>
+                                        }
+                                        else if (@pair.Change1h > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change1h</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1h</span> %</span>
+                                        }                                       
                                     </td>
                                     <td>
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Volume24h</span> $
