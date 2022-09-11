@@ -1097,10 +1097,14 @@ CREATE TABLE [dbo].[Pairs](
 	[Header] [nvarchar](128) NULL,
 	[Acronim] [nvarchar](20) NULL,
 	[Price] [decimal](38, 20) NOT NULL,
+	[Change1m] [decimal](5, 2) NOT NULL,
+	[Change15m] [decimal](5, 2) NOT NULL,
 	[Change24h] [decimal](5, 2) NOT NULL,
 	[Change1h] [decimal](5, 2) NOT NULL,
 	[Volume24h] [decimal](38, 20) NOT NULL,
 	[PriceUpdateDate] [datetime] NOT NULL,
+	[Change1mUpdateDate] [datetime] NOT NULL,
+	[Change15mUpdateDate] [datetime] NOT NULL,
 	[Change24hUpdateDate] [datetime] NOT NULL,
 	[Change1hUpdateDate] [datetime] NOT NULL,
 	[Volume24hUpdateDate] [datetime] NOT NULL,
@@ -1381,6 +1385,10 @@ ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Created]  DEFAULT (getdate()
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Price]  DEFAULT ((0)) FOR [Price]
 GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1m]  DEFAULT ((0)) FOR [Change1m]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15m]  DEFAULT ((0)) FOR [Change15m]
+GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change24h]  DEFAULT ((0)) FOR [Change24h]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1h]  DEFAULT ((0)) FOR [Change1h]
@@ -1388,6 +1396,10 @@ GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Volume24h]  DEFAULT ((0)) FOR [Volume24h]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_PriceUpdateDate]  DEFAULT (getdate()) FOR [PriceUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1mUpdateDate]  DEFAULT (getdate()) FOR [Change1mUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15mUpdateDate]  DEFAULT (getdate()) FOR [Change15mUpdateDate]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change24hUpdateDate]  DEFAULT (getdate()) FOR [Change24hUpdateDate]
 GO
@@ -4333,6 +4345,8 @@ SELECT
 ,[Header]
 ,[Acronim]
 ,[Price]
+,[Change1m]
+,[Change15m]
 ,[Change24h]
 ,[Change1h]
 ,[Volume24h]
@@ -4800,7 +4814,6 @@ BEGIN
 	FETCH  NEXT @pageSize ROWS ONLY
 
 END
-
 
 GO
 SET ANSI_NULLS ON
@@ -10023,155 +10036,231 @@ BEGIN
 --GO
 declare @BCH_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @BCH_BTC_1_hour_ago_price DECIMAL(38, 20);
+declare @BCH_BTC_1_minute_ago_price DECIMAL(38, 20);
+declare @BCH_BTC_15_minutes_ago_price DECIMAL(38, 20);
+
 set @BCH_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @BCH_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
-
+set @BCH_BTC_1_minute_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @BCH_BTC_15_minutes_ago_price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@BCH_BTC_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@BCH_BTC_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@BCH_BTC_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@BCH_BTC_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'BCHBTC'
 
 ------------------- BCH USDT
 --GO
 declare @BCH_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @BCH_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @BCH_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @BCH_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @BCH_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @BCH_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @BCH_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @BCH_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BCH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@BCH_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@BCH_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@BCH_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@BCH_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'BCHUSDT'
 
 ------------------- BTC USDT
 --GO
 declare @BTC_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @BTC_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @BTC_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @BTC_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @BTC_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @BTC_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @BTC_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @BTC_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from BTC_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@BTC_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@BTC_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@BTC_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@BTC_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'BTCUSDT'
 
 ------------------- DASH BTC
 --GO
 declare @DASH_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @DASH_BTC_1_hour_ago_price DECIMAL(38, 20);
+declare @DASH_BTC_1_minute_ago_price DECIMAL(38, 20);
+declare @DASH_BTC_15_minutes_ago_price DECIMAL(38, 20);
+
 set @DASH_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @DASH_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @DASH_BTC_1_minute_ago_price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @DASH_BTC_15_minutes_ago_price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@DASH_BTC_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@DASH_BTC_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@DASH_BTC_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@DASH_BTC_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'DASHBTC'
 
 ------------------- DASH USDT
 --GO
 declare @DASH_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @DASH_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @DASH_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @DASH_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @DASH_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @DASH_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @DASH_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @DASH_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DASH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@DASH_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@DASH_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@DASH_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@DASH_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'DASHUSDT'
 
 ------------------- DOGE BTC
 --GO
 declare @DOGE_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @DOGE_BTC_1_hour_ago_price DECIMAL(38, 20);
+declare @DOGE_BTC_1_minute_ago_price DECIMAL(38, 20);
+declare @DOGE_BTC_15_minutes_ago_price DECIMAL(38, 20);
+
 set @DOGE_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @DOGE_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @DOGE_BTC_1_minute_ago_price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @DOGE_BTC_15_minutes_ago_price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@DOGE_BTC_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@DOGE_BTC_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@DOGE_BTC_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@DOGE_BTC_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'DOGEBTC'
 
 ------------------- DOGE USDT
 --GO
 declare @DOGE_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @DOGE_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @DOGE_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @DOGE_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @DOGE_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @DOGE_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @DOGE_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @DOGE_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from DOGE_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@DOGE_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@DOGE_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@DOGE_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@DOGE_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'DOGEUSDT'
 
 ------------------- ETH BTC
 --GO
 declare @ETH_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @ETH_BTC_1_hour_ago_price DECIMAL(38, 20);
+declare @ETH_BTC_1_minute_ago_price DECIMAL(38, 20);
+declare @ETH_BTC_15_minutes_ago_price DECIMAL(38, 20);
+
 set @ETH_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @ETH_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @ETH_BTC_1_minute_ago_price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @ETH_BTC_15_minutes_ago_price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@ETH_BTC_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@ETH_BTC_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@ETH_BTC_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@ETH_BTC_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'ETHBTC'
 
 ------------------- ETH USDT
 --GO
 declare @ETH_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @ETH_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @ETH_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @ETH_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @ETH_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @ETH_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @ETH_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @ETH_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from ETH_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@ETH_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@ETH_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@ETH_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@ETH_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'ETHUSDT'
 
 ------------------- LTC BTC
 --GO
 declare @LTC_BTC_24_hour_ago_price DECIMAL(38, 20);
 declare @LTC_BTC_1_hour_ago_price DECIMAL(38, 20);
+declare @LTC_BTC_1_minute_ago_price DECIMAL(38, 20);
+declare @LTC_BTC_15_minutes_ago_price DECIMAL(38, 20);
+
 set @LTC_BTC_24_hour_ago_price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @LTC_BTC_1_hour_ago_price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @LTC_BTC_1_minute_ago_price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @LTC_BTC_15_minutes_ago_price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_BTC_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@LTC_BTC_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@LTC_BTC_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@LTC_BTC_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@LTC_BTC_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'LTCBTC'
 
 ------------------- LTC USDT
 --GO
 declare @LTC_USDT_24_hour_ago_price DECIMAL(38, 20);
 declare @LTC_USDT_1_hour_ago_price DECIMAL(38, 20);
+declare @LTC_USDT_1_minute_ago_price DECIMAL(38, 20);
+declare @LTC_USDT_15_minutes_ago_price DECIMAL(38, 20);
+
 set @LTC_USDT_24_hour_ago_price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders where ClosedDate < (GETDATE() - 1) order by Id desc);
 set @LTC_USDT_1_hour_ago_price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders where ClosedDate < (dateadd(hh,-1,getdate())) order by Id desc);
+set @LTC_USDT_1_minute_ago_price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-1,getdate())) order by Id desc);
+set @LTC_USDT_15_minutes_ago_price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders where ClosedDate < (dateadd(mi,-15,getdate())) order by Id desc);
 
 UPDATE [Exchange].[dbo].[Pairs]
 SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id desc)
 		, PriceUpdateDate = GETDATE()
 		, Change24h = Price / (@LTC_USDT_24_hour_ago_price / 100) - 100
 		, Change1h = Price / (@LTC_USDT_1_hour_ago_price / 100) - 100
+		, Change1m = Price / (@LTC_USDT_1_minute_ago_price / 100) - 100
+		, Change15m = Price / (@LTC_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'LTCUSDT'
 --GO
 
