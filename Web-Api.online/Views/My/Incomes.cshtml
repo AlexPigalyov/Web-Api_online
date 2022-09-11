@@ -62,47 +62,47 @@
                             <ul class="pagination pagination-rounded">
                                 @if (Model.PageViewModel.PageNumber == 1)
                                 {
-                                        <li class="paginate_button page-item next" id="products-datatable_next">
-                                            <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber)" class="page-link" tabindex="-1" aria-disabled="true">
-                                                Previous
-                                            </a>
-                                        </li>
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber)" class="page-link" tabindex="-1" aria-disabled="true">
+                                            Previous
+                                        </a>
+                                    </li>
                                 }
                                 @if (Model.PageViewModel.HasPreviousPage)
                                 {
-                                        <li class="paginate_button page-item next" id="products-datatable_next">
-                                            <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.TotalPages - 1)" class="page-link">
-                                                Previous
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item previous">
-                                            <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link">
-                                            @(Model.PageViewModel.PageNumber - 1)
-                                            </a>
-                                        </li>
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.TotalPages - 1)" class="page-link">
+                                            Previous
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item previous">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link">
+                                        @(Model.PageViewModel.PageNumber - 1)
+                                        </a>
+                                    </li>
                                 }
                                 <li class="paginate_button page-item active">
-                                    <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.PageNumber" class="page-link">
+                                    <a href="/My/Incomes?page=@Model.PageViewModel.PageNumber" class="page-link">
                                         @Model.PageViewModel.PageNumber
                                     </a>
                                 </li>
                                 @if (Model.PageViewModel.HasNextPage)
                                 {
-                                        <li class="paginate_button page-item">
-                                            <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
-                                            @(Model.PageViewModel.PageNumber + 1)
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item">
-                                            <a href="/Stats/IncomeTransactions?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
-                                                Next
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item next">
-                                            <a href="/Stats/IncomeTransactions?page=@Model.PageViewModel.TotalPages" class="page-link">
-                                                Last
-                                            </a>
-                                        </li>
+                                    <li class="paginate_button page-item">
+                                            <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                        @(Model.PageViewModel.PageNumber + 1)
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item">
+                                            <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                            Next
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item next">
+                                            <a href="/My/Incomes?page=@Model.PageViewModel.TotalPages" class="page-link">
+                                            Last
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </div>
