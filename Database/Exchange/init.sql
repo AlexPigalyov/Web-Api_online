@@ -1097,17 +1097,17 @@ CREATE TABLE [dbo].[Pairs](
 	[Header] [nvarchar](128) NULL,
 	[Acronim] [nvarchar](20) NULL,
 	[Price] [decimal](38, 20) NOT NULL,
-	[Change1m] [decimal](5, 2) NOT NULL,
-	[Change15m] [decimal](5, 2) NOT NULL,
 	[Change24h] [decimal](5, 2) NOT NULL,
 	[Change1h] [decimal](5, 2) NOT NULL,
 	[Volume24h] [decimal](38, 20) NOT NULL,
 	[PriceUpdateDate] [datetime] NOT NULL,
-	[Change1mUpdateDate] [datetime] NOT NULL,
-	[Change15mUpdateDate] [datetime] NOT NULL,
 	[Change24hUpdateDate] [datetime] NOT NULL,
 	[Change1hUpdateDate] [datetime] NOT NULL,
 	[Volume24hUpdateDate] [datetime] NOT NULL,
+	[Change1m] [decimal](5, 2) NULL,
+	[Change15m] [decimal](5, 2) NULL,
+	[Change1mUpdateDate] [datetime] NULL,
+	[Change15mUpdateDate] [datetime] NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1385,10 +1385,6 @@ ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Created]  DEFAULT (getdate()
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Price]  DEFAULT ((0)) FOR [Price]
 GO
-ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1m]  DEFAULT ((0)) FOR [Change1m]
-GO
-ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15m]  DEFAULT ((0)) FOR [Change15m]
-GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change24h]  DEFAULT ((0)) FOR [Change24h]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1h]  DEFAULT ((0)) FOR [Change1h]
@@ -1397,15 +1393,19 @@ ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Volume24h]  DEFAULT ((0)) FO
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_PriceUpdateDate]  DEFAULT (getdate()) FOR [PriceUpdateDate]
 GO
-ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1mUpdateDate]  DEFAULT (getdate()) FOR [Change1mUpdateDate]
-GO
-ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15mUpdateDate]  DEFAULT (getdate()) FOR [Change15mUpdateDate]
-GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change24hUpdateDate]  DEFAULT (getdate()) FOR [Change24hUpdateDate]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1hUpdateDate]  DEFAULT (getdate()) FOR [Change1hUpdateDate]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Volume24hUpdateDate]  DEFAULT (getdate()) FOR [Volume24hUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1m]  DEFAULT ((0)) FOR [Change1m]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15m]  DEFAULT ((0)) FOR [Change15m]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1mUpdateDate]  DEFAULT (getdate()) FOR [Change1mUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15mUpdateDate]  DEFAULT (getdate()) FOR [Change15mUpdateDate]
 GO
 ALTER TABLE [dbo].[Settings] ADD  CONSTRAINT [DF_Settings_LastUpdateDateTime]  DEFAULT (getdate()) FOR [LastUpdateDateTime]
 GO
@@ -4331,11 +4331,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[GetAllPairs]
 AS
 BEGIN
-
 SELECT 
 [Id]
 ,[Currency1]
@@ -4356,7 +4354,6 @@ SELECT
 ,[Volume24hUpdateDate]
 FROM [Exchange].[dbo].[Pairs]
 ORDER BY [Order]
-
 END
 
 GO
@@ -4814,6 +4811,7 @@ BEGIN
 	FETCH  NEXT @pageSize ROWS ONLY
 
 END
+
 
 GO
 SET ANSI_NULLS ON
@@ -10023,15 +10021,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-
-
 CREATE PROCEDURE [dbo].[UpdatePairsStatistics]
 AS
 BEGIN
-
 ----------------- BCH BTC
 --GO
 declare @BCH_BTC_24_hour_ago_price DECIMAL(38, 20);
@@ -10265,6 +10257,7 @@ WHERE [Acronim] = 'LTCUSDT'
 --GO
 
 END
+
 GO
 SET ANSI_NULLS ON
 GO
