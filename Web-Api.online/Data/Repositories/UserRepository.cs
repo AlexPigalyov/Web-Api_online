@@ -157,31 +157,58 @@ namespace Web_Api.online.Data.Repositories
 
         }
 
-        public async Task<string> FindUserIdForSendPageAsync(string searchText)
+        private async Task<string> ExecuteStroredProcedureWithParams(
+            IDbConnection connection, string procedureName, DynamicParameters parameters)
+        {           
+            return 
+                await connection.QueryFirstOrDefaultAsync<string>(
+                    procedureName, parameters, commandType: CommandType.StoredProcedure);
+        }
+
+        private async Task<string> GetUserIdFromDbWebApi(string searchText)
         {
             try
             {
                 var parameters = new DynamicParameters();
+
                 parameters.Add("searchText", searchText);
 
-                var useId = await _dbWebApi.QueryFirstOrDefaultAsync<string>(
-                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber",
-                        parameters,
-                        commandType: CommandType.StoredProcedure);
-
-                if (useId == null)
-                {
-                    useId = await _dbExchange.QueryFirstOrDefaultAsync<string>(
-                        "GetUserIdByWalletAddress",
-                        parameters,
-                        commandType: CommandType.StoredProcedure);
-                }
-                return useId;
+                return 
+                    await this.ExecuteStroredProcedureWithParams(_dbWebApi,
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber", parameters);                
             }
-            catch (Exception exc)
+            catch
             {
                 return null;
             }
+        }
+
+        private async Task<string> GetUserIdFromDbExchange(string walletAddress)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("address", walletAddress);
+
+                return
+                    await this.ExecuteStroredProcedureWithParams(_dbExchange,
+                        "GetUserIdByWalletAddress", parameters);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> FindUserIdForSendPageAsync(string searchText)
+        {
+            var userIdFromDbWebApi = await this.GetUserIdFromDbWebApi(searchText);
+
+            return 
+                string.IsNullOrEmpty(userIdFromDbWebApi) 
+                ? await this.GetUserIdFromDbExchange(searchText) 
+                : userIdFromDbWebApi;
         }
 
         public async Task<int> GetCountOfUsers()
