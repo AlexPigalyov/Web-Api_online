@@ -139,6 +139,7 @@ namespace Web_Api.online.Data.Repositories
             return result;
 
         }
+
         public async Task<List<UserRefferalTableModel>> GetUserRefferals_Paged(string userId, int page, int pageSize)
         {
             var parameters = new DynamicParameters();
@@ -157,31 +158,54 @@ namespace Web_Api.online.Data.Repositories
 
         }
 
-        public async Task<string> FindUserIdForSendPageAsync(string searchText)
+        public async Task<string> GetUserIdFromDbWebApi(string userAttributeValue)
         {
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("searchText", searchText);
 
-                var useId = await _dbWebApi.QueryFirstOrDefaultAsync<string>(
-                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber",
-                        parameters,
-                        commandType: CommandType.StoredProcedure);
+                parameters.Add("searchText", userAttributeValue);
 
-                if (useId == null)
-                {
-                    useId = await _dbExchange.QueryFirstOrDefaultAsync<string>(
-                        "GetUserIdByWalletAddress",
-                        parameters,
+                return 
+                    await _dbWebApi.QueryFirstOrDefaultAsync<string>(
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber", 
+                        parameters, 
                         commandType: CommandType.StoredProcedure);
-                }
-                return useId;
             }
-            catch (Exception exc)
+            catch
             {
                 return null;
             }
+        }
+
+        public async Task<string> GetUserIdFromDbExchange(string walletAddress)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("address", walletAddress);
+
+                return
+                    await _dbExchange.QueryFirstOrDefaultAsync<string>(
+                            "GetUserIdByWalletAddress",
+                            parameters,
+                            commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> FindUserIdForSendPageAsync(string searchText)
+        {
+            var userIdFromDbWebApi = await this.GetUserIdFromDbWebApi(searchText);
+
+            return 
+                string.IsNullOrEmpty(userIdFromDbWebApi) 
+                ? await this.GetUserIdFromDbExchange(searchText) 
+                : userIdFromDbWebApi;
         }
 
         public async Task<int> GetCountOfUsers()
