@@ -139,6 +139,7 @@ namespace Web_Api.online.Data.Repositories
             return result;
 
         }
+
         public async Task<List<UserRefferalTableModel>> GetUserRefferals_Paged(string userId, int page, int pageSize)
         {
             var parameters = new DynamicParameters();
@@ -157,25 +158,19 @@ namespace Web_Api.online.Data.Repositories
 
         }
 
-        private async Task<string> ExecuteStroredProcedureWithParams(
-            IDbConnection connection, string procedureName, DynamicParameters parameters)
-        {           
-            return 
-                await connection.QueryFirstOrDefaultAsync<string>(
-                    procedureName, parameters, commandType: CommandType.StoredProcedure);
-        }
-
-        private async Task<string> GetUserIdFromDbWebApi(string searchText)
+        public async Task<string> GetUserIdFromDbWebApi(string userAttributeValue)
         {
             try
             {
                 var parameters = new DynamicParameters();
 
-                parameters.Add("searchText", searchText);
+                parameters.Add("searchText", userAttributeValue);
 
                 return 
-                    await this.ExecuteStroredProcedureWithParams(_dbWebApi,
-                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber", parameters);                
+                    await _dbWebApi.QueryFirstOrDefaultAsync<string>(
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber", 
+                        parameters, 
+                        commandType: CommandType.StoredProcedure);
             }
             catch
             {
@@ -183,7 +178,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        private async Task<string> GetUserIdFromDbExchange(string walletAddress)
+        public async Task<string> GetUserIdFromDbExchange(string walletAddress)
         {
             try
             {
@@ -192,8 +187,10 @@ namespace Web_Api.online.Data.Repositories
                 parameters.Add("address", walletAddress);
 
                 return
-                    await this.ExecuteStroredProcedureWithParams(_dbExchange,
-                        "GetUserIdByWalletAddress", parameters);
+                    await _dbExchange.QueryFirstOrDefaultAsync<string>(
+                            "GetUserIdByWalletAddress",
+                            parameters,
+                            commandType: CommandType.StoredProcedure);
             }
             catch
             {
