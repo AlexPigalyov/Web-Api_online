@@ -192,6 +192,22 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE TABLE [dbo].[News](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](150) NOT NULL,
+	[Text] [nvarchar](max) NOT NULL,
+	[Created] [datetime] NOT NULL,
+	[AuthorId] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_News] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Rates](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[Acronim] [nvarchar](10) NOT NULL,
@@ -240,6 +256,8 @@ GO
 ALTER TABLE [dbo].[DpdCities] ADD  CONSTRAINT [DF_DpdCities_indexMin_48]  DEFAULT (NULL) FOR [indexMin]
 GO
 ALTER TABLE [dbo].[DpdCities] ADD  CONSTRAINT [DF_DpdCities_indexMax_48]  DEFAULT (NULL) FOR [indexMax]
+GO
+ALTER TABLE [dbo].[News] ADD  CONSTRAINT [DF_News_Created]  DEFAULT (getdate()) FOR [Created]
 GO
 ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_Price]  DEFAULT ((0)) FOR [Buy]
 GO
@@ -622,6 +640,28 @@ inner join (SELECT [Acronim], [Site], Max([Date]) as dateres
 FROM [web-api.online].[dbo].[Rates]
 group by Acronim, [Site]) as se
 on se.[Acronim] = r.[Acronim] and se.[Site] = r.[Site] and se.dateres = r.Date
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetNews]
+AS
+BEGIN
+
+SELECT n.[Id]
+      ,n.[Name]
+      ,n.[Text]
+      ,n.[Created]
+      ,n.[AuthorId]
+	  ,u.[UserName]
+FROM [News] AS n 
+LEFT JOIN AspNetUsers AS u
+ON n.AuthorId = u.Id
+
 
 END
 GO
