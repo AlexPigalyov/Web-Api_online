@@ -4923,7 +4923,8 @@ AS
 BEGIN
 
 Select
-  CurrencyAcronim
+   FromWalletId
+  ,CurrencyAcronim
   ,Value
   ,CreateDate
   ,ToAddress

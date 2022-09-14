@@ -120,6 +120,7 @@ namespace Web_Api.online
             services.AddTransient<UserRepository>();
             services.AddTransient<BotsRepository>();
             services.AddTransient<ISettingRepository, SettingRepository>();
+            services.AddTransient<INewsRepository, NewsRepository>();
             services.AddTransient<RoleRepository>();
             services.AddTransient<TransferRepository>();
             services.AddTransient<IExceptionsRepository, ExceptionsRepository>();

@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "News";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">News</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Value</th>
+                                            <th>Author</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.NewsList)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span id="name">@item.Name</span>
+                                                </td>
+                                                <td>
+                                                    <span id="text">@item.Text</span>
+                                                </td>
+                                                <td>
+                                                    <span id="userName">@item.UserName</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end card-body-->
+            </div>
+        </div>
+    </div>
+</div>
+

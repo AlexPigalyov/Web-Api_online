@@ -112,7 +112,7 @@
                                         <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
                                         <div class="timeline-item-info">
                                             <h5 class="mt-0 mb-1">@((EventTypeEnum) eventModel.Type)</h5>
-                                            <p class="font-14">DateTime: @(eventModel.WhenDate.ToString("g"))</p>
+                                                    <p class="font-14">DateTime: @(eventModel.WhenDate.ToString("dd-MM-yyyy HH:mm:ss"))</p>
                                             @if  (@eventModel.Value != null)
                                             {
                                                 <p class="text-muted mt-2 mb-0 pb-3">
