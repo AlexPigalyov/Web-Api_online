@@ -32,7 +32,7 @@ namespace Web_Api.online.Controllers.Admin
             IncomeTransactionsViewModel viewModel = new IncomeTransactionsViewModel()
             {
                 PageViewModel = new PageViewModel(usersCount, model.Page, pageSize),
-                IncomeTransactions = incomeTransactions ?? new List<    IncomeTransactionTableModel>()
+                IncomeTransactions = incomeTransactions ?? new List<IncomeTransactionTableModel>()
             };
 
             return View("Views/Admin/IncomeTransactions.cshtml", viewModel);
