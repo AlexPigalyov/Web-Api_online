@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
+using Web_Api.online.Models;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers
 {
@@ -19,13 +21,15 @@ namespace Web_Api.online.Controllers
     {
         private readonly PairsRepository _pairsRepository;
         private readonly ILogger<HomeController> _logger;
+        private readonly INewsRepository _newsRepository;
 
-        
 
-        public HomeController(ILogger<HomeController> logger, PairsRepository pairsRepository)
+
+        public HomeController(ILogger<HomeController> logger, PairsRepository pairsRepository, INewsRepository newsRepository)
         {
             _pairsRepository = pairsRepository;
             _logger = logger;
+            _newsRepository = newsRepository;
         }
 
         public async Task<ActionResult> Index()
@@ -46,6 +50,15 @@ namespace Web_Api.online.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<ActionResult> News()
+        {
+            NewsPageModel model = new NewsPageModel();
+
+            model.NewsList = await _newsRepository.GetNews();
+
+            return View(model);
         }
     }
 }
