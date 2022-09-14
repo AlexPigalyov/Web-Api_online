@@ -34,10 +34,11 @@ public class P2PController : Controller
         
         var model = new P2PViewModel()
         {
+            IsBuy = isBuyers,
             Payments = payments,
             Fiats = fiats,
             Crypts = crypts,
-            P2PSellers = p2pUsers,
+            P2PUsers = p2pUsers,
             TimeFrames = timeFrames 
         };
         
