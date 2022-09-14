@@ -31,7 +31,7 @@
                             <div class="orderbook-col decimal-data">@order.Price</div>
                             <div class="orderbook-col decimal-data">@order.Amount</div>
                             <div class="orderbook-col decimal-data">@order.Total</div>
-                            <div class="orderbook-col orderbook-col-date__small">@(order.CreateDate.ToString("hh:mm:ss"))</div>
+                            <div class="orderbook-col orderbook-col-date__small">@(order.CreateDate.ToString("HH:mm:ss"))</div>
                             <div class="orderbook-col">
                                 <a href="/trade/cancelorder/@order.Id">Cancel</a>
                             </div>
