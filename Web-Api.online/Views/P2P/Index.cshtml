@@ -71,17 +71,17 @@
                             <span>Available: <span class="decimal-data">@user.Available</span></span>
                         </div>
                         <div class="row">
-                            <span>Limit: <span class="decimal-data">@user.Available</span></span>
+                            <span>Limit: <span class="decimal-data">@($"{user.LimitFrom} {user.FiatName} - {user.LimitTo} {user.FiatName}")</span></span>
                         </div>
                     </td>
                     <td>
-                        @foreach (var payment in user.Payments)
+                        @foreach (var userPayment in user.Payments)
                         {
-                            <span class="badge badge-dark-lighten">payment.Name</span>
+                            <span class="badge badge-dark-lighten">@userPayment</span>
                         }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success">Buy USDT</button>
+                        <button type="button" class="btn btn-success">Buy @(user.CryptName)</button>
                     </td>
                 </tr>
             }

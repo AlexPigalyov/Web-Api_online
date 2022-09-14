@@ -80,7 +80,7 @@ public class P2PRepository
             p.Add("p2pUserId", p2pUserId);
             p.Add("p2pPaymentId", p2pPaymentId);
 
-            await _dbExchange.QueryAsync("CreateP2PUserPayment", p, commandType: CommandType.StoredProcedure);
+            await _dbExchange.ExecuteAsync("CreateP2PUserPayment", p, commandType: CommandType.StoredProcedure);
         }
         catch (Exception ex) { }
     }
