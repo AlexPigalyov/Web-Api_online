@@ -1,0 +1,151 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model List<PairsTableModel>
+
+@{
+    ViewData["Title"] = "Markets";
+}
+
+<link href="/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12 order-lg-2 order-xl-1">
+        <div class="card" style="margin: 10px 0 !important;">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="markets-table" class="table dt-responsive table-centered table-nowrap table-hover mb-0">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Name</h5>
+                                </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Price</h5>
+                                </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Change 1m</h5>
+                                </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Change 15m</h5>
+                                </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Change 1h</h5>
+                                </th>
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Change 24h</h5>
+                                </th>                                
+                                <th>
+                                    <h5 class="font-14 my-1 fw-normal">Volume 24h</h5>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pair in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/trade/crypto/@pair.Acronim" class="font-14 my-1 fw-normal">@pair.Header</a>
+                                    </td>
+                                    <td>
+                                        <span class="font-14 my-1 fw-normal decimal-data">@pair.Price</span> @pair.Currency2Postfix
+                                    </td>
+                                    <td>
+                                        @if (@pair.Change1m < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1m</span> %</span>
+                                        }
+                                        else if (@pair.Change1m > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change1m</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1m</span> %</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (@pair.Change15m < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change15m</span> %</span>
+                                        }
+                                        else if (@pair.Change15m > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change15m</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change15m</span> %</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (@pair.Change1h < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1h</span> %</span>
+                                        }
+                                        else if (@pair.Change1h > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change1h</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1h</span> %</span>
+                                        }                                       
+                                    </td>
+                                    <td>
+                                        @if (@pair.Change24h < 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else if (@pair.Change24h > 0)
+                                        {
+                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                        else
+                                        {
+                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %</span>
+                                        }
+                                    </td>                                    
+                                    <td>
+                                        <span class="font-14 my-1 fw-normal decimal-data">@pair.Volume24h</span> $
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive-->
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col-->
+</div>
+<!-- end row -->
+
+<div class="text-center" id="page-header">
+    <h1 class="display-4">Trades</h1>
+    <br />
+    @if (SignInManager.IsSignedIn(User))
+    {
+            <a href="/Trade/OpenOrders">Open orders</a>
+            <a href="/Trade/ClosedOrders">Closed orders</a>
+    }
+
+</div>
+
+<script src="/js/vendor/jquery.dataTables.min.js"></script>
+<script src="/js/vendor/dataTables.bootstrap5.js"></script>
+<script src="/js/vendor/dataTables.responsive.min.js"></script>
+<script src="/js/vendor/responsive.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#markets-table').DataTable({
+            "pageLength" : 500,
+            "paging": false,
+            "language": {
+              "info": "Showing _START_ to _END_ of _TOTAL_ pairs"
+            },
+            "dom": "frtip"
+        });
+    });
+</script>

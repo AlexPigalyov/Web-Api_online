@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="row">
+
+    <table id="ClosedOrders" class="table table-striped table-centered mb-0">
+        <thead>
+            <tr class="table-primary">
+                <th>Create</th>
+                <th>Closed</th>
+                <th>Start Price</th>
+                <th>Closed Price</th>
+                <th>Amount</th>
+                <th>Total</th>
+                <th>Difference</th>
+                <th>Status</th>
+                <th>Create User Id</th>
+                <th>Closed User Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ClosedOrders)
+            {
+                <tr>
+                    <td>
+                        @item.CreateDate.ToString("dd-MM-yyyy HH:mm:ss")
+                    </td>
+                    <td>
+                        @item.ClosedDate.ToString("dd-MM-yyyy HH:mm:ss")
+                    </td>
+                    <td>
+                        <span class="decimal-data">@item.StartPrice</span>
+                    </td>
+                    <td>
+                        <span class="decimal-data">@item.ClosedPrice</span>
+                    </td>
+                    <td>
+                        <span class="decimal-data">@item.Amount</span>
+                    </td>
+                    <td>
+                        <span class="decimal-data">@item.Total</span>
+                    </td>
+                    <td>
+                        <span class="decimal-data">@item.Difference</span>
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.CreateUserId
+                    </td>
+
+                    <td>
+                        @item.BoughtUserId
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

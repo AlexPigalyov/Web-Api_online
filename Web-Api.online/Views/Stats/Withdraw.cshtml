@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Withdraw";
+}
+
+<div class="row">
+
+    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
+        <thead>
+        <tr class="table-primary">
+            <th>From Wallet Id</th>
+            <th>To Address</th>
+            <th>Value</th>
+            <th>Create Date</th>
+            <th>Currency Acronim</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OutcomeTransactions)
+        {
+            <tr>
+                <td>
+                    @item.FromWalletId
+                </td>
+                <td>
+                    @item.ToAddress
+                </td>
+                <td>
+                   <span class="decimal-data">@item.Value</span>
+                </td>
+                <td>
+                    @item.CreateDate.ToString("dd-MM-yyyy HH:mm:ss")
+                </td>
+                <td>
+                    @item.CurrencyAcronim
+                </td>
+                <td>
+                    @item.State
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

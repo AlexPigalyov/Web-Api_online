@@ -1,0 +1,8 @@
+CREATE PROCEDURE [dbo].[Get_{cryptocurrencypair}_ClosedOrders_Top100]
+AS
+BEGIN
+
+SELECT TOP 100 *
+FROM [Exchange].[dbo].[{cryptocurrencypair}_ClosedOrders]
+ORDER BY ClosedDate DESC
+END

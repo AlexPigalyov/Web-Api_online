@@ -1,0 +1,35 @@
+﻿@using Web_Api.online.Extensions
+@model List<WalletTableModel>
+@{
+    ViewData["Title"] = "Send";
+}
+
+<h4>Balance:</h4>
+<table id="balanceWalletsList" class="table table-striped table-centered mb-0">
+    <thead>
+        <tr>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.CurrencyAcronim
+                </td>
+
+                <td> 
+                    <span class="decimal-data">@item.Value</span>                    
+                </td>
+
+                <td>
+                    <p><a href="/Send/Coins?Currency=@item.CurrencyAcronim">Send @item.CurrencyAcronim</a></p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />

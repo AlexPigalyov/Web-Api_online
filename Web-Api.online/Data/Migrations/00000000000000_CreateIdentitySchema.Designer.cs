@@ -9,7 +9,7 @@ using Web_Api.online.Data;
 
 namespace Web_Api.online.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WebApiDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

@@ -1,0 +1,14 @@
+USE [Exchange]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetAllOutcomeTransaction]
+AS
+BEGIN
+
+SELECT *  FROM OutcomeTransactions 
+
+
+END

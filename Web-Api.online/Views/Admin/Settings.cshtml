@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@{
+    ViewData["Title"] = "Settings";
+}
+
+@if (User.IsInRole(RolesNameConstant.Admin))
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Users</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <button id="save-settings" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle mr-2"></i>Save settings</button>
+                    <div class="table-responsive">
+                        <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span id="name">@item.Name</span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="value" placeholder="@item.Value">
+                                                </td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @section ThirdPartyCss
+    {
+        <link href="~/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css"/>
+        <link href="~/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css"/>
+    }
+    
+    @section Scripts { 
+        <script>
+                $(document).ready(function() {
+                    $("#save-settings").click(function() {
+                        var values = $("input[id*='value']")
+                        var names = $("span[id*='name']")
+        
+                        var data = []        
+                        for(let i = 0; i < values.length; i++){
+                            if(values[i].value != "" && values[i].value != null){
+                                data.push({
+                                    Name: names[i].innerText,
+                                    Value: values[i].value
+                                });
+                            }                    
+                        }
+        
+                        $.ajax({
+                            type: "POST",
+                            url: "/admin/settings/update",
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=utf-8'
+                        });
+                    });
+                });
+            </script>
+            <script src="~/js/vendor/jquery.dataTables.min.js"></script>
+            <script src="~/js/vendor/dataTables.bootstrap5.js"></script>
+            <script src="~/js/vendor/dataTables.responsive.min.js"></script>
+            <script src="~/js/vendor/responsive.bootstrap5.min.js"></script>
+            <script src="~/js/vendor/dataTables.checkboxes.min.js"></script>
+    }
+}

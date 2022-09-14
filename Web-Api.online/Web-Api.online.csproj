@@ -1,26 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-Web_Api.online-35BF76D5-5DD1-4641-BAC7-AD83DA495B5E</UserSecretsId>
     <RootNamespace>Web_Api.online</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.78" />
+    <Compile Remove="Models\Requests\**" />
+    <Compile Remove="wwwroot\js\ourPages\**" />
+    <Content Remove="Models\Requests\**" />
+    <Content Remove="wwwroot\js\ourPages\**" />
+    <EmbeddedResource Remove="Models\Requests\**" />
+    <EmbeddedResource Remove="wwwroot\js\ourPages\**" />
+    <None Remove="Models\Requests\**" />
+    <None Remove="wwwroot\js\ourPages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
+    <PackageReference Include="Nethereum.Web3" Version="4.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
-    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.4.0" />
+    <PackageReference Include="ReflectionIT.Mvc.Paging" Version="6.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +49,117 @@
 
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder_Buy.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Create_OpenOrder_Sell.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Create_OpenOrder_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_All_ClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_All_ClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_ClosedOrders_ByCreateUserIdWithOrderByDescClosedDate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_ClosedOrders_Top100.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_ClosedOrders_Top100.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrder_ById.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrder_ById.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OpenOrders_ByCreateUserIdWithOrderByDescCreateDate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OrderBookBuy_OrderByDescPrice.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OrderBookBuy_OrderByDescPrice.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Get_OrderBookSell_OrderByPrice.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Get_OrderBookSell_OrderByPrice.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\GetCurrent_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\GetCurrent_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersBuyToClosedOders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersBuyToClosedOders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersSellToClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersSellToClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Move_FromOpenOrdersToClosedOrders.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Move_FromOpenOrdersToClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_BuyOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_BuyOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_CandleStick.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Process_SellOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Process_SellOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder_Buy.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\StoredProcedures\Update_OpenOrder_Sell.txt" />
+    <Resource Include="Data\Templates\StoredProcedures\Update_OpenOrder_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\CandleStick.txt" />
+    <Resource Include="Data\Templates\Tables\CandleStick.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\ClosedOrders.txt" />
+    <Resource Include="Data\Templates\Tables\ClosedOrders.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\OpenOrders_Buy.txt" />
+    <Resource Include="Data\Templates\Tables\OpenOrders_Buy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\Templates\Tables\OpenOrders_Sell.txt" />
+    <Resource Include="Data\Templates\Tables\OpenOrders_Sell.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\P2P\Index.cshtml" />
   </ItemGroup>
 
 </Project>

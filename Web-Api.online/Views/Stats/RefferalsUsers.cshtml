@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "RefferalsUsers";
+}
+
+<div class="row">
+    
+    <table id="RefferalsUsers" class="table table-striped table-centered mb-0">
+        <thead>
+        <tr class="table-primary">
+            <th>Email</th>
+            <th>RegistrationDate</th>
+            <th>ReffererId</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.UserRefferal)
+        {
+            <tr>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.RegistrationDate.ToString("dd-MM-yyyy HH:mm:ss")
+                </td>
+                <td>
+                    @item.ReffererId
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>

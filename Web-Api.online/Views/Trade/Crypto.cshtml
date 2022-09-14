@@ -1,0 +1,969 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model Web_Api.online.Controllers.TradeController.CryptoModel
+
+@{
+    ViewData["Title"] = @Model.PairHeader;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.PairHeader</h1>
+</div>
+
+<div class="row card-row no-gutters">
+    <div class="col-xl-3 col-lg-12 card-container">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="orderbook-wrap">
+                    <div class="orderbook">
+                        <div class="orderbook-header"></div>
+                        <div class="orderbook-tbheader">
+                            <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                            <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                            <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
+                        </div>
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-asks orderbook-asks">
+                            </div>
+                            <div class="orderbook-ticker">
+                                <div class="orderbook-ticker-status status-buy">
+                                    <span class="current-price" id="current-price">0</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
+                                        <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
+                                    </svg>
+                                </div>
+                                <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
+                                <a href="#" target="_blank" class="orderbook-ticker-more">
+                                    More
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect y="7" width="2.66667" height="5" fill="#00C582"></rect>
+                                        <rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect>
+                                        <rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect>
+                                        <rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="orderbook custom-book">
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-bids orderbook-bids orderbook-gr">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div>
+    <!-- end col-->
+
+    <div class="col-xl-6 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-wrap">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <ul>
+                            <li class="nav-item">
+                                @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance" class="decimal-data">@Model.FirstWallet.Value</span>
+                                <br />
+                                Address: @Model.FirstWallet.Address
+                            </li>
+                            <li class="nav-item">
+                                @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance" class="decimal-data">@Model.SecondWallet.Value</span>
+                                <br />
+                                Address: @Model.SecondWallet.Address
+                            </li>
+                        </ul>
+
+                        <div class="container">
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
+                                <div class="col-4">
+                                    <input type="text" id="amountInput" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
+                                <div class="col-4">
+                                    <input type="text" id="priceInput" />
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency" />
+                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <div id="simple-candlestick" class="apex-charts" data-colors="#0acf97,#fa5c7c"></div>
+                </div>
+
+            </div>
+            <!-- end card-body -->
+        </div>
+        <!-- end card-->
+    </div>
+    <!-- end col -->
+
+    <div class="col-xl-3 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+
+
+                <div class="orderbook custom-book">
+                    <div class="orderbook-header">
+                        <div class="orderbook-header-col">Market Trades</div>
+                    </div>
+                    <div class="orderbook-tbheader">
+                        <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                        <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                        <div class="orderbook-tbheader-col">Time</div>
+                    </div>
+                    <div class="orderbook-container">
+                        <div class="orderbook-list orderbook-list-bids">
+                        </div>
+                    </div>
+                </div>
+                <div class="orderbook">
+                    <div class="orderbook-header">
+                        <div class="orderbook-header-col">Open Trades</div>
+                    </div>
+                    <div class="orderbook-tbheader">
+                        <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                        <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                        <div class="orderbook-tbheader-col">Time</div>
+                        <div class="orderbook-tbheader-col"></div>
+                    </div>
+                    <div class="orderbook-container">
+                        <div class="orderbook-list orderbook-list-bids">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- end card-body -->
+        </div>
+        <!-- end card-->
+
+    </div>
+    <!-- end col -->
+
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ставка</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы делаете ставку отличающуюся на 30% от текущей цены, подтвердить?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal-success-btn" class="btn btn-primary">Да</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .orderbook-progress-bar {
+        pointer-events: none;
+    }
+
+    .orderbook-bids {
+        pointer-events: none;
+    }
+
+    .orderbook-col {
+        pointer-events: all;
+        cursor: pointer;
+    }
+
+    .custom-book {
+        height: 240px;
+    }
+
+    .card-body {
+        padding: 0 !important;
+    }
+</style>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/vendor/d3.min.js"></script>
+<script src="~/js/pairshub.js" asp-append-version="true"></script>
+<script src="~/js/vendor/apexcharts.min.js"></script>
+<script>
+
+    $(".orderbook-col").click(function () {
+        $("#priceInput").val((this).parentNode.children[0].innerText)
+    });
+
+</script>
+<script>
+    var splittedUrl = document.URL.split('/');
+    var cryptExchangePair = splittedUrl[splittedUrl.length - 1].toUpperCase()
+
+    function sendTrade(tradeData, balanceId, updatedBalance) {
+        $.ajax({
+            url: '/trade/crypto/createorder',
+            type: 'POST',
+            data: JSON.stringify(tradeData),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                updatedBalance = data;
+                $(balanceId).text(updatedBalance);
+            },
+            error: function () {
+                //alert('Error occured');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        const modal = new bootstrap.Modal(document.querySelector('#modal'));
+
+        var model = @Html.Raw(Json.Serialize(Model));
+        var userOpenOrders = model.userOpenOrders;
+        var buyOpenOrders = model.buyOrderBook
+        var sellOpenOrders = model.sellOrderBook
+        var marketTrades = model.marketTrades
+
+        var selectedPrice = 0;
+        var selectedAmount = 0;
+        var selectedBuyOrSell = true;
+        var balanceId = "#usdtBalance";
+        var updatedBalance = "";
+
+        var tradeData = {}
+
+        $("#modal-success-btn").click(function () {
+            sendTrade(tradeData, balanceId, updatedBalance);
+            modal.hide();
+        });
+
+        $("#buyButton").click(function () {
+            var amount = document.getElementById("amountInput").value;
+            var price = document.getElementById("priceInput").value;
+            var currentPrice = parseInt(document.getElementById("current-price").innerText);
+
+            var percent = (price / currentPrice * 100) - 100;
+
+            updatedBalance = document.getElementById("usdtBalance").innerText;
+            balanceId = "#usdtBalance";
+            tradeData = {
+                Price: price,
+                Amount: amount,
+                IsBuy: true,
+                Pair: '@Model.Pair'
+            }
+
+            if (percent >= 30) {
+                modal.show();
+                return;
+            }
+
+            sendTrade(tradeData, balanceId, updatedBalance);
+        });
+
+        $("#sellButton").click(function () {
+            var amount = document.getElementById("amountInput").value;
+            var price = document.getElementById("priceInput").value;
+            var currentPrice = parseInt(document.getElementById("current-price").innerText);
+
+            var percent = (currentPrice / price * 100) - 100;
+
+            updatedBalance = document.getElementById("btcBalance").innerText;
+            balanceId = "#btcBalance";
+            tradeData = {
+                Price: price,
+                Amount: amount,
+                IsBuy: false,
+                Pair: '@Model.Pair'
+            }
+
+            if (percent >= 30) {
+                modal.show();
+                return;
+            }
+
+            sendTrade(tradeData, balanceId, updatedBalance);
+        });
+
+
+
+        var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+        if (marketTrades.length > 0) {
+            currentMarketTradeDoc.children[0].innerHTML = marketTrades[0].startPrice;
+
+            currentMarketTradeDoc.classList.remove('status-buy');
+            currentMarketTradeDoc.classList.remove('status-sell');
+            currentMarketTradeDoc.classList.add((marketTrades[0].isBuy ? 'status-buy' : 'status-sell'));
+
+            currentMarketTradeDoc.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+
+            currentMarketTradeDoc.children[1].style.transform = (marketTrades[0].isBuy ? 'rotate(180deg)' : 'rotate(360deg)');
+        }
+
+        loadOrderBook(buyOpenOrders, true, true);
+        loadOrderBook(sellOpenOrders, true, false);
+        loadMarketTrades(marketTrades, true);
+        loadUserOpenOrders(userOpenOrders, true);
+
+        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
+
+            var seriesData = []
+            if (data.lastCandleSticks != null) {
+                data.lastCandleSticks.forEach(candleStick => {
+                    seriesData.push({
+                        x: candleStick.closeTime,
+                        y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
+                    })
+                });
+            }
+
+            if (data.currentCandleStick != null) {
+                seriesData.push({
+                    x: data.currentCandleStick.closeTime,
+                    y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
+                });
+            }
+
+            var colors = ["#0acf97", "#fa5c7c"];
+            var dataColors = $("#simple-candlestick").data('colors');
+            if (dataColors) {
+                colors = dataColors.split(",");
+            }
+            var options = {
+                chart: {
+                    animations: {
+                        enabled: false
+                    },
+                    height: 400,
+                    type: 'candlestick',
+                },
+                plotOptions: {
+                    candlestick: {
+                        colors: {
+                            upward: colors[0],
+                            downward: colors[1]
+                        }
+                    }
+                },
+                series: [{
+                    data: seriesData
+                }],
+                xaxis: {
+                    type: 'datetime'
+                },
+                yaxis: {
+                    tooltip: {
+                        enabled: true
+                    }
+                }
+            }
+
+            var chart = new ApexCharts(
+                document.querySelector("#simple-candlestick"),
+                options
+            );
+
+            chart.render();
+
+            let lastPrice = 0;
+
+            if (data.currentCandleStick != null) {
+                var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
+
+                var currentHigh = data.currentCandleStick.high;
+                var currentLow = data.currentCandleStick.low;
+                var currentOpen = data.currentCandleStick.open;
+                var currentClose = data.currentCandleStick.close;
+                var currentCloseDate = new Date(Date.parse(data.currentCandleStick.closeTime));
+
+                //$(".current-price").on('DOMSubtreeModified', function (changedNode) {
+
+                //    if (changedNode.currentTarget.firstChild != null) {
+                //        var price = changedNode.currentTarget.firstChild.data;
+
+                //        var newSeries = []
+
+                //        if (price != lastPrice) {
+
+                //            var high = currentHigh < price ? price : currentHigh;
+                //            var low = currentLow > price ? price : currentLow;
+
+                //            var lastZoom = chart.zoom;
+
+                //            if (currentCloseDate > (new Date())) {
+
+                //                seriesData.pop();
+
+                //                seriesData.push({
+                //                    x: currentCloseDate,
+                //                    y: [currentOpen, high, low, price]
+                //                });
+
+                //                //chart.updateSeries([{
+                //                //    data: seriesData
+                //                //}]);
+
+                //                currentHigh = high;
+                //                currentLow = low;
+                //                currentClose = price;
+                //            } else {
+                //                currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
+                //                currentLow = price;
+                //                currentHigh = price;
+                //                currentClose = price;
+                //                currentClose = price;
+
+                //                seriesData.push({
+                //                    x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
+                //                    y: [price, price, price, price]
+                //                });
+
+                //                //chart.appendSeries({
+                //                //    data: newSeries
+                //                //});
+
+
+                //            }
+
+                //            chart.zoomX(lastZoom);
+
+                //            lastPrice = price;
+                //        }
+                //    }
+                //});
+
+
+
+            }
+
+        });
+
+    });
+
+    function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {
+        if (isMarketTrades) {
+            return document.getElementsByClassName("orderbook-list")[2];
+        }
+
+        if (isUserOpenOrders) {
+            return document.getElementsByClassName("orderbook-list")[3];
+        }
+
+        if (isBuy) {
+            return document.getElementsByClassName("orderbook-list")[1];
+        }
+        else {
+            return document.getElementsByClassName("orderbook-list")[0];
+        }
+    }
+
+    function removeUserOpenOrder(id) {
+        var list = document.getElementsByClassName("orderbook-list")[3];
+
+        for (let i = 0; i < list.childElementCount; i++) {
+            if (list.childNodes[i].lastChild.firstChild.getAttribute('href') == id) {
+                list.childNodes[i].outerHTML = '';
+            }
+        }
+    }
+
+    function createUserOpenOrder(order) {
+        var list = document.getElementsByClassName("orderbook-list")[3];
+
+        let orderBookElem = document.createElement('div');
+
+        if (!order.isBuy) {
+            orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+        }
+        else {
+            orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+        }
+
+        orderBookElem.onclick = (e) => {
+            $("#priceInput").val((e.target).parentNode.children[0].innerText)
+        }
+
+        let orderBookElemColFirst = document.createElement('div');
+        if (!order.isBuy) {
+            orderBookElemColFirst.className = "orderbook-col";
+        }
+        else {
+            orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+        }
+
+        orderBookElemColFirst.innerHTML = order.orderPrice;
+
+        orderBookElem.appendChild(orderBookElemColFirst);
+
+        let orderBookElemColSecond = document.createElement('div');
+        orderBookElemColSecond.className = "orderbook-col";
+        orderBookElemColSecond.innerHTML = order.orderAmount;
+
+        orderBookElem.appendChild(orderBookElemColSecond);
+
+        let orderBookElemColThird = document.createElement('div');
+        orderBookElemColThird.className = "orderbook-col";
+
+        orderBookElemColThird.innerHTML = order.time.toTimeString().split(' ')[0]
+
+
+        orderBookElem.appendChild(orderBookElemColThird);
+
+        let orderBookElemButton = document.createElement('div');
+        orderBookElemButton.className = "orderbook-col";
+
+        let orderBookElemButtonA = document.createElement('a');
+        orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
+        orderBookElemButtonA.innerHTML = "Cancel";
+
+        orderBookElemButton.appendChild(orderBookElemButtonA);
+        orderBookElem.appendChild(orderBookElemButton);
+
+        list.prepend(orderBookElem);
+    }
+
+    function loadOrderBook(openOrders, isLoad, isBuy = false) {
+
+        let list = null;
+        if (openOrders != null) {
+            if (openOrders.length != 0) {
+                if (!isBuy) {
+                    list = document.getElementsByClassName("orderbook-list")[0];
+
+                    list.innerHTML = '';
+                }
+                else {
+                    list = document.getElementsByClassName("orderbook-list")[1];
+
+                    list.innerHTML = '';
+                }
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            return;
+        }
+
+        var openOrdersObjMaxAmount = null;
+        if (isLoad) {
+            openOrdersObjMaxAmount = Math.max.apply(null, openOrders.map(item => item.amount));
+        }
+        else {
+            openOrdersObjMaxAmount = Math.max.apply(null, openOrders.map(item => item.Amount));
+        }
+
+        list.innerHTML = '';
+
+        let isBuyLocal = isBuy;
+
+        openOrders.forEach(order => {
+            let time = null;
+            let orderPrice = 0;
+            let orderAmount = 0;
+            let orderTotal = 0;
+
+            if (!isLoad) {
+                orderPrice = order.Price;
+                orderAmount = order.Amount;
+                orderTotal = order.Total;
+            }
+            else {
+                orderPrice = order.price;
+                orderAmount = order.amount;
+                orderTotal = order.total;
+            }
+
+            let orderBookElem = document.createElement('div');
+            orderBookElem.className = "orderbook-row";
+
+            orderBookElem.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+
+            let orderBookElemColFirst = document.createElement('div');
+
+            if (!isBuyLocal) {
+                orderBookElemColFirst.className = "orderbook-col";
+            }
+            else {
+                orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+            }
+
+            orderBookElemColFirst.innerHTML = orderPrice;
+
+            orderBookElem.appendChild(orderBookElemColFirst);
+
+            let orderBookElemColSecond = document.createElement('div');
+            orderBookElemColSecond.className = "orderbook-col";
+            orderBookElemColSecond.innerHTML = orderAmount;
+
+            orderBookElem.appendChild(orderBookElemColSecond);
+
+            let orderBookElemColThird = document.createElement('div');
+            orderBookElemColThird.className = "orderbook-col";
+            orderBookElemColThird.innerHTML = orderTotal;
+
+            orderBookElem.appendChild(orderBookElemColThird);
+
+            let orderBookElemProgressBar = document.createElement('div');
+            if (!isBuyLocal) {
+                orderBookElemProgressBar.className = "orderbook-progress-bar";
+            }
+            else {
+                orderBookElemProgressBar.classList.add("orderbook-bids", "orderbook-progress-bar");
+            }
+
+            orderBookElemProgressBar.style = "transform: translateX(-" + ((orderAmount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
+
+            orderBookElem.appendChild(orderBookElemProgressBar);
+
+            list.appendChild(orderBookElem);
+        });
+    }
+
+    function loadMarketTrades(openOrders, isLoad) {
+
+        let list = document.getElementsByClassName("orderbook-list")[2];
+
+        var openOrdersObjMaxAmount = null;
+
+        if (openOrders == null || openOrders.length == 0) {
+            return;
+        }
+
+        list.innerHTML = '';
+
+        openOrders.forEach(order => {
+            let time = null;
+            let orderPrice = 0;
+            let orderAmount = 0;
+            let orderTotal = 0;
+            let isBuy = true;
+
+            if (!isLoad) {
+                orderPrice = order.Price;
+                orderAmount = order.Amount.toFixed(20);
+                orderTotal = order.Total;
+                isBuy = order.IsBuy;
+                orderPrice = order.StartPrice;
+                time = new Date(order.ClosedDate);
+            }
+            else {
+                orderPrice = order.price;
+                orderAmount = order.amount.toFixed(20);
+                orderTotal = order.total;
+                isBuy = order.isBuy;
+                orderPrice = order.startPrice;
+                time = new Date(order.closedDate);
+            }
+
+            let orderBookElem = document.createElement('div');
+
+            if (!isBuy) {
+                orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+            }
+            else {
+                orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+            }
+
+            orderBookElem.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+
+            let orderBookElemColFirst = document.createElement('div');
+            if (!isBuy) {
+                orderBookElemColFirst.className = "orderbook-col";
+            }
+            else {
+                orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+            }
+
+            orderBookElemColFirst.innerHTML = orderPrice;
+
+            orderBookElem.appendChild(orderBookElemColFirst);
+
+            let orderBookElemColSecond = document.createElement('div');
+            orderBookElemColSecond.className = "orderbook-col";
+            orderBookElemColSecond.classList.add("decimal-data");
+            orderBookElemColSecond.innerHTML = orderAmount;
+
+            orderBookElem.appendChild(orderBookElemColSecond);
+
+            let orderBookElemColThird = document.createElement('div');
+            orderBookElemColThird.className = "orderbook-col";
+
+            orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
+
+            orderBookElem.appendChild(orderBookElemColThird);
+
+            list.appendChild(orderBookElem);
+        });
+
+        removeZeroes();
+    }
+
+    function loadUserOpenOrders(openOrders, isLoad) {
+        console.log(openOrders);
+        let list = document.getElementsByClassName("orderbook-list")[3];
+
+        const loadUserOpenOrder = (order) => {
+            let time = null;
+            let orderPrice = 0;
+            let orderAmount = 0;
+            let isBuy = true;
+            let openOrderId = 0;
+
+            if (!isLoad) {
+                orderPrice = order.Price;
+                orderAmount = order.Amount.toFixed(20);
+                isBuy = order.IsBuy;
+                time = new Date(order.CreateDate);
+                openOrderId = order.Id;
+            }
+            else {
+                orderPrice = order.price;
+                orderAmount = order.amount.toFixed(20);
+                isBuy = order.isBuy;
+                time = new Date(order.createDate);
+                openOrderId = order.id;
+            }
+
+            let orderBookElem = document.createElement('div');
+
+            if (!isBuy) {
+                orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+            }
+            else {
+                orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+            }
+            orderBookElem.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+
+            let orderBookElemColFirst = document.createElement('div');
+            if (!isBuy) {
+                orderBookElemColFirst.className = "orderbook-col";
+            }
+            else {
+                orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+            }
+
+            orderBookElemColFirst.innerHTML = orderPrice;
+
+            orderBookElem.appendChild(orderBookElemColFirst);
+
+            let orderBookElemColSecond = document.createElement('div');
+            orderBookElemColSecond.className = "orderbook-col";
+            orderBookElemColSecond.innerHTML = orderAmount;
+
+            orderBookElem.appendChild(orderBookElemColSecond);
+
+            let orderBookElemColThird = document.createElement('div');
+            orderBookElemColThird.className = "orderbook-col";
+
+            orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
+
+
+            orderBookElem.appendChild(orderBookElemColThird);
+
+            let orderBookElemButton = document.createElement('div');
+            orderBookElemButton.className = "orderbook-col";
+
+            let orderBookElemButtonA = document.createElement('a');
+            orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
+            orderBookElemButtonA.innerHTML = "Cancel";
+
+            orderBookElemButton.appendChild(orderBookElemButtonA);
+            orderBookElem.appendChild(orderBookElemButton);
+
+
+            list.appendChild(orderBookElem);
+        };
+
+        if (isLoad) {
+            if (openOrders == null || openOrders.length == 0) {
+                return;
+            }
+
+            list.innerHTML = '';
+
+            openOrders.forEach(order => {
+                loadUserOpenOrder(order);
+            });
+        }
+        else {
+            loadUserOpenOrder(openOrders);
+        }
+
+        removeZeroes();
+    }
+
+    function loadNewOrderBook(openOrders, isLoad, isBuy = false, isMarketTrades = false, isUserOpenOrders = false) {
+
+        var openOrders = openOrders;
+
+        let list = null;
+
+        if (openOrders.length == 0 && !isMarketTrades && !isUserOpenOrders) {
+            if (!isBuy) {
+                list = document.getElementsByClassName("orderbook-list")[0];
+
+                list.innerHTML = '';
+            }
+            else {
+                list = document.getElementsByClassName("orderbook-list")[1];
+
+                list.innerHTML = '';
+            }
+        }
+
+        var openOrdersObjMaxAmount = null;
+        if (isLoad) {
+            openOrdersObjMaxAmount = Math.max.apply(null, openOrders.map(item => item.amount));
+
+            if (openOrders.length != 0) {
+                list = getCurrentList(openOrders[0].isBuy, isMarketTrades, isUserOpenOrders);
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            openOrdersObjMaxAmount = Math.max.apply(null, openOrders.map(item => item.Amount));
+
+            if (openOrders.length != 0) {
+                list = getCurrentList(openOrders[0].IsBuy, isMarketTrades, isUserOpenOrders);
+            }
+            else {
+                return;
+            }
+        }
+
+        list.innerHTML = '';
+
+        openOrders.forEach(order => {
+            let time = null;
+            let orderPrice = 0;
+            let orderAmount = 0;
+            let orderTotal = 0;
+            let isBuy = true;
+
+            if (!isLoad) {
+                orderPrice = order.Price;
+                orderAmount = order.Amount;
+                orderTotal = order.Total;
+                isBuy = order.IsBuy;
+                if (isMarketTrades) {
+                    orderPrice = order.StartPrice;
+                    time = new Date(order.ClosedDate);
+                }
+            }
+            else {
+                orderPrice = order.price;
+                orderAmount = order.amount;
+                orderTotal = order.total;
+                isBuy = order.isBuy;
+                if (isMarketTrades) {
+                    orderPrice = order.startPrice;
+                    time = new Date(order.closedDate);
+                }
+            }
+            let orderBookElem = document.createElement('div');
+            if (isMarketTrades || isUserOpenOrders) {
+                if (!isBuy) {
+                    orderBookElem.classList.add("orderbook-asks", "orderbook-row");
+                }
+                else {
+                    orderBookElem.classList.add("orderbook-bids", "orderbook-row");
+                }
+            }
+            else {
+                orderBookElem.className = "orderbook-row";
+            }
+
+            orderBookElem.onclick = (e) => {
+                $("#priceInput").val((e.target).parentNode.children[0].innerText)
+            }
+
+            let orderBookElemColFirst = document.createElement('div');
+            if (!isBuy) {
+                orderBookElemColFirst.className = "orderbook-col";
+            }
+            else {
+                orderBookElemColFirst.classList.add("orderbook-col", ".orderbook-bids");
+            }
+
+            orderBookElemColFirst.innerHTML = orderPrice;
+
+            orderBookElem.appendChild(orderBookElemColFirst);
+
+            let orderBookElemColSecond = document.createElement('div');
+            orderBookElemColSecond.className = "orderbook-col";
+            orderBookElemColSecond.innerHTML = orderAmount;
+
+            orderBookElem.appendChild(orderBookElemColSecond);
+
+            let orderBookElemColThird = document.createElement('div');
+            orderBookElemColThird.className = "orderbook-col";
+            if (isMarketTrades || isUserOpenOrders) {
+
+                orderBookElemColThird.innerHTML = time.toTimeString().split(' ')[0]
+            }
+            else {
+                orderBookElemColThird.innerHTML = orderTotal;
+            }
+
+            orderBookElem.appendChild(orderBookElemColThird);
+
+            if (isUserOpenOrders) {
+                let orderBookElemButton = document.createElement('div');
+                orderBookElemButton.className = "orderbook-col";
+
+                let orderBookElemButtonA = document.createElement('a');
+                orderBookElemButtonA.href = "/trade/cancelorder?id=" + order.id + "&acronim=" + cryptExchangePair;
+                orderBookElemButtonA.innerHTML = "Cancel";
+            }
+
+            if (!isMarketTrades && !isUserOpenOrders) {
+                let orderBookElemProgressBar = document.createElement('div');
+                if (!isBuy) {
+                    orderBookElemProgressBar.className = "orderbook-progress-bar";
+                }
+                else {
+                    orderBookElemProgressBar.classList.add("orderbook-bids", "orderbook-progress-bar");
+                }
+
+                orderBookElemProgressBar.style = "transform: translateX(-" + ((orderAmount / openOrdersObjMaxAmount) * 100).toFixed() + "%);";
+
+                orderBookElem.appendChild(orderBookElemProgressBar);
+            }
+
+            list.appendChild(orderBookElem);
+        });
+    }
+
+</script>

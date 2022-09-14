@@ -1,0 +1,114 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@{
+    ViewData["Title"] = "Incomes";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">My income transactions   <span class="text-muted mb-2 font-13">(total: @Model.IncomeTransactions.Count)</span></h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-centered w-100 nowrap">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Currency Acronim</th>
+                                <th>Amount</th>
+                                <th>TransactionFee</th>
+                                <th>From Address</th>
+                                <th>To Address</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.IncomeTransactions)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.CurrencyAcronim
+                                    </td>
+                                    <td>
+                                        <span class="decimal-data">@item.Amount</span>
+                                    </td>
+                                    <td>
+                                        <span class="decimal-data">@item.TransactionFee</span>
+                                    </td>
+                                    <td>
+                                        @item.FromAddress
+                                    </td>
+                                    <td>
+                                        @item.ToAddress
+                                    </td>
+                                    <td>
+                                        @item.CreatedDate.ToString("dd-MM-yyyy HH:mm:ss")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate">
+                            <ul class="pagination pagination-rounded">
+                                @if (Model.PageViewModel.PageNumber == 1)
+                                {
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber)" class="page-link" tabindex="-1" aria-disabled="true">
+                                            Previous
+                                        </a>
+                                    </li>
+                                }
+                                @if (Model.PageViewModel.HasPreviousPage)
+                                {
+                                    <li class="paginate_button page-item next" id="products-datatable_next">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.TotalPages - 1)" class="page-link">
+                                            Previous
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item previous">
+                                        <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber - 1)" class="page-link">
+                                        @(Model.PageViewModel.PageNumber - 1)
+                                        </a>
+                                    </li>
+                                }
+                                <li class="paginate_button page-item active">
+                                    <a href="/My/Incomes?page=@Model.PageViewModel.PageNumber" class="page-link">
+                                        @Model.PageViewModel.PageNumber
+                                    </a>
+                                </li>
+                                @if (Model.PageViewModel.HasNextPage)
+                                {
+                                    <li class="paginate_button page-item">
+                                            <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                        @(Model.PageViewModel.PageNumber + 1)
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item">
+                                            <a href="/My/Incomes?page=@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                                            Next
+                                        </a>
+                                    </li>
+                                    <li class="paginate_button page-item next">
+                                            <a href="/My/Incomes?page=@Model.PageViewModel.TotalPages" class="page-link">
+                                            Last
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

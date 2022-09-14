@@ -1,0 +1,16 @@
+CREATE TABLE [dbo].[{cryptocurrencypair}_CandleStick](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Close] [decimal](38, 20) NOT NULL,
+	[CloseTime] [datetime] NOT NULL,
+	[High] [decimal](38, 20) NOT NULL,
+	[Low] [decimal](38, 20) NOT NULL,
+	[Open] [decimal](38, 20) NOT NULL,
+	[OpenTime] [datetime] NOT NULL,
+ CONSTRAINT [PK_{cryptocurrencypair}_CandleStick] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+

@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Pairs";
+}
+
+<div class="row">
+    <div class="col-12 d-flex flex-row justify-content-between">
+        <div class="page-title-box col-6">
+            <h4 class="page-title">Pairs</h4>
+        </div>
+        <div style="-webkit-writing-mode: vertical-rl; text-align: center">
+            <button type="button" data-toggle="modal" data-target="#modal" class="btn btn-light" style="margin-left: auto; margin-right:  1em;" class="col-6">
+                Create new pair
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th class="all">Currency1</th>
+                                            <th>Currency2</th>
+                                            <th>Header</th>
+                                            <th>Acronim</th>
+                                            <th>Creeated</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (var item in Model.Pairs)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Currency1
+                                                </td>
+                                                <td>
+                                                    @item.Currency2
+                                                </td>
+                                                <td>
+                                                    @item.Header
+                                                </td>
+                                                <td>
+                                                    @item.Acronim
+                                                </td>
+                                                <td>
+                                                    @item.Created
+                                                </td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end card-body-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create new crypt exchange pair</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="firstCurrency" class="col-form-label">First currency:</label>
+                    <input type="text" class="form-control" id="firstCurrency">
+                </div>
+                <div class="form-group">
+                    <label for="secondCurrency" class="col-form-label">Second currency:</label>
+                    <input type="text" class="form-control" id="secondCurrency"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="sendData()" data-dismiss="modal" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendData() {
+    var firstCurrency = document.getElementById("firstCurrency").value;
+    var secondCurrency = document.getElementById("secondCurrency").value;
+    
+    $.ajax({
+        url: 'pairs/create',
+        type: 'POST',
+        data: JSON.stringify({
+            firstCurrency: firstCurrency,
+            secondCurrency: secondCurrency
+        }),
+        contentType: 'application/json; charset=utf-8'
+    });
+}
+</script>
+
+@section ThirdPartyCss
+{
+    <link href="~/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css"/>
+    <link href="~/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css"/>
+}
+
+@section Scripts {
+    <script src="~/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="~/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="~/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="~/js/vendor/responsive.bootstrap5.min.js"></script>
+    <script src="~/js/vendor/dataTables.checkboxes.min.js"></script>
+}

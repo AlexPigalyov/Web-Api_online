@@ -1,0 +1,151 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@{
+    ViewData["Title"] = "OutcomeTransactions";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Outcome transactions</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="products-datatable_filter" class="dataTables_filter">
+                                    <label>
+                                        Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="products-datatable">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th class="all" style="width: 20px;">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">&nbsp;</label>
+                                                </div>
+                                            </th>
+                                            <th class="all">UserId</th>
+                                            <th>Currency acronim</th>
+                                            <th>Amount</th>
+                                            <th>TransactionFee</th>
+                                            <th>From Address</th>
+                                            <th>To Address</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (var item in Model.OutcomeTransactions)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                                        <label class="custom-control-label" for="customCheck2">&nbsp;</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @item.UserId
+                                                </td>
+                                                <td>
+                                                    @item.CurrencyAcronim
+                                                </td>
+                                                <td>
+                                                    <span class="decimal-data">@item.Amount</span>
+                                                </td>
+                                                <td>
+                                                    <span class="decimal-data">@item.TransactionFee</span>
+                                                </td>
+                                                <td>
+                                                    @item.FromAddress
+                                                </td>
+                                                <td>
+                                                    @item.ToAddress
+                                                </td>
+                                                <td>
+                                                    @item.Date
+                                                </td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate">
+                                    <ul class="pagination pagination-rounded">
+                                        @if (Model.PageViewModel.HasPreviousPage)
+                                        {
+                                            <li class="paginate_button page-item previous disabled" id="products-datatable_previous">
+                                                <a href="#" aria-controls="products-datatable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                    <i class="mdi mdi-chevron-left">
+                                                    </i>
+                                                </a>
+                                            </li>
+                                            <li class="paginate_button page-item active">
+                                                <a href="/Admin/Users?page=@(Model.PageViewModel.PageNumber - 1)" aria-controls="products-datatable" data-dt-idx="1" tabindex="0" class="page-link">
+                                                    @(Model.PageViewModel.PageNumber - 1)
+                                                </a>
+                                            </li>
+                                        }
+                                        <li class="paginate_button page-item ">
+                                            <a href="/Admin/Users?page=@Model.PageViewModel.PageNumber" aria-controls="products-datatable" data-dt-idx="2" tabindex="0" class="page-link">
+                                                @Model.PageViewModel.PageNumber
+                                            </a>
+                                        </li>
+                                        @if (Model.PageViewModel.HasNextPage)
+                                        {
+                                            <li class="paginate_button page-item">
+                                                <a href="/Admin/Users?page=@(Model.PageViewModel.PageNumber + 1)" aria-controls="products-datatable" data-dt-idx="3" tabindex="0" class="page-link">
+                                                    @(Model.PageViewModel.PageNumber + 1)
+                                                </a>
+                                            </li>
+                                            <li class="paginate_button page-item next" id="products-datatable_next">
+                                                <a href="/Admin/Users?page=@Model.PageViewModel.TotalPages" aria-controls="products-datatable" data-dt-idx="4" tabindex="0" class="page-link">
+                                                    Last
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end card-body-->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ThirdPartyCss
+{
+    <link href="~/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css"/>
+    <link href="~/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css"/>
+}
+
+@section Scripts {
+    <script src="~/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="~/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="~/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="~/js/vendor/responsive.bootstrap5.min.js"></script>
+    <script src="~/js/vendor/dataTables.checkboxes.min.js"></script>
+
+    <script src="~/js/pages/demo.products.js"></script>
+}
