@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Models\Requests\**" />
+    <Compile Remove="Views\Новая папка\**" />
     <Compile Remove="wwwroot\js\ourPages\**" />
     <Content Remove="Models\Requests\**" />
+    <Content Remove="Views\Новая папка\**" />
     <Content Remove="wwwroot\js\ourPages\**" />
     <EmbeddedResource Remove="Models\Requests\**" />
+    <EmbeddedResource Remove="Views\Новая папка\**" />
     <EmbeddedResource Remove="wwwroot\js\ourPages\**" />
     <None Remove="Models\Requests\**" />
+    <None Remove="Views\Новая папка\**" />
     <None Remove="wwwroot\js\ourPages\**" />
   </ItemGroup>
 
@@ -160,6 +164,17 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\P2P\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\News\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Admin\News.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
