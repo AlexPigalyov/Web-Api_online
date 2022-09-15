@@ -80,7 +80,7 @@ public class P2PRepository
             p.Add("p2pUserId", p2pUserId);
             p.Add("p2pPaymentId", p2pPaymentId);
 
-            await _dbExchange.QueryAsync("CreateP2PUserPayment", p, commandType: CommandType.StoredProcedure);
+            await _dbExchange.ExecuteAsync("CreateP2PUserPayment", p, commandType: CommandType.StoredProcedure);
         }
         catch (Exception ex) { }
     }
@@ -111,7 +111,7 @@ public class P2PRepository
         try
         {
             var parameters = new DynamicParameters();
-            parameters.Add("p2pSellerId", p2pSellerId);
+            parameters.Add("p2pUserId", p2pSellerId);
 
             return (await _dbExchange.QueryAsync<P2PSellerPaymentTableModel>("GetP2PPaymentsByP2PUserId",
                     parameters,
@@ -318,9 +318,11 @@ public class P2PRepository
                     parameters,
                     commandType: CommandType.StoredProcedure)).UserName;
 
-                user.FiatName = (await GetFiatById(p2pSeller.FiatId)).Name;
-                user.CryptName = (await GetCryptById(p2pSeller.CryptId)).Name;
+                user.FiatName = (await GetFiatById(p2pSeller.P2PFiatId)).Name;
+                user.CryptName = (await GetCryptById(p2pSeller.P2PCryptId)).Name;
                 user.Payments = await GetP2PUserPaymentsByP2PUserId(p2pSeller.Id);
+
+                result.Add(user);
             }
 
             return result.ToList();

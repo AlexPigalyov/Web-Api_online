@@ -22,7 +22,7 @@
         @foreach (var crypt in Model.Crypts)
         {
             <li class="nav-item">
-                <a href="@($"/p2p/{crypt.Name}/1")" aria-expanded="false" class="nav-link active py-2" style="background-color: #fafbfe;">
+                <a href="@($"/p2p/{(Model.IsBuy ? "buy" : "sell")}/{crypt.Name}/1")" aria-expanded="false" class="nav-link active py-2" style="background-color: #fafbfe;">
                     @crypt.Name
                 </a>
             </li>
@@ -61,27 +61,27 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var seller in Model.P2PSellers)
+            @foreach (var user   in Model.P2PUsers)
             {
                 <tr>
-                    <td>@seller.UserName</td>
-                    <td>@seller.Price @seller.FiatName</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Price @user.FiatName</td>
                     <td>
                         <div class="row">
-                            <span>Available: <span class="decimal-data">@seller.Available</span></span>
+                            <span>Available: <span class="decimal-data">@user.Available</span></span>
                         </div>
                         <div class="row">
-                            <span>Limit: <span class="decimal-data">@seller.Available</span></span>
+                            <span>Limit: <span class="decimal-data">@($"{user.LimitFrom} {user.FiatName} - {user.LimitTo} {user.FiatName}")</span></span>
                         </div>
                     </td>
                     <td>
-                        @foreach (var payment in seller.Payments)
+                        @foreach (var userPayment in user.Payments)
                         {
-                            <span class="badge badge-dark-lighten">payment.Name</span>
+                            <span class="badge badge-dark-lighten">@userPayment</span>
                         }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success">Buy USDT</button>
+                        <button type="button" class="btn btn-success">Buy @(user.CryptName)</button>
                     </td>
                 </tr>
             }
@@ -364,11 +364,12 @@
         
         $('#switch1').change(function() {
             if(this.checked) {
-                window.location.replace(window.location.href.split('/')[0] + "/p2p/buy/USDT/1")
+                
+                window.location.replace(window.location.href.split('/')[0] + "/p2p/buy/" + window.location.href.split('/')[5] + "/1")
             }  
             else
             {
-                window.location.replace(window.location.href.split('/')[0] + "/p2p/sell/USDT/1")
+                window.location.replace(window.location.href.split('/')[0] + "/p2p/sell/" + window.location.href.split('/')[5] + "/1")
             }
         });
     });
