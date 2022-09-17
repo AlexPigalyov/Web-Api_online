@@ -30,7 +30,7 @@ namespace Web_Api.online.Controllers
             }
             else
             {
-                return Redirect("/Identity/Account/Login?ReturnUrl=%2FBots");
+                return Redirect("/Login?ReturnUrl=%2FBots");
             }
         }
 

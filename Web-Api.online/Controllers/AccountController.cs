@@ -8,13 +8,13 @@ namespace Web_Api.online.Controllers
         [Route("Account/Login")]
         public ActionResult Login(string ReturnUrl)
         {
-            return Redirect("/Identity/Account/Login?ReturnUrl=" + ReturnUrl);
+            return Redirect("/Login?ReturnUrl=" + ReturnUrl);
         }
 
         [Route("Account/Register")]
         public ActionResult Register(string ReturnUrl)
         {
-            return Redirect("/Identity/Account/Register?ReturnUrl=" + ReturnUrl);
+            return Redirect("/Register?ReturnUrl=" + ReturnUrl);
         }
     }
 }

@@ -120,7 +120,7 @@ namespace Web_Api.online.Controllers
             }
             else
             {
-                return Redirect("/Identity/Account/Login");
+                return Redirect("/Login");
             }
         }
     }

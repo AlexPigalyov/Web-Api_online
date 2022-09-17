@@ -47,7 +47,7 @@ namespace Web_Api.online.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return Redirect("/Identity/Account/Login%2FMy%2FProfile");
+                return Redirect("/Login%2FMy%2FProfile");
             }
 
             model.UserInfo.UserId = userId;
@@ -81,7 +81,7 @@ namespace Web_Api.online.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return Redirect("/Identity/Account/Login%2FMy%2FProfile");
+                return Redirect("/Login%2FMy%2FProfile");
             }
 
             UserInfoTableModel userInfo = (await _usersInfoRepository.GetUserInfo(userId)) ?? new UserInfoTableModel();
@@ -115,7 +115,7 @@ namespace Web_Api.online.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return Redirect("/Identity/Account/Login%2FMy%2FEvents");
+                return Redirect("/Login%2FMy%2FEvents");
             }
 
             var userIncomes = await _transactionsRepository.GetPagedIncomeTransactionsByUserId(userId, model.Page, pageSize);
@@ -136,7 +136,7 @@ namespace Web_Api.online.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return Redirect("/Identity/Account/Login%2FMy%2FEvents");
+                return Redirect("/Login%2FMy%2FEvents");
             }
 
             return View(await _eventsRepository.GetByUserId(userId));
@@ -151,7 +151,7 @@ namespace Web_Api.online.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return Redirect("/Identity/Account/Login%2FMy%2FEvents");
+                return Redirect("/Login%2FMy%2FEvents");
             }
 
             var reffUsers = await _userRepository.GetUserRefferals_Paged(userId, model.Page, pageSize);
