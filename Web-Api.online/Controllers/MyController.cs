@@ -145,7 +145,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<IActionResult> MyRefferals(SortModel model)
         {
-            int pageSize = 15;
+            int pageSize = 100;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
