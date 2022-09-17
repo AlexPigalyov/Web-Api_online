@@ -688,7 +688,7 @@ FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
 ON anu.Id = ui.UserId
 WHERE ui.ReffererId IS NOT NULL
-ORDER By anu.Id
+ORDER By ui.RegistrationDate desc
 
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
