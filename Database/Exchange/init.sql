@@ -4937,7 +4937,6 @@ OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
 END
-
 GO
 SET ANSI_NULLS ON
 GO
