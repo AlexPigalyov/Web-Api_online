@@ -73,6 +73,7 @@
                             <tr class="table-primary">
                                 <th>Currency</th>
                                 <th>Address</th>
+                                <th></th>
                                 <th>Created</th>
                             </tr>
                         </thead>
@@ -85,6 +86,12 @@
                                     </td>
                                     <td>
                                         @item.Address
+                                    </td>
+                                    <td>
+                                        @if (item.QrCode != null)
+                                        {
+                                            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode))"/>
+                                        }
                                     </td>
                                     <td>
                                         @item.Created.ToString("dd-MM-yyyy HH:mm:ss")

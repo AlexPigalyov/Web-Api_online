@@ -11,6 +11,7 @@ using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 using System;
+using Web_Api.online.Services;
 
 namespace Web_Api.online.Data.Repositories
 {
@@ -61,8 +62,12 @@ namespace Web_Api.online.Data.Repositories
             {
                 List<IncomeWalletTableModel> result = (List<IncomeWalletTableModel>)(await _db.QueryAsync<IncomeWalletTableModel>("GetUserIncomeWallets",
                 new { userId = userId },
-                commandType: CommandType.StoredProcedure
-            ));
+                commandType: CommandType.StoredProcedure));
+
+                foreach(var wallet in result)
+                {
+                    wallet.QrCode = QrCodeService.GenerateQrCode(wallet.Address);
+                }
 
                 return result;
             }
