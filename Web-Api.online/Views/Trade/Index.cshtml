@@ -24,9 +24,9 @@
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Price</h5>
                                 </th>
-                                <th>
+                                @*<th>
                                     <h5 class="font-14 my-1 fw-normal">Change 1m</h5>
-                                </th>
+                                </th>*@
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Change 15m</h5>
                                 </th>
@@ -51,7 +51,7 @@
                                     <td>
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Price</span> @pair.Currency2Postfix
                                     </td>
-                                    <td>
+                                    @*<td>
                                         @if (@pair.Change1m < 0)
                                         {
                                             <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1m</span> %</span>
@@ -64,7 +64,7 @@
                                         {
                                             <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1m</span> %</span>
                                         }
-                                    </td>
+                                    </td>*@
                                     <td>
                                         @if (@pair.Change15m < 0)
                                         {
