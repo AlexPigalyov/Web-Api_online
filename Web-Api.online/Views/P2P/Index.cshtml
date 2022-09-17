@@ -1,5 +1,4 @@
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
@@ -13,9 +12,12 @@
 </div>
 
 <div class="container" style="margin-top: 20px">
-    <div class="row" style="margin-bottom: 10px;">
-        <button type="button" id="addP2PButton" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">Add P2P Ad</button>
-    </div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="row" style="margin-bottom: 10px;">
+            <button type="button" id="addP2PButton" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">Add P2P Ad</button>
+        </div>
+    }
     <ul class="nav nav-tabs nav-bordered">
         <input type="checkbox" id="switch1" checked data-switch="bool"/>
         <label for="switch1" data-on-label="Buy" data-off-label="Sell" style="margin-top: 14px;"></label>
@@ -65,13 +67,13 @@
             {
                 <tr>
                     <td>@user.UserName</td>
-                    <td>@user.Price @user.FiatName</td>
+                    <td><span class="decimal-data">@user.Price</span> @user.FiatName</td>
                     <td>
                         <div class="row">
                             <span>Available: <span class="decimal-data">@user.Available</span></span>
                         </div>
                         <div class="row">
-                            <span>Limit: <span class="decimal-data">@($"{user.LimitFrom} {user.FiatName} - {user.LimitTo} {user.FiatName}")</span></span>
+                        <span>Limit: <span class="decimal-data">@user.LimitFrom</span> @user.FiatName - <span class="decimal-data">@user.LimitTo</span> @user.FiatName</span>
                         </div>
                     </td>
                     <td>
@@ -215,28 +217,30 @@
 <script>
     $(document).ready(function () {
         $("#create-btn").click(function() {
+            var model = @Html.Raw(Json.Serialize(Model));        
+            console.log(model);
             var isBuy = $('#buy-radio-btn:checked').val() != null;
-            var crypt = $('#crypts-select').find(":selected").text();
-            var fiat = $('#fiats-select').find(":selected").text();
+            var cryptId = model.crypts.find(crypt => crypt.name == $('#crypts-select').find(":selected").text()).id;
+            var fiatId = model.fiats.find(fiat => fiat.name == $('#fiats-select').find(":selected").text()).id;
             var price = $('#price-input').val();
             var totalAmount = $('#total-amount-input').val();
             var limitFrom = $('#limit-from-input').val();
             var limitTo = $('#limit-to-input').val();
-            var payments = $('#payments-multiple-select').val();
-            var timeFramesViewName = $('#timeframes-select').find(":selected").text();
+            var paymentsId = model.payments.filter(payment => $('#payments-multiple-select').val().includes(payment.name)).map(payment => payment.id);
+            var timeFrameId = model.timeFrames.find(timeFrame => timeFrame.viewName == $('#timeframes-select').find(":selected").text()).id;
             
             var data = {
                 isBuy: isBuy,
-                crypt: crypt,
-                fiat: fiat,
+                cryptId: cryptId,
+                fiatId: fiatId,
                 price: parseFloat(price),
                 totalAmount: parseFloat(totalAmount),
                 limitFrom: parseFloat(limitFrom),
                 limitTo: parseFloat(limitTo),
-                payments: payments,
-                timeFrame: timeFramesViewName
+                paymentIds: paymentsId,
+                timeFrameId: timeFrameId
             };
-            
+            console.log(data);
             console.log((document.domain + "/p2p/create-p2p-add"));
             
             $.ajax({

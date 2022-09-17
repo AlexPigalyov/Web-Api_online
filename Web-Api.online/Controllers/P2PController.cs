@@ -12,10 +12,12 @@ namespace Web_Api.online.Controllers;
 public class P2PController : Controller
 {
     private readonly P2PRepository _p2PRepository;
+    private readonly WalletsRepository _walletsRepository;
 
-    public P2PController(P2PRepository p2PRepository)
+    public P2PController(P2PRepository p2PRepository, WalletsRepository walletsRepository)
     {
         _p2PRepository = p2PRepository;
+        _walletsRepository = walletsRepository;
     }
     
     [Route("p2p/{isBuy}/{cryptName}/{id}")]
@@ -49,25 +51,15 @@ public class P2PController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateP2PAd([FromBody]P2PAddRequestModel model)
     {
-        var cryptId = (await _p2PRepository.GetCryptByName(model.Crypt)).Id;
-        List<int> paymentIds = new List<int>();
-
-        foreach (var paymentName in model.Payments)
-        {
-            paymentIds.Add((await _p2PRepository.GetPaymentByName(paymentName)).Id);
-        }
-        
-        var fiatId = (await _p2PRepository.GetFiatByName(model.Fiat)).Id;
-        var timeFrameId = (await _p2PRepository.GetTimeFrameByViewName(model.TimeFrame)).Id;
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
         {
             return BadRequest("You are not authorized.");
         }
-
-        await _p2PRepository.CreateP2PUser(model.IsBuy, userId, model.Price, fiatId, model.LimitFrom, model.LimitTo,
-            model.TotalAmount, paymentIds, cryptId, timeFrameId);
+        
+        await _p2PRepository.CreateP2PUser(model.IsBuy, userId, model.Price, model.FiatId, model.LimitFrom, model.LimitTo,
+            model.TotalAmount, model.PaymentIds, model.CryptId, model.TimeFrameId);
 
         return Ok();
     }
