@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -114,20 +115,28 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
 
                         if(int.TryParse(cookieRefid, out var refUserNumber))
                             refUser = await _usersInfoRepository.GetUserByUserNumber(refUserNumber);
-                    }                    
+                    }
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = user.Id,
-                        Type = cookieRefid == null 
-                                ? (int)EventTypeEnum.Registration 
-                                : (int)EventTypeEnum.RegistrationByReferralLink,
-                        Comment = refUser == null
-                                ? "Platform registration."
-                                : $"Platform registration by refferal link from {refUser.Email.HideEmail()}",
+                        Type = (int)EventTypeEnum.Registration,
+                        Comment = "Platform registration.",
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = ""
                     });
+
+                    if (refUser != null)
+                    {
+                        await _eventsRepository.CreateEventAsync(new EventTableModel()
+                        {
+                            UserId = refUser.Id,
+                            Type = (int)EventTypeEnum.RegistrationByRefferalLink,
+                            Comment = $"Got new refferal {user.Email.HideEmail()}.",
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = ""
+                        });
+                    }
 
                     _logger.LogInformation("User created a new account with password.");
 
