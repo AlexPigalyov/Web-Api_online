@@ -15,8 +15,11 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Data.Repositories.Abstract;
+using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Areas.Identity.Pages.Account
 {
@@ -103,16 +106,25 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
 
                     var cookieRefid = Request.Cookies["refid"];
 
+                    spGetUserByUserNumber refUser = null;
+
                     if (cookieRefid != null)
                     {
                         await _usersInfoRepository.SetUsersInfoRefid(user.Id, cookieRefid);
-                    }
+
+                        if(int.TryParse(cookieRefid, out var refUserNumber))
+                            refUser = await _usersInfoRepository.GetUserByUserNumber(refUserNumber);
+                    }                    
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
                         UserId = user.Id,
-                        Type = (int)EventTypeEnum.Registration,
-                        Comment = "Platform registration.",
+                        Type = cookieRefid == null 
+                                ? (int)EventTypeEnum.Registration 
+                                : (int)EventTypeEnum.RegistrationByReferralLink,
+                        Comment = refUser == null
+                                ? "Platform registration."
+                                : $"Platform registration by refferal link from {refUser.Email.HideEmail()}",
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = ""
                     });

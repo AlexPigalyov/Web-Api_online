@@ -1,13 +1,14 @@
 ﻿using Dapper;
-
 using Microsoft.Extensions.Configuration;
 
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing.Printing;
+using System.Linq;
 using System.Threading.Tasks;
-
+using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
 
@@ -30,6 +31,27 @@ namespace Web_Api.online.Data.Repositories
                     (List<RegistratedUsersTableModel>)await _db.QueryAsync<RegistratedUsersTableModel>
                     ("GetAllRegistratedUser",
                         commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<spGetUserByUserNumber> GetUserByUserNumber (int userNumber)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("number", userNumber);
+
+                var result =
+                    (await _db.QueryAsync<spGetUserByUserNumber>
+                    ("GetUserByUserNumber",
+                        p,
+                        commandType: CommandType.StoredProcedure)).FirstOrDefault();
 
                 return result;
             }
