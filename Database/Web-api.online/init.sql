@@ -861,6 +861,23 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE PROCEDURE [dbo].[GetUserByUserNumber]
+@number int
+AS
+BEGIN
+
+SELECT *
+FROM AspNetUsers 
+WHERE Number = @number
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber]
 @searchText nvarchar(max)
 AS
