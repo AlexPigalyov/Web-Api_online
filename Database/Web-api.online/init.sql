@@ -67,6 +67,7 @@ CREATE TABLE [dbo].[AspNetUserLogins](
 	[ProviderKey] [nvarchar](128) NOT NULL,
 	[ProviderDisplayName] [nvarchar](max) NULL,
 	[UserId] [nvarchar](450) NOT NULL,
+	[Created] [datetime] NULL,
  CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY CLUSTERED 
 (
 	[LoginProvider] ASC,
@@ -246,6 +247,8 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220712-001814] ON [dbo].[AspNetUs
 (
 	[Number] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[AspNetUserLogins] ADD  CONSTRAINT [DF_AspNetUserLogins_Created]  DEFAULT (getdate()) FOR [Created]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
 GO
@@ -685,7 +688,7 @@ FROM AspNetUsers as anu
 LEFT JOIN UsersInfo as ui
 ON anu.Id = ui.UserId
 WHERE ui.ReffererId IS NOT NULL
-ORDER By anu.Id
+ORDER By ui.RegistrationDate desc
 
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
@@ -858,6 +861,23 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE PROCEDURE [dbo].[GetUserByUserNumber]
+@number int
+AS
+BEGIN
+
+SELECT *
+FROM AspNetUsers 
+WHERE Number = @number
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber]
 @searchText nvarchar(max)
 AS
@@ -929,17 +949,18 @@ BEGIN
 --set @userId = '08d803ba-a9fb-430e-a0b9-d4a366aeaee7'
 
 
-SELECT 
-LEFT(anu.Email, 2) + '*****' + RIGHT(anu.Email,4) Email,
-ui.ReffererId,
-ui.RegistrationDate
-
+SELECT
+anu.Id
+,LEFT(anu.Email, 2) + '*****' + RIGHT(anu.Email,4) Email
+,ui.ReffererId
+,ui.RegistrationDate
+,anuref.Id
 
 FROM AspNetUsers as anu
-LEFT JOIN UsersInfo as ui
-ON anu.Id = ui.UserId
-WHERE ui.ReffererId = @userId
-ORDER By anu.Id
+LEFT JOIN UsersInfo as ui ON anu.Id = ui.UserId
+LEFT JOIN AspNetUsers anuref ON anuref.Number = ui.ReffererId
+WHERE anuref.Id = @userId
+ORDER By ui.RegistrationDate desc
 
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY

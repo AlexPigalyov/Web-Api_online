@@ -50,9 +50,7 @@ namespace Web_Api.online.Services
 
             var coinServices = _coinManager
                                 .CoinServices
-                                .Where(x => incomeWallets
-                                                .Any(y =>
-                                                        x.CoinShortName == y.CurrencyAcronim))
+                                .Where(x => incomeWallets.Any(y => x.CoinShortName == y.CurrencyAcronim))
                                 .ToList(); // убирает лишние сервисы, останутся только те у которых юзер имеет кошелёк
 
 
@@ -84,7 +82,17 @@ namespace Web_Api.online.Services
 
                     foreach (var blockchainTransaction in newTransactionsInBlockchain)
                     {
-                        var transaction = ConvertTransactionResponseToIncomeTransaction(blockchainTransaction, coin.CoinShortName, wallet.Id, userId);
+                        var transaction = new IncomeTransactionTableModel()
+                        {
+                            CurrencyAcronim = coin.CoinShortName,
+                            TransactionId = blockchainTransaction.TxId,
+                            Amount = blockchainTransaction.Amount,
+                            TransactionFee = blockchainTransaction.Fee, // не видит комиссию
+                            ToAddress = blockchainTransaction.Address,
+                            Date = blockchainTransaction.Time,
+                            UserId = userId,
+                            WalletId = wallet.Id
+                        };
 
                         var result = await _balanceProvider.Income(wallet, transaction);
 
@@ -114,22 +122,6 @@ namespace Web_Api.online.Services
                 catch { }
             }
             return wallets;
-        }
-
-        private IncomeTransactionTableModel ConvertTransactionResponseToIncomeTransaction(TransactionResponse transaction,
-            string shortNameCurrency, int walletId, string userId)
-        {
-            return new IncomeTransactionTableModel()
-            {
-                CurrencyAcronim = shortNameCurrency,
-                TransactionId = transaction.TxId,
-                Amount = transaction.Amount,
-                TransactionFee = transaction.Fee, // не видит комиссию
-                ToAddress = transaction.Address,
-                Date = transaction.Time,
-                UserId = userId,
-                WalletId = walletId
-            };
         }
     }
 }

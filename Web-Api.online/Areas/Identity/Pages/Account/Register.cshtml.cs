@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -15,8 +16,11 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Data.Repositories.Abstract;
+using Web_Api.online.Extensions;
 using Web_Api.online.Models.Enums;
+using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Areas.Identity.Pages.Account
 {
@@ -61,7 +65,7 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -103,9 +107,14 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
 
                     var cookieRefid = Request.Cookies["refid"];
 
+                    spGetUserByUserNumber refUser = null;
+
                     if (cookieRefid != null)
                     {
                         await _usersInfoRepository.SetUsersInfoRefid(user.Id, cookieRefid);
+
+                        if(int.TryParse(cookieRefid, out var refUserNumber))
+                            refUser = await _usersInfoRepository.GetUserByUserNumber(refUserNumber);
                     }
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
@@ -116,6 +125,18 @@ namespace Web_Api.online.Areas.Identity.Pages.Account
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = ""
                     });
+
+                    if (refUser != null)
+                    {
+                        await _eventsRepository.CreateEventAsync(new EventTableModel()
+                        {
+                            UserId = refUser.Id,
+                            Type = (int)EventTypeEnum.RegistrationByRefferalLink,
+                            Comment = $"Got new refferal {user.Email.HideEmail()}.",
+                            WhenDate = DateTime.Now,
+                            CurrencyAcronim = ""
+                        });
+                    }
 
                     _logger.LogInformation("User created a new account with password.");
 

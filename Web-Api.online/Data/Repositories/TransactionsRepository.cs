@@ -148,7 +148,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("toAddress", incomeTransaction.ToAddress);
                 p.Add("date", incomeTransaction.Date);
                 p.Add("userId", incomeTransaction.UserId);
-                p.Add("incomeWalletId", incomeTransaction.WalletId);
+                p.Add("walletId", incomeTransaction.WalletId);
                 p.Add("new_identity", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 await _db.QueryAsync<int>("CreateIncomeTransaction", p, commandType: CommandType.StoredProcedure);
