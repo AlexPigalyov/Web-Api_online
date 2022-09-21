@@ -79,7 +79,7 @@ namespace Web_Api.online.Controllers
                 {
                     UserId = userId,
                     Type = (int)EventTypeEnum.CreateAddress,
-                    Comment = $"Create address {selectCurrency}: {address}",
+                    Comment = $"Create income wallet address {selectCurrency}: {address}",
                     WhenDate = DateTime.Now,
                     CurrencyAcronim = selectCurrency
                 });
@@ -109,7 +109,7 @@ namespace Web_Api.online.Controllers
                     {
                         UserId = wallet.UserId,
                         Type = (int)EventTypeEnum.CreateWallet,
-                        Comment = $"Create wallet {wallet.CurrencyAcronim}",
+                        Comment = $"Create inner wallet {wallet.CurrencyAcronim}: {wallet.Address}",
                         WhenDate = DateTime.Now,
                         CurrencyAcronim = wallet.CurrencyAcronim
                     });

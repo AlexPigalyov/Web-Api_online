@@ -32,7 +32,6 @@ public class P2PController : Controller
         var p2pUsers = await _p2PRepository.GetP2PUsersByCryptId(isBuyers, crypt.Id, crypt.Name, page);
         var fiats = await _p2PRepository.GetFiats();
         var payments = await _p2PRepository.GetPayments();
-        var timeFrames = await _p2PRepository.GetP2PTimeFrames();
         
         var model = new P2PViewModel()
         {
@@ -40,8 +39,7 @@ public class P2PController : Controller
             Payments = payments,
             Fiats = fiats,
             Crypts = crypts,
-            P2PUsers = p2pUsers,
-            TimeFrames = timeFrames 
+            P2PUsers = p2pUsers
         };
         
         return View(model);
@@ -62,5 +60,32 @@ public class P2PController : Controller
             model.TotalAmount, model.PaymentIds, model.CryptId, model.TimeFrameId);
 
         return Ok();
+    }
+
+    [Route("p2p/create")]
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        var crypt = await _p2PRepository.GetCryptByName("USDT");
+        var crypts = await _p2PRepository.GetCrypts();
+
+        var isBuyers = "buy".Trim().ToLower() == "buy";
+        
+        var p2pUsers = await _p2PRepository.GetP2PUsersByCryptId(isBuyers, crypt.Id, crypt.Name, 1);
+        var fiats = await _p2PRepository.GetFiats();
+        var payments = await _p2PRepository.GetPayments();
+        var timeFrames = await _p2PRepository.GetP2PTimeFrames();
+        
+        var model = new P2PViewModel()
+        {
+            IsBuy = isBuyers,
+            Payments = payments,
+            Fiats = fiats,
+            Crypts = crypts,
+            P2PUsers = p2pUsers,
+            TimeFrames = timeFrames 
+        };
+        
+        return View(model);
     }
 }

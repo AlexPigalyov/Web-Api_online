@@ -133,7 +133,7 @@ namespace Web_Api.online.Clients
                             FromAddress = null,
                             ToAddress = tx.Address,
                             TransactionFee = 0,
-
+                            WalletId = wallet.Id
                         });
 
 

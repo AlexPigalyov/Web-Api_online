@@ -1,3 +1,263 @@
 @{
     ViewData["Title"] = "P2P";
 }
+
+<div class="text-center">
+    <h1 class="display-4">P2P Create</h1>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="mb-1 text-center">
+                        <h4>Create P2P Ad</h4>
+                    </div>
+                    <hr>
+                    <div style="margin-top: 2rem !important;">
+                        <div class="row middle d-flex">
+                            <div class="col-md-6">
+                                <label>
+                                    <input id="buy-radio-btn" type="radio" name="radio" checked/>
+                                    <div class="front-end box">
+                                        <span>Buy</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    <input id="sell-radio-btn" type="radio" name="radio"/>
+                                    <div class="back-end box">
+                                        <span>Sell</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <div class="col-6">
+                            <label class="form-label">Asset</label>
+                            <select id="crypts-select" class="form-select mb-3">
+                                @foreach (var crypt in Model.Crypts)
+                                {
+                                    <option>@crypt.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">With Fiat</label>
+                            <select id="fiats-select" class="form-select mb-3">
+                                @foreach (var fiat in Model.Fiats)
+                                {
+                                    <option>@fiat.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-margins">
+                        <label class="form-label">Price</label>
+                        <input id="price-input" data-toggle="touchspin" class="form-control" type="text" value="0">
+                    </div>
+                    <div class="mb-3 form-margins">
+                        <label class="form-label">Total amount</label>
+                        <div class="input-group flex-nowrap">
+                            <input id="total-amount-input" type="text" class="form-control" placeholder="Enter total trading quantity">
+                            <span class="input-group-text">USDT</span>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex">
+                        <div class="col-6">
+                            <label class="form-label">Limit Amount From</label>
+                            <div class="input-group flex-nowrap">
+                                <input id="limit-from-input" type="text" class="form-control" placeholder="Enter limit amount from">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Limit Amount To</label>
+                            <div class="input-group flex-nowrap">
+                                <input id="limit-to-input" type="text" class="form-control" placeholder="Enter limit amount to">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-margins">
+                        <label class="form-label">Payments (Select 5 methods)</label>
+                        <div class="input-group flex-nowrap">
+                            <select id="payments-multiple-select" multiple data-placeholder="Add tools">
+                                @foreach (var payment in Model.Payments)
+                                {
+                                    <option>@payment.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-margins">
+                        <label class="form-label">Payment Time Limit</label>
+                        <select id="timeframes-select" class="form-select mb-3">
+                            @foreach (var timeFrame in Model.TimeFrames)
+                            {
+                                <option>@timeFrame.ViewName</option>
+                            }
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="mb-1 text-center d-flex">
+                        <div class="col-6">
+                            <button class="btn btn-light" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-6">
+                            <button id="create-btn" class="btn btn-primary" type="submit">Create</button>
+                        </div>
+                    </div>
+                </div> <!-- end col-->
+            </div><!-- end row -->
+        </div> <!-- end card-body -->
+    </div>
+</div>
+
+<link rel="stylesheet" asp-append-version="true" href="~/css/pages/p2p.css"/>
+
+<script>
+    $(document).ready(function () {
+        $("#create-btn").click(function() {
+            var model = @Html.Raw(Json.Serialize(Model));        
+            console.log(model);
+            var isBuy = $('#buy-radio-btn:checked').val() != null;
+            var cryptId = model.crypts.find(crypt => crypt.name == $('#crypts-select').find(":selected").text()).id;
+            var fiatId = model.fiats.find(fiat => fiat.name == $('#fiats-select').find(":selected").text()).id;
+            var price = $('#price-input').val();
+            var totalAmount = $('#total-amount-input').val();
+            var limitFrom = $('#limit-from-input').val();
+            var limitTo = $('#limit-to-input').val();
+            var paymentsId = model.payments.filter(payment => $('#payments-multiple-select').val().includes(payment.name)).map(payment => payment.id);
+            var timeFrameId = model.timeFrames.find(timeFrame => timeFrame.viewName == $('#timeframes-select').find(":selected").text()).id;
+            
+            var data = {
+                isBuy: isBuy,
+                cryptId: cryptId,
+                fiatId: fiatId,
+                price: parseFloat(price),
+                totalAmount: parseFloat(totalAmount),
+                limitFrom: parseFloat(limitFrom),
+                limitTo: parseFloat(limitTo),
+                paymentIds: paymentsId,
+                timeFrameId: timeFrameId
+            };
+            console.log(data);
+            console.log((document.domain + "/p2p/create-p2p-add"));
+            
+            $.ajax({
+              type: 'POST',
+              url: "/p2p/create-p2p-add",
+              data: JSON.stringify(data),
+              contentType: 'application/json; charset=utf-8'
+            });
+            
+            console.log(data);
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    
+        var select = $('select[multiple]');
+        var options = select.find('option');
+    
+        var div = $('<div />').addClass('selectMultiple');
+        var active = $('<div />');
+        var list = $('<ul />');
+        var placeholder = select.data('placeholder');
+    
+        var span = $('<span />').text(placeholder).appendTo(active);
+    
+        options.each(function() {
+            var text = $(this).text();
+            if($(this).is(':selected')) {
+                active.append($('<a />').html('<em>' + text + '</em><i></i>'));
+                span.addClass('hide');
+            } else {
+                list.append($('<li />').html(text));
+            }
+        });
+    
+        active.append($('<div />').addClass('arrow'));
+        div.append(active).append(list);
+    
+        select.wrap(div);
+    
+        $(document).on('click', '.selectMultiple ul li', function(e) {
+            var select = $(this).parent().parent();
+            var li = $(this);
+            if(!select.hasClass('clicked')) {
+                select.addClass('clicked');
+                li.prev().addClass('beforeRemove');
+                li.next().addClass('afterRemove');
+                li.addClass('remove');
+                var a = $('<a />').addClass('notShown').html('<em>' + li.text() + '</em><i></i>').hide().appendTo(select.children('div'));
+                a.slideDown(400, function() {
+                    setTimeout(function() {
+                        a.addClass('shown');
+                        select.children('div').children('span').addClass('hide');
+                        select.find('option:contains(' + li.text() + ')').prop('selected', true);
+                    }, 500);
+                });
+                setTimeout(function() {
+                    if(li.prev().is(':last-child')) {
+                        li.prev().removeClass('beforeRemove');
+                    }
+                    if(li.next().is(':first-child')) {
+                        li.next().removeClass('afterRemove');
+                    }
+                    setTimeout(function() {
+                        li.prev().removeClass('beforeRemove');
+                        li.next().removeClass('afterRemove');
+                    }, 200);
+    
+                    li.slideUp(400, function() {
+                        li.remove();
+                        select.removeClass('clicked');
+                    });
+                }, 600);
+            }
+        });
+    
+        $(document).on('click', '.selectMultiple > div a', function(e) {
+            var select = $(this).parent().parent();
+            var self = $(this);
+            self.removeClass().addClass('remove');
+            select.addClass('open');
+            setTimeout(function() {
+                self.addClass('disappear');
+                setTimeout(function() {
+                    self.animate({
+                        width: 0,
+                        height: 0,
+                        padding: 0,
+                        margin: 0
+                    }, 300, function() {
+                        var li = $('<li />').text(self.children('em').text()).addClass('notShown').appendTo(select.find('ul'));
+                        li.slideDown(400, function() {
+                            li.addClass('show');
+                            setTimeout(function() {
+                                select.find('option:contains(' + self.children('em').text() + ')').prop('selected', false);
+                                if(!select.find('option:selected').length) {
+                                    select.children('div').children('span').removeClass('hide');
+                                }
+                                li.removeClass();
+                            }, 400);
+                        });
+                        self.remove();
+                    })
+                }, 300);
+            }, 400);
+        });
+    
+        $(document).on('click', '.selectMultiple > div .arrow, .selectMultiple > div span', function(e) {
+            $(this).parent().parent().toggleClass('open');
+        });
+    
+    });
+</script>
