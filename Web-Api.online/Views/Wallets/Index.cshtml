@@ -74,6 +74,7 @@
                                 <th>Currency</th>
                                 <th>Address</th>
                                 <th></th>
+                                <th></th>
                                 <th>Created</th>
                             </tr>
                         </thead>
@@ -86,6 +87,12 @@
                                     </td>
                                     <td>
                                         @item.Address
+                                    </td>
+                                    <td>
+                                        <button onClick="@string.Concat("return copyTextToClipboard(\"",item.Address,"\",\"Wallet addres copied to clipboard\")")"
+                                                class="btn btn-outline-secondary">
+                                            copy to clipboard
+                                        </button>
                                     </td>
                                     <td>
                                         @if (item.QrCode != null)
@@ -128,4 +135,5 @@
 
         });
     }
+    
 </script>
