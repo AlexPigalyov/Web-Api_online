@@ -74,7 +74,6 @@
                                 <th>Currency</th>
                                 <th>Address</th>
                                 <th></th>
-                                <th></th>
                                 <th>Created</th>
                             </tr>
                         </thead>
@@ -87,12 +86,14 @@
                                     </td>
                                     <td>
                                         @item.Address
-                                    </td>
-                                    <td>
-                                        <button onClick="@string.Concat("return copyTextToClipboard(\"",item.Address,"\",\"Wallet addres copied to clipboard\")")"
-                                                class="btn btn-outline-secondary">
-                                            copy to clipboard
-                                        </button>
+                                        <span class="ms-2">
+                                            <i class="dripicons-copy" title="Click to copy" 
+                                                onClick="@string.Concat(
+                                                    "return copyTextToClipboard(\"",
+                                                    item.Address,
+                                                    "\",\"Wallet addres copied to clipboard\")")">
+                                             </i>
+                                         </span>
                                     </td>
                                     <td>
                                         @if (item.QrCode != null)
