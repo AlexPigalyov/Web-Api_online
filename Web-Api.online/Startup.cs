@@ -104,7 +104,7 @@ namespace Web_Api.online
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = new PathString("/Identity/Account/Login");
+                options.LoginPath = new PathString("/Login");
             });
 
             services.AddTransient<P2PRepository>();

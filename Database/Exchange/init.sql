@@ -758,7 +758,7 @@ CREATE TABLE [dbo].[IncomeTransactions](
 	[Date] [float] NULL,
 	[CreatedDate] [datetime] NULL,
 	[UserId] [nvarchar](450) NOT NULL,
-	[IncomeWalletsId] [int] NOT NULL,
+	[WalletId] [int] NOT NULL,
  CONSTRAINT [PK_IncomeTransactions] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1742,15 +1742,13 @@ CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 @toAddress nvarchar(max),
 @date decimal(38, 20),
 @userId nvarchar(450),
-@incomeWalletId int,
+@walletId int,
 @new_identity    INT    OUTPUT
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount,
-TransactionFee, ToAddress, Date, UserId, IncomeWalletsId, PlatformCommission)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee,
-@toAddress, @date, @userId, @incomeWalletId, @PlatformCommission)
+INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount, TransactionFee, ToAddress, Date, UserId, WalletId, PlatformCommission)
+VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @toAddress, @date, @userId, @walletId, @PlatformCommission)
 
 SET @new_identity = SCOPE_IDENTITY()
 
@@ -4939,7 +4937,6 @@ OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
 
 END
-
 GO
 SET ANSI_NULLS ON
 GO

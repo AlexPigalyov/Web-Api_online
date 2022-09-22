@@ -14,5 +14,6 @@
         CommissionForOutcomeTransaction = 9,
         CommissionForTrade = 10,
         OutcomeTransactionError = 11,
+        RegistrationByRefferalLink = 12
     }
 }

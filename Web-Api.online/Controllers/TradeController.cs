@@ -99,7 +99,7 @@ namespace Web_Api.online.Controllers
                 return View(await _tradeRepository.spGet_OpenOrders_ByUser(userId));
             }
 
-            return Redirect("/Identity/Account/Login?ReturnUrl=%2FTrade%2FOpenOrders");
+            return Redirect("/Login?ReturnUrl=%2FTrade%2FOpenOrders");
         }
 
         [Authorize]
@@ -129,7 +129,7 @@ namespace Web_Api.online.Controllers
                 return View(closedOrders.OrderByDescending(x => x.ClosedDate));
             }
 
-            return Redirect("/Identity/Account/Login%2FTrade%2FClosedOrders");
+            return Redirect("/Login%2FTrade%2FClosedOrders");
         }
 
         //[HttpPost]

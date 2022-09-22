@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Web_Api.online.Models.Tables
 {
@@ -14,5 +15,9 @@ namespace Web_Api.online.Models.Tables
         public DateTime LastUpdate { get; set; }
         public string Address { get; set; }
         public string AddressLabel { get; set; }
+
+        // Generating
+        public byte[] QrCode { get; set; }
+
     }
 }

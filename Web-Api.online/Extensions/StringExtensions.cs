@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Web_Api.online.Extensions
 {
@@ -54,6 +55,15 @@ namespace Web_Api.online.Extensions
                 result = 0;
             }
             return result;
+        }
+
+        public static string HideEmail(this string email)
+        {
+            if (!Regex.IsMatch(email,
+                    @"^\S+@\S+\.\S+$"))
+                return email;
+
+            return $"{email[..2]}*****{email[^4..]}";
         }
     }
 }
