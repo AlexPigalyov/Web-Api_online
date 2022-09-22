@@ -46,14 +46,13 @@
                             https://ecats.online/Register?refid=@Model.UserNumber                                       
                         </span>
                         <span class="ms-2">
-                            <button onClick=
-                                "@string.Concat(
-                                    "return copyTextToClipboard(\"https://ecats.online/Register?refid=",
-                                    Model.UserNumber,
-                                    "\",\"Refferal link was copied to clipboard\")")" 
-                                    class="btn btn-outline-secondary font-13" style="border-radius:5px;">
-                                copy to clipboard
-                            </button>                
+                            <i class="dripicons-copy" title="Click to copy"
+                                onClick=
+                                    "@string.Concat(
+                                        "return copyTextToClipboard(\"https://ecats.online/Register?refid=",
+                                        Model.UserNumber,
+                                        "\",\"Refferal link was copied to clipboard\")")">                                
+                            </i>                
                         </span>
                     </p>
                     
