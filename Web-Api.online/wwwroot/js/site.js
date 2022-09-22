@@ -23,3 +23,26 @@ function removeZeroes() {
         var ddd = 10;
     });
 }
+
+function copyTextToClipboard(text, msg) {
+
+    navigator.clipboard.writeText(text);
+
+    tempAlert(msg, 1000);
+}
+
+
+function tempAlert(msg, duration) {
+    var el = document.createElement("div");
+
+    el.setAttribute("class", "b-popup-content");
+
+    el.innerHTML = msg;
+
+    setTimeout(function () {
+        el.parentNode.removeChild(el);
+    },
+        duration);
+
+    document.body.appendChild(el);
+}
