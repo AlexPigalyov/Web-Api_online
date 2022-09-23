@@ -47,11 +47,9 @@
                         </span>
                         <span class="ms-2">
                             <i class="dripicons-copy" title="Click to copy"
-                                onClick=
-                                    "@string.Concat(
-                                        "return copyTextToClipboard(\"https://ecats.online/Register?refid=",
-                                        Model.UserNumber,
-                                        "\",\"Refferal link was copied to clipboard\")")">                                
+                                onClick="@("return copyTextToClipboard(\"https://ecats.online/Register?refid=" +
+                                            Model.UserNumber +
+                                            "\",\"Refferal link was copied to clipboard\")")">                                
                             </i>                
                         </span>
                     </p>

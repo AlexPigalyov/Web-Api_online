@@ -88,10 +88,9 @@
                                         @item.Address
                                         <span class="ms-2">
                                             <i class="dripicons-copy" title="Click to copy" 
-                                                onClick="@string.Concat(
-                                                    "return copyTextToClipboard(\"",
-                                                    item.Address,
-                                                    "\",\"Wallet addres copied to clipboard\")")">
+                                                onClick="@("return copyTextToClipboard(\"" +
+                                                            item.Address +
+                                                            "\",\"Wallet addres copied to clipboard\")")">
                                              </i>
                                          </span>
                                     </td>
