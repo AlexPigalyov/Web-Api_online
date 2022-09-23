@@ -5,235 +5,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="/favicon.ico">
     <title>@ViewData["Title"] - eCats - Cryptocurrency Exchange</title>
 
-    <link rel="stylesheet" asp-append-version="true" href="~/css/site.css"/>
-    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css"/>
+    <link rel="stylesheet" asp-append-version="true" href="~/css/site.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css" />
 
-    <meta name="google-site-verification" content="B2VIatlv421f2XH7oxKlRIfRQoQhMRZvrfuZ2ctehLE"/>
-    <meta name="facebook-domain-verification" content="dwx9fqrjsclmrymn0gdm41lfeazmcv"/>
-    <meta name="facebook-domain-verification" content="j9poqqzha79jwuuua362k9oj5jcbvz"/>
+    <meta name="google-site-verification" content="B2VIatlv421f2XH7oxKlRIfRQoQhMRZvrfuZ2ctehLE" />
+    <meta name="facebook-domain-verification" content="dwx9fqrjsclmrymn0gdm41lfeazmcv" />
+    <meta name="facebook-domain-verification" content="j9poqqzha79jwuuua362k9oj5jcbvz" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!-- third party css -->
-    <link href="~/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css"/>
+    <link href="~/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
     @await RenderSectionAsync("ThirdPartyCss", required: false)
     <!-- third party css end -->
-
     <!-- App css -->
-    <link href="~/css/icons.css" asp-append-version="true" rel="stylesheet" type="text/css"/>
-    <link href="~/css/app.css" asp-append-version="true" rel="stylesheet" type="text/css" id="light-style"/>
-    <link href="~/css/app-dark.css" asp-append-version="true" rel="stylesheet" type="text/css" id="dark-style"/>
+    <link href="~/css/icons.css" asp-append-version="true" rel="stylesheet" type="text/css" />
+    <link href="~/css/app.css" asp-append-version="true" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="~/css/app-dark.css" asp-append-version="true" rel="stylesheet" type="text/css" id="dark-style" />
 
     <script src="~/js/vendor.js" asp-append-version="true"></script>
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
-<div class="wrapper">
-    <div class="leftside-menu">
+    <div class="wrapper">
+        <div class="leftside-menu">
 
-        <a href="/" class="logo text-center logo-light">
-            <span class="logo-lg">
-                <img src="/img/logo.png" alt="" height="50">
-            </span>
-        </a>
-
-        <div class="h-100" id="leftside-menu-container" data-simplebar>
-
-            <!--- Sidemenu -->
-            <ul class="side-nav">
-                <li class="side-nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarTrades" aria-expanded="false" aria-controls="sidebarTrades" class="side-nav-link">
-                        <i class="uil-store"></i>
-                        <span> Trades </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="sidebarTrades">
-                        <ul class="side-nav-second-level">
-                            <li>
-                                <a href="/Trade/">Markets</a>
-                            </li>
-                            <li>
-                                <a href="/Trade/OpenOrders">Open orders</a>
-                            </li>
-                            <li>
-                                <a href="/Trade/ClosedOrders">Closed orders</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/Wallets" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Wallets </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/Send" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Send </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/Withdraw" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Withdraw </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/p2p/sell/USDT/1" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> P2P </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="Bots" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Bots </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/api" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Api </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="/stats" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Stats </span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="https://t.me/eCats_Support" target="_blank" class="side-nav-link">
-                        <i class="uil-comments-alt"></i>
-                        <span> Support </span>
-                    </a>
-                </li>
-
-            </ul>
-
-            <div class="form-check form-switch mb-1 position-fixed dark-mode">
-                <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
-                <label class="form-check-label dark-mode-label" for="dark-mode-check">Dark Mode</label>
-            </div>
-
-        </div>
-
-    </div>
-    <div class="content-page">
-        <div class="content">
-            <div class="navbar-custom">
-                <ul class="list-unstyled topbar-menu float-end mb-0">
-                    <li class="dropdown notification-list topbar-dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="~/img/flags/us.jpg" alt="user-image" class="me-0 me-sm-1" height="12">
-                            <span class="align-middle d-none d-sm-inline-block">English</span> @*<i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>*@
-                        </a>
-                        @*<div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu">
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="~/img/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="~/img/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="~/img/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="~/img/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
-                            </a>
-
-                        </div>*@
-                    </li>
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <li class="dropdown notification-list">
-                            <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                               aria-expanded="false">
-                                <span>
-                                    <span class="account-user-name"> @User.Identity.Name</span>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
-                                <!-- item-->
-                                <a href="/My/Profile" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-account-circle me-1"></i>
-                                    <span>Profile</span>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-logout me-1"></i>
-                                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
-                                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                                    </form>
-                                </a>
-                            </div>
-                        </li>
-                    }
-                    else
-                    {
-                        <a asp-page="/Account/Login" asp-area="Identity" class="btn btn-success btn-sm mb-2">Login</a>
-                        <a asp-page="/Account/Register" asp-area="Identity" class="btn btn-danger btn-sm mb-2">Register</a>
-                    }
-                </ul>
-                <button class="button-menu-mobile open-left">
-                    <i class="mdi mdi-menu"></i>
-                </button>
-                <div class="open-left" style="padding-top: 25px;" id="page-header"></div>
-            </div>
-            <div class="container-fluid p-0">
-                <main role="main">
-                    @RenderBody()
-                </main>
-            </div>
-        </div>
-    </div>
-
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - eCats.online - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            <a href="https://t.me/ecats_exchange" target="_blank">
-                <div class="div_telegram"></div>
+            <a href="/" class="logo text-center logo-light">
+                <span class="logo-lg">
+                    <img src="/img/logo.png" alt="" height="50">
+                </span>
             </a>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar>
+
+                <!--- Sidemenu -->
+                <ul class="side-nav">
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarTrades" aria-expanded="false" aria-controls="sidebarTrades" class="side-nav-link">
+                            <i class="uil-store"></i>
+                            <span> Trades </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarTrades">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="/Trade/">Markets</a>
+                                </li>
+                                <li>
+                                    <a href="/Trade/OpenOrders">Open orders</a>
+                                </li>
+                                <li>
+                                    <a href="/Trade/ClosedOrders">Closed orders</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/Wallets" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Wallets </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/Send" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Send </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/Withdraw" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Withdraw </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/p2p/sell/USDT/1" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> P2P </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="Bots" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Bots </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/api" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Api </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="/stats" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Stats </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="https://t.me/eCats_Support" target="_blank" class="side-nav-link">
+                            <i class="uil-comments-alt"></i>
+                            <span> Support </span>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <div class="form-check form-switch mb-1 position-fixed dark-mode">
+                    <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
+                    <label class="form-check-label dark-mode-label" for="dark-mode-check">Dark Mode</label>
+                </div>
+
+            </div>
+
         </div>
-    </footer>
-</div>
+        <div class="content-page">
+            <div class="content">
+                <div class="navbar-custom">
+                    <ul class="list-unstyled topbar-menu float-end mb-0">
+                        <li class="dropdown notification-list topbar-dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="~/img/flags/us.jpg" alt="English" class="me-0 me-sm-1" height="12">
+                                <span class="align-middle d-none d-sm-inline-block">English</span> @*<i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>*@
+                            </a>
+                            @*<div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu">
 
-<!-- bundle -->
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <img src="~/img/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                            </a>
 
-<script src="~/js/app.js" asp-append-version="true"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <img src="~/img/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                            </a>
 
-<script>
-    $(document).ready(function () {
-        $('#page-header').text($(".display-4").text());
-        $(".display-4").remove();
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <img src="~/img/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <img src="~/img/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                            </a>
+
+                            </div>*@
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="dropdown notification-list">
+                                <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                               aria-expanded="false">
+                                    <span>
+                                        <span class="account-user-name"> @User.Identity.Name</span>
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                                    <!-- item-->
+                                    <a href="/My/Profile" class="dropdown-item notify-item">
+                                        <i class="mdi mdi-account-circle me-1"></i>
+                                        <span>Profile</span>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                        <i class="mdi mdi-logout me-1"></i>
+                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+                                            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                        </form>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a asp-page="/Account/Login" asp-area="Identity" class="btn btn-success btn-sm mb-2">Login</a>
+                            <a asp-page="/Account/Register" asp-area="Identity" class="btn btn-danger btn-sm mb-2">Register</a>
+                        }
+                    </ul>
+                    <button class="button-menu-mobile open-left">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                    <div class="open-left" style="padding-top: 25px;" id="page-header"></div>
+                </div>
+                <div class="container-fluid p-0">
+                    <main role="main">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2022 - eCats.online - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a href="https://t.me/ecats_exchange" target="_blank">
+                    <div class="div_telegram"></div>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- bundle -->
+
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#page-header').text($(".display-4").text());
+            $(".display-4").remove();
         });
-</script>
+    </script>
 
 
-<!-- third party js -->
-@await RenderSectionAsync("Scripts", required: false)
-<!-- third party js ends -->
+    <!-- third party js -->
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- third party js ends -->
 </body>
 </html>
