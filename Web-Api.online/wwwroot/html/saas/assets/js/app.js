@@ -93,13 +93,17 @@
             e.preventDefault();
             self.body.toggleClass('sidebar-enable');
 
-            if (self.window.width() >= 576) {
-                if (self.body.attr('data-leftbar-compact-mode') === 'condensed') {
-                    self.deactivateCondensedSidebar();
-                } else {
-                    self.activateCondensedSidebar(); 
+                if (self.body.attr('data-layout') === 'full') {
+                    self.body.toggleClass('hide-menu');
                 }
-            }
+                else {
+                    if (self.body.attr('data-leftbar-compact-mode') === 'condensed') {
+                        self.deactivateCondensedSidebar();
+                    } else {
+                        self.activateCondensedSidebar(); 
+                    }
+                }
+            
         });
 
         // sidebar - main menu
@@ -1259,13 +1263,17 @@ function ($) {
 
                 //Tooltips
 
+                // document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(element) {
+                //     //new bootstrap.Tooltip(element);
+                //     element.addEventListener("mouseover", function( event ) {
+                //         new bootstrap.Tooltip(element).show();
+                //     });
+                // });
 
-                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(element) {
-                    //new bootstrap.Tooltip(element);
-                    element.addEventListener("mouseover", function( event ) {
-                        new bootstrap.Tooltip(element).show();
-                    });
-                });
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                })
   
 
                 // offcanvas
