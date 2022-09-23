@@ -62,11 +62,11 @@ namespace Web_Api.online.Controllers
                         await _usersManager.FindByIdAsync(userId),
                         model.Username);
                 }
-                else
-                {
-                    return BadRequest("A user with same username was found");
-                }
-
+                // why? causes update profile error
+                //else
+                //{
+                //    return BadRequest("A user with same username was found");
+                //}
             }
 
             await _usersInfoRepository.spCreateOrUpdateProfileUserInfo(model.UserInfo);
