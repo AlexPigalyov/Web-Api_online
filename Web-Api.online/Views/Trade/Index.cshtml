@@ -11,11 +11,20 @@
 <link href="/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
 
 <div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h1 class="display-4">Markets</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-xl-12 col-lg-12 order-lg-2 order-xl-1">
         <div class="card" style="margin: 10px 0 !important;">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="markets-table" class="table dt-responsive table-centered table-nowrap table-hover mb-0">
+                    @*<table id="markets-table" class="table dt-responsive table-centered table-nowrap table-hover mb-0">*@
+                        <table id="markets-table" class="table table-centered table-nowrap table-hover mb-0">
                         <thead>
                             <tr class="table-primary">
                                 <th>
@@ -25,7 +34,7 @@
                                     <h5 class="font-14 my-1 fw-normal">Price</h5>
                                 </th>
                                 @*<th>
-                                    <h5 class="font-14 my-1 fw-normal">Change 1m</h5>
+                                <h5 class="font-14 my-1 fw-normal">Change 1m</h5>
                                 </th>*@
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Change 15m</h5>
@@ -35,7 +44,7 @@
                                 </th>
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Change 24h</h5>
-                                </th>                                
+                                </th>
                                 <th>
                                     <h5 class="font-14 my-1 fw-normal">Volume 24h</h5>
                                 </th>
@@ -52,19 +61,19 @@
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Price</span> @pair.Currency2Postfix
                                     </td>
                                     @*<td>
-                                        @if (@pair.Change1m < 0)
-                                        {
-                                            <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1m</span> %</span>
-                                        }
-                                        else if (@pair.Change1m > 0)
-                                        {
-                                            <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change1m</span> %</span>
-                                        }
-                                        else
-                                        {
-                                            <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1m</span> %</span>
-                                        }
-                                    </td>*@
+                                @if (@pair.Change1m < 0)
+                                {
+                                <span class="font-14 my-1 fw-bold text-danger"><span class="decimal-data">@pair.Change1m</span> %</span>
+                                }
+                                else if (@pair.Change1m > 0)
+                                {
+                                <span class="font-14 my-1 fw-bold text-success"><span class="decimal-data">@pair.Change1m</span> %</span>
+                                }
+                                else
+                                {
+                                <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1m</span> %</span>
+                                }
+                                </td>*@
                                     <td>
                                         @if (@pair.Change15m < 0)
                                         {
@@ -91,7 +100,7 @@
                                         else
                                         {
                                             <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change1h</span> %</span>
-                                        }                                       
+                                        }
                                     </td>
                                     <td>
                                         @if (@pair.Change24h < 0)
@@ -106,7 +115,7 @@
                                         {
                                             <span><span class="font-14 my-1 fw-normal decimal-data">@pair.Change24h</span> %</span>
                                         }
-                                    </td>                                    
+                                    </td>
                                     <td>
                                         <span class="font-14 my-1 fw-normal decimal-data">@pair.Volume24h</span> $
                                     </td>
@@ -126,8 +135,8 @@
     <br />
     @if (SignInManager.IsSignedIn(User))
     {
-            <a href="/Trade/OpenOrders">Open orders</a>
-            <a href="/Trade/ClosedOrders">Closed orders</a>
+        <a href="/Trade/OpenOrders">Open orders</a>
+        <a href="/Trade/ClosedOrders">Closed orders</a>
     }
 
 </div>
@@ -140,10 +149,10 @@
 <script>
     $(document).ready(function () {
         $('#markets-table').DataTable({
-            "pageLength" : 500,
+            "pageLength": 500,
             "paging": false,
             "language": {
-              "info": "Showing _START_ to _END_ of _TOTAL_ pairs"
+                "info": "Showing _START_ to _END_ of _TOTAL_ pairs"
             },
             "dom": "frtip"
         });

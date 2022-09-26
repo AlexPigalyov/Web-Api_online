@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
-            <h4 class="page-title">Wallets</h4>
+            <h1 class="display-4">Wallets</h1>
         </div>
     </div>
 </div>
@@ -74,7 +74,6 @@
                                 <th>Currency</th>
                                 <th>Address</th>
                                 <th></th>
-                                <th></th>
                                 <th>Created</th>
                             </tr>
                         </thead>
@@ -87,17 +86,18 @@
                                     </td>
                                     <td>
                                         @item.Address
-                                    </td>
-                                    <td>
-                                        <button onClick="@string.Concat("return copyTextToClipboard(\"",item.Address,"\",\"Wallet addres copied to clipboard\")")"
-                                                class="btn btn-outline-secondary">
-                                            copy to clipboard
-                                        </button>
+                                        <span class="ms-2">
+                                            <i class="dripicons-copy" title="Click to copy" 
+                                                onClick="@("return copyTextToClipboard(\"" +
+                                                            item.Address +
+                                                            "\",\"Wallet addres copied to clipboard\")")">
+                                             </i>
+                                         </span>
                                     </td>
                                     <td>
                                         @if (item.QrCode != null)
                                         {
-                                            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode))"/>
+                                            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode))" />
                                         }
                                     </td>
                                     <td>
@@ -135,5 +135,5 @@
 
         });
     }
-    
+
 </script>
