@@ -72,13 +72,14 @@ public class P2PRepository
         catch (Exception ex) { }
     }
     
-    public async Task CreateUserPayment(long p2pUserId, int p2pPaymentId)
+    public async Task CreateUserPayment(long p2pUserId, int p2pPaymentId, bool isBuyer)
     {
         try
         {
             var p = new DynamicParameters();
             p.Add("p2pUserId", p2pUserId);
             p.Add("p2pPaymentId", p2pPaymentId);
+            p.Add("isBuyer", isBuyer);
 
             await _dbExchange.ExecuteAsync("CreateP2PUserPayment", p, commandType: CommandType.StoredProcedure);
         }
@@ -103,17 +104,18 @@ public class P2PRepository
             await _dbExchange.QueryAsync<long>("CreateP2P" + (isBuyer ? "Buyer" : "Seller"), p, commandType: CommandType.StoredProcedure);
             var id = p.Get<long>("new_identity");
             
-            paymentIds.ForEach(async x => await CreateUserPayment(id, x));
+            paymentIds.ForEach(async x => await CreateUserPayment(id, x, isBuyer));
         }
         catch (Exception ex) { }
     }
 
-    public async Task<List<P2PUserPaymentTableModel>> GetP2PPaymentByP2PUserId(long p2pSellerId)
+    public async Task<List<P2PUserPaymentTableModel>> GetP2PPaymentByP2PUserId(long p2pSellerId, bool isBuyer)
     {
         try
         {
             var parameters = new DynamicParameters();
             parameters.Add("p2pUserId", p2pSellerId);
+            parameters.Add("isBuyer", isBuyer);
 
             return (await _dbExchange.QueryAsync<P2PUserPaymentTableModel>("GetP2PPaymentsByP2PUserId",
                     parameters,
@@ -242,11 +244,11 @@ public class P2PRepository
         }
     }
 
-    public async Task<List<string>> GetP2PUserPaymentsByP2PUserId(long p2pUserId)
+    public async Task<List<string>> GetP2PUserPaymentsByP2PUserId(long p2pUserId, bool isBuyer)
     {
         try
         {
-            var p2pPaymentsIds = await GetP2PPaymentByP2PUserId(p2pUserId);
+            var p2pPaymentsIds = await GetP2PPaymentByP2PUserId(p2pUserId, isBuyer);
             
             return p2pPaymentsIds.Select(x =>
             {
@@ -324,7 +326,7 @@ public class P2PRepository
 
                 user.FiatName = (await GetFiatById(p2pSeller.P2PFiatId)).Name;
                 user.CryptName = (await GetCryptById(p2pSeller.P2PCryptId)).Name;
-                user.Payments = await GetP2PUserPaymentsByP2PUserId(p2pSeller.Id);
+                user.Payments = await GetP2PUserPaymentsByP2PUserId(p2pSeller.Id, isBuyers);
 
                 result.Add(user);
             }
