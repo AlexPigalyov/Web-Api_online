@@ -1068,7 +1068,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[P2PUsersPayments](
 	[P2PUserId] [bigint] NOT NULL,
-	[P2PPaymentId] [int] NOT NULL
+	[P2PPaymentId] [int] NOT NULL,
+	[IsBuyer] [bit] NOT NULL
 ) ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -1852,12 +1853,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateP2PUserPayment]
 @p2pUserId bigint,
-@p2pPaymentId int
+@p2pPaymentId int,
+@isBuyer bit
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[P2PUsersPayments] (P2PPaymentId, P2PUserId)
-VALUES (@p2pPaymentId, @p2pUserId)
+INSERT INTO [Exchange].[dbo].[P2PUsersPayments] (P2PPaymentId, P2PUserId, IsBuyer)
+VALUES (@p2pPaymentId, @p2pUserId, @isBuyer)
 
 END
 GO
@@ -5098,14 +5100,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
 CREATE PROCEDURE [dbo].[GetP2PPaymentsByP2PUserId]
-@p2pUserId bigint
+@p2pUserId bigint,
+@isBuyer bit
 AS
 BEGIN
 
 SELECT * FROM [Exchange].[dbo].[P2PUsersPayments] 
 WHERE 
 P2PUserId = @p2pUserId
+AND
+IsBuyer = @isBuyer
 
 END
 
