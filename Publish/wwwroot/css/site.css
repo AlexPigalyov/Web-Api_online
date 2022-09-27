@@ -1,6 +1,21 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+a {
+    color: #6C757D !important;
+    text-decoration: none !important;
+}
+
+h5, .h5 {
+    display: block !important;
+    font-size: 0.83em !important;
+    margin-block-start: 1.67em !important;
+    margin-block-end: 1.67em !important;
+    margin-inline-start: 0px !important;
+    margin-inline-end: 0px !important;
+    font-weight: bold !important;
+}
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -162,3 +177,33 @@ footer > .container {
     .div_telegram:hover {
         background-image: url("/img/telegram_hover.png");
     }
+
+.b-popup-content {
+    margin: 40px auto 0px auto;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    color: #808080;
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0px 0px 10px #000;
+}
+
+i[class^="dripicons-copy"]:hover {
+    color: black !important;
+}
+
+body[data-leftbar-theme=dark] .list-unstyled.topbar-menu a {
+    color: #8391a2 !important;
+}
+
+body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode-label {
+    visibility: hidden;
+}
+
+body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode {
+    padding-left: 2em;
+    /* } */
