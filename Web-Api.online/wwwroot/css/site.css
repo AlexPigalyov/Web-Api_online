@@ -192,6 +192,10 @@ footer > .container {
     box-shadow: 0px 0px 10px #000;
 }
 
+i[class^="dripicons-copy"]:hover {
+    color: black !important;
+}
+
 body[data-leftbar-theme=dark] .list-unstyled.topbar-menu a {
     color: #8391a2 !important;
 }
