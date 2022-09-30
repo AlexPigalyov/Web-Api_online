@@ -177,6 +177,7 @@ namespace Web_Api.online
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<StatsOrdersHub>("/statsordershub");
                 endpoints.MapHub<PairsHub>("/pairshub");
                 endpoints.MapHub<BtcUsdtHub>("/btcusdthub");
                 endpoints.MapHub<EthUsdtHub>("/ethusdthub");
@@ -189,6 +190,7 @@ namespace Web_Api.online
                 endpoints.MapHub<DogeBtcHub>("/dogebtchub");
                 endpoints.MapHub<BchUsdtHub>("/bchusdthub");
                 endpoints.MapHub<BchBtcHub>("/bchbtchub");
+                
                 //endpoints.MapHub<ChatHub>("/chatHub");
             });
 
