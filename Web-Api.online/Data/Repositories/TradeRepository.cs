@@ -253,7 +253,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<ClosedOrderTableModel>> GetBTCUSDTClosedOrdersPaged(int page, int pageSize)
+        public async Task<List<ClosedOrderTableModel>> GetClosedOrdersPaged(int page, int pageSize)
         {
             try
             {

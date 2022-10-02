@@ -24,7 +24,7 @@ public class StatsOrdersJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var closedOrders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(1, 100);
+        var closedOrders = await _tradeRepository.GetClosedOrdersPaged(1, 100);
 
         _hubContext.Clients.All.SendAsync($"ReceiveMessage", JsonConvert.SerializeObject(closedOrders)).Wait();
     }
