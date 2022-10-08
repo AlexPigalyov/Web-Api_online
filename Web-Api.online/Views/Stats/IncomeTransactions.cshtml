@@ -22,18 +22,21 @@
                     <table id="transactions-table" class="table table-centered w-100 nowrap">
                         <thead>
                             <tr class="table-primary">
+                                <th>Date</th>
                                 <th>Currency Acronim</th>
                                 <th>Amount</th>
                                 <th>TransactionFee</th>
                                 <th>From Address</th>
                                 <th>To Address</th>
-                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.IncomeTransactions)
                             {
                                 <tr>
+                                    <td>
+                                        @item.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
                                     <td>
                                         @item.CurrencyAcronim
                                     </td>
@@ -48,9 +51,6 @@
                                     </td>
                                     <td>
                                         @item.ToAddress
-                                    </td>
-                                    <td>
-                                        @item.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")
                                     </td>
                                 </tr>
                             }
