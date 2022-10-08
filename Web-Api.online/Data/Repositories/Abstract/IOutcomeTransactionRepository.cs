@@ -9,7 +9,7 @@ namespace Web_Api.online.Data.Repositories.Abstract
     {
         public Task<OutcomeTransactionTableModel> CreateOutcomeTransaction(OutcomeTransactionTableModel outcomeTransaction);
 
-        public Task UpdateTransactionAfterExecutioAsync(OutcomeTransactionTableModel outcomeTransaction);
+        public Task UpdateTransactionAfterExecutionAsync(OutcomeTransactionTableModel outcomeTransaction);
 
         public Task<List<OutcomeTransactionTableModel>> GetOutcomeTransactionsPaged(int page, int pageSize);
 

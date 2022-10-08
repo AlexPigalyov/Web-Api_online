@@ -43,7 +43,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task UpdateTransactionAfterExecutioAsync(OutcomeTransactionTableModel outcomeTransaction)
+        public async Task UpdateTransactionAfterExecutionAsync(OutcomeTransactionTableModel outcomeTransaction)
         {
             try
             {

@@ -145,6 +145,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("amount", incomeTransaction.Amount);
                 p.Add("platformCommission", incomeTransaction.PlatformCommission);
                 p.Add("transactionFee", incomeTransaction.TransactionFee);
+                p.Add("fromAddress", incomeTransaction.FromAddress);
                 p.Add("toAddress", incomeTransaction.ToAddress);
                 p.Add("date", incomeTransaction.Date);
                 p.Add("userId", incomeTransaction.UserId);
