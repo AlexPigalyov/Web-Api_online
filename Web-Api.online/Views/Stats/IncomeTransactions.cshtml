@@ -123,6 +123,7 @@
 <script>
     $(document).ready(function () {
         $('#transactions-table').DataTable({
+            "order": [[0, "desc"]],
             "pageLength": 500,
             "paging": false,
             "language": {

@@ -16,10 +16,10 @@
         <thead>
             <tr class="table-primary">
                 <th>Create Date</th>
+                <th>Currency Acronim</th>
+                <th>Value</th>
                 <th>From Wallet Id</th>
                 <th>To Address</th>
-                <th>Value</th>
-                <th>Currency Acronim</th>
                 <th>State</th>
             </tr>
         </thead>
@@ -31,16 +31,16 @@
                         @item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
                     </td>
                     <td>
-                        @item.FromWalletId
-                    </td>
-                    <td>
-                        @item.ToAddress
+                        @item.CurrencyAcronim
                     </td>
                     <td>
                         <span class="decimal-data">@item.Value</span>
                     </td>
                     <td>
-                        @item.CurrencyAcronim
+                        @item.FromWalletId
+                    </td>
+                    <td>
+                        @item.ToAddress
                     </td>
                     <td>
                         @item.State
@@ -60,6 +60,7 @@
 <script>
     $(document).ready(function () {
         $('#WithdrawTransactionRepository').DataTable({
+            "order": [[0, "desc"]],
             "pageLength": 500,
             "paging": false,
             "language": {
