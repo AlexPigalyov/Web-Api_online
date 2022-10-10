@@ -749,7 +749,7 @@ GO
 CREATE TABLE [dbo].[IncomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[CurrencyAcronim] [nvarchar](50) NOT NULL,
-	[TransactionId] [nvarchar](max) NOT NULL,
+	[TransactionHash] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
 	[PlatformCommission] [decimal](38, 20) NULL,
@@ -966,7 +966,8 @@ CREATE TABLE [dbo].[OutcomeTransactions](
 	[ErrorText] [nvarchar](max) NULL,
 	[PlatformCommission] [decimal](38, 20) NULL,
 	[BlockchainCommission] [decimal](38, 20) NULL,
-	[FixedCommission] [decimal](38, 20) NULL
+	[FixedCommission] [decimal](38, 20) NULL,
+	[TransactionHash] [nvarchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -1735,10 +1736,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 @currencyAcronim nvarchar(10),
-@transactionId nvarchar(max),
+@transactionHash nvarchar(max),
 @amount decimal(38, 20),
 @transactionFee decimal(38, 20),
 @PlatformCommission decimal(38, 20),
+@fromAddress nvarchar(max),
 @toAddress nvarchar(max),
 @date decimal(38, 20),
 @userId nvarchar(450),
@@ -1747,8 +1749,8 @@ CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount, TransactionFee, ToAddress, Date, UserId, WalletId, PlatformCommission)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @toAddress, @date, @userId, @walletId, @PlatformCommission)
+INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionHash, Amount, TransactionFee, FromAddress, ToAddress, Date, UserId, WalletId, PlatformCommission)
+VALUES (@currencyAcronim, @transactionHash, @amount, @transactionFee,@fromAddress, @toAddress, @date, @userId, @walletId, @PlatformCommission)
 
 SET @new_identity = SCOPE_IDENTITY()
 
@@ -1769,16 +1771,17 @@ CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
 @fixedCommission decimal(38,20),
 @blockchainCommission decimal(38,20),
 @currencyAcronim nvarchar(10),
+@transactionHash nvarchar(max),
 @state int
 AS
 
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, PlatformCommission,
+			Value, CreateDate, CurrencyAcronim, TransactionHash, State, LastUpdateDate, PlatformCommission,
 			BlockchainCommission, FixedCommission)
-VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(),
-@platformCommission, @blockchainCommission, @fixedCommission)
+VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, @transactionHash,
+1, GETDATE(), @platformCommission, @blockchainCommission, @fixedCommission)
 
 SET @id = SCOPE_IDENTITY()
 END
@@ -4288,6 +4291,7 @@ BEGIN
 
 SELECT inct.[Id],
        inct.[CurrencyAcronim],
+       inct.[TransactionHash],
        inct.[Amount],
        inct.[TransactionFee],
        inct.[FromAddress],
@@ -4766,6 +4770,7 @@ BEGIN
 
 Select
   CurrencyAcronim
+  ,TransactionHash
   ,Amount
   ,TransactionFee
   ,FromAddress
@@ -4797,6 +4802,7 @@ BEGIN
 
 	SELECT
 	   CurrencyAcronim
+      ,TransactionHash
 	  ,Amount
 	  ,TransactionFee
 	  ,FromAddress
@@ -4925,6 +4931,7 @@ BEGIN
 Select
    FromWalletId
   ,CurrencyAcronim
+  ,TransactionHash
   ,Value
   ,CreateDate
   ,ToAddress
@@ -10288,13 +10295,16 @@ CREATE PROCEDURE [dbo].[UpdateTransactionAfterExecution]
 @id int,
 @state int,
 @blockchainCommission decimal (38, 20),
+@transactionHash nvarchar(max),
 @errorText nvarchar(max)
 AS
 BEGIN
 
 UPDATE [Exchange].[dbo].[OutcomeTransactions]
 SET State = @state, LastUpdateDate = GETDATE(),
-BlockchainCommission = @blockchainCommission, ErrorText = @errorText
+BlockchainCommission = @blockchainCommission,
+TransactionHash = @errorText,
+ErrorText = @errorText
 WHERE Id = @id
 
 END
