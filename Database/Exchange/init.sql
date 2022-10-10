@@ -1657,6 +1657,39 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE PROCEDURE [dbo].[ClosedOrdersByPair_Paged]
+@pairPrefiks nvarchar(150),
+@page int,
+@pageSize int
+AS
+BEGIN
+
+SET NOCOUNT ON;
+
+DECLARE @SQL NVARCHAR(MAX) = N'
+	Select CreateDate, ClosedDate, IsBuy, StartPrice, Difference, ClosedPrice, Amount, Total, Status, CreateUserId, BoughtUserId FROM ' + 
+	@pairPrefiks + '_ClosedOrders Order By Id desc OFFSET ' + (SELECT CAST(@pageSize as varchar(10))) + ' * (' + (SELECT CAST(@page as varchar(10))) + ' - 1) ROWS FETCH NEXT ' + (SELECT CAST(@pageSize as varchar(10))) + ' ROWS ONLY';
+
+EXECUTE sp_executesql @SQL;
+
+
+--Select CreateDate, ClosedDate, IsBuy, StartPrice, Difference, ClosedPrice, Amount, Total, Status, CreateUserId, BoughtUserId FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+--Order By Id desc
+--OFFSET @pageSize * (@page - 1) ROWS
+--FETCH NEXT @pageSize ROWS ONLY
+
+
+
+END
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[CreateBot]
 @name nvarchar(450),
 @botAuthCode nvarchar(450),
