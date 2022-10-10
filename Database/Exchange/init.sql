@@ -5416,7 +5416,8 @@ BEGIN
 
 SELECT w.[Id]
       ,w.[UserId]
-      ,w.[Value]
+	  ,Convert(Decimal(38,12),[Value]) as Value
+	  --,[Value]
       ,w.CurrencyAcronim
 	  ,w.[Created]
 	  ,w.[LastUpdate]
@@ -5440,7 +5441,8 @@ BEGIN
 
 SELECT w.[Id]
       ,w.[UserId]
-      ,w.[Value]
+      --,w.[Value]
+	  , Convert(Decimal(38,12),[Value]) as Value
       ,w.CurrencyAcronim
 	  ,w.[Created]
 	  ,w.[LastUpdate]
