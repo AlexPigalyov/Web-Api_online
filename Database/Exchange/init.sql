@@ -4955,6 +4955,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[GetOutcomeTransactionById]
+@id bigint
+AS
+BEGIN
+
+Select * FROM [Exchange].[dbo].[OutcomeTransactions]
+WHERE Id = @id
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[GetOutcomeTransactions_Paged]
 @page int,
 @pageSize int
