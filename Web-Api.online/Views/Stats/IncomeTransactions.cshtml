@@ -28,6 +28,7 @@
                                 <th>TransactionFee</th>
                                 <th>From Address</th>
                                 <th>To Address</th>
+                                <th>Hash</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,6 +52,9 @@
                                     </td>
                                     <td>
                                         @item.ToAddress
+                                    </td>
+                                    <td>
+                                        @item.TransactionHash
                                     </td>
                                 </tr>
                             }

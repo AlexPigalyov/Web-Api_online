@@ -21,6 +21,7 @@
                 <th>From Wallet Id</th>
                 <th>To Address</th>
                 <th>State</th>
+                <th>Transaction Hash</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +45,9 @@
                     </td>
                     <td>
                         @item.State
+                    </td>
+                    <td>
+                        @item.TransactionHash
                     </td>
                 </tr>
             }
