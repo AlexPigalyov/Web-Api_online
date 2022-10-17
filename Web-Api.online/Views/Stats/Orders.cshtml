@@ -114,7 +114,7 @@ function loadOrders(orders)
             var amountTd = document.createElement("td");                                    
             var amountSpan = document.createElement("span");
             amountSpan.className = "decimal-data";
-            amountSpan.innerText = order.Amount;                                    
+            amountSpan.innerText = order.Amount.toFixed(20);                                    
             amountTd.appendChild(amountSpan);
             trElem.appendChild(amountTd);
             
