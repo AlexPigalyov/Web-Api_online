@@ -602,12 +602,12 @@
 
             if (!isLoad) {
                 orderPrice = order.Price;
-                orderAmount = order.Amount;
+                orderAmount = order.Amount.toFixed(20);
                 orderTotal = order.Total;
             }
             else {
                 orderPrice = order.price;
-                orderAmount = order.amount;
+                orderAmount = order.amount.toFixed(20);
                 orderTotal = order.total;
             }
 
