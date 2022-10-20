@@ -111,9 +111,6 @@ namespace Web_Api.online.Clients
                         //списываем дополнительно комиссию 
                         wallet.Value -= resultTr.CommissionBlockchain.Value;
 
-                        tr.State = resultTr.OutcomeTransactionState;
-                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
-
                         await _walletsRepository.UpdateWalletBalanceAsync(wallet);
                         await _eventsRepository.CreateEventAsync(new EventTableModel()
                         {
@@ -131,8 +128,6 @@ namespace Web_Api.online.Clients
                     }
                     else
                     {
-                        tr.State = resultTr.OutcomeTransactionState;
-                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
                         tr.ErrorText = resultTr.ErrorText;
 
                         await _eventsRepository.CreateEventAsync(new EventTableModel()
@@ -149,7 +144,11 @@ namespace Web_Api.online.Clients
 
                         model.Status = "Error, your transaction will be processed manually";
                     }
-                    await _outcomeTransactionRepository.UpdateTransactionAfterExecutionAsync(tr);
+                    tr.State = resultTr.OutcomeTransactionState;
+                    tr.BlockchainCommission = resultTr.CommissionBlockchain;
+                    tr.TransactionHash = resultTr.TransactionHash;
+
+                    await _outcomeTransactionRepository.UpdateOutcomeTransactionAfterExecutionAsync(tr);
                 }
                 else
                 {

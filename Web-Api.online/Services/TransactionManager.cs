@@ -98,7 +98,7 @@ namespace Web_Api.online.Services
                         var transaction = new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = coin.CoinShortName,
-                            TransactionId = blockchainTransaction.TxId,
+                            TransactionHash = blockchainTransaction.TxId,
                             Amount = blockchainTransaction.Amount,
                             TransactionFee = blockchainTransaction.Fee, // не видит комиссию
                             ToAddress = blockchainTransaction.Address,

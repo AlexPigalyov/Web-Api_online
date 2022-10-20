@@ -66,12 +66,13 @@ namespace Web_Api.online.Clients
                                         Value = _amount.Value,
                                         PlatformCommission = result.Commission,
                                         CurrencyAcronim = "ZEC",
-                                        State = (int)OutcomeTransactionStateEnum.Finished
+                                        State = (int)OutcomeTransactionStateEnum.Finished,
                                     });
 
                     // check if need to convert Amount
                     var txId = _client.MakeRequest<string>(ZecRestMethods.sendtoaddress, model.Address, model.Amount);
-
+                    tr.TransactionHash = txId;
+                    await _outcomeTransactionRepository.UpdateOutcomeTransactionAfterExecutionAsync(tr);
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()
                     {
@@ -114,7 +115,7 @@ namespace Web_Api.online.Clients
             List<IncomeWalletTableModel> incomeZecWallets = await _walletsRepository.GetUserIncomeWalletsByAcronimAsync(userId, "ZEC");
 
             List<IncomeTransactionTableModel> transactionModels = await _transactionsRepository.GetIncomeTransactions(userId, "ZEC");
-            List<string> savedTransactions = transactionModels.Select(x => x.TransactionId).ToList();
+            List<string> savedTransactions = transactionModels.Select(x => x.TransactionHash).ToList();
 
             foreach (var incomeZecWallet in incomeZecWallets)
             {
@@ -127,7 +128,8 @@ namespace Web_Api.online.Clients
                         var transaction = await _transactionsRepository.CreateIncomeTransactionAsync(new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = "ZEC",
-                            TransactionId = tx.TxId,
+                            //TransactionId = tx.TxId,
+                            TransactionHash = tx.TxId,
                             Amount = tx.Satoshis / 100000000,
                             UserId = userId,
                             FromAddress = null,
