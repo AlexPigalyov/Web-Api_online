@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Create New Pair";
+}
+
+<div class="">
+    <div role="document">
+        <div>
+            <div>
+                <h5>Create new crypt exchange pair</h5>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="firstCurrency" class="col-form-label">First currency:</label>
+                    <input type="text" class="form-control" id="firstCurrency">
+                </div>
+                <div class="form-group">
+                    <label for="secondCurrency" class="col-form-label">Second currency:</label>
+                    <input type="text" class="form-control" id="secondCurrency" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="sendData()" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendData() {
+        var firstCurrency = document.getElementById("firstCurrency").value;
+        var secondCurrency = document.getElementById("secondCurrency").value;
+
+        $.ajax({
+            url: '/admin/pairs/create',
+            type: 'POST',
+            data: JSON.stringify({
+                firstCurrency: firstCurrency,
+                secondCurrency: secondCurrency
+            }),
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+</script>
