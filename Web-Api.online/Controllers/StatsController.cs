@@ -84,7 +84,7 @@ namespace Web_Api.online.Controllers
         {
             int pageSize = 100;
 
-            var closedOrders = await _tradeRepository.GetBTCUSDTClosedOrdersPaged(model.Page, pageSize);
+            var closedOrders = await _tradeRepository.GetClosedOrdersPaged(model.Page, pageSize);
             var itemsCount = await _tradeRepository.GetCountOfClosedOrders();
 
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()

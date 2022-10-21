@@ -22,18 +22,22 @@
                     <table id="transactions-table" class="table table-centered w-100 nowrap">
                         <thead>
                             <tr class="table-primary">
+                                <th>Transaction Date</th>
                                 <th>Currency Acronim</th>
                                 <th>Amount</th>
                                 <th>TransactionFee</th>
                                 <th>From Address</th>
                                 <th>To Address</th>
-                                <th>Date</th>
+                                <th>Hash</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.IncomeTransactions)
                             {
                                 <tr>
+                                    <td>
+                                        @item.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
                                     <td>
                                         @item.CurrencyAcronim
                                     </td>
@@ -44,13 +48,13 @@
                                         <span class="decimal-data">@item.TransactionFee</span>
                                     </td>
                                     <td>
-                                        @item.FromAddress
+                                        <span style="width: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@item.FromAddress</span>
                                     </td>
                                     <td>
                                         @item.ToAddress
                                     </td>
                                     <td>
-                                        @item.CreatedDate.ToString("dd-MM-yyyy HH:mm:ss")
+                                        @item.TransactionHash
                                     </td>
                                 </tr>
                             }
@@ -123,6 +127,7 @@
 <script>
     $(document).ready(function () {
         $('#transactions-table').DataTable({
+            "order": [[0, "desc"]],
             "pageLength": 500,
             "paging": false,
             "language": {

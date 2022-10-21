@@ -749,7 +749,7 @@ GO
 CREATE TABLE [dbo].[IncomeTransactions](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[CurrencyAcronim] [nvarchar](50) NOT NULL,
-	[TransactionId] [nvarchar](max) NOT NULL,
+	[TransactionHash] [nvarchar](max) NOT NULL,
 	[Amount] [decimal](38, 20) NOT NULL,
 	[TransactionFee] [decimal](38, 20) NOT NULL,
 	[PlatformCommission] [decimal](38, 20) NULL,
@@ -966,7 +966,8 @@ CREATE TABLE [dbo].[OutcomeTransactions](
 	[ErrorText] [nvarchar](max) NULL,
 	[PlatformCommission] [decimal](38, 20) NULL,
 	[BlockchainCommission] [decimal](38, 20) NULL,
-	[FixedCommission] [decimal](38, 20) NULL
+	[FixedCommission] [decimal](38, 20) NULL,
+	[TransactionHash] [nvarchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -1624,6 +1625,107 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+CREATE PROCEDURE [dbo].[ClearAllBotsOrdersMoreOneHour]
+AS
+BEGIN
+
+delete from BCH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Buy
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Sell
+where CreateDate < dateadd(hh,-1,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[ClosedOrders_Paged]
 @page int,
 @pageSize int
@@ -1646,6 +1748,39 @@ FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
 Order By Id desc
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[ClosedOrdersByPair_Paged]
+@pairPrefiks nvarchar(150),
+@page int,
+@pageSize int
+AS
+BEGIN
+
+SET NOCOUNT ON;
+
+DECLARE @SQL NVARCHAR(MAX) = N'
+	Select CreateDate, ClosedDate, IsBuy, StartPrice, Difference, ClosedPrice, Amount, Total, Status, CreateUserId, BoughtUserId FROM ' + 
+	@pairPrefiks + '_ClosedOrders Order By Id desc OFFSET ' + (SELECT CAST(@pageSize as varchar(10))) + ' * (' + (SELECT CAST(@page as varchar(10))) + ' - 1) ROWS FETCH NEXT ' + (SELECT CAST(@pageSize as varchar(10))) + ' ROWS ONLY';
+
+EXECUTE sp_executesql @SQL;
+
+
+--Select CreateDate, ClosedDate, IsBuy, StartPrice, Difference, ClosedPrice, Amount, Total, Status, CreateUserId, BoughtUserId FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+--Order By Id desc
+--OFFSET @pageSize * (@page - 1) ROWS
+--FETCH NEXT @pageSize ROWS ONLY
+
+
 
 END
 
@@ -1735,10 +1870,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 @currencyAcronim nvarchar(10),
-@transactionId nvarchar(max),
+@transactionHash nvarchar(max),
 @amount decimal(38, 20),
 @transactionFee decimal(38, 20),
 @PlatformCommission decimal(38, 20),
+@fromAddress nvarchar(max),
 @toAddress nvarchar(max),
 @date decimal(38, 20),
 @userId nvarchar(450),
@@ -1747,8 +1883,8 @@ CREATE PROCEDURE [dbo].[CreateIncomeTransaction]
 AS
 BEGIN
 
-INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionId, Amount, TransactionFee, ToAddress, Date, UserId, WalletId, PlatformCommission)
-VALUES (@currencyAcronim, @transactionId, @amount, @transactionFee, @toAddress, @date, @userId, @walletId, @PlatformCommission)
+INSERT INTO [Exchange].[dbo].[IncomeTransactions](CurrencyAcronim, TransactionHash, Amount, TransactionFee, FromAddress, ToAddress, Date, UserId, WalletId, PlatformCommission)
+VALUES (@currencyAcronim, @transactionHash, @amount, @transactionFee,@fromAddress, @toAddress, @date, @userId, @walletId, @PlatformCommission)
 
 SET @new_identity = SCOPE_IDENTITY()
 
@@ -1769,16 +1905,17 @@ CREATE PROCEDURE [dbo].[CreateOutcomeTransaction]
 @fixedCommission decimal(38,20),
 @blockchainCommission decimal(38,20),
 @currencyAcronim nvarchar(10),
+@transactionHash nvarchar(max),
 @state int
 AS
 
 BEGIN
 
 INSERT INTO [Exchange].[dbo].[OutcomeTransactions] ( FromWalletId, ToAddress,
-			Value, CreateDate, CurrencyAcronim, State, LastUpdateDate, PlatformCommission,
+			Value, CreateDate, CurrencyAcronim, TransactionHash, State, LastUpdateDate, PlatformCommission,
 			BlockchainCommission, FixedCommission)
-VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, 1, GETDATE(),
-@platformCommission, @blockchainCommission, @fixedCommission)
+VALUES (@fromWalletId, @toAddress, @value, GETDATE(), @currencyAcronim, @transactionHash,
+1, GETDATE(), @platformCommission, @blockchainCommission, @fixedCommission)
 
 SET @id = SCOPE_IDENTITY()
 END
@@ -4288,6 +4425,7 @@ BEGIN
 
 SELECT inct.[Id],
        inct.[CurrencyAcronim],
+       inct.[TransactionHash],
        inct.[Amount],
        inct.[TransactionFee],
        inct.[FromAddress],
@@ -4766,6 +4904,7 @@ BEGIN
 
 Select
   CurrencyAcronim
+  ,TransactionHash
   ,Amount
   ,TransactionFee
   ,FromAddress
@@ -4797,6 +4936,7 @@ BEGIN
 
 	SELECT
 	   CurrencyAcronim
+      ,TransactionHash
 	  ,Amount
 	  ,TransactionFee
 	  ,FromAddress
@@ -4916,6 +5056,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[GetOutcomeTransactionById]
+@id bigint
+AS
+BEGIN
+
+Select * FROM [Exchange].[dbo].[OutcomeTransactions]
+WHERE Id = @id
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[GetOutcomeTransactions_Paged]
 @page int,
 @pageSize int
@@ -4925,6 +5080,7 @@ BEGIN
 Select
    FromWalletId
   ,CurrencyAcronim
+  ,TransactionHash
   ,Value
   ,CreateDate
   ,ToAddress
@@ -5361,7 +5517,8 @@ BEGIN
 
 SELECT w.[Id]
       ,w.[UserId]
-      ,w.[Value]
+	  ,Convert(Decimal(38,12),[Value]) as Value
+	  --,[Value]
       ,w.CurrencyAcronim
 	  ,w.[Created]
 	  ,w.[LastUpdate]
@@ -5385,7 +5542,8 @@ BEGIN
 
 SELECT w.[Id]
       ,w.[UserId]
-      ,w.[Value]
+      --,w.[Value]
+	  , Convert(Decimal(38,12),[Value]) as Value
       ,w.CurrencyAcronim
 	  ,w.[Created]
 	  ,w.[LastUpdate]
@@ -10288,13 +10446,16 @@ CREATE PROCEDURE [dbo].[UpdateTransactionAfterExecution]
 @id int,
 @state int,
 @blockchainCommission decimal (38, 20),
+@transactionHash nvarchar(max),
 @errorText nvarchar(max)
 AS
 BEGIN
 
 UPDATE [Exchange].[dbo].[OutcomeTransactions]
 SET State = @state, LastUpdateDate = GETDATE(),
-BlockchainCommission = @blockchainCommission, ErrorText = @errorText
+BlockchainCommission = @blockchainCommission,
+TransactionHash = @errorText,
+ErrorText = @errorText
 WHERE Id = @id
 
 END

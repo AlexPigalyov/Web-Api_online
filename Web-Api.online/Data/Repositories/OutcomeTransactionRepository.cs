@@ -43,7 +43,7 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
-        public async Task UpdateTransactionAfterExecutioAsync(OutcomeTransactionTableModel outcomeTransaction)
+        public async Task UpdateOutcomeTransactionAfterExecutionAsync(OutcomeTransactionTableModel outcomeTransaction)
         {
             try
             {
@@ -51,6 +51,7 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("id", outcomeTransaction.Id);
                 p.Add("state", outcomeTransaction.State);
                 p.Add("blockchainCommission", outcomeTransaction.State);
+                p.Add("transactionHash", outcomeTransaction.TransactionHash);
                 p.Add("errorText", outcomeTransaction.ErrorText);
 
                 await _db.QueryAsync("UpdateTransactionAfterExecution", p, commandType: CommandType.StoredProcedure);

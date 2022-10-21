@@ -6,7 +6,7 @@ namespace Web_Api.online.Models.Tables
     {
         public long Id { get; set; }
         public string CurrencyAcronim { get; set; }
-        public string TransactionId { get; set; }
+        public string TransactionHash { get; set; }
         public decimal Amount { get; set; }
         public decimal TransactionFee { get; set; }
         public decimal? PlatformCommission { get; set; }

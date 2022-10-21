@@ -253,7 +253,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<ClosedOrderTableModel>> GetBTCUSDTClosedOrdersPaged(int page, int pageSize)
+        public async Task<List<ClosedOrderTableModel>> GetClosedOrdersPaged(int page, int pageSize)
         {
             try
             {
@@ -263,9 +263,28 @@ namespace Web_Api.online.Data.Repositories
 
                 List<ClosedOrderTableModel> result =
                     (List<ClosedOrderTableModel>)await _db.QueryAsync<ClosedOrderTableModel>
-                    ("ClosedOrders_Paged",
-                        p,
-                        commandType: CommandType.StoredProcedure);
+                    ("ClosedOrders_Paged", p, commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<ClosedOrderTableModel>> GetClosedOrdersByPairPaged(string pairPrefiks, int page, int pageSize)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("pairPrefiks", pairPrefiks);
+                p.Add("page", page);
+                p.Add("pageSize", pageSize);
+
+                List<ClosedOrderTableModel> result =
+                    (List<ClosedOrderTableModel>)await _db.QueryAsync<ClosedOrderTableModel>
+                    ("ClosedOrdersByPair_Paged", p, commandType: CommandType.StoredProcedure);
 
                 return result;
             }

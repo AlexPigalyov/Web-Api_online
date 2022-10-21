@@ -39,7 +39,7 @@ namespace Web_Api.online.Services
             return acronim switch
             {
                 "USDT" => GenerateHash.sha256(lable + "USDT" + DateTime.Now.ToString()),
-                "ETH" => _etheriumService.GetNewAddress(lable),
+                "ETH" => _etheriumService.GetNewAddressAsync(lable).Result,
                 "ZEC" => _zCashService.GetNewAddress(),
                 "LTC" => _litecoinService.GetNewAddress(lable),
                 "DOGE" => _dogecoinService.GetNewAddress(lable),
