@@ -18,12 +18,28 @@
                     <input type="text" class="form-control" id="secondCurrency" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="sendData()" class="btn btn-primary">Create</button>
+                    <button type="button" onclick="sendData()" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#success-alert-modal">Create</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Success Alert Modal -->
+<div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modal-filled bg-success">
+            <div class="modal-body p-4">
+                <div class="text-center">
+                    <i class="dripicons-checkmark h1"></i>
+                    <h4 class="mt-2">Pair added</h4>
+                    <p class="mt-3">Objects in database created.</p>
+                    <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
     function sendData() {
