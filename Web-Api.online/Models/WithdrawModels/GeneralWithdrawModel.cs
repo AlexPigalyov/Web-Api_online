@@ -16,7 +16,7 @@ namespace Web_Api.online.Models.WithdrawModels
         }
 
         public string Status { get; set; }
-        public decimal AmountMin { get; set; }
+        public decimal AmountMin { get; set; } = 0;
         public decimal Commission { get; set; }
         public bool IsApproximate { get; set; } = false;
 
