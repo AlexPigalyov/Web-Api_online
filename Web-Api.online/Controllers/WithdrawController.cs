@@ -42,10 +42,22 @@ namespace Web_Api.online.Controllers
                 model.Balance = (await _walletsRepository.GetUserWalletAsync(userId, currency)).Value;
                 model.Currency = currency;
 
+                if (_currency.Acronim == "ETH")
+                {
+                    model.IsApproximate = true;
+                    model.Commission = 0.0008m;
+                }
+
+                if (_currency.Acronim == "DOGE")
+                {
+                    model.IsApproximate = false;
+                    model.Commission = 0.00226m;
+                }
+
                 return View("GeneralWithdrawPage", model);
             }
 
-            
+
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
             return View(wallets);
         }
@@ -65,7 +77,7 @@ namespace Web_Api.online.Controllers
                 {
                     m = await _zecService.SendToAddress(model, userId);
                 }
-                else if(model.Currency == "ETH")
+                else if (model.Currency == "ETH")
                 {
                     m = await _etheriumService.SendToAddress(model, userId);
                 }
@@ -74,7 +86,7 @@ namespace Web_Api.online.Controllers
                     m = await _withdrawService.Send(model, userId);
                 }
 
-                
+
                 return View("GeneralWithdrawPage", m);
             }
             return View("GeneralWithdrawPage", m);

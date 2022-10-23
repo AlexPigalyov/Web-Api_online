@@ -36,7 +36,12 @@
                     <input asp-for="AmountMin" type="hidden" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Commission" class="control-label">Commission: <span class="decimal-data">@Model.Commission</span></label>
+                    <label asp-for="Commission" class="control-label">Commission: 
+                        @if (Model.IsApproximate) 
+                        {
+                            <span>~</span>
+                        }
+                        <span class="decimal-data">@Model.Commission</span></label>
                     <input asp-for="Commission" type="hidden" />
                 </div>
                 <div class="form-group">
