@@ -54,6 +54,12 @@ namespace Web_Api.online.Controllers
                     model.Commission = 0.00226m;
                 }
 
+                if (_currency.Acronim == "DASH")
+                {
+                    model.IsApproximate = true;
+                    model.Commission = 0.00002660m;
+                }
+
                 return View("GeneralWithdrawPage", model);
             }
 
