@@ -402,7 +402,8 @@ CREATE TABLE [dbo].[Currencies](
 	[PercentCommissionForIncomeTransaction] [decimal](38, 20) NULL,
 	[PercentCommissionForTransfer] [decimal](38, 20) NULL,
 	[PercentCommissionForOutcomeTransaction] [decimal](38, 20) NULL,
-	[PercentCommissionForTrade] [decimal](38, 20) NULL
+	[PercentCommissionForTrade] [decimal](38, 20) NULL,
+	[NodeIsReady] [bit] NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_NULLS ON
@@ -1491,6 +1492,8 @@ GO
 ALTER TABLE [dbo].[BTC_USDT_OpenOrders_Sell] ADD  CONSTRAINT [DF_BTC_USDT_OpenOrders_Sell_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
 ALTER TABLE [dbo].[Currencies] ADD  CONSTRAINT [DF_Currencies_Created]  DEFAULT (getdate()) FOR [Created]
+GO
+ALTER TABLE [dbo].[Currencies] ADD  CONSTRAINT [DF_Currencies_NodeIsReady]  DEFAULT ((0)) FOR [NodeIsReady]
 GO
 ALTER TABLE [dbo].[DASH_BTC_OpenOrders_Buy] ADD  CONSTRAINT [DF_DASH_BTC_OpenOrders_Buy_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
