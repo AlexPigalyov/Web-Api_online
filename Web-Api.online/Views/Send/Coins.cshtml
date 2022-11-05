@@ -18,16 +18,16 @@
                     <label asp-for="Currency" class="control-label">Currency @Model.Currency</label>
                     <input asp-for="Currency" type="hidden" />
                 </div>
-                <div class="form-group">
-                            <label asp-for="Balance" class="control-label">Balance <span class="decimal-data">@Model.Balance</span></label>
+                <div class="form-group" style="padding-top: 10px;">
+                    <label asp-for="Balance" class="control-label">Balance <span class="decimal-data">@Model.Balance</span></label>
                     <input asp-for="Balance" type="hidden" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <label asp-for="InputTextIdentifier" class="control-label">User name, email, phone, wallet</label>
                     <input asp-for="InputTextIdentifier" class="form-control" />
                     <span asp-validation-for="InputTextIdentifier" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <label asp-for="Amount" class="control-label">Amount coins</label>
                     <input asp-for="Amount" class="form-control" />
                     <span asp-validation-for="Amount" class="text-danger"></span>
@@ -37,11 +37,11 @@
                     <input asp-for="Comment" class="form-control" />
                     <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <label asp-for="Commission" class="control-label">Commission: <span class="decimal-data">@Model.Commission</span></label>
                     <input asp-for="Commission" type="hidden" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <input type="submit" value="Send" class="btn btn-primary" />
                 </div>
             </form>
