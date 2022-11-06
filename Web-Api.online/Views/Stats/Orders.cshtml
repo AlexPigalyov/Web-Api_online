@@ -14,7 +14,7 @@
 
     <div class="input-group" style="padding-top: 15px; padding-bottom: 15px;">
         <label class="input-group-text" for="inputGroupSelect01">Pair</label>
-        <select name="selectCurrency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" style="width: 300px; flex: none !important;">
+        <select name="selectPair" class="form-select" id="inputGroupSelectPair" aria-label="select pair" style="width: 300px; flex: none !important;">
             @foreach (var item in Model.Pairs)
             {
                 <option value="@item.Acronim">@item.Header</option>
@@ -84,9 +84,18 @@
         var paramCryptocurrency = getUrlParametr('Pair');
 
         if (paramCryptocurrency == null) {
+            paramCryptocurrency = 'BTCUSDT';
             var newURL = updateURLParameter(window.location.href, 'Pair', 'BTCUSDT');
             window.history.replaceState('', '', newURL);
         }
+        else {
+            $("#inputGroupSelectPair").val(paramCryptocurrency);
+        }
+
+        $('#inputGroupSelectPair').on('change', function () {
+            var newUrl = "/stats/Orders?Pair=" + $("#inputGroupSelectPair").val();
+            window.location.href = newUrl;
+        });
 
     });
 
