@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Data.Repositories.Abstract;
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
+using static Web_Api.online.API.Controllers.CurrenciesController;
 
 namespace Web_Api.online.Controllers
 {
     public class StatsController : Controller
     {
+        private WalletsRepository _walletsRepository;
         private TransactionsRepository _transactionsRepository;
         private TransferRepository _transferRepository;
         private IOutcomeTransactionRepository _outcomeRepository;
@@ -18,13 +21,15 @@ namespace Web_Api.online.Controllers
         private UsersInfoRepository _usersInfoRepository;
         private UserRepository _userRepository;
 
-        public StatsController(TransactionsRepository transactionsRepository,
+        public StatsController(WalletsRepository walletsRepository,
+            TransactionsRepository transactionsRepository,
             TransferRepository transferRepository,
             IOutcomeTransactionRepository outcomeRepository,
             TradeRepository tradeRepository,
             UsersInfoRepository usersInfoRepository,
             UserRepository userRepository)
         {
+            _walletsRepository = walletsRepository;
             _transactionsRepository = transactionsRepository;
             _transferRepository = transferRepository;
             _outcomeRepository = outcomeRepository;
@@ -80,15 +85,25 @@ namespace Web_Api.online.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Orders(SortModel model)
+        public async Task<ActionResult> Orders(SortModel model, string Currency)
         {
+            if (string.IsNullOrEmpty(Currency))
+            {
+                Currency = "BTC";
+            }
+
             int pageSize = 100;
+
+            var Currencies = await _walletsRepository.GetCurrenciesAsync();
+
+            if (!Currencies.Any(x => x.Acronim == Currency)) { return NotFound(); }
 
             var closedOrders = await _tradeRepository.GetClosedOrdersPaged(model.Page, pageSize);
             var itemsCount = await _tradeRepository.GetCountOfClosedOrders();
 
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
             {
+                Currencies = Currencies,
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 ClosedOrders = closedOrders ?? new List<ClosedOrderTableModel>()
             };
