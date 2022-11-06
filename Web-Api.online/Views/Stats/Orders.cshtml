@@ -116,11 +116,11 @@
                 var trElem = document.createElement("tr");
 
                 var createDateTd = document.createElement("td");
-                createDateTd.innerText = replaceAll(new Date(order.CreateDate).toLocaleDateString("ru-RU", dateFormatOptions), ".", "-").replace(",", "")
+                createDateTd.innerText =order.CreateDate.replace('T', ' ').split('.')[0];
                 trElem.appendChild(createDateTd);
 
                 var closedDateTd = document.createElement("td");
-                closedDateTd.innerText = replaceAll(new Date(order.ClosedDate).toLocaleDateString("ru-RU", dateFormatOptions), ".", "-").replace(",", "")
+                closedDateTd.innerText = order.ClosedDate.replace('T', ' ').split('.')[0];
                 trElem.appendChild(closedDateTd);
 
                 var startPriceTd = document.createElement("td");
