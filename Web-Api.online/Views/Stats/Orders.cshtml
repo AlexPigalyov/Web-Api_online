@@ -13,19 +13,11 @@
 <div class="row">
 
     <div class="input-group" style="padding-top: 15px; padding-bottom: 15px;">
-        <label class="input-group-text" for="inputGroupSelect01">Currency</label>
+        <label class="input-group-text" for="inputGroupSelect01">Pair</label>
         <select name="selectCurrency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" style="width: 300px; flex: none !important;">
-            @foreach (var item in Model.Currencies)
+            @foreach (var item in Model.Pairs)
             {
-                if (@item.NodeIsReady)
-                {
-                    <option value="@item.Acronim">@item.Acronim</option>
-                }
-                else
-                {
-                    <option disabled="disabled" value="@item.Acronim">@item.Acronim (not ready)</option>
-                }
-
+                <option value="@item.Acronim">@item.Header</option>
             }
         </select>
     </div>
@@ -88,11 +80,11 @@
 <script>
 
     $(document).ready(function () {
-        
-        var paramCryptocurrency = getUrlParametr('Currency');
 
-        if (paramCryptocurrency == null){
-            var newURL = updateURLParameter(window.location.href, 'Currency', 'BTC');
+        var paramCryptocurrency = getUrlParametr('Pair');
+
+        if (paramCryptocurrency == null) {
+            var newURL = updateURLParameter(window.location.href, 'Pair', 'BTCUSDT');
             window.history.replaceState('', '', newURL);
         }
 

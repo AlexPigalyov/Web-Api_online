@@ -20,6 +20,7 @@ namespace Web_Api.online.Controllers
         private TradeRepository _tradeRepository;
         private UsersInfoRepository _usersInfoRepository;
         private UserRepository _userRepository;
+        private readonly PairsRepository _pairsRepository;
 
         public StatsController(WalletsRepository walletsRepository,
             TransactionsRepository transactionsRepository,
@@ -27,7 +28,8 @@ namespace Web_Api.online.Controllers
             IOutcomeTransactionRepository outcomeRepository,
             TradeRepository tradeRepository,
             UsersInfoRepository usersInfoRepository,
-            UserRepository userRepository)
+            UserRepository userRepository,
+            PairsRepository pairsRepository)
         {
             _walletsRepository = walletsRepository;
             _transactionsRepository = transactionsRepository;
@@ -36,6 +38,7 @@ namespace Web_Api.online.Controllers
             _tradeRepository = tradeRepository;
             _usersInfoRepository = usersInfoRepository;
             _userRepository = userRepository;
+            _pairsRepository = pairsRepository;
         }
 
         public async Task<ActionResult> IncomeTransactions(SortModel model)
@@ -85,25 +88,25 @@ namespace Web_Api.online.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Orders(SortModel model, string Currency)
+        public async Task<ActionResult> Orders(SortModel model, string Pair)
         {
-            if (string.IsNullOrEmpty(Currency))
+            if (string.IsNullOrEmpty(Pair))
             {
-                Currency = "BTC";
+                Pair = "BTCUSDT";
             }
 
             int pageSize = 100;
 
-            var Currencies = await _walletsRepository.GetCurrenciesAsync();
+            var pairs = await _pairsRepository.GetAllPairsAsync();
 
-            if (!Currencies.Any(x => x.Acronim == Currency)) { return NotFound(); }
+            if (!pairs.Any(x => x.Acronim == Pair)) { return NotFound(); }
 
             var closedOrders = await _tradeRepository.GetClosedOrdersPaged(model.Page, pageSize);
             var itemsCount = await _tradeRepository.GetCountOfClosedOrders();
 
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
             {
-                Currencies = Currencies,
+                Pairs = pairs,
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 ClosedOrders = closedOrders ?? new List<ClosedOrderTableModel>()
             };
