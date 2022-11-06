@@ -99,9 +99,11 @@ namespace Web_Api.online.Controllers
 
             var pairs = await _pairsRepository.GetAllPairsAsync();
 
-            if (!pairs.Any(x => x.Acronim == Pair)) { return NotFound(); }
+            var currentPair = pairs.FirstOrDefault(x => x.Acronim == Pair);
 
-            var closedOrders = await _tradeRepository.GetClosedOrdersPaged(model.Page, pageSize);
+            if (currentPair == null) { return NotFound(); }
+
+            var closedOrders = await _tradeRepository.GetClosedOrdersByPairPaged(currentPair.SQLTableName, model.Page, pageSize);
             var itemsCount = await _tradeRepository.GetCountOfClosedOrders();
 
             ClosedOrdersViewModel viewModel = new ClosedOrdersViewModel()
