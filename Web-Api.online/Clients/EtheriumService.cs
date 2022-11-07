@@ -18,30 +18,67 @@ namespace Web_Api.online.Clients
         private IOutcomeTransactionRepository _outcomeTransactionRepository;
         private ETHRequestClient _ethRequestClient;
         private BalanceProvider _balanceProvider;
-
+        private TransactionsRepository _transactionsRepository;
 
         public EtheriumService(WalletsRepository walletsRepository,
             IEventsRepository eventsRepository,
             IOutcomeTransactionRepository outcomeTransactionRepository,
             ETHRequestClient ethRequestClient,
-            BalanceProvider balanceProvider)
+            BalanceProvider balanceProvider,
+            TransactionsRepository transactionsRepository)
         {
             _walletsRepository = walletsRepository;
             _eventsRepository = eventsRepository;
             _outcomeTransactionRepository = outcomeTransactionRepository;
             _ethRequestClient = ethRequestClient;
             _balanceProvider = balanceProvider;
+            _transactionsRepository = transactionsRepository;
         }
 
-        public string GetNewAddress(string lable)
+        public async Task<string> GetNewAddressAsync(string lable)
         {
-            return _ethRequestClient.GetNewAddress(lable);
+            return await _ethRequestClient.GetNewAddressAsync(lable);
+        }
+
+        public async Task<WalletTableModel> GetUpdatedWalletAsync(string userId)
+        {
+            var newIncomeTransactions = await _ethRequestClient.GetNewTransactions(userId);
+            WalletTableModel wallet = await _walletsRepository.GetUserWalletAsync(userId, "ETH");
+
+            foreach (var incomTransaction in newIncomeTransactions)
+            {
+                var result = await _balanceProvider.Income(wallet, incomTransaction);
+
+                incomTransaction.PlatformCommission = result.Commission;
+                wallet.Value = result.ResultBalanceReceiver.Value;
+
+                incomTransaction.PlatformCommission = result.Commission;
+
+                var _ = await _transactionsRepository.CreateIncomeTransactionAsync(incomTransaction);
+
+                await _eventsRepository.CreateEventAsync(new EventTableModel()
+                {
+                    UserId = userId,
+                    Type = (int)EventTypeEnum.Income,
+                    Comment = $"Income transaction {incomTransaction.CurrencyAcronim}",
+                    WhenDate = DateTime.Now,
+                    CurrencyAcronim = incomTransaction.CurrencyAcronim,
+                    StartBalance = result.StartBalanceReceiver,
+                    ResultBalance = result.ResultBalanceReceiver,
+                    PlatformCommission = result.Commission,
+                    Value = incomTransaction.Amount
+                });
+            }
+
+            await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+
+            return wallet;
         }
 
         public async Task<GeneralWithdrawModel> SendToAddress(GeneralWithdrawModel model, string userId)
         {
-            // оставляем запас 0.001 на комисию блокчейна, можно вынесли в константы
-            decimal fixedCommicion = 0.001m;
+            // оставляем запас 0.001 на комисию блокчейна, можно вынести в константы
+            decimal fixedCommicion = 0.0002m;
             try
             {
                 var wallet = await _walletsRepository.GetUserWalletAsync(userId, model.Currency);
@@ -50,6 +87,10 @@ namespace Web_Api.online.Clients
                 if (wallet != null && _amount.Value > 0 && _amount.Value + fixedCommicion <= wallet.Value)
                 {
                     var resultBalance = await _balanceProvider.Withdraw(_amount.Value, wallet);
+                    //списываем с баланса значение транзакции 
+                    wallet.Value = resultBalance.ResultBalanceSender;
+                    await _walletsRepository.UpdateWalletBalanceAsync(wallet);
+
 
                     var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
                                     new OutcomeTransactionTableModel()
@@ -67,12 +108,10 @@ namespace Web_Api.online.Clients
 
                     if (resultTr.IsSuccess)
                     {
-                        wallet.Value = resultBalance.ResultBalanceSender - resultTr.CommissionBlockchain.Value;
+                        //списываем дополнительно комиссию 
+                        wallet.Value -= resultTr.CommissionBlockchain.Value;
+
                         await _walletsRepository.UpdateWalletBalanceAsync(wallet);
-
-                        tr.State = resultTr.OutcomeTransactionState;
-                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
-
                         await _eventsRepository.CreateEventAsync(new EventTableModel()
                         {
                             UserId = userId,
@@ -89,8 +128,6 @@ namespace Web_Api.online.Clients
                     }
                     else
                     {
-                        tr.State = resultTr.OutcomeTransactionState;
-                        tr.BlockchainCommission = resultTr.CommissionBlockchain;
                         tr.ErrorText = resultTr.ErrorText;
 
                         await _eventsRepository.CreateEventAsync(new EventTableModel()
@@ -107,7 +144,11 @@ namespace Web_Api.online.Clients
 
                         model.Status = "Error, your transaction will be processed manually";
                     }
-                    await _outcomeTransactionRepository.UpdateTransactionAfterExecutioAsync(tr);
+                    tr.State = resultTr.OutcomeTransactionState;
+                    tr.BlockchainCommission = resultTr.CommissionBlockchain;
+                    tr.TransactionHash = resultTr.TransactionHash;
+
+                    await _outcomeTransactionRepository.UpdateOutcomeTransactionAfterExecutionAsync(tr);
                 }
                 else
                 {

@@ -55,13 +55,14 @@ namespace Web_Api.online.Services
                     var result = await _balanceProvider.Withdraw(_amount.Value, wallet);
                     wallet.Value = result.ResultBalanceSender;
 
+                    string hash = string.Empty;
                     if (result.Commission.HasValue)
                     {
-                        coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
+                        hash = coinService.SendToAddress(model.Address, _amount.Value - result.Commission.Value, "", "", true);
                     }
                     else
                     {
-                        coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
+                        hash = coinService.SendToAddress(model.Address, _amount.Value, "", "", true);
                     }
 
                     var tr = await _outcomeTransactionRepository.CreateOutcomeTransaction(
@@ -71,7 +72,9 @@ namespace Web_Api.online.Services
                                        ToAddress = model.Address,
                                        Value = _amount.Value,
                                        CurrencyAcronim = model.Currency,
-                                       State = (int)OutcomeTransactionStateEnum.Finished
+                                       State = (int)OutcomeTransactionStateEnum.Finished,
+                                       //проверить приходит ли хеш
+                                       TransactionHash = hash
                                    });
 
                     await _eventsRepository.CreateEventAsync(new EventTableModel()

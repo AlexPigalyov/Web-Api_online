@@ -16,13 +16,14 @@ namespace Web_Api.online.Models.WithdrawModels
         }
 
         public string Status { get; set; }
-        public decimal AmountMin { get; set; }
+        public decimal AmountMin { get; set; } = 0;
         public decimal Commission { get; set; }
+        public bool IsApproximate { get; set; } = false;
 
         [Required]
         public string Currency { get; set; }
 
-        public decimal Balance { get; set; }    
+        public decimal Balance { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]

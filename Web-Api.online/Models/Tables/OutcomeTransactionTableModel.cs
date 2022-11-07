@@ -13,6 +13,7 @@ namespace Web_Api.online.Models.Tables
         public decimal? PlatformCommission { get; set; }
         public DateTime CreateDate { get; set; }
         public string CurrencyAcronim { get; set; }
+        public string TransactionHash { get; set; }
         public int State { get; set; }
         public DateTime LastUpdateDate { get; set; }
         public string ErrorText { get; set; }

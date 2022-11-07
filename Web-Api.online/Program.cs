@@ -46,6 +46,7 @@ namespace Web_Api.online
                         var LtcBtcJobKey = new JobKey("LtcBtcJobKey");
                         var LtcUsdtJobKey = new JobKey("LtcUsdtJobKey");
                         var candleStickJobKey = new JobKey("CandleStickJob");
+                        var statsOrdersJobKey = new JobKey("StatsOrdersJobKey");
 
                         // Register the job with the DI container
                         q.AddJob<BtcUsdtJob>(opts => opts.WithIdentity(btcUsdtJobKey));
@@ -60,6 +61,7 @@ namespace Web_Api.online
                         q.AddJob<LtcBtcJob>(opts => opts.WithIdentity(LtcBtcJobKey));
                         q.AddJob<LtcUsdtJob>(opts => opts.WithIdentity(LtcUsdtJobKey));
                         q.AddJob<CandleStickJob>(opts => opts.WithIdentity(candleStickJobKey));
+                        q.AddJob<StatsOrdersJob>(opts => opts.WithIdentity(statsOrdersJobKey));
 
                         // Create a trigger for the job
                         q.AddTrigger(opts => opts
@@ -146,7 +148,13 @@ namespace Web_Api.online
                                 .WithInterval(TimeSpan.FromMilliseconds(1000 * 60))
                                 .RepeatForever()
                             ));
-
+                        q.AddTrigger(opts => opts
+                            .ForJob(statsOrdersJobKey)
+                            .WithIdentity("StatsOrdersJob-trigger")
+                            .WithSimpleSchedule(builder => builder
+                                .WithInterval(TimeSpan.FromMilliseconds(1000))
+                                .RepeatForever()
+                            ));
                     });
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 });

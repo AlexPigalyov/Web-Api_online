@@ -17,29 +17,34 @@
                     <span asp-for="Currency" class="control-label">Currency @Model.Currency</span>
                     <input asp-for="Currency" type="hidden" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     Balance <span class="decimal-data">@Model.Balance</span>
                     <input asp-for="Balance" type="hidden" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <label asp-for="Address" class="control-label"></label>
                     <input asp-for="Address" class="form-control" />
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Amount" class="control-label">Amount coins</label>
+                <div class="form-group" style="padding-top: 10px;">
+                    <label asp-for="Amount" class="control-label">Amount</label>
                     <input asp-for="Amount" class="form-control" />
                     <span asp-validation-for="Amount" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="AmountMin" class="control-label">Minimum amount: <span class="decimal-data">@Model.AmountMin</span></label>
+                    <label asp-for="AmountMin" class="control-label">Minimum amount: <span>@Model.AmountMin</span></label>
                     <input asp-for="AmountMin" type="hidden" />
                 </div>
-                <div class="form-group">
-                    <label asp-for="Commission" class="control-label">Commission: <span class="decimal-data">@Model.Commission</span></label>
+                <div class="form-group" style="padding-top: 10px;">
+                    <label asp-for="Commission" class="control-label">Commission: 
+                        @if (Model.IsApproximate) 
+                        {
+                            <span>~</span>
+                        }
+                        <span class="decimal-data">@Model.Commission</span> @Model.Currency</label>
                     <input asp-for="Commission" type="hidden" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="padding-top: 10px;">
                     <input type="submit" value="Send" class="btn btn-primary" />
                 </div>
             </form>

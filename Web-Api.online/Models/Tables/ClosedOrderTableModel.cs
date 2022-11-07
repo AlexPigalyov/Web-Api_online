@@ -14,6 +14,7 @@ namespace Web_Api.online.Models.Tables
         public bool IsBuy { get; set; }
         public decimal StartPrice { get; set; }
         public decimal Difference { get; set; }
+        public decimal Profit { get { return Difference * Amount; } }
         public decimal ClosedPrice { get; set; }
         public decimal Amount { get; set; }
         public decimal Total { get; set; }
@@ -22,5 +23,6 @@ namespace Web_Api.online.Models.Tables
         public string BoughtUserId { get; set; }
         public string Currency1 { get; set; }
         public string Currency2 { get; set; }
+        public string PairAcronim { get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace Web_Api.online.Models.Tables
         public decimal? PercentCommissionForTransfer { get; set; }
         public decimal? PercentCommissionForOutcomeTransaction { get; set; }
         public decimal? PercentCommissionForTrade { get; set; }
+        public bool NodeIsReady { get; set; }
     }
 }

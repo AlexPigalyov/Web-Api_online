@@ -12,6 +12,16 @@
 
 <div class="row">
 
+    <div class="input-group" style="padding-top: 15px; padding-bottom: 15px;">
+        <label class="input-group-text" for="inputGroupSelect01">Pair</label>
+        <select name="selectPair" class="form-select" id="inputGroupSelectPair" aria-label="select pair" style="width: 300px; flex: none !important;">
+            @foreach (var item in Model.Pairs)
+            {
+                <option value="@item.Acronim">@item.Header</option>
+            }
+        </select>
+    </div>
+
     <table id="ClosedOrders" class="table table-striped table-centered mb-0">
         <thead>
             <tr class="table-primary">
@@ -21,21 +31,20 @@
                 <th>Closed Price</th>
                 <th>Amount</th>
                 <th>Total</th>
-                <th>Difference</th>
-                <th>Status</th>
-                <th>Create User Id</th>
-                <th>Closed User Id</th>
+                <th>Profit</th>
+                @*<th>Create User Id</th>
+                <th>Closed User Id</th>*@
             </tr>
         </thead>
-        <tbody>
+        <tbody id="orders-table-body">
             @foreach (var item in Model.ClosedOrders)
             {
                 <tr>
                     <td>
-                        @item.CreateDate.ToString("dd-MM-yyyy HH:mm:ss")
+                        @item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
                     </td>
                     <td>
-                        @item.ClosedDate.ToString("dd-MM-yyyy HH:mm:ss")
+                        @item.ClosedDate.ToString("yyyy-MM-dd HH:mm:ss")
                     </td>
                     <td>
                         <span class="decimal-data">@item.StartPrice</span>
@@ -50,21 +59,121 @@
                         <span class="decimal-data">@item.Total</span>
                     </td>
                     <td>
-                        <span class="decimal-data">@item.Difference</span>
+                        <span class="decimal-data">@item.Profit</span>
                     </td>
-                    <td>
-                        @item.Status
-                    </td>
-                    <td>
-                        @item.CreateUserId
-                    </td>
+                    @*<td>
+                @item.CreateUserId
+                </td>
 
-                    <td>
-                        @item.BoughtUserId
-                    </td>
+                <td>
+                @item.BoughtUserId
+                </td>*@
                 </tr>
             }
         </tbody>
     </table>
-
 </div>
+
+<sript src="~/js/jquery.query-object.js"></sript>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/statsordershub.js" asp-append-version="true"></script>
+<script>
+
+    $(document).ready(function () {
+
+        var paramCryptocurrency = getUrlParametr('Pair');
+
+        if (paramCryptocurrency == null) {
+            paramCryptocurrency = 'BTCUSDT';
+            var newURL = updateURLParameter(window.location.href, 'Pair', 'BTCUSDT');
+            window.history.replaceState('', '', newURL);
+        }
+        else {
+            $("#inputGroupSelectPair").val(paramCryptocurrency);
+        }
+
+        $('#inputGroupSelectPair').on('change', function () {
+            var newUrl = "/stats/Orders?Pair=" + $("#inputGroupSelectPair").val();
+            window.location.href = newUrl;
+        });
+
+    });
+
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function loadOrders(orders) {
+        if (orders != null) {
+            var dateFormatOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", year: 'numeric', month: '2-digit', day: '2-digit' };
+
+            var tbody = document.getElementById("orders-table-body");
+            tbody.innerText = "";
+
+            orders.forEach(order => {
+
+                var trElem = document.createElement("tr");
+
+                var createDateTd = document.createElement("td");
+                createDateTd.innerText = order.CreateDate.replace('T', ' ').split('.')[0];
+                trElem.appendChild(createDateTd);
+
+                var closedDateTd = document.createElement("td");
+                closedDateTd.innerText = order.ClosedDate.replace('T', ' ').split('.')[0];
+                trElem.appendChild(closedDateTd);
+
+                var startPriceTd = document.createElement("td");
+                var startPriceSpan = document.createElement("span");
+                startPriceSpan.className = "decimal-data";
+                startPriceSpan.innerText = order.StartPrice;
+                startPriceTd.appendChild(startPriceSpan);
+                trElem.appendChild(startPriceTd);
+
+                var closedPriceTd = document.createElement("td");
+                var closedPriceSpan = document.createElement("span");
+                closedPriceSpan.className = "decimal-data";
+                closedPriceSpan.innerText = order.ClosedPrice;
+                closedPriceTd.appendChild(closedPriceSpan);
+                trElem.appendChild(closedPriceTd);
+
+                var amountTd = document.createElement("td");
+                var amountSpan = document.createElement("span");
+                amountSpan.className = "decimal-data";
+                amountSpan.innerText = order.Amount.toFixed(20);
+                amountTd.appendChild(amountSpan);
+                trElem.appendChild(amountTd);
+
+                var totalTd = document.createElement("td");
+                var totalSpan = document.createElement("span");
+                totalSpan.className = "decimal-data";
+                totalSpan.innerText = order.Total;
+                totalTd.appendChild(totalSpan);
+                trElem.appendChild(totalTd);
+
+                var differenceTd = document.createElement("td");
+                var differenceSpan = document.createElement("span");
+                differenceSpan.className = "decimal-data";
+                differenceSpan.innerText = order.Difference;
+                differenceTd.appendChild(differenceSpan);
+                trElem.appendChild(differenceTd);
+
+                //var statusTd = document.createElement("td");
+                //statusTd.innerText = order.Status;
+                //trElem.appendChild(statusTd);
+
+                //var createUserIdTd = document.createElement("td");
+                //createUserIdTd.innerText = order.CreateUserId;
+                //trElem.appendChild(createUserIdTd);
+
+                //var boughtUserIdTd = document.createElement("td");
+                //boughtUserIdTd.innerText = order.BoughtUserId;
+                //trElem.appendChild(boughtUserIdTd);
+
+                tbody.appendChild(trElem);
+            });
+
+            removeZeroes();
+        }
+    }
+</script>

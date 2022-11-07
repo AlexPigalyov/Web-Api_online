@@ -21,13 +21,15 @@ namespace Web_Api.online.Services
         private ICoinManager _coinManager;
         private IEventsRepository _eventsRepository;
         private ZCashService _zecService;
-        private BalanceProvider _balanceProvider;
+        private BalanceProvider _balanceProvider; 
+        private EtheriumService _etheriumService;
 
         public TransactionManager(TransactionsRepository transactionsRepository,
             ICoinManager coinManager, WalletsRepository walletsRepository,
             IEventsRepository eventsRepository,
             ZCashService zecService,
-            BalanceProvider balanceProvider)
+            BalanceProvider balanceProvider,
+            EtheriumService etheriumService)
         {
             _transactionsRepository = transactionsRepository;
             _coinManager = coinManager;
@@ -35,14 +37,25 @@ namespace Web_Api.online.Services
             _eventsRepository = eventsRepository;
             _zecService = zecService;
             _balanceProvider = balanceProvider;
+            _etheriumService = etheriumService;
         }
 
         public async Task<List<WalletTableModel>> GetUpdatedWalletsAsync(string userId)
         {
-            await _zecService.GetUpdatedWalletAsync(userId);
-
-
             var incomeWallets = await _walletsRepository.GetUserIncomeWalletsAsync(userId);
+            
+            // работает?
+            //if(incomeWallets.Any(y => y.CurrencyAcronim == "ZEC"))
+            //{
+            //    var zecWallet = await _zecService.GetUpdatedWalletAsync(userId);
+            //    wallets.Add(zecWallet);
+            //}
+
+            if (incomeWallets.Any(y => y.CurrencyAcronim == "ETH"))
+            {
+                var ethWallet = await _etheriumService.GetUpdatedWalletAsync(userId);
+            }
+
             var wallets = await _walletsRepository.GetUserWalletsAsync(userId);
 
             List<IncomeTransactionTableModel> incomeLastTransactions = await _transactionsRepository.GetLastIncomeTransactionsByUserIdAsync(userId) ??
@@ -85,7 +98,7 @@ namespace Web_Api.online.Services
                         var transaction = new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = coin.CoinShortName,
-                            TransactionId = blockchainTransaction.TxId,
+                            TransactionHash = blockchainTransaction.TxId,
                             Amount = blockchainTransaction.Amount,
                             TransactionFee = blockchainTransaction.Fee, // не видит комиссию
                             ToAddress = blockchainTransaction.Address,
