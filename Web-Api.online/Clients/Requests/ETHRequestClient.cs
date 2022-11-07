@@ -13,7 +13,7 @@ namespace Web_Api.online.Clients.Requests
 {
     public class ETHRequestClient
     {
-        private string _url = "http://192.168.1.86:777";
+        private string _url = "http://localhost:777";
 
         public async Task<string> GetNewAddressAsync(string label)
         {
