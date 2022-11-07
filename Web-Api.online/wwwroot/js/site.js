@@ -46,3 +46,19 @@ function tempAlert(msg, duration) {
 
     document.body.appendChild(el);
 }
+
+function showModalQr() {
+
+    var modal = this.closest('div');
+
+    modal.style.display = "block";  
+
+    tempAlert("Clicked", 1000);
+}
+
+function closeModalQr() {
+
+    var modal = this.closest('div');
+
+    modal.style.display = "none";
+}
