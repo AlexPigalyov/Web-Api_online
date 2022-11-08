@@ -23,12 +23,12 @@ namespace Web_Api.online.Data.Repositories
         }
 
 
-        public async Task<List<RegistratedUsersTableModel>> GetAllRegistratedUsers()
+        public async Task<List<RegisteredUsersTableModel>> GetAllRegistratedUsers()
         {
             try
             {
-                List<RegistratedUsersTableModel> result =
-                    (List<RegistratedUsersTableModel>)await _db.QueryAsync<RegistratedUsersTableModel>
+                List<RegisteredUsersTableModel> result =
+                    (List<RegisteredUsersTableModel>)await _db.QueryAsync<RegisteredUsersTableModel>
                     ("GetAllRegistratedUser",
                         commandType: CommandType.StoredProcedure);
 
@@ -75,7 +75,7 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
-        public async Task<List<RegistratedUsersTableModel>> GetRegistratedUsersPaged(int page, int pageSize, int currentPage=1)
+        public async Task<List<RegisteredUsersTableModel>> GetRegistratedUsersPaged(int page, int pageSize, int currentPage=1)
         {
             try
             {
@@ -83,8 +83,8 @@ namespace Web_Api.online.Data.Repositories
                 p.Add("page", page);
                 p.Add("pageSize", pageSize);
 
-                List<RegistratedUsersTableModel> result =
-                    (List<RegistratedUsersTableModel>)await _db.QueryAsync<RegistratedUsersTableModel>
+                List<RegisteredUsersTableModel> result =
+                    (List<RegisteredUsersTableModel>)await _db.QueryAsync<RegisteredUsersTableModel>
                     ("GetRegistratedUsers_Paged",
                         p,
                         commandType: CommandType.StoredProcedure);

@@ -116,17 +116,17 @@ namespace Web_Api.online.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> RegistratedUsers(SortModel model)
+        public async Task<ActionResult> RegisteredUsers(SortModel model)
         {
             int pageSize = 100;
 
-            List<RegistratedUsersTableModel> users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
+            List<RegisteredUsersTableModel> users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
             int itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
 
             RegistratedUsersViewModel viewModel = new RegistratedUsersViewModel()
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
-                RegistratedUsers = users ?? new List<RegistratedUsersTableModel>()
+                RegisteredUsers = users ?? new List<RegisteredUsersTableModel>()
             };
 
             return View(viewModel);
