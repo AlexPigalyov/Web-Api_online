@@ -12,11 +12,11 @@
 
 <div class="row">
 
-    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
+    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0" style="font-size: 0.7rem !important;">
         <thead>
             <tr class="table-primary">
-                <th>Transaction Date</th>
-                <th>Currency Acronim</th>
+                <th>Date</th>
+                <th>Currency</th>
                 <th>Value</th>
                 <th>From Wallet Id</th>
                 <th>To Address</th>
@@ -27,7 +27,7 @@
             @foreach (var item in Model.OutcomeTransactions)
             {
                 <tr>
-                    <td>
+                    <td style="white-space: nowrap;">
                         @item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
                     </td>
                     <td>
@@ -51,6 +51,28 @@
     </table>
 </div>
 
+<style>
+    .card-body {
+        padding-left: 0 !important;
+        padding-top: 1rem;
+        padding-right: 1rem;
+    }
+
+    .row > * {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    #transactions-table_filter {
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 0.5rem 0.5rem !important;
+    }
+
+</style>
 
 <script src="/js/vendor/jquery.dataTables.min.js"></script>
 <script src="/js/vendor/dataTables.bootstrap5.js"></script>
