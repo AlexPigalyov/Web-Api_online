@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="transactions-table" class="table table-centered w-100 nowrap">
+                    <table id="transactions-table" class="table table-centered w-100 nowrap" style="font-size: 0.7rem !important;">
                         <thead>
                             <tr class="table-primary">
                                 <th>Date</th>
@@ -35,7 +35,7 @@
                             @foreach (var item in Model.IncomeTransactions)
                             {
                                 <tr>
-                                    <td style="font-size: 0.7rem !important;">
+                                    <td>
                                         @item.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")
                                     </td>
                                     <td>
@@ -129,6 +129,12 @@
         padding-right: 0 !important;
         padding-left: 0 !important;
     }
+
+    #transactions-table_filter {
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
 </style>
 
 <script src="/js/vendor/jquery.dataTables.min.js"></script>
