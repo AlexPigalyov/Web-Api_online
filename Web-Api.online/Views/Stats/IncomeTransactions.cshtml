@@ -53,9 +53,18 @@
                                     <td>
                                         @item.ToAddress
                                     </td>
-                                    <td>
-                                        @item.TransactionHash
-                                    </td>
+                                    @if(item.CurrencyAcronim == "ETH")
+                                    {
+                                        <td>
+                                            <a href="https://etherscan.io/tx/@item.TransactionHash" alt="@item.TransactionHash">@item.TransactionHash</a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @item.TransactionHash
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
