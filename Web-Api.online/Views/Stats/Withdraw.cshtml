@@ -21,6 +21,7 @@
                                 <th>Date</th>
                                 <th>Currency</th>
                                 <th>Value</th>
+                                <th>Fee</th>
                                 <th>From Wallet Id</th>
                                 <th>To Address</th>
                                 <th>Transaction Hash</th>
@@ -38,6 +39,9 @@
                                     </td>
                                     <td>
                                         <span class="decimal-data">@item.Value</span>
+                                    </td>
+                                    <td>
+                                        @item.BlockchainCommission
                                     </td>
                                     <td>
                                         @item.FromWalletId
