@@ -11,44 +11,51 @@
 </div>
 
 <div class="row">
-
-    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0" style="font-size: 0.7rem !important;">
-        <thead>
-            <tr class="table-primary">
-                <th>Date</th>
-                <th>Currency</th>
-                <th>Value</th>
-                <th>From Wallet Id</th>
-                <th>To Address</th>
-                <th>Transaction Hash</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OutcomeTransactions)
-            {
-                <tr>
-                    <td style="white-space: nowrap;">
-                        @item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
-                    </td>
-                    <td>
-                        @item.CurrencyAcronim
-                    </td>
-                    <td>
-                        <span class="decimal-data">@item.Value</span>
-                    </td>
-                    <td>
-                        @item.FromWalletId
-                    </td>
-                    <td>
-                        @item.ToAddress
-                    </td>
-                    <td>
-                        @item.TransactionHash
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0" style="font-size: 0.7rem !important;">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Date</th>
+                                <th>Currency</th>
+                                <th>Value</th>
+                                <th>From Wallet Id</th>
+                                <th>To Address</th>
+                                <th>Transaction Hash</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OutcomeTransactions)
+                            {
+                                <tr>
+                                    <td style="white-space: nowrap;">
+                                        @item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                    <td>
+                                        @item.CurrencyAcronim
+                                    </td>
+                                    <td>
+                                        <span class="decimal-data">@item.Value</span>
+                                    </td>
+                                    <td>
+                                        @item.FromWalletId
+                                    </td>
+                                    <td>
+                                        @item.ToAddress
+                                    </td>
+                                    <td>
+                                        @item.TransactionHash
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
