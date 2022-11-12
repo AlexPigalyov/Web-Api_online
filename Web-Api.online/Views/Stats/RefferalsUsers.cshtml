@@ -11,31 +11,38 @@
 </div>
 
 <div class="row">
-    
-    <table id="RefferalsUsers" class="table table-striped table-centered mb-0">
-        <thead>
-        <tr class="table-primary">
-            <th>Email</th>
-            <th>RegistrationDate</th>
-            <th>ReffererId</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.UserRefferal)
-        {
-            <tr>
-                <td>
-                    @item.Email
-                </td>
-                <td>
-                        @item.RegistrationDate.ToString("yyyy-MM-dd HH:mm:ss")
-                </td>
-                <td>
-                    @item.ReffererId
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="RefferalsUsers" class="table table-striped table-centered mb-0">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Email</th>
+                                <th>RegistrationDate</th>
+                                <th>ReffererId</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.UserRefferal)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @item.RegistrationDate.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                    <td>
+                                        @item.ReffererId
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
 
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
