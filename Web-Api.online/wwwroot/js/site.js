@@ -89,3 +89,12 @@ function getUrlParametr(name, url) {
     var results = regex.exec(url);
     return results == null ? null : results[1];
 }
+
+function showModalQr(imgContent) {
+    $('.modal-qrcode-content').attr('src', imgContent);
+    $('.popup-qr-container').fadeIn();
+}
+
+function closeModalQr() {
+    $('.popup-qr-container').fadeOut();
+}
