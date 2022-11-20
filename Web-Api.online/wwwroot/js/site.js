@@ -89,20 +89,12 @@ function getUrlParametr(name, url) {
     var results = regex.exec(url);
     return results == null ? null : results[1];
 }
-}
 
-function showModalQr() {
-
-    var modal = this.closest('div');
-
-    modal.style.display = "block";  
-
-    tempAlert("Clicked", 1000);
+function showModalQr(imgContent) {
+    $('.modal-qrcode-content').attr('src', imgContent);
+    $('.popup-qr-container').fadeIn();
 }
 
 function closeModalQr() {
-
-    var modal = this.closest('div');
-
-    modal.style.display = "none";
+    $('.popup-qr-container').fadeOut();
 }

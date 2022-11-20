@@ -107,14 +107,11 @@
                                         {
                                             var qrCode = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode));
 
-                                            <img src="@qrCode" onclick="this.siblings().closest('div').style.display='none'" />
+                                            <img class="qrcode-img" src="@qrCode" onclick="@("return showModalQr(\""+qrCode+"\")")")" />
 
-                                            <div class="modal-qrcode">
-                                                <span class="close" onclick="this.closest('div').style.display='none'">&times;</span>
-                                                <img class="modal-qrcode-content" />
+                                            <div class="popup-qr-container" onclick="closeModalQr()">
+                                                <img class="modal-qrcode-content"/>
                                             </div>
-
-
                                         }
                                     </td>
                                     <td>
@@ -152,23 +149,5 @@
 
         });
     }
-
-    $(function () {
-
-        $.ajaxSetup({ 
-
-            cache: false 
-        });
-
-        $("#qr_code").click(function (e) {
-
-            e.preventDefault();
-
-            $.get(this.href, function (data) {
-                //$('#dialogContent').html(data);
-                $('#qrCode').modal('show');
-            });
-        });
-    })
 
 </script>
