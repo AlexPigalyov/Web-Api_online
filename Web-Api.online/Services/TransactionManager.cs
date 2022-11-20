@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +73,7 @@ namespace Web_Api.online.Services
                 {
                     var currencyTableModel = await _walletsRepository.GetCurrencyByAcronimAsync(coin.CoinShortName);
 
-                    var transactionsInBlockchain = coin.ListTransactions(userId);
+                    var transactionsInBlockchain = coin.ListTransactions(userId);  //не видит комиссию, в респонсе нету инфы о комиссии
 
                     var lastTr = incomeLastTransactions
                                      .FirstOrDefault(tr =>
@@ -95,12 +95,14 @@ namespace Web_Api.online.Services
 
                     foreach (var blockchainTransaction in newTransactionsInBlockchain)
                     {
+                        var transactionInfo = coin.GetTransaction(blockchainTransaction.TxId);
+
                         var transaction = new IncomeTransactionTableModel()
                         {
                             CurrencyAcronim = coin.CoinShortName,
                             TransactionHash = blockchainTransaction.TxId,
                             Amount = blockchainTransaction.Amount,
-                            TransactionFee = blockchainTransaction.Fee, // не видит комиссию
+                            TransactionFee = transactionInfo.Fee,
                             ToAddress = blockchainTransaction.Address,
                             Date = blockchainTransaction.Time,
                             UserId = userId,
