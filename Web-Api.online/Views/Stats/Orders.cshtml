@@ -62,7 +62,14 @@
                                         <span class="decimal-data">@item.Total</span>
                                     </td>
                                     <td>
-                                        <span class="decimal-data">@item.Profit</span>
+                                        @if (item.IsBuy)
+                                        {
+                                            <span class="decimal-data">@item.Profit</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="decimal-data">0</span>
+                                        }
                                     </td>
                                     @*<td>
                                 @item.CreateUserId
@@ -161,7 +168,18 @@
                 var differenceTd = document.createElement("td");
                 var differenceSpan = document.createElement("span");
                 differenceSpan.className = "decimal-data";
-                differenceSpan.innerText = order.Difference;
+
+                if(order.IsBuy)
+                {
+                    var profit = order.Difference * order.Amount.toFixed(20);
+                    differenceSpan.innerText = profit.toFixed(20);
+                }
+                else
+                {
+                    var profit = 0.00;
+                    differenceSpan.innerText = profit.toFixed(20);
+                }
+                
                 differenceTd.appendChild(differenceSpan);
                 trElem.appendChild(differenceTd);
 
