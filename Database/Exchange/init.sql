@@ -1493,7 +1493,7 @@ ALTER TABLE [dbo].[BTC_USDT_OpenOrders_Sell] ADD  CONSTRAINT [DF_BTC_USDT_OpenOr
 GO
 ALTER TABLE [dbo].[Currencies] ADD  CONSTRAINT [DF_Currencies_Created]  DEFAULT (getdate()) FOR [Created]
 GO
-ALTER TABLE [dbo].[Currencies] ADD  CONSTRAINT [DF_Currencies_NodeIsReady]  DEFAULT ((0)) FOR [NodeIsReady]
+ALTER TABLE [dbo].[Currencies] ADD  CONSTRAINT [DF_Currencies_Currencies]  DEFAULT ((0)) FOR [NodeIsReady]
 GO
 ALTER TABLE [dbo].[DASH_BTC_OpenOrders_Buy] ADD  CONSTRAINT [DF_DASH_BTC_OpenOrders_Buy_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
 GO
@@ -1681,6 +1681,108 @@ where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
 
 delete from LTC_USDT_OpenOrders_Sell
 where CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[ClearAllBotsOrdersMore5Minutes]
+AS
+BEGIN
+
+delete from BCH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BCH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from BTC_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DASH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_BTC_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from DOGE_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_BTC_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from ETH_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_BTC_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Buy
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
+
+delete from LTC_USDT_OpenOrders_Sell
+where CreateDate < dateadd(minute,-5,getdate())
+AND CreateUserId IN ('0996e6bb-ea74-447b-9832-d1b5a02d4a70')
 
 END
 
