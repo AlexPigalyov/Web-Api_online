@@ -1,11 +1,11 @@
 USE [msdb]
 GO
 
-/****** Object:  Job [Clear All Bots Orders More 5 minutes]    Script Date: 12/11/2022 14:59:28 ******/
+/****** Object:  Job [Clear All Bots Orders More 5 minutes]    Script Date: 12/11/2022 15:02:27 ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
-/****** Object:  JobCategory [[Uncategorized (Local)]]    Script Date: 12/11/2022 14:59:29 ******/
+/****** Object:  JobCategory [[Uncategorized (Local)]]    Script Date: 12/11/2022 15:02:27 ******/
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
 BEGIN
 EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
@@ -25,7 +25,7 @@ EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Clear All Bots Orders More 5
 		@category_name=N'[Uncategorized (Local)]', 
 		@owner_login_name=N'exchange', @job_id = @jobId OUTPUT
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [1]    Script Date: 12/11/2022 14:59:29 ******/
+/****** Object:  Step [1]    Script Date: 12/11/2022 15:02:27 ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'1', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
@@ -47,7 +47,7 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id=@jobId, @name=N'1',
 		@freq_type=4, 
 		@freq_interval=1, 
 		@freq_subday_type=4, 
-		@freq_subday_interval=10, 
+		@freq_subday_interval=1, 
 		@freq_relative_interval=0, 
 		@freq_recurrence_factor=0, 
 		@active_start_date=20220825, 
