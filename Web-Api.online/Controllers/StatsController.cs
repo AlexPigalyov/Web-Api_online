@@ -43,7 +43,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> IncomeTransactions(SortModel model)
         {
-            int pageSize = 100;
+            int pageSize = 1000;
 
             var incomeTransactions = await _transactionsRepository.GetPagedIncomeTransactions(model.Page, pageSize);
             var itemsCount = await _transactionsRepository.GetCountOfIncomeTransactions();
@@ -59,7 +59,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Transfers(SortModel model)
         {
-            int pageSize = 100;
+            int pageSize = 1000;
 
             var transfers = await _transferRepository.GetTransfersPaged(model.Page, pageSize);
             var itemsCount = await _transferRepository.GetCountOfTransfers();
@@ -75,7 +75,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> Withdraw(SortModel model)
         {
-            int pageSize = 100;
+            int pageSize = 1000;
 
             var outcomes = await _outcomeRepository.GetOutcomeTransactionsPaged(model.Page, pageSize);
             var itemsCount = await _outcomeRepository.GetCountOfOutcomeTransactions();
@@ -118,7 +118,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> RegisteredUsers(SortModel model)
         {
-            int pageSize = 100;
+            int pageSize = 1000;
 
             List<RegisteredUsersTableModel> users = await _usersInfoRepository.GetRegistratedUsersPaged(model.Page, pageSize);
             int itemsCount = await _usersInfoRepository.GetCountOfRegistratedUsers();
@@ -134,7 +134,7 @@ namespace Web_Api.online.Controllers
 
         public async Task<ActionResult> RefferalsUsers(SortModel model)
         {
-            int pageSize = 100;
+            int pageSize = 1000;
 
             var reffUsers = await _userRepository.GetRefferersPaged(model.Page, pageSize);
             var itemsCount = await _userRepository.GetCountUserRefferer();
@@ -143,6 +143,22 @@ namespace Web_Api.online.Controllers
             {
                 PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
                 UserRefferal = reffUsers ?? new List<UserRefferalTableModel>()
+            };
+
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> Wallets(SortModel model)
+        {
+            int pageSize = 1000;
+
+            var items = await _userRepository.GetWalletsPaged(model.Page, pageSize);
+            var itemsCount = await _userRepository.GetCountWallets();
+
+            WalletsViewModel viewModel = new WalletsViewModel()
+            {
+                PageViewModel = new PageViewModel(itemsCount, model.Page, pageSize),
+                Wallets = items ?? new List<WalletViewModel>()
             };
 
             return View(viewModel);

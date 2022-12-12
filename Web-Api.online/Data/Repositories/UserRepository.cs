@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 using Web_Api.online.Models;
 using Web_Api.online.Models.Tables;
+using Web_Api.online.Models.ViewModels;
 
 namespace Web_Api.online.Data.Repositories
 {
@@ -98,6 +99,20 @@ namespace Web_Api.online.Data.Repositories
             }
         }
 
+        public async Task<int> GetCountWallets()
+        {
+            try
+            {
+                return await _dbWebApi.QueryFirstAsync<int>(
+                    "GetCountWallets",
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception exc)
+            {
+                return 0;
+            }
+        }
+
         public async Task<List<UserRefferalTableModel>> GetRefferersPaged(int page, int pageSize)
         {
 
@@ -156,6 +171,22 @@ namespace Web_Api.online.Data.Repositories
 
             return result;
 
+        }
+
+        public async Task<List<WalletViewModel>> GetWalletsPaged(int page, int pageSize)
+        {
+
+            var p = new DynamicParameters();
+            p.Add("page", page);
+            p.Add("pageSize", pageSize);
+
+            List<WalletViewModel> result =
+                (List<WalletViewModel>)await _dbWebApi.QueryAsync<WalletViewModel>
+                ("GetWallets_Paged",
+                    p,
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
         }
 
         public async Task<string> GetUserIdFromDbWebApi(string userAttributeValue)
