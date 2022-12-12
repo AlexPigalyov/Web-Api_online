@@ -175,13 +175,12 @@ namespace Web_Api.online.Data.Repositories
 
         public async Task<List<WalletViewModel>> GetWalletsPaged(int page, int pageSize)
         {
-
             var p = new DynamicParameters();
             p.Add("page", page);
             p.Add("pageSize", pageSize);
 
             List<WalletViewModel> result =
-                (List<WalletViewModel>)await _dbWebApi.QueryAsync<WalletViewModel>
+                (List<WalletViewModel>)await _dbExchange.QueryAsync<WalletViewModel>
                 ("GetWallets_Paged",
                     p,
                     commandType: CommandType.StoredProcedure);
@@ -197,10 +196,10 @@ namespace Web_Api.online.Data.Repositories
 
                 parameters.Add("searchText", userAttributeValue);
 
-                return 
+                return
                     await _dbWebApi.QueryFirstOrDefaultAsync<string>(
-                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber", 
-                        parameters, 
+                        "GetUserIdBy_UserName_NormalizedUserName_Email_PhoneNumber",
+                        parameters,
                         commandType: CommandType.StoredProcedure);
             }
             catch
@@ -233,9 +232,9 @@ namespace Web_Api.online.Data.Repositories
         {
             var userIdFromDbWebApi = await this.GetUserIdFromDbWebApi(searchText);
 
-            return 
-                string.IsNullOrEmpty(userIdFromDbWebApi) 
-                ? await this.GetUserIdFromDbExchange(searchText) 
+            return
+                string.IsNullOrEmpty(userIdFromDbWebApi)
+                ? await this.GetUserIdFromDbExchange(searchText)
                 : userIdFromDbWebApi;
         }
 
