@@ -6231,6 +6231,30 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[GetWallets_Paged]
+@page int,
+@pageSize int
+AS
+BEGIN
+
+Select
+[Id]
+,[CurrencyAcronim]
+,[Created]
+,[Address]
+FROM [Exchange].[dbo].[Wallets]
+Order By Id desc
+OFFSET @pageSize * (@page - 1) ROWS
+FETCH  NEXT @pageSize ROWS ONLY
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 
 
 
