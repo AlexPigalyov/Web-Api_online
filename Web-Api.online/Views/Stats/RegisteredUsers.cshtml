@@ -34,9 +34,18 @@
                                     <td>
                                         @item.Email
                                     </td>
-                                    <td>
-                                        @item.RegistrationDate.ToString("yyyy-MM-dd HH:mm:ss")
-                                    </td>
+                                    if(@item.RegistrationDate != null)
+                                    {
+                                        <td>
+                                            @item.RegistrationDate.ToString("yyyy-MM-dd HH:mm:ss")
+                                        </td>
+                                    }
+                                    else if(@item.Created != null)
+                                    {
+                                        <td>
+                                            @item.Created.ToString("yyyy-MM-dd HH:mm:ss")
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
