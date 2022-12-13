@@ -110,6 +110,7 @@ CREATE TABLE [dbo].[AspNetUsers](
 	[LockoutEnd] [datetimeoffset](7) NULL,
 	[LockoutEnabled] [bit] NOT NULL,
 	[AccessFailedCount] [int] NOT NULL,
+	[Created] [datetime] NOT NULL,
  CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -249,6 +250,8 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220712-001814] ON [dbo].[AspNetUs
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[AspNetUserLogins] ADD  CONSTRAINT [DF_AspNetUserLogins_Created]  DEFAULT (getdate()) FOR [Created]
+GO
+ALTER TABLE [dbo].[AspNetUsers] ADD  CONSTRAINT [DF_AspNetUsers_Created]  DEFAULT (getdate()) FOR [Created]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
 GO
@@ -704,6 +707,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
 CREATE PROCEDURE [dbo].[GetRegistratedUsers_Paged]
 @page int,
 @pageSize int
@@ -715,11 +719,13 @@ Select
 	LEFT(AspNetUsers.Email, 2) + '*****' + RIGHT(AspNetUsers.Email,4) Email, 
 	LEFT(UsersInfo.FullName, 1) + '*****' + RIGHT(UsersInfo.FullName,1) FullName, 
 	UsersInfo.RegistrationDate,
-	UsersInfo.ReffererId 
-  
+	UsersInfo.ReffererId,
+	[AspNetUserLogins].Created
 FROM AspNetUsers 
 LEFT JOIN UsersInfo
 ON AspNetUsers.Id = UsersInfo.UserId
+LEFT JOIN [AspNetUserLogins]
+ON AspNetUsers.Id = [AspNetUserLogins].[UserId]
 Order By Number desc
 OFFSET @pageSize * (@page - 1) ROWS
 FETCH  NEXT @pageSize ROWS ONLY
@@ -872,7 +878,6 @@ FROM AspNetUsers
 WHERE Number = @number
 
 END
-
 GO
 SET ANSI_NULLS ON
 GO
