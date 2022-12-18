@@ -9,79 +9,82 @@
 }
 
 @section ThirdPartyCss
-    {
-    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css" />
+{
+    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css"/>
 }
 
-    <div class="text-center">
-        <h1 class="display-4">@Model.PairHeader</h1>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script type="module" src="~/js/trading-vue-js.js"></script>
 
-    <div class="row card-row no-gutters">
-        <div class="col-xl-3 col-lg-12 card-container">
-            <div class="card">
-                <div class="card-body">
+<div class="text-center">
+    <h1 class="display-4">@Model.PairHeader</h1>
+</div>
 
-                    <div class="orderbook-wrap">
-                        <div class="orderbook">
-                            <div class="orderbook-header"></div>
-                            <div class="orderbook-tbheader">
-                                <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
-                                <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
-                                <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
-                            </div>
-                            <div class="orderbook-container">
-                                <div class="orderbook-list orderbook-list-asks orderbook-asks">
-                                </div>
-                                <div class="orderbook-ticker">
-                                    <div class="orderbook-ticker-status status-buy">
-                                        <span class="current-price" id="current-price">0</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
-                                            <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
-                                    <a href="#" target="_blank" class="orderbook-ticker-more">
-                                        More
-                                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect y="7" width="2.66667" height="5" fill="#00C582"></rect>
-                                            <rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect>
-                                            <rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect>
-                                            <rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
+<div class="row card-row no-gutters">
+    <div class="col-xl-3 col-lg-12 card-container">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="orderbook-wrap">
+                    <div class="orderbook">
+                        <div class="orderbook-header"></div>
+                        <div class="orderbook-tbheader">
+                            <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                            <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                            <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
                         </div>
-                        <div class="orderbook custom-book">
-                            <div class="orderbook-container">
-                                <div class="orderbook-list orderbook-list-bids orderbook-bids orderbook-gr">
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-asks orderbook-asks">
+                            </div>
+                            <div class="orderbook-ticker">
+                                <div class="orderbook-ticker-status status-buy">
+                                    <span class="current-price" id="current-price">0</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
+                                        <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
+                                    </svg>
                                 </div>
+                                <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
+                                <a href="#" target="_blank" class="orderbook-ticker-more">
+                                    More
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect y="7" width="2.66667" height="5" fill="#00C582"></rect>
+                                        <rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect>
+                                        <rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect>
+                                        <rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </div>
+                    <div class="orderbook custom-book">
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-bids orderbook-bids orderbook-gr">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div>
-        <!-- end col-->
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div>
+    <!-- end col-->
 
-        <div class="col-xl-6 col-lg-6">
-            <div class="card">
-                <div class="card-body">
+    <div class="col-xl-6 col-lg-6">
+        <div class="card">
+            <div class="card-body">
 
-                    <div class="text-wrap">
+                <div class="text-wrap">
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <ul>
                             <li class="nav-item">
                                 @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance" class="decimal-data">@Model.FirstWallet.Value</span>
-                                <br />
+                                <br/>
                                 Address: @Model.FirstWallet.Address
                             </li>
                             <li class="nav-item">
                                 @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance" class="decimal-data">@Model.SecondWallet.Value</span>
-                                <br />
+                                <br/>
                                 Address: @Model.SecondWallet.Address
                             </li>
                         </ul>
@@ -91,27 +94,29 @@
                             <div class="row">
                                 <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
                                 <div class="col-4">
-                                    <input type="text" id="amountInput" />
+                                    <input type="text" id="amountInput"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
                                 <div class="col-4">
-                                    <input type="text" id="priceInput" />
+                                    <input type="text" id="priceInput"/>
                                 </div>
                             </div>
                             <div class="row">&nbsp;</div>
                             <div class="row">
                                 <div class="col-8">
-                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency" />
-                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency" />
+                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency"/>
+                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency"/>
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
                 <div class="row">
-                    <div id="simple-candlestick" class="apex-charts" data-colors="#0acf97,#fa5c7c"></div>
+                    <div id="app">
+                        <trading-vue :data="this.$data"></trading-vue>
+                    </div>
                 </div>
 
             </div>
@@ -216,7 +221,24 @@
     }
 
 </style>
-
+<script>
+document.addEventListener("DOMContentLoaded", () => {  
+  new Vue({
+    el: '#app',
+    data() {
+        return {
+          ohlcv: [
+            [ 1551128400000, 33,  37.1, 14,  14,  196 ],
+            [ 1551132000000, 13.7, 30, 6.6,  30,  206 ],
+            [ 1551135600000, 29.9, 33, 21.3, 21.8, 74 ],
+            [ 1551139200000, 21.7, 25.9, 18, 24,  140 ],
+            [ 1551142800000, 24.1, 24.1, 24, 24.1, 29 ],
+          ]
+        }
+      }
+  });
+});
+</script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/pairshub.js" asp-append-version="true"></script>
