@@ -11,49 +11,56 @@
 </div>
 
 <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>id</th>
+                                <th>Date(UTC)</th>
+                                <th>WalletFromId</th>
+                                <th>WalletToId</th>
+                                <th>Value</th>
+                                <th>Currency</th>
+                                <th>Hash</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Transfers)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td><span style="white-space: nowrap;">@item.Date.ToString("yyyy-MM-dd HH:mm:ss")</span></td>
+                                    <td>
+                                        @item.WalletFromId
+                                    </td>
+                                    <td>
+                                        @item.WalletToId
+                                    </td>
+                                    <td>
+                                        <span class="decimal-data">@item.Value</span>
+                                    </td>
+                                    <td>
+                                        @item.CurrencyAcronim
+                                    </td>
+                                    <td>
+                                        @item.Hash
+                                    </td>
+                                    <td>
+                                        @item.Comment
+                                    </td>
 
-    <table id="WithdrawTransactionRepository" class="table table-striped table-centered mb-0">
-        <thead>
-            <tr class="table-primary">
-                <th>id</th>
-                <th>Date</th>
-                <th>WalletFromId</th>
-                <th>WalletToId</th>
-                <th>Value</th>
-                <th>Currency</th>
-                <th>Hash</th>
-                <th>Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Transfers)
-            {
-                <tr>
-                    <td>
-                        @item.Id
-                    </td>
-                    <td><span style="white-space: nowrap;">@item.Date.ToString("yyyy-MM-dd HH:mm:ss")</span></td>
-                    <td>
-                        @item.WalletFromId
-                    </td>
-                    <td>
-                        @item.WalletToId
-                    </td>
-                    <td>
-                        <span class="decimal-data">@item.Value</span>
-                    </td>
-                    <td>
-                        @item.CurrencyAcronim
-                    </td>
-                    <td>
-                        @item.Hash
-                    </td>
-                    <td>
-                        @item.Comment
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

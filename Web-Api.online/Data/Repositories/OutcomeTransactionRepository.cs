@@ -26,6 +26,7 @@ namespace Web_Api.online.Data.Repositories
             {
                 var p = new DynamicParameters();
                 p.Add("id", outcomeTransaction.Id, dbType: DbType.Int64, direction: ParameterDirection.InputOutput);
+                p.Add("transactionHash", outcomeTransaction.TransactionHash);
                 p.Add("fromWalletId", outcomeTransaction.FromWalletId);
                 p.Add("toAddress", outcomeTransaction.ToAddress);
                 p.Add("value", outcomeTransaction.Value);

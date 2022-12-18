@@ -58,10 +58,18 @@
                         <select name="selectCurrency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
                             @foreach (var item in Model.Currencies)
                             {
-                                <option value="@item.Acronim">@item.Acronim</option>
+                                if (@item.NodeIsReady)
+                                {
+                                    <option value="@item.Acronim">@item.Acronim</option>
+                                }
+                                else
+                                {
+                                    <option disabled="disabled"  value="@item.Acronim">@item.Acronim (not ready)</option>
+                                }
+                                
                             }
                         </select>
-                        <button id="createButton" class="btn btn-outline-secondary" type="submit">Сreate</button>
+                        <button id="createButton" class="btn btn-success" type="submit">Сreate</button>
                     </div>
                 </form>
                 <hr />
@@ -97,7 +105,13 @@
                                     <td>
                                         @if (item.QrCode != null)
                                         {
-                                            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode))" />
+                                            var qrCode = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.QrCode));
+
+                                            <img class="qrcode-img" src="@qrCode" onclick="@("return showModalQr(\""+qrCode+"\")")")" />
+
+                                            <div class="popup-qr-container" onclick="closeModalQr()">
+                                                <img class="modal-qrcode-content"/>
+                                            </div>
                                         }
                                     </td>
                                     <td>

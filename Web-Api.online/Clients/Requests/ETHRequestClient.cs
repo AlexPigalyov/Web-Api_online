@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Security;
 using System.Threading.Tasks;
 using Web_Api.online.Models.Response;
 using Web_Api.online.Models.Tables;
@@ -13,13 +10,20 @@ namespace Web_Api.online.Clients.Requests
 {
     public class ETHRequestClient
     {
-        private string _url = "http://192.168.1.86:777";
+        private string _url;
+        private readonly IConfiguration _configuration;
+
+        public ETHRequestClient(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _url = _configuration["ETH_DaemonUrl"];
+        }
 
         public async Task<string> GetNewAddressAsync(string label)
         {
             try
             {
-                string url = $"{_url}/ETH/GetNewAddress?label=" + label;
+                string url = $"{_url}ETH/GetNewAddress?label=" + label;
 
                 using (var httpClientHandler = new HttpClientHandler())
                 {
@@ -43,7 +47,7 @@ namespace Web_Api.online.Clients.Requests
             {
                 Dictionary<string, string> parametrs = new Dictionary<string, string>();
                 parametrs.Add("userId", userId);
-                return await ExecuteGetQueryAsync<List<IncomeTransactionTableModel>>($"{_url}/ETH/GetNewTransactions", parametrs);
+                return await ExecuteGetQueryAsync<List<IncomeTransactionTableModel>>($"{_url}ETH/GetNewTransactions", parametrs);
             }
             catch
             {
@@ -57,7 +61,7 @@ namespace Web_Api.online.Clients.Requests
             {
                 Dictionary<string, string> parametrs = new Dictionary<string, string>();
                 parametrs.Add("outcomeTransactionId", transactionId.ToString());
-                return await ExecuteGetQueryAsync<ExecuteTransactionResponse>($"{_url}/ETH/ExecuteTransaction", parametrs);
+                return await ExecuteGetQueryAsync<ExecuteTransactionResponse>($"{_url}ETH/ExecuteTransaction", parametrs);
             }
             catch
             {
@@ -74,7 +78,7 @@ namespace Web_Api.online.Clients.Requests
                 {
                     List<string> listParametrs = new List<string>();
 
-                    foreach(var param in parametrs)
+                    foreach (var param in parametrs)
                     {
                         listParametrs.Add($"{param.Key}={param.Value}");
                     }
