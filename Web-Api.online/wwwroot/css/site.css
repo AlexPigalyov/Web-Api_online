@@ -131,7 +131,7 @@ li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
 }
 
 @media (max-width: 991.98px) {
-    .nav-user .account-position, .nav-user .account-user-name {
+    .nav-user .account-position {
         display: block !important;
     }
 
