@@ -1261,6 +1261,7 @@ CREATE TABLE [dbo].[Pairs](
 	[Change15m] [decimal](5, 2) NULL,
 	[Change1mUpdateDate] [datetime] NULL,
 	[Change15mUpdateDate] [datetime] NULL,
+	[OrdersCount24h] [int] NOT NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1574,6 +1575,8 @@ GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1mUpdateDate]  DEFAULT (getdate()) FOR [Change1mUpdateDate]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15mUpdateDate]  DEFAULT (getdate()) FOR [Change15mUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_OrdersCount24h]  DEFAULT ((0)) FOR [OrdersCount24h]
 GO
 ALTER TABLE [dbo].[Settings] ADD  CONSTRAINT [DF_Settings_LastUpdateDateTime]  DEFAULT (getdate()) FOR [LastUpdateDateTime]
 GO
@@ -11956,6 +11959,199 @@ SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id 
 		, Change15m = Price / (@LTC_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'LTCUSDT'
 --GO
+
+
+------------------------------------------------------------------------------
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BTCUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[ETH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'ETHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DOGE_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DOGEUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[LTC_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'LTCUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DASH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DASHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DASH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DASHBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[ETH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'ETHBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[LTC_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'LTCBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DOGE_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DOGEBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BCH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BCHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BCH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BCHBTC'
+
+--update Pairs
+--set OrdersCount24h = rr.ccount,
+--	Volume24h = rr.ttotal,
+--	Volume24hUpdateDate = GETDATE()
+--from(
+--SELECT Count([Id]) as ccount
+--		,SUM([Amount]) as aamount
+--		,SUM([Total]) as ttotal
+--  FROM [Exchange].[dbo].[ADA_USDT_ClosedOrders]
+--  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+--  --GROUP BY ClosedDate
+--  ) rr
+--where Acronim = 'ADAUSDT'
+
+--update Pairs
+--set OrdersCount24h = rr.ccount,
+--	Volume24h = rr.ttotal,
+--	Volume24hUpdateDate = GETDATE()
+--from(
+--SELECT Count([Id]) as ccount
+--		,SUM([Amount]) as aamount
+--		,SUM([Total]) as ttotal
+--  FROM [Exchange].[dbo].[ADA_BTC_ClosedOrders]
+--  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+--  --GROUP BY ClosedDate
+--  ) rr
+--where Acronim = 'ADABTC'
+
+
+
+
+
+
+
+
 
 END
 
