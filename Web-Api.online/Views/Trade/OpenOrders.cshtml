@@ -5,46 +5,70 @@
     ViewData["Title"] = "Open orders";
 }
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <div class="text-center">
-        <h1 class="display-4">Open orders</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h1 class="display-4">Open orders</h1>
+        </div>
     </div>
+</div>
 
-    <div class="orderbook-wrap mt-2">
-        <div class="orderbook" style="height: 1000px !important; width: 1540px !important; max-width: 1540px !important;">
-            <div class="orderbook-header"></div>
-            <div class="orderbook-tbheader">
-                <div class="orderbook-tbheader-col orderbook-col-small">Pair</div>
-                <div class="orderbook-tbheader-col">Price(USDT)</div>
-                <div class="orderbook-tbheader-col">Amount(BTC)</div>
-                <div class="orderbook-tbheader-col">Total</div>
-                <div class="orderbook-tbheader-col orderbook-col-date__small">Created</div>
-                <div class="orderbook-tbheader-col"></div>
-            </div>
-            <div class="orderbook-container">
-                <div class="orderbook-list orderbook-list-bids orderbook-asks" style="width: 1540px !important; max-height: 970px !important;">
-                    @foreach (var order in Model)
-                    {
-                        <div class="orderbook-row">
-                            <div class="orderbook-col orderbook-col-small">@order.Pair</div>
-                            <div class="orderbook-col decimal-data">@order.Price</div>
-                            <div class="orderbook-col decimal-data">@order.Amount</div>
-                            <div class="orderbook-col decimal-data">@order.Total</div>
-                            <div class="orderbook-col orderbook-col-date__small">@(order.CreateDate.ToString("HH:mm:ss"))</div>
-                            <div class="orderbook-col">
-                                <a href="/trade/cancelorder/@order.Id">Cancel</a>
-                            </div>
-                        </div>
-                    }
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="RefferalsUsers" class="table table-striped table-centered mb-0">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Pair</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                                <th>Total</th>
+                                <th>Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>@order.Currency1 @order.Currency2</td>
+                                    <td><span class="decimal-data">@order.Price</span> @order.Currency2</td>
+                                    <td><span class="decimal-data">@order.Amount</span> @order.Currency1</td>
+                                    <td><span class="decimal-data">@order.Total</span> @order.Currency2</td>
+                                    <td>@order.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td><a href="/trade/cancelorder?id=@order.Id&acronim=@order.Pair">Cancel</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
+
 <style>
-    .container {
-        max-width: 1540px;
+    .card-body {
+        padding-left: 0 !important;
+        padding-top: 1rem;
+        padding-right: 1rem;
     }
+
+    .row > * {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    #transactions-table_filter {
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 0.5rem 0.5rem !important;
+    }
+
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
