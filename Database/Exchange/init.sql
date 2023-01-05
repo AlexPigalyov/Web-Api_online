@@ -1261,6 +1261,7 @@ CREATE TABLE [dbo].[Pairs](
 	[Change15m] [decimal](5, 2) NULL,
 	[Change1mUpdateDate] [datetime] NULL,
 	[Change15mUpdateDate] [datetime] NULL,
+	[OrdersCount24h] [int] NOT NULL,
  CONSTRAINT [PK_Pairs] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1356,9 +1357,40 @@ CREATE TABLE [dbo].[Wallets](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014323] ON [dbo].[ADA_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-015244] ON [dbo].[ADA_BTC_ClosedOrders]
+(
+	[ClosedDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014343] ON [dbo].[ADA_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-015252] ON [dbo].[ADA_USDT_ClosedOrders]
+(
+	[ClosedDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223846] ON [dbo].[BCH_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014402] ON [dbo].[BCH_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223634] ON [dbo].[BCH_USDT_ClosedOrders]
@@ -1366,9 +1398,23 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223634] ON [dbo].[BCH_USDT
 	[ClosedDate] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014521] ON [dbo].[BCH_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223801] ON [dbo].[BTC_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-012903] ON [dbo].[BTC_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-230559] ON [dbo].[BTC_USDT_OpenOrders_Buy]
@@ -1386,9 +1432,23 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223951] ON [dbo].[DASH_BTC
 	[ClosedDate] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014701] ON [dbo].[DASH_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224010] ON [dbo].[DASH_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014753] ON [dbo].[DASH_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224028] ON [dbo].[DOGE_BTC_ClosedOrders]
@@ -1396,14 +1456,35 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224028] ON [dbo].[DOGE_BTC
 	[ClosedDate] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014807] ON [dbo].[DOGE_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224044] ON [dbo].[DOGE_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014820] ON [dbo].[DOGE_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224101] ON [dbo].[ETH_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014840] ON [dbo].[ETH_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-231202] ON [dbo].[ETH_BTC_OpenOrders_Buy]
@@ -1419,6 +1500,13 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224117] ON [dbo].[ETH_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014902] ON [dbo].[ETH_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-230935] ON [dbo].[ETH_USDT_OpenOrders_Buy]
@@ -1446,6 +1534,13 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224135] ON [dbo].[LTC_BTC_
 	[ClosedDate] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014919] ON [dbo].[LTC_BTC_ClosedOrders]
+(
+	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-231131] ON [dbo].[LTC_BTC_OpenOrders_Buy]
 (
 	[Price] DESC
@@ -1459,6 +1554,13 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224152] ON [dbo].[LTC_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014931] ON [dbo].[LTC_USDT_ClosedOrders]
+(
+	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-231022] ON [dbo].[LTC_USDT_OpenOrders_Buy]
@@ -1574,6 +1676,8 @@ GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change1mUpdateDate]  DEFAULT (getdate()) FOR [Change1mUpdateDate]
 GO
 ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_Change15mUpdateDate]  DEFAULT (getdate()) FOR [Change15mUpdateDate]
+GO
+ALTER TABLE [dbo].[Pairs] ADD  CONSTRAINT [DF_Pairs_OrdersCount24h]  DEFAULT ((0)) FOR [OrdersCount24h]
 GO
 ALTER TABLE [dbo].[Settings] ADD  CONSTRAINT [DF_Settings_LastUpdateDateTime]  DEFAULT (getdate()) FOR [LastUpdateDateTime]
 GO
@@ -11956,6 +12060,199 @@ SET    Price = (select TOP 1 ClosedPrice from LTC_USDT_ClosedOrders order by Id 
 		, Change15m = Price / (@LTC_USDT_15_minutes_ago_price / 100) - 100
 WHERE [Acronim] = 'LTCUSDT'
 --GO
+
+
+------------------------------------------------------------------------------
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BTC_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BTCUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[ETH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'ETHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DOGE_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DOGEUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[LTC_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'LTCUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DASH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DASHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DASH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DASHBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[ETH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'ETHBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[LTC_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'LTCBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[DOGE_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'DOGEBTC'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BCH_USDT_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BCHUSDT'
+
+update Pairs
+set OrdersCount24h = rr.ccount,
+	Volume24h = rr.ttotal,
+	Volume24hUpdateDate = GETDATE()
+from(
+SELECT Count([Id]) as ccount
+		,SUM([Amount]) as aamount
+		,SUM([Total]) as ttotal
+  FROM [Exchange].[dbo].[BCH_BTC_ClosedOrders]
+  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+  --GROUP BY ClosedDate
+  ) rr
+where Acronim = 'BCHBTC'
+
+--update Pairs
+--set OrdersCount24h = rr.ccount,
+--	Volume24h = rr.ttotal,
+--	Volume24hUpdateDate = GETDATE()
+--from(
+--SELECT Count([Id]) as ccount
+--		,SUM([Amount]) as aamount
+--		,SUM([Total]) as ttotal
+--  FROM [Exchange].[dbo].[ADA_USDT_ClosedOrders]
+--  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+--  --GROUP BY ClosedDate
+--  ) rr
+--where Acronim = 'ADAUSDT'
+
+--update Pairs
+--set OrdersCount24h = rr.ccount,
+--	Volume24h = rr.ttotal,
+--	Volume24hUpdateDate = GETDATE()
+--from(
+--SELECT Count([Id]) as ccount
+--		,SUM([Amount]) as aamount
+--		,SUM([Total]) as ttotal
+--  FROM [Exchange].[dbo].[ADA_BTC_ClosedOrders]
+--  where ClosedDate >= dateadd(DAY, -1, GETDATE())
+--  --GROUP BY ClosedDate
+--  ) rr
+--where Acronim = 'ADABTC'
+
+
+
+
+
+
+
+
 
 END
 

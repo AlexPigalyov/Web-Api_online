@@ -14389,9 +14389,11 @@ body[data-layout=full][data-leftbar-theme=light].hide-menu .wrapper .leftside-me
   .nav-user {
     padding: 17px 5px 17px 57px !important;
   }
-  .nav-user .account-position,
-.nav-user .account-user-name {
+  .nav-user .account-position {
     display: none;
+  }
+  .nav-user .account-user-icon {
+    display: block;
   }
 }
 @media (max-width: 767.98px) {

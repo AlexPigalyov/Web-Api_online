@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Web_Api.online.Models.ViewModels;
 using Web_Api.online.Data.Repositories;
 using Web_Api.online.Mappers;
+using Web_Api.online.Data.Repositories.Abstract;
 
 namespace Web_Api.online.Controllers
 {
@@ -24,6 +25,7 @@ namespace Web_Api.online.Controllers
         private readonly IHubContext<Hub> _hubcontext;
         private readonly BotsRepository _botsRepository;
         private readonly CandleStickRepository _candleStickRepository;
+        private readonly IEventsRepository _eventsRepository;
         private readonly PairsRepository _pairsRepository;
 
         public TradeController(
@@ -32,6 +34,7 @@ namespace Web_Api.online.Controllers
             BotsRepository botsRepository,
             CandleStickRepository candleStickRepository,
             PairsRepository pairsRepository,
+            IEventsRepository eventsRepository,
             IHubContext<Hub> hubcontext)
         {
             _walletsRepository = walletsRepository;
@@ -39,6 +42,7 @@ namespace Web_Api.online.Controllers
             _botsRepository = botsRepository;
             _candleStickRepository = candleStickRepository;
             _pairsRepository = pairsRepository;
+            _eventsRepository = eventsRepository;
             _hubcontext = hubcontext;
         }
 
@@ -85,18 +89,39 @@ namespace Web_Api.online.Controllers
             await _walletsRepository
                 .UpdateUserWalletBalanceAsync(wallet.Id, order.IsBuy ? order.Total : order.Amount);
 
+            await _eventsRepository.CreateEventAsync(new EventTableModel()
+            {
+                UserId = userId,
+                Type = (int)EventTypeEnum.CancelOrder,
+                Comment = "Total: " + order.Total.ToString("G29") + " " + acronim,
+                WhenDate = DateTime.Now,
+                CurrencyAcronim = acronim
+            });
+
             return Redirect("crypto/" + acronim);
         }
 
         [Authorize]
         [Route("trade/openorders")]
-        public async Task<ActionResult> OpenOrders(string pair = "BTCUSDT")
+        public async Task<ActionResult> OpenOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                return View(await _tradeRepository.spGet_OpenOrders_ByUser(userId));
+                var pairs = await _pairsRepository.GetAllPairsAsync();
+
+                List<spGetOpenOrdersByUser> list = await _tradeRepository.spGet_OpenOrders_ByUser(userId);
+
+                list.ForEach(p =>
+                {
+                    var ppair = pairs.First(x => x.Acronim == p.Pair);
+
+                    p.Currency1 = ppair.Currency1;
+                    p.Currency2 = ppair.Currency2;
+                });
+
+                return View(list);
             }
 
             return Redirect("/Login?ReturnUrl=%2FTrade%2FOpenOrders");
@@ -115,7 +140,7 @@ namespace Web_Api.online.Controllers
 
                 foreach (var pair in pairs)
                 {
-                    var pairClosedOrders = await _tradeRepository.spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId, pair.SQLTableName);
+                    List<ClosedOrderTableModel> pairClosedOrders = await _tradeRepository.spGetClosedOrders_ByCreateUserIdWithOrderByDescClosedDate(userId, pair.SQLTableName);
 
                     pairClosedOrders.ForEach(p =>
                     {

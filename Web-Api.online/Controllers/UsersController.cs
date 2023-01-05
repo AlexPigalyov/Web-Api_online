@@ -20,7 +20,11 @@ public class UsersController : Controller
     private readonly WalletsRepository _walletsRepository;
     private readonly UserRepository _userRepository;
 
-    public UsersController(IEventsRepository eventsRepository, UsersInfoRepository usersInfoRepository, UserManager<IdentityUser> usersManager, WalletsRepository walletsRepository, UserRepository userRepository)
+    public UsersController(IEventsRepository eventsRepository, 
+        UsersInfoRepository usersInfoRepository, 
+        UserManager<IdentityUser> usersManager, 
+        WalletsRepository walletsRepository, 
+        UserRepository userRepository)
     {
         _eventsRepository = eventsRepository;
         _usersInfoRepository = usersInfoRepository;
