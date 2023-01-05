@@ -11,10 +11,13 @@
 @section ThirdPartyCss
 {
     <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css"/>
+    <link rel="stylesheet" asp-append-version="true" href="~/css/pages/crypto.css"/>
 }
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
-<script type="module" src="~/js/trading-vue-js.js"></script>
+<script src="~/js/trading-vue.min.js"></script>
+<script src="~/js/tvjs-overlays.min.js"></script>
+<script src="~/js/tvjs-xp.min.js"></script>
 
 <div class="text-center">
     <h1 class="display-4">@Model.PairHeader</h1>
@@ -70,7 +73,7 @@
     <!-- end col-->
 
     <div class="col-xl-6 col-lg-6">
-        <div class="card">
+        <div class="card" id="tradingChartCol">
             <div class="card-body">
 
                 <div class="text-wrap">
@@ -114,8 +117,28 @@
                     }
                 </div>
                 <div class="row">
-                    <div id="app">
-                        <trading-vue :data="this.$data"></trading-vue>
+                    <div id="app" class="multi-chart">
+                        <trading-vue :data="chart" v-bind:title-txt="this.pairName"
+                                     :width="this.width" ref="tvjs" :toolbar="true"
+                                     :legend-buttons="['display', 'settings', 'up', 'down', 'add', 'remove', 'settings']"
+                                     :chart-config="{DEFAULT_LEN:70}"
+                                     :overlays="ovs"
+                                     :extentions="ext"
+                                     :color-title="colors.colorTitle"
+                                     :color-back="colors.colorBack"
+                                     :color-grid="colors.colorGrid"
+                                     :color-text="colors.colorText"
+                                     :x-settings="xsett">
+                        </trading-vue>
+                        <div class="tf-selector">
+                            <span class="timeframe" v-for="(tf, i) in this.timeframes"
+                                v-on:click="on_tfselect_click(tf, i)"
+                                v-bind:style= "selected === i ? {color: '#44c767'} : {}">
+                                {{tf}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="link-icon" :style="lst">
                     </div>
                 </div>
 
@@ -125,12 +148,9 @@
         <!-- end card-->
     </div>
     <!-- end col -->
-
     <div class="col-xl-3 col-lg-6">
         <div class="card">
             <div class="card-body">
-
-
                 <div class="orderbook custom-book">
                     <div class="orderbook-header">
                         <div class="orderbook-header-col">Market Trades</div>
@@ -160,16 +180,12 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
             <!-- end card-body -->
         </div>
         <!-- end card-->
-
     </div>
     <!-- end col -->
-
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -190,52 +206,134 @@
     </div>
 </div>
 
-<style>
-    .orderbook-progress-bar {
-        pointer-events: none;
-    }
 
-    .orderbook-bids {
-        pointer-events: none;
-    }
+<script type="module">
 
-    .orderbook-col {
-        pointer-events: all;
-        cursor: pointer;
+const DEFAULT = `// Chart link rules
+{
+    '*': {
+        cursor: true,
+        position: true,
+        tools: true
+    },
+    'D -> 1H': {
+        data: ['BB'], // WIP
+    },
+    'D -> 4H,12H': {
+        range: 'X' // WIP
+    },
+    '1H -> *': {
+        // ...
     }
+}
+`
 
-    .custom-book {
-        height: 240px;
-    }
-
-    .card-body {
-        padding: 0 !important;
-    }
-
-    .card {
-        margin-bottom: 0 !important;
-    }
-
-    .content-page {
-        padding: 70px 12px 100px !important;
-    }
-
-</style>
-<script>
 document.addEventListener("DOMContentLoaded", () => {  
   new Vue({
     el: '#app',
+    methods: {
+        onResize(event) {
+            this.width = document.getElementById('tradingChartCol').offsetWidth
+        },
+        src_changed(txt) {
+            this.rules = txt
+            try {
+                let code = txt.replace('{', 'return {')
+                var obj = new Function('', `${code}`)()
+            } catch(e) {
+                console.log('SYNTAX ERR', {e})
+                return
+            }
+            this.xsett['chart-link'].rules = obj
+        },
+        onlink() {
+            this.code = true
+        },
+        oncodeclose() {
+            this.code = false
+        },
+        on_tfselect_click(tf, i) {
+            this.selected = i
+            
+            let newCandles = []
+                    
+            $.get("/candlestick/getcandlestick?interval=" + tf + "&acronim=" + cryptExchangePair, function (data) {
+                if (data.lastCandleSticks != null) {
+                    data.lastCandleSticks.forEach(candleStick => {
+                        newCandles.push([
+                            candleStick.closeTimeStamp,
+                            candleStick.open,
+                            candleStick.high,
+                            candleStick.low,
+                            candleStick.close,
+                            1000.1234
+                        ])
+                    });
+                }         
+            });
+            
+            this.chart.set('chart.data', newCandles)
+        }
+    },
+    computed: {
+        lst() {
+            return this.night ? { 'opacity': '0.6' } : {}
+        }
+    },
+    mounted() {
+        let newCandles = []
+        
+        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
+            if (data.lastCandleSticks != null) {
+                data.lastCandleSticks.forEach(candleStick => {
+                    newCandles.push([
+                        candleStick.closeTimeStamp,
+                        candleStick.open,
+                        candleStick.high,
+                        candleStick.low,
+                        candleStick.close,
+                        1000.1234
+                    ])
+                });
+            }         
+        });
+        
+        this.chart.set('chart.data', newCandles)
+        
+        window.addEventListener('resize', this.onResize)
+        
+        this.src_changed(DEFAULT)
+    },
+    beforeDestroy() {        
+        window.removeEventListener('resize', this.onResize)
+    },
     data() {
         return {
-          ohlcv: [
-            [ 1551128400000, 33,  37.1, 14,  14,  196 ],
-            [ 1551132000000, 13.7, 30, 6.6,  30,  206 ],
-            [ 1551135600000, 29.9, 33, 21.3, 21.8, 74 ],
-            [ 1551139200000, 21.7, 25.9, 18, 24,  140 ],
-            [ 1551142800000, 24.1, 24.1, 24, 24.1, 29 ],
+          pairName: window.location.href.split('/')[5],
+          chart: new TradingVueLib.DataCube({
+            chart: {}, onchart: [], offchart: []
+          }),
+          night: true, 
+          ext: Object.values(TvjsXP.default),         
+          ovs: Object.values(TvjsOverlays),
+          top: 50,        
+          width: document.getElementById('tradingChartCol').offsetWidth,
+          xsett: {
+            'grid-resize': { min_height: 30 },
+            'chart-link': { rules: {} }
+          },
+          rules: DEFAULT,
+          colors: {
+            colorBack: '#fff',
+            colorGrid: '#eee',
+            colorText: '#333',
+          },
+          selected: 0,
+          timeframes: [
+              "1h", "1d"
           ]
         }
-      }
+    }
   });
 });
 </script>
@@ -415,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             }
-
+            console.log(seriesData)
             var chart = new ApexCharts(
                 document.querySelector("#simple-candlestick"),
                 options
