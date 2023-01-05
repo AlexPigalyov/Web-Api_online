@@ -9,79 +9,85 @@
 }
 
 @section ThirdPartyCss
-    {
-    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css" />
+{
+    <link rel="stylesheet" asp-append-version="true" href="~/css/orderbook.css"/>
+    <link rel="stylesheet" asp-append-version="true" href="~/css/pages/crypto.css"/>
 }
 
-    <div class="text-center">
-        <h1 class="display-4">@Model.PairHeader</h1>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="~/js/trading-vue.min.js"></script>
+<script src="~/js/tvjs-overlays.min.js"></script>
+<script src="~/js/tvjs-xp.min.js"></script>
 
-    <div class="row card-row no-gutters">
-        <div class="col-xl-3 col-lg-12 card-container">
-            <div class="card">
-                <div class="card-body">
+<div class="text-center">
+    <h1 class="display-4">@Model.PairHeader</h1>
+</div>
 
-                    <div class="orderbook-wrap">
-                        <div class="orderbook">
-                            <div class="orderbook-header"></div>
-                            <div class="orderbook-tbheader">
-                                <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
-                                <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
-                                <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
-                            </div>
-                            <div class="orderbook-container">
-                                <div class="orderbook-list orderbook-list-asks orderbook-asks">
-                                </div>
-                                <div class="orderbook-ticker">
-                                    <div class="orderbook-ticker-status status-buy">
-                                        <span class="current-price" id="current-price">0</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
-                                            <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
-                                    <a href="#" target="_blank" class="orderbook-ticker-more">
-                                        More
-                                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect y="7" width="2.66667" height="5" fill="#00C582"></rect>
-                                            <rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect>
-                                            <rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect>
-                                            <rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
+<div class="row card-row no-gutters">
+    <div class="col-xl-3 col-lg-12 card-container">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="orderbook-wrap">
+                    <div class="orderbook">
+                        <div class="orderbook-header"></div>
+                        <div class="orderbook-tbheader">
+                            <div class="orderbook-tbheader-col">Price(@Model.SecondCurrency)</div>
+                            <div class="orderbook-tbheader-col">Amount(@Model.FirstCurrency)</div>
+                            <div class="orderbook-tbheader-col">Total(@Model.SecondCurrency)</div>
                         </div>
-                        <div class="orderbook custom-book">
-                            <div class="orderbook-container">
-                                <div class="orderbook-list orderbook-list-bids orderbook-bids orderbook-gr">
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-asks orderbook-asks">
+                            </div>
+                            <div class="orderbook-ticker">
+                                <div class="orderbook-ticker-status status-buy">
+                                    <span class="current-price" id="current-price">0</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="arrow-icon" style="transform: rotate(180deg);">
+                                        <path d="M5 13.47l1.41-1.41 5.1 5.1V3h1.99v14.15l5.09-5.09L20 13.47l-7.5 7.5-7.5-7.5z" fill="currentColor"></path>
+                                    </svg>
                                 </div>
+                                <div class="orderbook-ticker-markprice">$<span id="orderbook-ticker-markprice">0</span></div>
+                                <a href="#" target="_blank" class="orderbook-ticker-more">
+                                    More
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect y="7" width="2.66667" height="5" fill="#00C582"></rect>
+                                        <rect x="4.44446" y="4" width="2.66667" height="8" fill="#00C582"></rect>
+                                        <rect x="8.88892" y="2" width="2.66667" height="10" fill="#00C582"></rect>
+                                        <rect x="13.3333" width="2.66667" height="12" fill="#00C582"></rect>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </div>
+                    <div class="orderbook custom-book">
+                        <div class="orderbook-container">
+                            <div class="orderbook-list orderbook-list-bids orderbook-bids orderbook-gr">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div>
-        <!-- end col-->
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div>
+    <!-- end col-->
 
-        <div class="col-xl-6 col-lg-6">
-            <div class="card">
-                <div class="card-body">
+    <div class="col-xl-6 col-lg-6">
+        <div class="card" id="tradingChartCol">
+            <div class="card-body">
 
-                    <div class="text-wrap">
+                <div class="text-wrap">
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <ul>
                             <li class="nav-item">
                                 @Model.FirstWallet.CurrencyAcronim balance: <span id="btcBalance" class="decimal-data">@Model.FirstWallet.Value</span>
-                                <br />
+                                <br/>
                                 Address: @Model.FirstWallet.Address
                             </li>
                             <li class="nav-item">
                                 @Model.SecondWallet.CurrencyAcronim balance: <span id="usdtBalance" class="decimal-data">@Model.SecondWallet.Value</span>
-                                <br />
+                                <br/>
                                 Address: @Model.SecondWallet.Address
                             </li>
                         </ul>
@@ -91,27 +97,49 @@
                             <div class="row">
                                 <div class="col-4">Count&nbsp;@Model.FirstCurrency</div>
                                 <div class="col-4">
-                                    <input type="text" id="amountInput" />
+                                    <input type="text" id="amountInput"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-4">Price&nbsp;@Model.SecondCurrency</div>
                                 <div class="col-4">
-                                    <input type="text" id="priceInput" />
+                                    <input type="text" id="priceInput"/>
                                 </div>
                             </div>
                             <div class="row">&nbsp;</div>
                             <div class="row">
                                 <div class="col-8">
-                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency" />
-                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency" />
+                                    <input type="button" id="buyButton" value="Buy @Model.FirstCurrency"/>
+                                    <input type="button" id="sellButton" value="Sell @Model.FirstCurrency"/>
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
                 <div class="row">
-                    <div id="simple-candlestick" class="apex-charts" data-colors="#0acf97,#fa5c7c"></div>
+                    <div id="app" class="multi-chart">
+                        <trading-vue :data="chart" v-bind:title-txt="this.pairName"
+                                     :width="this.width" ref="tvjs" :toolbar="true"
+                                     :legend-buttons="['display', 'settings', 'up', 'down', 'add', 'remove', 'settings']"
+                                     :chart-config="{DEFAULT_LEN:70}"
+                                     :overlays="ovs"
+                                     :extentions="ext"
+                                     :color-title="colors.colorTitle"
+                                     :color-back="colors.colorBack"
+                                     :color-grid="colors.colorGrid"
+                                     :color-text="colors.colorText"
+                                     :x-settings="xsett">
+                        </trading-vue>
+                        <div class="tf-selector">
+                            <span class="timeframe" v-for="(tf, i) in this.timeframes"
+                                v-on:click="on_tfselect_click(tf, i)"
+                                v-bind:style= "selected === i ? {color: '#44c767'} : {}">
+                                {{tf}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="link-icon" :style="lst">
+                    </div>
                 </div>
 
             </div>
@@ -120,12 +148,9 @@
         <!-- end card-->
     </div>
     <!-- end col -->
-
     <div class="col-xl-3 col-lg-6">
         <div class="card">
             <div class="card-body">
-
-
                 <div class="orderbook custom-book">
                     <div class="orderbook-header">
                         <div class="orderbook-header-col">Market Trades</div>
@@ -155,16 +180,12 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
             <!-- end card-body -->
         </div>
         <!-- end card-->
-
     </div>
     <!-- end col -->
-
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -185,38 +206,137 @@
     </div>
 </div>
 
-<style>
-    .orderbook-progress-bar {
-        pointer-events: none;
+
+<script type="module">
+
+const DEFAULT = `// Chart link rules
+{
+    '*': {
+        cursor: true,
+        position: true,
+        tools: true
+    },
+    'D -> 1H': {
+        data: ['BB'], // WIP
+    },
+    'D -> 4H,12H': {
+        range: 'X' // WIP
+    },
+    '1H -> *': {
+        // ...
     }
+}
+`
 
-    .orderbook-bids {
-        pointer-events: none;
+document.addEventListener("DOMContentLoaded", () => {  
+  new Vue({
+    el: '#app',
+    methods: {
+        onResize(event) {
+            this.width = document.getElementById('tradingChartCol').offsetWidth
+        },
+        src_changed(txt) {
+            this.rules = txt
+            try {
+                let code = txt.replace('{', 'return {')
+                var obj = new Function('', `${code}`)()
+            } catch(e) {
+                console.log('SYNTAX ERR', {e})
+                return
+            }
+            this.xsett['chart-link'].rules = obj
+        },
+        onlink() {
+            this.code = true
+        },
+        oncodeclose() {
+            this.code = false
+        },
+        on_tfselect_click(tf, i) {
+            this.selected = i
+            
+            let newCandles = []
+                    
+            $.get("/candlestick/getcandlestick?interval=" + tf + "&acronim=" + cryptExchangePair, function (data) {
+                if (data.lastCandleSticks != null) {
+                    data.lastCandleSticks.forEach(candleStick => {
+                        newCandles.push([
+                            candleStick.closeTimeStamp,
+                            candleStick.open,
+                            candleStick.high,
+                            candleStick.low,
+                            candleStick.close,
+                            1000.1234
+                        ])
+                    });
+                }         
+            });
+            
+            this.chart.set('chart.data', newCandles)
+        }
+    },
+    computed: {
+        lst() {
+            return this.night ? { 'opacity': '0.6' } : {}
+        }
+    },
+    mounted() {
+        let newCandles = []
+        
+        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
+            if (data.lastCandleSticks != null) {
+                data.lastCandleSticks.forEach(candleStick => {
+                    newCandles.push([
+                        candleStick.closeTimeStamp,
+                        candleStick.open,
+                        candleStick.high,
+                        candleStick.low,
+                        candleStick.close,
+                        1000.1234
+                    ])
+                });
+            }         
+        });
+        
+        this.chart.set('chart.data', newCandles)
+        
+        window.addEventListener('resize', this.onResize)
+        
+        this.src_changed(DEFAULT)
+    },
+    beforeDestroy() {        
+        window.removeEventListener('resize', this.onResize)
+    },
+    data() {
+        return {
+          pairName: window.location.href.split('/')[5],
+          chart: new TradingVueLib.DataCube({
+            chart: {}, onchart: [], offchart: []
+          }),
+          night: true, 
+          ext: Object.values(TvjsXP.default),         
+          ovs: Object.values(TvjsOverlays),
+          top: 50,        
+          width: document.getElementById('tradingChartCol').offsetWidth,
+          xsett: {
+            'grid-resize': { min_height: 30 },
+            'chart-link': { rules: {} }
+          },
+          rules: DEFAULT,
+          colors: {
+            colorBack: '#fff',
+            colorGrid: '#eee',
+            colorText: '#333',
+          },
+          selected: 0,
+          timeframes: [
+              "1h", "1d"
+          ]
+        }
     }
-
-    .orderbook-col {
-        pointer-events: all;
-        cursor: pointer;
-    }
-
-    .custom-book {
-        height: 240px;
-    }
-
-    .card-body {
-        padding: 0 !important;
-    }
-
-    .card {
-        margin-bottom: 0 !important;
-    }
-
-    .content-page {
-        padding: 70px 12px 100px !important;
-    }
-
-</style>
-
+  });
+});
+</script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/pairshub.js" asp-append-version="true"></script>
@@ -393,7 +513,7 @@
                     }
                 }
             }
-
+            console.log(seriesData)
             var chart = new ApexCharts(
                 document.querySelector("#simple-candlestick"),
                 options
