@@ -14,10 +14,13 @@
     <link rel="stylesheet" asp-append-version="true" href="~/css/pages/crypto.css"/>
 }
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
-<script src="~/js/trading-vue.min.js"></script>
-<script src="~/js/tvjs-overlays.min.js"></script>
-<script src="~/js/tvjs-xp.min.js"></script>
+@section ThirdPartyJs
+{   
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14" asp-append-version="true"></script>
+    <script src="~/js/trading-vue.min.js" asp-append-version="true"></script>
+    <script src="~/js/tvjs-overlays.min.js" asp-append-version="true"></script>
+    <script src="~/js/tvjs-xp.min.js" asp-append-version="true"></script>
+}
 
 <div class="text-center">
     <h1 class="display-4">@Model.PairHeader</h1>
@@ -122,8 +125,7 @@
                                      :width="this.width" ref="tvjs" :toolbar="true"
                                      :legend-buttons="['display', 'settings', 'up', 'down', 'add', 'remove', 'settings']"
                                      :chart-config="{DEFAULT_LEN:70}"
-                                     :overlays="ovs"
-                                     :extentions="ext"
+                                     
                                      :color-title="colors.colorTitle"
                                      :color-back="colors.colorBack"
                                      :color-grid="colors.colorGrid"
@@ -134,7 +136,7 @@
                             <span class="timeframe" v-for="(tf, i) in this.timeframes"
                                 v-on:click="on_tfselect_click(tf, i)"
                                 v-bind:style= "selected === i ? {color: '#44c767'} : {}">
-                                {{tf}}
+                                {{tf.toUpperCase()}}
                             </span>
                         </div>
                     </div>
