@@ -250,4 +250,4 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .le
 
 body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode {
     padding-left: 2em;
-    /* } */
+}
