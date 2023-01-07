@@ -1357,6 +1357,16 @@ CREATE TABLE [dbo].[Wallets](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205815] ON [dbo].[ADA_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205825] ON [dbo].[ADA_BTC_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 SET ANSI_PADDING ON
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014323] ON [dbo].[ADA_BTC_ClosedOrders]
@@ -1367,6 +1377,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-015244] ON [dbo].[ADA_BTC_ClosedOrders]
 (
 	[ClosedDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205843] ON [dbo].[ADA_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205850] ON [dbo].[ADA_USDT_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
@@ -1381,6 +1401,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-015252] ON [dbo].[ADA_USDT
 	[ClosedDate] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205904] ON [dbo].[BCH_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-205911] ON [dbo].[BCH_BTC_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223846] ON [dbo].[BCH_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1393,6 +1423,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014402] ON [dbo].[BCH_BTC_
 	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210113] ON [dbo].[BCH_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210121] ON [dbo].[BCH_USDT_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223634] ON [dbo].[BCH_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1403,6 +1443,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014521] ON [dbo].[BCH_USDT_ClosedOrders]
 (
 	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-181542] ON [dbo].[BTC_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-181613] ON [dbo].[BTC_USDT_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223801] ON [dbo].[BTC_USDT_ClosedOrders]
@@ -1427,6 +1477,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-230712] ON [dbo].[BTC_USDT
 	[Price] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210513] ON [dbo].[DASH_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210520] ON [dbo].[DASH_BTC_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-223951] ON [dbo].[DASH_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1437,6 +1497,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014701] ON [dbo].[DASH_BTC_ClosedOrders]
 (
 	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210532] ON [dbo].[DASH_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210539] ON [dbo].[DASH_USDT_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224010] ON [dbo].[DASH_USDT_ClosedOrders]
@@ -1451,6 +1521,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014753] ON [dbo].[DASH_USD
 	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210552] ON [dbo].[DOGE_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210559] ON [dbo].[DOGE_BTC_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224028] ON [dbo].[DOGE_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1463,6 +1543,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014807] ON [dbo].[DOGE_BTC
 	[CreateUserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210612] ON [dbo].[DOGE_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210620] ON [dbo].[DOGE_USDT_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224044] ON [dbo].[DOGE_USDT_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1473,6 +1563,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230104-014820] ON [dbo].[DOGE_USDT_ClosedOrders]
 (
 	[CreateUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210642] ON [dbo].[ETH_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210650] ON [dbo].[ETH_BTC_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224101] ON [dbo].[ETH_BTC_ClosedOrders]
@@ -1495,6 +1595,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-231215] ON [dbo].[ETH_BTC_OpenOrders_Sell]
 (
 	[Price] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210724] ON [dbo].[ETH_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210731] ON [dbo].[ETH_USDT_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224117] ON [dbo].[ETH_USDT_ClosedOrders]
@@ -1529,6 +1639,16 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20221023-034323] ON [dbo].[IncomeWa
 	[Created] DESC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210747] ON [dbo].[LTC_BTC_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-210755] ON [dbo].[LTC_BTC_CandleStick]
+(
+	[OpenTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224135] ON [dbo].[LTC_BTC_ClosedOrders]
 (
 	[ClosedDate] DESC
@@ -1549,6 +1669,16 @@ GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220711-231147] ON [dbo].[LTC_BTC_OpenOrders_Sell]
 (
 	[Price] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-211225] ON [dbo].[LTC_USDT_CandleStick]
+(
+	[CloseTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20230107-211233] ON [dbo].[LTC_USDT_CandleStick]
+(
+	[OpenTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220703-224152] ON [dbo].[LTC_USDT_ClosedOrders]
@@ -2469,7 +2599,23 @@ CREATE PROCEDURE [dbo].[Get_ADA_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[ADA_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -2485,6 +2631,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[ADA_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -2495,6 +2643,7 @@ BEGIN
 	left join [ADA_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -2513,6 +2662,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[ADA_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -2528,6 +2679,7 @@ BEGIN
 	left join [ADA_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -2537,6 +2689,7 @@ BEGIN
 	FROM [Exchange].[dbo].[ADA_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -2671,7 +2824,23 @@ CREATE PROCEDURE [dbo].[Get_ADA_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[ADA_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -2687,6 +2856,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[ADA_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -2697,6 +2868,7 @@ BEGIN
 	left join [ADA_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -2715,6 +2887,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[ADA_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -2730,6 +2904,7 @@ BEGIN
 	left join [ADA_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -2739,6 +2914,7 @@ BEGIN
 	FROM [Exchange].[dbo].[ADA_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -2873,7 +3049,23 @@ CREATE PROCEDURE [dbo].[Get_BCH_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[BCH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -2889,6 +3081,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[BCH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -2899,6 +3093,7 @@ BEGIN
 	left join [BCH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -2917,6 +3112,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[BCH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -2932,6 +3129,7 @@ BEGIN
 	left join [BCH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -2941,6 +3139,7 @@ BEGIN
 	FROM [Exchange].[dbo].[BCH_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -3075,7 +3274,23 @@ CREATE PROCEDURE [dbo].[Get_BCH_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[BCH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -3091,6 +3306,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[BCH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -3101,6 +3318,7 @@ BEGIN
 	left join [BCH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -3119,6 +3337,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[BCH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -3134,6 +3354,7 @@ BEGIN
 	left join [BCH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -3143,6 +3364,7 @@ BEGIN
 	FROM [Exchange].[dbo].[BCH_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -3276,8 +3498,23 @@ CREATE PROCEDURE [dbo].[Get_BTC_USDT_CandleStick]
 @interval nvarchar(50)
 AS
 BEGIN
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
-IF(@interval = '1h')
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -3293,6 +3530,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -3303,6 +3542,7 @@ BEGIN
 	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -3321,6 +3561,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -3336,6 +3578,7 @@ BEGIN
 	left join [BTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -3345,6 +3588,7 @@ BEGIN
 	FROM [Exchange].[dbo].[BTC_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -3479,7 +3723,23 @@ CREATE PROCEDURE [dbo].[Get_DASH_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[DASH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -3495,6 +3755,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[DASH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -3505,6 +3767,7 @@ BEGIN
 	left join [DASH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -3523,6 +3786,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[DASH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -3538,6 +3803,7 @@ BEGIN
 	left join [DASH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -3547,6 +3813,7 @@ BEGIN
 	FROM [Exchange].[dbo].[DASH_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -3681,7 +3948,23 @@ CREATE PROCEDURE [dbo].[Get_DASH_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -3697,6 +3980,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -3707,6 +3992,7 @@ BEGIN
 	left join [DASH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -3725,6 +4011,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -3740,6 +4028,7 @@ BEGIN
 	left join [DASH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -3749,6 +4038,7 @@ BEGIN
 	FROM [Exchange].[dbo].[DASH_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -3883,7 +4173,23 @@ CREATE PROCEDURE [dbo].[Get_DOGE_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[DOGE_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -3899,6 +4205,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[DOGE_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -3909,6 +4217,7 @@ BEGIN
 	left join [DOGE_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -3927,6 +4236,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[DOGE_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -3942,6 +4253,7 @@ BEGIN
 	left join [DOGE_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -3951,6 +4263,7 @@ BEGIN
 	FROM [Exchange].[dbo].[DOGE_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -4085,7 +4398,23 @@ CREATE PROCEDURE [dbo].[Get_DOGE_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -4101,6 +4430,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -4111,6 +4442,7 @@ BEGIN
 	left join [DOGE_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -4129,6 +4461,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -4144,6 +4478,7 @@ BEGIN
 	left join [DOGE_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -4153,6 +4488,7 @@ BEGIN
 	FROM [Exchange].[dbo].[DOGE_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -4287,7 +4623,23 @@ CREATE PROCEDURE [dbo].[Get_ETH_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[ETH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -4303,6 +4655,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[ETH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -4313,6 +4667,7 @@ BEGIN
 	left join [ETH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -4331,6 +4686,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[ETH_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -4346,6 +4703,7 @@ BEGIN
 	left join [ETH_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -4355,6 +4713,7 @@ BEGIN
 	FROM [Exchange].[dbo].[ETH_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -4489,7 +4848,23 @@ CREATE PROCEDURE [dbo].[Get_ETH_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -4505,6 +4880,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -4515,6 +4892,7 @@ BEGIN
 	left join [ETH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -4533,6 +4911,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -4548,6 +4928,7 @@ BEGIN
 	left join [ETH_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -4557,6 +4938,7 @@ BEGIN
 	FROM [Exchange].[dbo].[ETH_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -4691,7 +5073,23 @@ CREATE PROCEDURE [dbo].[Get_LTC_BTC_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[LTC_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -4707,6 +5105,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[LTC_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -4717,6 +5117,7 @@ BEGIN
 	left join [LTC_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -4735,6 +5136,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[LTC_BTC_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -4750,6 +5153,7 @@ BEGIN
 	left join [LTC_BTC_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -4759,6 +5163,7 @@ BEGIN
 	FROM [Exchange].[dbo].[LTC_BTC_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
@@ -4893,7 +5298,23 @@ CREATE PROCEDURE [dbo].[Get_LTC_USDT_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -4909,6 +5330,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -4919,6 +5342,7 @@ BEGIN
 	left join [LTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE IF (@interval = '1d')
@@ -4937,6 +5361,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -4952,6 +5378,7 @@ BEGIN
 	left join [LTC_USDT_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -4961,6 +5388,7 @@ BEGIN
 	FROM [Exchange].[dbo].[LTC_USDT_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
