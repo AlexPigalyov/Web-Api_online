@@ -169,7 +169,7 @@
                                aria-expanded="false">
                                     <i class="account-user-icon mdi mdi-account"></i>
                                     <span>
-                                        <span class="account-user-name"> @User.Identity.Name</span>
+                                        <span class="account-user-name fw-bold"> @User.Identity.Name</span>
                                     </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
@@ -191,8 +191,8 @@
                         }
                         else
                         {
-                            <li><a asp-page="/Account/Login" asp-area="Identity" class="btn btn-success btn-sm mb-2">Login</a></li>
-                            <li><a asp-page="/Account/Register" asp-area="Identity" class="btn btn-danger btn-sm mb-2">Register</a></li>
+                            <li><a asp-page="/Account/Login" asp-area="Identity" class="btn btn-success btn-sm mb-2 fw-bold">Login</a></li>
+                            <li><a asp-page="/Account/Register" asp-area="Identity" class="btn btn-danger btn-sm mb-2 fw-bold">Register</a></li>
                         }
                     </ul>
                     <button class="button-menu-mobile open-left">
