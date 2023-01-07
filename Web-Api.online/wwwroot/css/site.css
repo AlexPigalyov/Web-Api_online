@@ -260,3 +260,13 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .le
 .leftside-menu .dark-mode-label {
     color: #6C757D;
 }
+
+tr.td-sell > * {
+    color: #f84960!important;
+}
+tr.td-buy > * {
+    color: #02c076!important;
+}
+
+
+/* look to important!!! */
