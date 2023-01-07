@@ -5,7 +5,23 @@ CREATE PROCEDURE [dbo].[Get_{cryptocurrencypair}_CandleStick]
 AS
 BEGIN
 
-IF(@interval = '1h')
+IF(@interval = '1m')
+BEGIN
+	
+	SELECT 
+		[Close]
+		,[CloseTime]
+		,[High]
+		,[Low]
+		,[Open]
+		,[OpenTime]
+	FROM [Exchange].[dbo].[{cryptocurrencypair}_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
+
+END
+ELSE IF(@interval = '1h')
 BEGIN
 	
 	IF OBJECT_ID(N'tempdb..#TempCandleSticksHoursTable') IS NOT NULL
@@ -21,6 +37,8 @@ BEGIN
 	dateadd(hour,0, datediff(hour,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksHoursTable
 	FROM [Exchange].[dbo].[{cryptocurrencypair}_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(hour,0, datediff(hour,0, OpenTime))
 
 	select tt.*,
@@ -31,7 +49,8 @@ BEGIN
 	left join [{cryptocurrencypair}_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
-
+	order by CloseTime
+	
 END
 ELSE IF (@interval = '1d')
 BEGIN
@@ -49,6 +68,8 @@ BEGIN
 	dateadd(day,0, datediff(day,0, OpenTime)) as OpenTimeD
 	INTO #TempCandleSticksDaysTable
 	FROM [Exchange].[dbo].[{cryptocurrencypair}_CandleStick]
+	where (@datestart is null or OpenTime >= @datestart)
+	and (@dateend is null or CloseTime <= @dateend)
 	group by dateadd(day,0, datediff(day,0, OpenTime))
 
 	select 
@@ -64,6 +85,7 @@ BEGIN
 	left join [{cryptocurrencypair}_CandleStick] csc on tt.CloseTime = csc.CloseTime
 	where (@datestart is null or tt.OpenTime >= @datestart)
 	and (@dateend is null or tt.CloseTime <= @dateend)
+	order by CloseTime
 
 END
 ELSE
@@ -73,6 +95,7 @@ BEGIN
 	FROM [Exchange].[dbo].[{cryptocurrencypair}_CandleStick]
 	where (@datestart is null or OpenTime >= @datestart)
 	and (@dateend is null or CloseTime <= @dateend)
+	order by CloseTime
 
 END
 END
