@@ -125,7 +125,6 @@
                                      :width="this.width" ref="tvjs" :toolbar="true"
                                      :legend-buttons="['display', 'settings', 'up', 'down', 'add', 'remove', 'settings']"
                                      :chart-config="{DEFAULT_LEN:70}"
-                                     
                                      :color-title="colors.colorTitle"
                                      :color-back="colors.colorBack"
                                      :color-grid="colors.colorGrid"
@@ -258,23 +257,33 @@ document.addEventListener("DOMContentLoaded", () => {
             this.selected = i
             
             let newCandles = []
-                    
-            $.get("/candlestick/getcandlestick?interval=" + tf + "&acronim=" + cryptExchangePair, function (data) {
-                if (data.lastCandleSticks != null) {
-                    data.lastCandleSticks.forEach(candleStick => {
-                        newCandles.push([
-                            candleStick.closeTimeStamp,
-                            candleStick.open,
-                            candleStick.high,
-                            candleStick.low,
-                            candleStick.close,
-                            1000.1234
-                        ])
-                    });
-                }         
+            
+            $.ajax({
+                url: '/candlestick/getcandlestick?interval=1h&acronim=' + cryptExchangePair,
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    console.log(data)
+                    if (data.lastCandleSticks != null) {
+                          data.lastCandleSticks.forEach(candleStick => {
+                              newCandles.push([
+                                  candleStick.closeTimeStamp,
+                                  candleStick.open,
+                                  candleStick.high,
+                                  candleStick.low,
+                                  candleStick.close,
+                                  1000.1234
+                              ])
+                          });
+                      }
+                }
             });
             
-            this.chart.set('chart.data', newCandles)
+            this.chart.set('chart', {
+                type: "Candles",
+                data: newCandles,
+                settings: {}
+            }) 
         }
     },
     computed: {
@@ -285,22 +294,32 @@ document.addEventListener("DOMContentLoaded", () => {
     mounted() {
         let newCandles = []
         
-        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
-            if (data.lastCandleSticks != null) {
-                data.lastCandleSticks.forEach(candleStick => {
-                    newCandles.push([
-                        candleStick.closeTimeStamp,
-                        candleStick.open,
-                        candleStick.high,
-                        candleStick.low,
-                        candleStick.close,
-                        1000.1234
-                    ])
-                });
-            }         
+        $.ajax({
+            url: '/candlestick/getcandlestick?interval=1h&acronim=' + cryptExchangePair,
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                console.log(data)
+                if (data.lastCandleSticks != null) {
+                      data.lastCandleSticks.forEach(candleStick => {
+                          newCandles.push([
+                              candleStick.closeTimeStamp,
+                              candleStick.open,
+                              candleStick.high,
+                              candleStick.low,
+                              candleStick.close,
+                              1004.234
+                          ])
+                      });
+                  }
+            }
         });
-        
-        this.chart.set('chart.data', newCandles)
+
+        this.chart.set('chart', {
+            type: "Candles",
+            data: newCandles,
+            settings: {}
+        })
         
         window.addEventListener('resize', this.onResize)
         
@@ -313,7 +332,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return {
           pairName: window.location.href.split('/')[5],
           chart: new TradingVueLib.DataCube({
-            chart: {}, onchart: [], offchart: []
+            chart: {
+                type: "Candles"
+            }
           }),
           night: true, 
           ext: Object.values(TvjsXP.default),         
@@ -342,7 +363,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/vendor/d3.min.js"></script>
 <script src="~/js/pairshub.js" asp-append-version="true"></script>
-<script src="~/js/vendor/apexcharts.min.js"></script>
 <script>
 
     $(".orderbook-col").click(function () {
@@ -462,140 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
         loadOrderBook(sellOpenOrders, true, false);
         loadMarketTrades(marketTrades, true);
         loadUserOpenOrders(userOpenOrders, true);
-
-        $.get("/candlestick/getcandlestick?interval=1h&acronim=" + cryptExchangePair, function (data) {
-
-            var seriesData = []
-            if (data.lastCandleSticks != null) {
-                data.lastCandleSticks.forEach(candleStick => {
-                    seriesData.push({
-                        x: candleStick.closeTime,
-                        y: [candleStick.open, candleStick.high, candleStick.low, candleStick.close]
-                    })
-                });
-            }
-
-            if (data.currentCandleStick != null) {
-                seriesData.push({
-                    x: data.currentCandleStick.closeTime,
-                    y: [data.currentCandleStick.open, data.currentCandleStick.high, data.currentCandleStick.low, data.currentCandleStick.close]
-                });
-            }
-
-            var colors = ["#0acf97", "#fa5c7c"];
-            var dataColors = $("#simple-candlestick").data('colors');
-            if (dataColors) {
-                colors = dataColors.split(",");
-            }
-            var options = {
-                chart: {
-                    animations: {
-                        enabled: false
-                    },
-                    height: 400,
-                    type: 'candlestick',
-                },
-                plotOptions: {
-                    candlestick: {
-                        colors: {
-                            upward: colors[0],
-                            downward: colors[1]
-                        }
-                    }
-                },
-                series: [{
-                    data: seriesData
-                }],
-                xaxis: {
-                    type: 'datetime'
-                },
-                yaxis: {
-                    tooltip: {
-                        enabled: true
-                    }
-                }
-            }
-            console.log(seriesData)
-            var chart = new ApexCharts(
-                document.querySelector("#simple-candlestick"),
-                options
-            );
-
-            chart.render();
-
-            let lastPrice = 0;
-
-            if (data.currentCandleStick != null) {
-                var currentMarketTradeDoc = document.getElementsByClassName("orderbook-ticker-status")[0];
-
-                var currentHigh = data.currentCandleStick.high;
-                var currentLow = data.currentCandleStick.low;
-                var currentOpen = data.currentCandleStick.open;
-                var currentClose = data.currentCandleStick.close;
-                var currentCloseDate = new Date(Date.parse(data.currentCandleStick.closeTime));
-
-                //$(".current-price").on('DOMSubtreeModified', function (changedNode) {
-
-                //    if (changedNode.currentTarget.firstChild != null) {
-                //        var price = changedNode.currentTarget.firstChild.data;
-
-                //        var newSeries = []
-
-                //        if (price != lastPrice) {
-
-                //            var high = currentHigh < price ? price : currentHigh;
-                //            var low = currentLow > price ? price : currentLow;
-
-                //            var lastZoom = chart.zoom;
-
-                //            if (currentCloseDate > (new Date())) {
-
-                //                seriesData.pop();
-
-                //                seriesData.push({
-                //                    x: currentCloseDate,
-                //                    y: [currentOpen, high, low, price]
-                //                });
-
-                //                //chart.updateSeries([{
-                //                //    data: seriesData
-                //                //}]);
-
-                //                currentHigh = high;
-                //                currentLow = low;
-                //                currentClose = price;
-                //            } else {
-                //                currentCloseDate = new Date(new Date(currentCloseDate).getTime() + 60000);
-                //                currentLow = price;
-                //                currentHigh = price;
-                //                currentClose = price;
-                //                currentClose = price;
-
-                //                seriesData.push({
-                //                    x: currentCloseDate.setTime(new Date(currentCloseDate).getTime() + 60000),
-                //                    y: [price, price, price, price]
-                //                });
-
-                //                //chart.appendSeries({
-                //                //    data: newSeries
-                //                //});
-
-
-                //            }
-
-                //            chart.zoomX(lastZoom);
-
-                //            lastPrice = price;
-                //        }
-                //    }
-                //});
-
-
-
-            }
-
-        });
-
     });
 
     function getCurrentList(isBuy, isMarketTrades, isUserOpenOrders) {

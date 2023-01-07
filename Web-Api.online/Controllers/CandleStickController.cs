@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api.online.Data.Repositories;
@@ -47,6 +48,8 @@ public class CandleStickController : Controller
         {
             CurrentCandleStick = currentCandleStick,
             LastCandleSticks = candleStick
+                .OrderBy(x => x.CloseTime)
+                .ToList()
         };
 
         return Ok(resultModel);
