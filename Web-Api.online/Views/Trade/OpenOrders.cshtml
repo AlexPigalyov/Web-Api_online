@@ -32,7 +32,7 @@
                         <tbody>
                             @foreach (var order in Model)
                             {
-                                <tr>
+                                <tr class="@(order.IsBuy ? "td-buy" : "td-sell")">
                                     <td>@order.Currency1 @order.Currency2</td>
                                     <td><span class="decimal-data">@order.Price</span> @order.Currency2</td>
                                     <td><span class="decimal-data">@order.Amount</span> @order.Currency1</td>
