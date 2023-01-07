@@ -251,3 +251,12 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .le
 body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu .dark-mode {
     padding-left: 2em;
 }
+
+/* form-check form-switch mb-2 side-nav-title dark-mode */
+.leftside-menu .dark-mode .form-check-input {
+    background-color: #727cf5;
+    border-color: #727cf5;
+}
+.leftside-menu .dark-mode-label {
+    color: #6C757D;
+}
