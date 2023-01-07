@@ -17,6 +17,7 @@
 @section ThirdPartyJs
 {   
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" asp-append-version="true"></script>
     <script src="~/js/trading-vue.min.js" asp-append-version="true"></script>
     <script src="~/js/tvjs-overlays.min.js" asp-append-version="true"></script>
     <script src="~/js/tvjs-xp.min.js" asp-append-version="true"></script>
@@ -255,11 +256,12 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         on_tfselect_click(tf, i) {
             this.selected = i
-            
+            this.$refs.tvjs.resetChart()
+            this.chart.onrange(this.load_chunk)
+            this.selectedTf = tf;
             let newCandles = []
-            
             $.ajax({
-                url: '/candlestick/getcandlestick?interval=1h&acronim=' + cryptExchangePair,
+                url: '/candlestick/getcandlestick?interval='+ tf +'&acronim=' + cryptExchangePair,
                 type: 'GET',
                 async: false,
                 success: function (data) {
@@ -271,19 +273,48 @@ document.addEventListener("DOMContentLoaded", () => {
                                   candleStick.open,
                                   candleStick.high,
                                   candleStick.low,
-                                  candleStick.close,
-                                  1000.1234
+                                  candleStick.close
                               ])
                           });
                       }
                 }
             });
             
-            this.chart.set('chart', {
-                type: "Candles",
-                data: newCandles,
-                settings: {}
-            }) 
+            newCandles.pop()            
+            this.chart.set('chart.data', newCandles) 
+        },
+        async load_chunk(range) {              
+            let [from, to] = range           
+            
+            let newCandles = []
+
+            await $.ajax({
+                url: '/candlestick/getcandlestick?interval=' + this.selectedTf + '&acronim=' + cryptExchangePair + '&dateStart=' + moment(from).format('YYYY-MM-DDTHH:mm:ss') + '&dateEnd=' + moment(to).format('YYYY-MM-DDTHH:mm:ss'),
+                type: 'GET',
+                async: true,
+                success: function (data) 
+                {
+                    if (data.lastCandleSticks != null) 
+                    {
+                        data.lastCandleSticks.forEach(candleStick => 
+                        {
+                            newCandles.push([
+                                candleStick.closeTimeStamp,
+                                candleStick.open,
+                                candleStick.high,
+                                candleStick.low,
+                                candleStick.close
+                            ])
+                        });
+                    }
+                }
+            })
+            
+                  
+            
+            return {
+                'chart.data': newCandles    
+            }
         }
     },
     computed: {
@@ -293,7 +324,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     mounted() {
         let newCandles = []
-        
         $.ajax({
             url: '/candlestick/getcandlestick?interval=1h&acronim=' + cryptExchangePair,
             type: 'GET',
@@ -307,24 +337,20 @@ document.addEventListener("DOMContentLoaded", () => {
                               candleStick.open,
                               candleStick.high,
                               candleStick.low,
-                              candleStick.close,
-                              1004.234
+                              candleStick.close
                           ])
                       });
                   }
             }
         });
-
-        this.chart.set('chart', {
-            type: "Candles",
-            data: newCandles,
-            settings: {}
-        })
         
+        newCandles.pop()        
+        this.chart.set('chart.data', newCandles)
+        this.chart.onrange(this.load_chunk)
         window.addEventListener('resize', this.onResize)
         
         this.src_changed(DEFAULT)
-    },
+    },    
     beforeDestroy() {        
         window.removeEventListener('resize', this.onResize)
     },
@@ -333,9 +359,10 @@ document.addEventListener("DOMContentLoaded", () => {
           pairName: window.location.href.split('/')[5],
           chart: new TradingVueLib.DataCube({
             chart: {
-                type: "Candles"
-            }
+                type: "Candles"                
+             }
           }),
+          selectedTf: '1h',
           night: true, 
           ext: Object.values(TvjsXP.default),         
           ovs: Object.values(TvjsOverlays),
