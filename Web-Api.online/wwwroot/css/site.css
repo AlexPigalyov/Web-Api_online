@@ -6,7 +6,8 @@ a {
     text-decoration: none !important;
 }
 
-h5, .h5 {
+h5,
+.h5 {
     display: block !important;
     font-size: 0.83em !important;
     margin-block-start: 1.67em !important;
@@ -33,7 +34,8 @@ a {
     border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
@@ -85,7 +87,8 @@ body {
     bottom: 0;
     width: 100%;
     white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
+    line-height: 60px;
+    /* Vertically center the text there */
 }
 
 
@@ -96,9 +99,9 @@ body {
     align-items: center;
 }
 
-    .notification-list .topbar-dropdown-menu .notify-item form button.nav-link.text-dark {
-        margin: 0;
-    }
+.notification-list .topbar-dropdown-menu .notify-item form button.nav-link.text-dark {
+    margin: 0;
+}
 
 .nav-user .account-user-avatar {
     display: none;
@@ -139,12 +142,15 @@ li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
     .nav-user .account-position {
         display: block !important;
     }
+
     .nav-user .account-user-name {
         display: none;
     }
+
     .nav-user .account-user-icon {
         display: block;
     }
+
     li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
         padding: 10px 15px !important;
     }
@@ -159,17 +165,17 @@ li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
     cursor: pointer !important;
 }
 
-    .stats-links a:hover {
-        /*text-decoration: none !important;*/
-        color: black !important;
-    }
+.stats-links a:hover {
+    /*text-decoration: none !important;*/
+    color: black !important;
+}
 
-    .stats-links div {
-        cursor: pointer !important;
-    }
+.stats-links div {
+    cursor: pointer !important;
+}
 
 
-footer > .container {
+footer>.container {
     display: flex;
     align-items: center;
 }
@@ -184,9 +190,9 @@ footer > .container {
     background-size: cover;
 }
 
-    .div_telegram:hover {
-        background-image: url("/img/telegram_hover.png");
-    }
+.div_telegram:hover {
+    background-image: url("/img/telegram_hover.png");
+}
 
 .b-popup-content {
     margin: 40px auto 0px auto;
@@ -254,21 +260,24 @@ body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .le
 
 /* form-check form-switch mb-2 side-nav-title dark-mode */
 .leftside-menu .dark-mode {
-	margin-top: 50px;
+    margin-top: 50px;
 }
+
 .leftside-menu .dark-mode .form-check-input {
     background-color: #727cf5;
     border-color: #727cf5;
 }
+
 .leftside-menu .dark-mode-label {
     color: #6C757D;
 }
 
-tr.td-sell > * {
-    color: #f84960!important;
+tr.td-sell>* {
+    color: #f84960 !important;
 }
-tr.td-buy > * {
-    color: #02c076!important;
+
+tr.td-buy>* {
+    color: #02c076 !important;
 }
 
 
