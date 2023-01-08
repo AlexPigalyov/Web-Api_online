@@ -30,14 +30,19 @@ public class CandleStickController : Controller
         
         if (!model.DateStart.HasValue)
         {
-            if (model.Interval == "1h")
+            if (model.Interval == "1m")
             {
-                model.DateStart = System.DateTime.Now.AddDays(-2);
+                model.DateStart = System.DateTime.Now.AddHours(-1);
+            }
+            else if (model.Interval == "1h")
+            {
+                model.DateStart = System.DateTime.Now.AddDays(-4);
             }
             else if(model.Interval == "1d")
             {
-                model.DateStart = System.DateTime.Now.AddDays(-48);
+                model.DateStart = System.DateTime.Now.AddDays(-96);
             }
+            
         }
 
         var candleStick = await _candleStickRepository.GetCandleStick(model, pair.SQLTableName);
