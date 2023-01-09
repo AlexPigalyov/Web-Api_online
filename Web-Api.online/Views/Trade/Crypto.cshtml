@@ -308,12 +308,24 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                     }
                 }
-            })
-            
-                  
+            })              
             
             return {
                 'chart.data': newCandles    
+            }
+        },
+        onThemeChanged(e) {
+            if (document.getElementById('dark-mode-check').value === 'dark')
+            {
+                this.colors = {
+                    colorBack: '#fff',
+                    colorGrid: '#eee',
+                    colorText: '#333'
+                }
+            }
+            else
+            {
+                this.colors = {}
             }
         }
     },
@@ -348,6 +360,9 @@ document.addEventListener("DOMContentLoaded", () => {
         this.chart.set('chart.data', newCandles)
         this.chart.onrange(this.load_chunk)
         window.addEventListener('resize', this.onResize)
+        
+        document.getElementById('dark-mode-check')
+            .addEventListener('change', this.onThemeChanged)
         
         this.src_changed(DEFAULT)
     },    
