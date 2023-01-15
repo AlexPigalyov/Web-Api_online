@@ -112,6 +112,15 @@
     sans-serif;
     font-weight: 200;
 }
+
+.trading-vue-toolbar {
+    z-index: 1 !important;
+}
+
+.trading-vue-legend {
+    z-index: 1 !important;
+}
+
 #extensions-lbl {
     position: absolute;
     top: 17px;
