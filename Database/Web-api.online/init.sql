@@ -138,6 +138,47 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE TABLE [dbo].[CashIns](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserNumber] [int] NOT NULL,
+	[Value] [float] NOT NULL,
+	[Sposob] [nvarchar](max) NULL,
+	[WhenDate] [datetime] NOT NULL,
+	[AcceptedAccount] [nvarchar](50) NOT NULL,
+	[SendAccount] [nvarchar](50) NULL,
+ CONSTRAINT [PK_CashIns] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CashOuts](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserNumber] [int] NOT NULL,
+	[Value] [float] NOT NULL,
+	[WhenDate] [datetime] NOT NULL,
+	[Sposob] [nvarchar](max) NOT NULL,
+	[WhenAdminEvent] [datetime] NULL,
+	[State] [int] NOT NULL,
+	[Number] [nvarchar](max) NULL,
+	[Comment] [nvarchar](max) NULL,
+	[Type] [int] NOT NULL,
+	[PaymentNumber] [nvarchar](50) NULL,
+	[Result] [int] NOT NULL,
+ CONSTRAINT [PK_CashOuts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[CoinsRates](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[Acronim] [nvarchar](10) NOT NULL,
@@ -276,6 +317,20 @@ ALTER TABLE [dbo].[AspNetUserLogins] ADD  CONSTRAINT [DF_AspNetUserLogins_Create
 GO
 ALTER TABLE [dbo].[AspNetUsers] ADD  CONSTRAINT [DF_AspNetUsers_Created]  DEFAULT (getdate()) FOR [Created]
 GO
+ALTER TABLE [dbo].[CashIns] ADD  CONSTRAINT [DF_CashIns_Sposob]  DEFAULT ('Qiwi') FOR [Sposob]
+GO
+ALTER TABLE [dbo].[CashIns] ADD  CONSTRAINT [DF_CashIns_WhenDate]  DEFAULT (getdate()) FOR [WhenDate]
+GO
+ALTER TABLE [dbo].[CashIns] ADD  CONSTRAINT [DF_CashIns_AcceptedAccount]  DEFAULT ((0)) FOR [AcceptedAccount]
+GO
+ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_WhenDate]  DEFAULT (getdate()) FOR [WhenDate]
+GO
+ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_Status]  DEFAULT ((1)) FOR [State]
+GO
+ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_Type]  DEFAULT ((0)) FOR [Type]
+GO
+ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_Result]  DEFAULT ((1)) FOR [Result]
+GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
 GO
 ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Date]  DEFAULT (getdate()) FOR [Date]
@@ -351,6 +406,33 @@ REFERENCES [dbo].[AspNetUsers] ([Id])
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[AspNetUserTokens] CHECK CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[CheckExistCashIn]
+@userNumber integer,
+@value float,
+@whenDate datetime
+
+AS
+BEGIN
+--declare @userId nvarchar(450);
+--set @userId = '08d803ba-a9fb-430e-a0b9-d4a366aeaee7'
+
+
+SELECT *
+
+FROM CashIns 
+WHERE UserNumber = @userNumber 
+AND Value = @value
+AND WhenDate = @whenDate
+
+END
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -923,6 +1005,25 @@ SELECT *
 
 FROM AspNetUsers 
 WHERE Id = @userId
+
+END
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GetUserByPublicId]
+@number integer
+
+AS
+BEGIN
+
+SELECT *
+
+FROM AspNetUsers 
+WHERE Number = @number
 
 END
 
