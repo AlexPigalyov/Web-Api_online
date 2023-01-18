@@ -108,7 +108,7 @@ body {
 }
 
 li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
-    padding: 10px 20px !important;
+    /* padding: 10px 20px !important; */
     align-items: center;
     display: flex;
 }
@@ -278,6 +278,45 @@ tr.td-sell>* {
 
 tr.td-buy>* {
     color: #02c076 !important;
+}
+
+.content-page {
+	padding-top: 30px;
+}
+.navbar-custom {
+	min-height: 40px;
+}
+.navbar-custom .topbar-menu li {
+	max-height: 50px;
+}
+.topbar-dropdown .nav-link  {
+	line-height: 50px;
+}
+.button-menu-mobile {
+	line-height: 40px;
+	height: 50px;
+}
+.nav-user {
+	min-height: unset;
+	max-height: 50px;
+}
+/* li.dropdown.notification-list a.nav-link.dropdown-toggle.nav-user {
+	padding: 0px !important;
+} */
+.logo {
+	line-height: 50px;
+}
+.logo img {
+    height: 40px;
+    max-height: 100%;
+}
+@media (min-width: 768px) {
+	.logo {
+        top: 4px;
+    }
+    .logo img {
+		height: 50px;
+	}
 }
 
 
