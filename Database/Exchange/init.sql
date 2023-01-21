@@ -6737,6 +6737,31 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[GetUserWalletByPublicIdAndAcronim]
+@publicUserId nvarchar(450),
+@acronim nvarchar(10)
+AS
+BEGIN
+
+SELECT w.[Id]
+      ,w.[UserId]
+	  ,Convert(Decimal(38,12),[Value]) as Value
+	  --,[Value]
+      ,w.CurrencyAcronim
+	  ,w.[Created]
+	  ,w.[LastUpdate]
+	  ,w.[Address]
+	  ,u.[Number] as PublicUserId
+  FROM [Exchange].[dbo].[Wallets] w
+  left join [web-api.online].[dbo].[AspNetUsers] u on w.[UserId] = u.[Id]
+  where u.[Number] = @publicUserId AND w.CurrencyAcronim = @acronim
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[GetUserWallets]
 @userid nvarchar(450)
 AS
