@@ -319,6 +319,25 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE PROCEDURE [dbo].[AddCashIn]
+@userNumber int,
+@value float,
+@sposob nvarchar(max),
+@whenDate datetime,
+@acceptedAccount nvarchar(50),
+@sendAccount nvarchar(50)
+AS
+BEGIN
+
+INSERT INTO [Exchange].[dbo].[CashIns] ([UserNumber], [Value], [Sposob], [WwhenDate], [AcceptedAccount], [SendAccount])
+VALUES (@userNumber, @value, @sposob, @whenDate, @acceptedAccount, @sendAccount)
+
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
 
 CREATE PROCEDURE [dbo].[CheckExistCashIn]
