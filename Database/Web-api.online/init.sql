@@ -179,62 +179,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[CoinsRates](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Acronim] [nvarchar](10) NOT NULL,
-	[Site] [nvarchar](150) NOT NULL,
-	[Sell] [float] NOT NULL,
-	[Buy] [float] NOT NULL,
-	[Date] [datetime] NOT NULL,
-	[IsUp] [bit] NULL,
- CONSTRAINT [PK_CoinsRates] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Currencies](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
-	[Acronim] [nvarchar](5) NULL,
-	[Country] [nvarchar](50) NULL
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DpdCities](
-	[cityId] [bigint] NOT NULL,
-	[cityIdSpecified] [bit] NOT NULL,
-	[countryCode] [nvarchar](50) NOT NULL,
-	[countryName] [nvarchar](50) NOT NULL,
-	[regionCode] [int] NOT NULL,
-	[regionCodeSpecified] [bit] NOT NULL,
-	[regionName] [nvarchar](100) NOT NULL,
-	[cityCode] [nvarchar](50) NOT NULL,
-	[cityName] [nvarchar](100) NOT NULL,
-	[abbreviation] [nvarchar](50) NOT NULL,
-	[indexMin] [nvarchar](50) NULL,
-	[indexMax] [nvarchar](50) NULL,
-	[Population] [bigint] NULL,
-	[Settled] [nchar](20) NULL,
-	[lat] [float] NULL,
-	[lng] [float] NULL,
- CONSTRAINT [PK_DpdCities_48] PRIMARY KEY CLUSTERED 
-(
-	[cityId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE TABLE [dbo].[News](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](150) NOT NULL,
@@ -265,24 +209,6 @@ CREATE TABLE [dbo].[Phones](
 	[IdentificateStatus] [int] NOT NULL,
 	[Commision] [bit] NOT NULL,
  CONSTRAINT [PK_Phones] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Rates](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Acronim] [nvarchar](10) NOT NULL,
-	[Site] [nvarchar](150) NOT NULL,
-	[Buy] [float] NOT NULL,
-	[Sell] [float] NOT NULL,
-	[Date] [datetime] NOT NULL,
-	[IsUp] [bit] NULL,
- CONSTRAINT [PK_Rates] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -331,16 +257,6 @@ ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_Type]  DEFAULT ((0)) F
 GO
 ALTER TABLE [dbo].[CashOuts] ADD  CONSTRAINT [DF_CashOuts_Result]  DEFAULT ((1)) FOR [Result]
 GO
-ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Sell]  DEFAULT ((0)) FOR [Sell]
-GO
-ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_Date]  DEFAULT (getdate()) FOR [Date]
-GO
-ALTER TABLE [dbo].[CoinsRates] ADD  CONSTRAINT [DF_CoinsRates_IsUp]  DEFAULT ((1)) FOR [IsUp]
-GO
-ALTER TABLE [dbo].[DpdCities] ADD  CONSTRAINT [DF_DpdCities_indexMin_48]  DEFAULT (NULL) FOR [indexMin]
-GO
-ALTER TABLE [dbo].[DpdCities] ADD  CONSTRAINT [DF_DpdCities_indexMax_48]  DEFAULT (NULL) FOR [indexMax]
-GO
 ALTER TABLE [dbo].[News] ADD  CONSTRAINT [DF_News_Created]  DEFAULT (getdate()) FOR [Created]
 GO
 ALTER TABLE [dbo].[Phones] ADD  CONSTRAINT [DF_Phones_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
@@ -360,14 +276,6 @@ GO
 ALTER TABLE [dbo].[Phones] ADD  CONSTRAINT [DF_Phones_IdentificateStatus]  DEFAULT ((1)) FOR [IdentificateStatus]
 GO
 ALTER TABLE [dbo].[Phones] ADD  CONSTRAINT [DF_Phones_Commision]  DEFAULT ((0)) FOR [Commision]
-GO
-ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_Price]  DEFAULT ((0)) FOR [Buy]
-GO
-ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_Cell]  DEFAULT ((0)) FOR [Sell]
-GO
-ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_Date]  DEFAULT (getdate()) FOR [Date]
-GO
-ALTER TABLE [dbo].[Rates] ADD  CONSTRAINT [DF_Rates_IsUp]  DEFAULT ((1)) FOR [IsUp]
 GO
 ALTER TABLE [dbo].[UsersInfo] ADD  CONSTRAINT [DF_UsersInfo_RegistrationDate]  DEFAULT (getdate()) FOR [RegistrationDate]
 GO
