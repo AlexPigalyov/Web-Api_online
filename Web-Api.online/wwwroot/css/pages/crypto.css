@@ -15,18 +15,6 @@
     height: 240px;
 }
 
-.card-body {
-    padding: 0 !important;
-}
-
-.card {
-    margin-bottom: 0 !important;
-}
-
-.content-page {
-    padding: 70px 12px 100px !important;
-}
-
 .log-scale {
     position: absolute;
     top: 60px;
