@@ -7,19 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Requests\**" />
     <Compile Remove="Views\News\**" />
     <Compile Remove="Views\Новая папка\**" />
     <Compile Remove="wwwroot\js\ourPages\**" />
-    <Content Remove="Models\Requests\**" />
     <Content Remove="Views\News\**" />
     <Content Remove="Views\Новая папка\**" />
     <Content Remove="wwwroot\js\ourPages\**" />
-    <EmbeddedResource Remove="Models\Requests\**" />
     <EmbeddedResource Remove="Views\News\**" />
     <EmbeddedResource Remove="Views\Новая папка\**" />
     <EmbeddedResource Remove="wwwroot\js\ourPages\**" />
-    <None Remove="Models\Requests\**" />
     <None Remove="Views\News\**" />
     <None Remove="Views\Новая папка\**" />
     <None Remove="wwwroot\js\ourPages\**" />
@@ -29,6 +25,7 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />

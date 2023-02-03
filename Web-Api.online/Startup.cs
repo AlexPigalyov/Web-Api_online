@@ -26,6 +26,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ReflectionIT.Mvc.Paging;
 using Web_Api.online.Middlewares;
 
@@ -75,18 +77,33 @@ namespace Web_Api.online
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
             })
-                .AddCookie()
-                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-                 {
-                     options.ClientId = Configuration["Authentitcation:Google:ClientId"];
-                     options.ClientSecret = Configuration["Authentitcation:Google:ClientSecret"];
-                     options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                 })
-                .AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+            .AddCookie()
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+             {
+                 options.ClientId = Configuration["Authentitcation:Google:ClientId"];
+                 options.ClientSecret = Configuration["Authentitcation:Google:ClientSecret"];
+                 options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+             })
+            .AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+            {
+                options.AppId = Configuration["Authentitcation:Facebook:AppId"];
+                options.AppSecret = Configuration["Authentitcation:Facebook:AppSecret"];
+                options.ClaimActions.MapJsonKey("urn:facebook:picture", "picture", "url");
+            });
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.AppId = Configuration["Authentitcation:Facebook:AppId"];
-                    options.AppSecret = Configuration["Authentitcation:Facebook:AppSecret"];
-                    options.ClaimActions.MapJsonKey("urn:facebook:picture", "picture", "url");
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = MobileAuthOptions.ISSUER,
+                        ValidateAudience = true,
+                        ValidAudience = MobileAuthOptions.AUDIENCE,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = MobileAuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
                 });
 
             services.AddControllersWithViews();
