@@ -14,8 +14,7 @@ namespace Web_Api.online.Services
         public ILitecoinService _litecoinService { get; }
 
         private EtheriumService _etheriumService { get; set; }
-        private ZCashService  _zCashService { get; set; }
-
+        private ZCashService _zCashService { get; set; }
 
         public WalletService(EtheriumService etheriumService,
             ZCashService zCashService,
@@ -36,9 +35,10 @@ namespace Web_Api.online.Services
 
         public string GetNewAddress(string acronim, string lable)
         {
-            return acronim switch
+            var result = acronim switch
             {
                 "USDT" => GenerateHash.sha256(lable + "USDT" + DateTime.Now.ToString()),
+                "RURT" => GenerateHash.sha256(lable + "RURT" + DateTime.Now.ToString()),
                 "ETH" => _etheriumService.GetNewAddressAsync(lable).Result,
                 "ZEC" => _zCashService.GetNewAddress(),
                 "LTC" => _litecoinService.GetNewAddress(lable),
@@ -48,6 +48,8 @@ namespace Web_Api.online.Services
                 "BCH" => _bitcoinCashService.GetNewAddress(lable),
                 _ => null
             };
+
+            return result;
         }
     }
 }

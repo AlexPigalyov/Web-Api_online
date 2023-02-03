@@ -31,7 +31,7 @@ namespace Web_Api.online.Data.Repositories
                     "GetUserWallets",
                     new { userId = userId },
                     commandType: CommandType.StoredProcedure
-            );
+                    );
 
                 return result;
             }
@@ -56,6 +56,32 @@ namespace Web_Api.online.Data.Repositories
             catch (Exception ex) { return null; }
         }
 
+        public async Task<WalletTableModel> GetUserWalletByPublicIdAsync(int publicUserId, string acronim)
+        {
+            //try
+            //{
+            //    //var user = await _userRepository.GetUserByPublicId(checkQiwiPayment.UserPublicId);
+
+            //    //var wallet = await _walletsRepository.GetUserWalletAsync(user.Id, "RURT");
+
+            //    WalletTableModel result = ((List<WalletTableModel>)await _db.QueryAsync<WalletTableModel>("GetUserWalletByPublicIdAndAcronim",
+            //        new
+            //        {
+            //            publicUserId = publicUserId,
+            //            acronim = acronim
+            //        },
+            //        commandType: CommandType.StoredProcedure
+            //    )).FirstOrDefault();
+
+            //    return result;
+            //}
+            //catch (Exception ex) {
+
+            return null;
+
+            //}
+        }
+
         public async Task<List<IncomeWalletTableModel>> GetUserIncomeWalletsAsync(string userId)
         {
             try
@@ -64,7 +90,7 @@ namespace Web_Api.online.Data.Repositories
                 new { userId = userId },
                 commandType: CommandType.StoredProcedure));
 
-                foreach(var wallet in result)
+                foreach (var wallet in result)
                 {
                     wallet.QrCode = QrCodeService.GenerateQrCode(wallet.Address);
                 }

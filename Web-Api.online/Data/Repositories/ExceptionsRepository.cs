@@ -30,8 +30,22 @@ namespace Web_Api.online.Data.Repositories
                 return null;
             }
         }
-        
-        public async Task CreateExceptionAsync (ExceptionTableModel exception)
+
+        public async Task CreateExceptionAsync(Exception exception)
+        {
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("value", exception.Message);
+                p.Add("stackTrace", exception.StackTrace);
+                p.Add("userId", null);
+
+                await _db.QueryAsync<int>("CreateException", p, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex) { return; }
+        }
+
+        public async Task CreateExceptionAsync(ExceptionTableModel exception)
         {
             try
             {

@@ -85,6 +85,17 @@ namespace Web_Api.online.Data.Repositories
                     commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<AspNetUserTableModel> GetUserByPublicId(int publicId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("number", publicId);
+
+            return await _dbWebApi.QueryFirstAsync<AspNetUserTableModel>(
+                    "GetUserByPublicId",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+        }
+
         public async Task<int> GetCountUserRefferer()
         {
             try
