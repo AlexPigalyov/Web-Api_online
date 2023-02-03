@@ -52,7 +52,7 @@ namespace Web_Api.online.Models
                 Pwd = acc.Pwd,
                 Recipient = recipient,
                 Amount = amount,
-                Comment = "Solo Systems"
+                Comment = "eCats platform"
             };
 
             bool result = Payment(item);
@@ -73,7 +73,7 @@ namespace Web_Api.online.Models
                 Pwd = acc.Pwd,
                 Recipient = recipient,
                 Amount = amount,
-                Comment = "Solo Systems"
+                Comment = "eCats platform"
             };
 
             bool result = PaymentBankCard(item);
