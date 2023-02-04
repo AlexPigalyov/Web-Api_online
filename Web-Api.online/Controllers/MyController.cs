@@ -13,9 +13,11 @@ using Web_Api.online.Models.StoredProcedures;
 using Web_Api.online.Models.Tables;
 using Web_Api.online.Models.ViewModels;
 using Web_Api.online.Models.ViewModels.Profile;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web_Api.online.Controllers
 {
+    [Authorize]
     public class MyController : Controller
     {
         private readonly IEventsRepository _eventsRepository;
@@ -139,7 +141,9 @@ namespace Web_Api.online.Controllers
                 return Redirect("/Login%2FMy%2FEvents");
             }
 
-            return View(await _eventsRepository.GetByUserId(userId));
+            var result = await _eventsRepository.GetByUserId(userId);
+
+            return View(result);
         }
 
 

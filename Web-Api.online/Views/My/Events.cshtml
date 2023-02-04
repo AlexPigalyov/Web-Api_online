@@ -7,15 +7,45 @@
     ViewData["Title"] = "Events";
 }
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <ul>
-        @foreach (var item in Model)
-        {
-            <li>
-                <span>@(((EventTypeEnum)item.Type).ToString())-@(item.Comment)-@(item.WhenDate.ToString("dd-MM-yyyy HH:mm:ss"))</span>
-            </li>
-        }
-    </ul>
-}
-
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Events <span class="text-muted mb-2 font-13">(total: @Model.Count)</span></h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-centered w-100 nowrap">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Event</th>
+                                <th>Comment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @((EventTypeEnum)item.Type)
+                                    </td>
+                                    <td>
+                                        @item.Comment
+                                    </td>
+                                    <td>
+                                        @item.WhenDate.ToString("dd-MM-yyyy HH:mm:ss")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
