@@ -30,6 +30,12 @@ INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissio
 GO
 INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade], [NodeIsReady]) VALUES (8, N'DASH', N'DashCoin', CAST(N'2021-04-24T03:25:17.297' AS DateTime), NULL, NULL, NULL, NULL, 1)
 GO
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade], [NodeIsReady]) VALUES (9, N'EURT', N'Euro', CAST(N'2023-02-04T11:53:31.410' AS DateTime), NULL, NULL, NULL, NULL, 1)
+GO
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade], [NodeIsReady]) VALUES (10, N'RURT', N'Ruble', CAST(N'2023-02-04T11:53:51.453' AS DateTime), NULL, NULL, NULL, NULL, 1)
+GO
+INSERT [dbo].[Currencies] ([Id], [Acronim], [Name], [Created], [PercentCommissionForIncomeTransaction], [PercentCommissionForTransfer], [PercentCommissionForOutcomeTransaction], [PercentCommissionForTrade], [NodeIsReady]) VALUES (11, N'KZTT', N'Tenge', CAST(N'2023-02-04T11:59:40.933' AS DateTime), NULL, NULL, NULL, NULL, 1)
+GO
 SET IDENTITY_INSERT [dbo].[Currencies] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Pairs] ON 
