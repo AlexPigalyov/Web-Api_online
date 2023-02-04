@@ -37,8 +37,10 @@ namespace Web_Api.online.Services
         {
             var result = acronim switch
             {
-                "USDT" => GenerateHash.sha256(lable + "USDT" + DateTime.Now.ToString()),
-                "RURT" => GenerateHash.sha256(lable + "RURT" + DateTime.Now.ToString()),
+                "USDT" => GenerateHash.sha256(lable + acronim + DateTime.Now.ToString()),
+                "RURT" => GenerateHash.sha256(lable + acronim + DateTime.Now.ToString()),
+                "EURT" => GenerateHash.sha256(lable + acronim + DateTime.Now.ToString()),
+                "KZTT" => GenerateHash.sha256(lable + acronim + DateTime.Now.ToString()),
                 "ETH" => _etheriumService.GetNewAddressAsync(lable).Result,
                 "ZEC" => _zCashService.GetNewAddress(),
                 "LTC" => _litecoinService.GetNewAddress(lable),
