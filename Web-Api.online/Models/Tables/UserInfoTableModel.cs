@@ -8,7 +8,7 @@ namespace Web_Api.online.Models.Tables
         public string ProfilePhotoPath { get; set; }
         public string FullName { get; set; }
         public string AboutMe { get; set; }
-        public string RefferalId { get; set; }
+        public string ReffererId { get; set; }
         public string FacebookLink { get; set; }
         public string InstagramLink { get; set; }
         public string SkypeLink { get; set; }

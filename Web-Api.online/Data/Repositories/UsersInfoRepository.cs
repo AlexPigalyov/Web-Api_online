@@ -178,7 +178,8 @@ namespace Web_Api.online.Data.Repositories
                         skypeLink = model.SkypeLink,
                         twitterLink = model.TwitterLink,
                         linkedinLink = model.LinkedinLink,
-                        githubLink = model.GithubLink
+                        githubLink = model.GithubLink,
+                        reffererId = model.ReffererId
                     },
                     commandType: CommandType.StoredProcedure);
             }
